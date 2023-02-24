@@ -1,7 +1,8 @@
 import 'package:cloud_mobile/yearselection.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
-import 'package:cloud_mobile/yearselection.dart';
+import 'package:cloud_mobile/common/global.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   static const String _title = 'Equal On Mobile';
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -97,18 +99,30 @@ class _MyHomePage extends State<MyHomePage> {
                     style: TextStyle(fontSize: 20),
                   ),
                   onPressed: () {
-                    print(nameController.text);
-                    print(passwordController.text);
-
                     String _username = nameController.text;
                     String _password = passwordController.text;
 
-                    Navigator.push(
+                    if (_username == '') {
+                      alert(context, 'Validation error!!!',
+                          'User Can Not Be Blank !!!');
+                      return;
+                    }
+
+                    if (_password == '') {
+                      alert(context, 'Validation error!!!',
+                          'Password Can Not Be Blank !!');
+                      return;
+                    }
+
+                    //print(nameController.text);
+                    //print(passwordController.text);
+
+                    /*Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => YearSelection(
                               username: _username, password: _password)),
-                    );
+                    );*/
                   },
                 )),
           ],
