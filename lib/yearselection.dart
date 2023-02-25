@@ -2,46 +2,136 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_mobile/dashboard.dart';
 
-class YearSelection extends StatelessWidget {
-  final String username;
-  final String password;
+import 'dart:convert';
 
-  //const YearSelection({super.key});
-  const YearSelection(
-      {super.key, required this.username, required this.password});
+import 'package:http/http.dart' as http;
+
+import 'common/global.dart' as globals;
+import 'package:cloud_mobile/common/alert.dart';
+
+class YearSelection extends StatefulWidget {
+  var xuser;
+  var xpwd;
+  YearSelection({Key? mykey, user, pwd}) : super(key: mykey) {
+    xuser = user;
+    xpwd = pwd;
+
+    // print(xuser);
+    // print(xpwd);
+  }
+
+  @override
+  _YearSelectionPageState createState() => _YearSelectionPageState();
+}
+
+class _YearSelectionPageState extends State<YearSelection> {
+  List _companydetails = [];
+  @override
+  void initState() {
+    companydetails(widget.xuser, widget.xpwd);
+  }
+
+  Future<bool> companydetails(_user, _pwd) async {
+    var response = await http.get(Uri.parse(
+        'https://www.cloud.equalsoftlink.com/api/api_getcompanylist?dbname=admin_neel&username=KRISHNA&password=KRISHNA@123'));
+
+    var jsonData = jsonDecode(response.body);
+
+    jsonData = jsonData['Data'];
+
+    print(jsonData);
+
+    this.setState(() {
+      _companydetails = jsonData;
+    });
+
+    //Iterable list = jsonData[0];
+
+    //print(jsonData);
+    //print('dhaval');
+    //print('dhruv');
+    //print(jsonData.length);
+    //print('in');
+    for (var ictr = 0; ictr < jsonData.length; ictr++) {
+      //this._companydetails.add(jsonData[ictr]);
+      //print(jsonData[ictr]);
+    }
+    //print(this._companydetails);
+    //print('out');
+    //print(this.user);
+    //print(this.);
+    return true;
+    // if (jsonData>0)
+    // {
+    //   print('Valid');
+    //   this.isvaliduser = 'valid';
+    //   return Future.value(true) ;
+    // }
+    // else
+    // {
+    //   print('In-Valid');
+    //   this.isvaliduser = 'invalid';
+    //   return Future.value(false) ;
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
+    //print(widget.xuser);
+    //print(widget.xpwd);
+
+    //companydetails(widget.xuser,widget.xpwd);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Year Selection'),
+        title: Text('Company Selection'),
       ),
       body: Center(
-          child: Column(
-        children: [
-          Padding(padding: const EdgeInsets.all(10)),
-          SizedBox(
-            height: 50,
-            width: 200,
-            child: ElevatedButton(
-              onPressed: () {
-                //Navigator.pop(context);
-                Navigator.push(
+          child: ListView.builder(
+        itemCount: this._companydetails.length,
+        itemBuilder: (context, index) {
+          print(this._companydetails[index]);
+          String companyname = this._companydetails[index]['company'];
+          String companyid =
+              this._companydetails[index]['companyid'].toString();
+          String yearid = this._companydetails[index]['startdate'].toString() +
+              '-' +
+              this._companydetails[index]['enddate'].toString();
+          String fbeg = this._companydetails[index]['startdate'];
+          String fend = this._companydetails[index]['enddate'];
+          String startdate =
+              this._companydetails[index]['startdate'].toString();
+          String enddate = this._companydetails[index]['enddate'].toString();
+          return Card(
+              child: Center(
+                  child: ListTile(
+            title: Text(companyname + ' [ ' + yearid + ' ]',
+                style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
+            subtitle: Text(companyid),
+            leading: Icon(Icons.select_all),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: () {
+              showAlertDialog(context, companyid);
+              globals.companyid = companyid;
+              globals.companyname = companyname;
+              globals.fbeg = fbeg;
+              globals.fend = fend;
+              globals.startdate = startdate;
+              globals.enddate = enddate;
+
+              Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Dashboard()),
-                );
-                // Navigate back to first route when tapped.
-              },
-              child: const Text(
-                'Select Year',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
+                  MaterialPageRoute(
+                      builder: (_) => Dashboard(
+                          companyid: companyid,
+                          companyname: companyname,
+                          fbeg: fbeg,
+                          fend: fend)));
+            },
+          )));
+        },
+      )
+          //child: JobsListView()
           ),
-          Text(this.username),
-          Text(this.password),
-        ],
-      )),
     );
   }
 }

@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:cloud_mobile/yearselection.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'package:cloud_mobile/common/global.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:cloud_mobile/common/alert.dart';
 
 void main() {
   runApp(const MyApp());
@@ -42,8 +48,58 @@ class _MyHomePage extends State<MyHomePage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  String _username = '';
+  String _password = '';
+  bool _load = false;
+
+  void executelogin(context) async {
+    DialogBuilder(context).showLoadingIndicator('');
+
+    var url = Uri.parse(
+        'https://www.cloud.equalsoftlink.com/api/api_authuser?dbname=admin_sarika1&username=' +
+            _username +
+            '&password=' +
+            _password);
+    print(url);
+
+    http.Response response = await http.get(url);
+
+    ///print(response);
+
+    var parsedJson = jsonDecode(response.body);
+    if (!parsedJson['Success']) {
+      _load = false;
+      DialogBuilder(context).hideOpenDialog();
+      alert(context, 'Validation error!!!', 'In-Valid Login !!!');
+    } else {
+      _load = false;
+      DialogBuilder(context).hideOpenDialog();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => YearSelection(user: _username, pwd: _password)));
+
+      /*Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                YearSelection(username: _username, password: _password)),
+      );*/
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget loadingIndicator = _load
+        ? new Container(
+            color: Colors.grey[300],
+            width: 70.0,
+            height: 70.0,
+            child: new Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: new Center(child: new CircularProgressIndicator())),
+          )
+        : new Container();
     return Padding(
         padding: const EdgeInsets.all(10),
         child: ListView(
@@ -99,8 +155,8 @@ class _MyHomePage extends State<MyHomePage> {
                     style: TextStyle(fontSize: 20),
                   ),
                   onPressed: () {
-                    String _username = nameController.text;
-                    String _password = passwordController.text;
+                    _username = nameController.text;
+                    _password = passwordController.text;
 
                     if (_username == '') {
                       alert(context, 'Validation error!!!',
@@ -114,6 +170,7 @@ class _MyHomePage extends State<MyHomePage> {
                       return;
                     }
 
+                    executelogin(context);
                     //print(nameController.text);
                     //print(passwordController.text);
 

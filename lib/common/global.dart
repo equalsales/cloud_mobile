@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
+String companyid = '';
+String companyname = '';
+String fbeg = '';
+String fend = '';
+String startdate = '';
+String enddate = '';
 void alert(context, _title, _msg) {
   Alert(
     context: context,
