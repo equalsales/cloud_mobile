@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 String companyid = '';
+String cno = '';
 String companyname = '';
 String fbeg = '';
 String fend = '';

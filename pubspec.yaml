@@ -34,6 +34,7 @@ dependencies:
   http: ^0.13.5
   loading_indicator: ^3.1.0
   loading_overlay: ^0.3.0
+  pluto_grid: ^2.8.0
 
 
   # The following adds the Cupertino Icons font to your application.

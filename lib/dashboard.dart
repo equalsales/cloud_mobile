@@ -10,6 +10,7 @@ import 'package:cloud_mobile/dashboard/sidebar.dart';
 //import 'package:myfirstapp/screens/account/ledgerview_screen.dart';
 
 import 'common/global.dart' as globals;
+import 'package:cloud_mobile/common/bottombar.dart';
 
 import 'package:charts_flutter/flutter.dart' as charts;
 
@@ -123,11 +124,10 @@ class _DashboardState extends State<Dashboard> {
             )),
         //child: JobsListView()
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Text(
-            widget.xcompanyname + ' ' + widget.xfbeg + ' To ' + widget.xfend,
-            style: TextStyle(color: Colors.white, fontSize: 15)),
-        color: Colors.red,
+      bottomNavigationBar: BottomBar(
+        companyname: widget.xcompanyname,
+        fbeg: widget.xfbeg,
+        fend: widget.xfend,
       ),
     );
   }
