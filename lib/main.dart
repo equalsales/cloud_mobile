@@ -14,6 +14,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:cloud_mobile/common/alert.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'common/global.dart' as globals;
 
 //import 'package:splashscreen/splashscreen.dart';
 
@@ -22,6 +23,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
 
 import 'package:pdf/widgets.dart' as pw;
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 //void main() {
 
@@ -76,19 +79,49 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController dbController = TextEditingController();
 
   String _username = '';
   String _password = '';
+  String _db = '';
   bool _load = false;
+
+  @override
+  void initState() {
+    getDbDetails();
+  }
+
+  void getDbDetails() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    _db = prefs.getString('cloud_db').toString();
+
+    //dbController = TextEditingController(text: _db);
+    setState(() {
+      dbController.text = _db;
+    });
+    alert(context, _db, _db);
+  }
 
   void executelogin(context) async {
     DialogBuilder(context).showLoadingIndicator('');
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('cloud_db', _db);
+    globals.dbname = _db;
 
     var url = Uri.parse(
         'https://www.cloud.equalsoftlink.com/api/api_authuser?dbname=admin_sarika1&username=' +
             _username +
             '&password=' +
             _password);
+
+    // alert(
+    //     context,
+    //     'https://www.cloud.equalsoftlink.com/api/api_authuser?dbname=admin_sarika1&username=' +
+    //         _username +
+    //         '&password=' +
+    //         _password,
+    //     '');
     print(url);
 
     http.Response response = await http.get(url);
@@ -191,6 +224,7 @@ class _MyHomePage extends State<MyHomePage> {
                   onPressed: () {
                     _username = nameController.text;
                     _password = passwordController.text;
+                    _db = dbController.text;
 
                     if (_username == '') {
                       alert(context, 'Validation error!!!',
@@ -201,6 +235,12 @@ class _MyHomePage extends State<MyHomePage> {
                     if (_password == '') {
                       alert(context, 'Validation error!!!',
                           'Password Can Not Be Blank !!');
+                      return;
+                    }
+
+                    if (_db == '') {
+                      alert(context, 'Validation error!!!',
+                          'DB Can Not Be Blank !!');
                       return;
                     }
 
@@ -216,6 +256,22 @@ class _MyHomePage extends State<MyHomePage> {
                     );*/
                   },
                 )),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                autofocus: true,
+                controller: dbController,
+                style: GoogleFonts.oswald(
+                    fontSize: 22.0, fontWeight: FontWeight.bold),
+                //style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.email),
+                    border: OutlineInputBorder(),
+                    labelText: 'DB',
+                    labelStyle: GoogleFonts.oswald(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
+              ),
+            ),
           ],
         ));
   }

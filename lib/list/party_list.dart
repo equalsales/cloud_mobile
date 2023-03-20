@@ -49,13 +49,18 @@ class PartyListState extends State<party_list> {
 
     //var response  = await http.get(Uri.parse('http://116.72.16.74:5000/api/partylist/'+widget.xcompanyid));
     var response;
+    var db = globals.dbname;
     if (widget.xacctype != '') {
       response = await http.get(Uri.parse(
-          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=admin_neel&acctype=' +
+          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
+              db +
+              '&acctype=' +
               widget.xacctype));
     } else {
       response = await http.get(Uri.parse(
-          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=admin_neel&acctype='));
+          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
+              db +
+              '&acctype='));
     }
 
     var jsonData = jsonDecode(response.body);

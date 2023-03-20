@@ -16,6 +16,8 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:cloud_mobile/function.dart';
+
 class Dashboard extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
@@ -43,8 +45,21 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<bool> companydetails() async {
+    var cfromdate = retconvdate(globals.startdate).toString();
+    var ctodate = retconvdate(globals.enddate).toString();
+    var cno = globals.companyid;
+    var db = globals.dbname;
+    //print('----');
+    //print(cno);
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_getchartsales?dbname=admin_neel&companyid=1&type=ms&fromdate=2022-04-01&todate=2023-03-31'));
+        'https://www.cloud.equalsoftlink.com/api/api_getchartsales?dbname=' +
+            db +
+            '&companyid=' +
+            cno +
+            '&type=ms&fromdate=' +
+            cfromdate +
+            '&todate=' +
+            ctodate));
 
     var jsonData = jsonDecode(response.body);
 

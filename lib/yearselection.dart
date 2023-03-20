@@ -34,8 +34,14 @@ class _YearSelectionPageState extends State<YearSelection> {
   }
 
   Future<bool> companydetails(_user, _pwd) async {
+    var db = globals.dbname;
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_getcompanylist?dbname=admin_neel&username=KRISHNA&password=KRISHNA@123'));
+        'https://www.cloud.equalsoftlink.com/api/api_getcompanylist?dbname=' +
+            db +
+            '&username=' +
+            widget.xuser +
+            '&password=' +
+            widget.xpwd));
 
     var jsonData = jsonDecode(response.body);
 

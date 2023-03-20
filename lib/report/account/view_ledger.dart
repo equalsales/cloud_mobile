@@ -27,6 +27,8 @@ import 'package:cloud_mobile/common/customer.dart';
 import 'package:cloud_mobile/common/invoice.dart';
 import 'package:cloud_mobile/common/supplier.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+
 class Ledgerview extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
@@ -164,19 +166,23 @@ class _LedgerviewState extends State<Ledgerview> {
       //print('xxxx');
       var cfromdate = retconvdate(globals.startdate).toString();
       var ctodate = retconvdate(globals.enddate).toString();
+      var cno = globals.companyid;
+      var db = globals.dbname;
       print(partylist); //6288
-      uri =
-          'https://www.cloud.equalsoftlink.com/api/api_genledger?dbname=admin_neel&party=' +
-              partylist +
-              '&fromdate=' +
-              fromdate +
-              '&todate=' +
-              todate +
-              '&cfromdate=' +
-              cfromdate +
-              '&ctodate=' +
-              ctodate +
-              '&cno=1';
+      uri = 'https://www.cloud.equalsoftlink.com/api/api_genledger?dbname=' +
+          db +
+          '&party=' +
+          partylist +
+          '&fromdate=' +
+          fromdate +
+          '&todate=' +
+          todate +
+          '&cfromdate=' +
+          cfromdate +
+          '&ctodate=' +
+          ctodate +
+          '&cno=' +
+          cno;
       //print('2');
       var response = await http.get(Uri.parse(uri));
       //print('3');
@@ -215,6 +221,7 @@ class _LedgerviewState extends State<Ledgerview> {
       var fromdate = fromDate.toString().split(' ')[0];
       var todate = toDate.toString().split(' ')[0];
 
+      DialogBuilder(context).showLoadingIndicator('');
       await getreportdata();
 
       var ReportTitle = 'Account Ledger Report';
@@ -291,17 +298,17 @@ class _LedgerviewState extends State<Ledgerview> {
       if ((runbal) > 0) {
         _jsonData.add({
           'date2': '',
-          'refacname': 'Balance C/f',
+          'refacname': 'Closing Balance C/f Cr Amt',
           'dramt': '',
-          'cramt': runbal.toStringAsFixed(2),
+          'cramt': runbal.abs().toStringAsFixed(2),
           'balance': '',
           'bold': 'Y'
         });
       } else {
         _jsonData.add({
           'date2': '',
-          'refacname': 'Balance C/f',
-          'dramt': runbal.toStringAsFixed(2),
+          'refacname': 'Closing Balance C/f Dr Amt',
+          'dramt': runbal.abs().toStringAsFixed(2),
           'cramt': '',
           'balance': '',
           'bold': 'Y'
@@ -327,6 +334,26 @@ class _LedgerviewState extends State<Ledgerview> {
         });
       }
 
+      if ((runbal) > 0) {
+        _jsonData.add({
+          'date2': '',
+          'refacname': 'Balance Dr Amt',
+          'dramt': runbal.abs().toStringAsFixed(2),
+          'cramt': '',
+          'balance': '',
+          'bold': 'Y'
+        });
+      } else {
+        _jsonData.add({
+          'date2': '',
+          'refacname': 'Balance Cr Amt',
+          'dramt': '',
+          'cramt': runbal.abs().toStringAsFixed(2),
+          'balance': '',
+          'bold': 'Y'
+        });
+      }
+
       //print(_jsonData);
       oReport.addColumn('date2', 'Date', 'C', 10, 0, 'left', 'N');
       oReport.addColumn('refacname', 'Description', 'C', 20, 0, 'left', 'N');
@@ -340,6 +367,7 @@ class _LedgerviewState extends State<Ledgerview> {
 
       PdfApi.openFile(pdfFile2);
 
+      DialogBuilder(context).hideOpenDialog();
       return;
 
       final date2 = DateTime.now();
@@ -414,7 +442,11 @@ class _LedgerviewState extends State<Ledgerview> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ledger'),
+        title: Text(
+          'Ledger',
+          style:
+              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -463,7 +495,9 @@ class _LedgerviewState extends State<Ledgerview> {
             ),
             ElevatedButton(
               onPressed: () => {gotoLedgerReport(context)},
-              child: Text('Generate Report', style: TextStyle(fontSize: 22.0)),
+              child: Text('Generate Report',
+                  style: GoogleFonts.oswald(
+                      fontSize: 22.0, fontWeight: FontWeight.normal)),
             ),
           ],
         ),

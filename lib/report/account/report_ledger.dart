@@ -124,8 +124,10 @@ class _LedgerReport extends State<LedgerReport> {
     String uri = '';
 
     print('1');
-    uri =
-        'https://www.cloud.equalsoftlink.com/api/api_genledger?dbname=admin_neel&party=6288&fromdate=2022-04-01&todate=2023-03-31&cfromdate=2022-04-01&ctodate=2023-03-31&cno=1';
+    var db = globals.dbname;
+    uri = 'https://www.cloud.equalsoftlink.com/api/api_genledger?dbname=' +
+        db +
+        '&party=6288&fromdate=2022-04-01&todate=2023-03-31&cfromdate=2022-04-01&ctodate=2023-03-31&cno=1';
     print('2');
     var response = await http.get(Uri.parse(uri));
     print('3');

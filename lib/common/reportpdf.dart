@@ -1,5 +1,6 @@
 import 'dart:io';
 //import 'dart:js';
+//import 'dart:js';
 import 'package:cloud_mobile/common/pdf_api.dart';
 import 'package:cloud_mobile/common/customer.dart';
 import 'package:cloud_mobile/common/utils.dart';
@@ -66,6 +67,18 @@ class ReportPdf {
       maxPages: 99999,
       header: (context) {
         return buildTitle(ReportTitle, ReportTitle2, column);
+      },
+      footer: (context) {
+        return Center(
+            child: Text(
+                'Page No : ' +
+                    context.pageNumber.toString() +
+                    ' / ' +
+                    context.pagesCount.toString(),
+                style: TextStyle(
+                    fontSize: 9,
+                    color: PdfColors.black,
+                    fontWeight: FontWeight.bold)));
       },
       build: (context) => [
         //buildHeader(invoice),
