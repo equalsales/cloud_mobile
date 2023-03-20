@@ -1,17 +1,31 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 //import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+
 import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/list/party_list.dart';
+import 'package:cloud_mobile/report/account/report_ledger.dart';
 //import 'package:myfirstapp/screens/account/ledger_report.dart';
-import '../../common/alert.dart' as globals;
+import '../../common/global.dart' as globals;
 
 import 'package:cloud_mobile/common/bottombar.dart';
 
+import 'package:cloud_mobile/common/reportpdf.dart';
+
 //import 'package:myfirstapp/screens/dashboard/sidebar.dart';
+
+import 'package:cloud_mobile/common/pdf_api.dart';
+import 'package:cloud_mobile/common/pdf_report_api.dart';
+import 'package:cloud_mobile/main.dart';
+import 'package:cloud_mobile/common/customer.dart';
+import 'package:cloud_mobile/common/invoice.dart';
+import 'package:cloud_mobile/common/supplier.dart';
 
 class Ledgerview extends StatefulWidget {
   var xcompanyid;
@@ -39,6 +53,8 @@ class _LedgerviewState extends State<Ledgerview> {
   TextEditingController _fromdate = new TextEditingController();
   TextEditingController _todate = new TextEditingController();
   TextEditingController _partysel = new TextEditingController();
+
+  var _jsonData = [];
 
   @override
   void initState() {
@@ -99,43 +115,301 @@ class _LedgerviewState extends State<Ledgerview> {
                   )));
 
       setState(() {
-        _partylist = result;
-        print('ddddd');
-        print(result);
+        var retResult = result;
+        _partylist = result[1];
+        print('xxxxxxxxx');
+        print(_partylist);
+        result = result[1];
+        //print('ddddd');
+        //print(result);
         var selParty = '';
-        for (var ictr = 0; ictr < result.length; ictr++) {
+        // for (var ictr = 0; ictr < result.length; ictr++) {
+        //   if (ictr > 0) {
+        //     selParty = selParty + ',';
+        //   }
+        //   selParty = selParty + result[ictr];
+        // }
+
+        //var selParty2 = '';
+        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
           if (ictr > 0) {
             selParty = selParty + ',';
           }
-          selParty = selParty + result[ictr];
+          selParty = selParty + retResult[0][ictr];
         }
         _partysel.text = selParty;
       });
       //print(result);
     }
 
+    Future<bool> getreportdata() async {
+      var companyid = widget.xcompanyid;
+      var fromdate = fromDate.toString().split(' ')[0];
+      var todate = toDate.toString().split(' ')[0];
+      var partylist = '';
+      for (var ictr = 0; ictr < _partylist.length; ictr++) {
+        if (ictr > 0) {
+          partylist = partylist + ',';
+        }
+        partylist = partylist + _partylist[ictr].toString();
+      }
+      // if (_partylist.length > 0) {
+      //   partylist = _partylist[0].toString();
+      // }
+
+      partylist = partylist.replaceAll('/', '{{}}');
+
+      String uri = '';
+
+      //print('xxxx');
+      var cfromdate = retconvdate(globals.startdate).toString();
+      var ctodate = retconvdate(globals.enddate).toString();
+      print(partylist); //6288
+      uri =
+          'https://www.cloud.equalsoftlink.com/api/api_genledger?dbname=admin_neel&party=' +
+              partylist +
+              '&fromdate=' +
+              fromdate +
+              '&todate=' +
+              todate +
+              '&cfromdate=' +
+              cfromdate +
+              '&ctodate=' +
+              ctodate +
+              '&cno=1';
+      //print('2');
+      var response = await http.get(Uri.parse(uri));
+      //print('3');
+      var jsonData = jsonDecode(response.body);
+      //print('4');
+
+      jsonData = jsonData['Data'];
+
+      //var list = jsonData['Data'] as List;
+      //List<Item> itemsList = list.map((i) => Item.fromJSON(i)).toList();
+
+      //print(itemsList);
+
+      //print(jsonData);
+      //print(uri);
+
+      //http.Response response = await http.get(Uri.parse(Uri.encodeFull(uri)));
+      //var response = await http.get(Uri.parse(uri));
+
+      //print('1');
+      //var Data = jsonDecode(response.body);
+      //print('2');
+      //Data = Data['Data'];
+      //print('3');
+      //print(Data);
+
+      setState(() {
+        _jsonData = jsonData;
+      });
+      return true;
+    }
+
     void gotoLedgerReport(BuildContext context) async {
-      //print(_partylist.length);
-      if (_partylist.length <= 0) {
-        showAlertDialog(
-            context, 'Select Atleast One Party To Generate Ledger Report!!!1');
-        return;
+      //print('1234');
+
+      var fromdate = fromDate.toString().split(' ')[0];
+      var todate = toDate.toString().split(' ')[0];
+
+      await getreportdata();
+
+      var ReportTitle = 'Account Ledger Report';
+      var ReportTitle2 =
+          'Reportitng Period Between ' + fromdate + ' To ' + todate;
+
+      var oReport = new ReportPdf(ReportTitle, ReportTitle2);
+      oReport.Data = _jsonData;
+
+      var iCtr = 0;
+      double dramt = 0;
+      double cramt = 0;
+      double runbal = 0;
+      double totdramt = 0;
+      double totcramt = 0;
+
+      //var groupby = 'acname';
+      var cgroup = '';
+      var cNextGroup = '';
+      //var cnextgroup = '';
+      for (iCtr = 0; iCtr < _jsonData.length; iCtr++) {
+        if ((iCtr + 1) < _jsonData.length) {
+          cNextGroup = _jsonData[iCtr + 1]['acname'].toString();
+        }
+        if (cNextGroup != cgroup) {
+          if (iCtr != 0) {
+            _jsonData[iCtr + 1]['auto'] = 'Y';
+          } else {
+            _jsonData[iCtr]['auto'] = 'Y';
+          }
+          runbal = 0;
+          totdramt = 0;
+          totcramt = 0;
+          cgroup = _jsonData[iCtr]['acname'].toString();
+          _jsonData[iCtr]['autoword'] = cgroup;
+          _jsonData[iCtr]['bold'] = 'Y';
+        } else {
+          _jsonData[iCtr]['auto'] = '';
+          cgroup = _jsonData[iCtr]['acname'].toString();
+          _jsonData[iCtr]['autoword'] = '';
+          _jsonData[iCtr]['bold'] = '';
+        }
+
+        dramt = 0;
+        cramt = 0;
+        //print(_jsonData[iCtr]['dramt']);
+        if (_jsonData[iCtr]['dramt'].toString() != '') {
+          dramt = double.parse(_jsonData[iCtr]['dramt'].toString());
+        }
+        if (_jsonData[iCtr]['cramt'].toString() != '') {
+          cramt = double.parse(_jsonData[iCtr]['cramt'].toString());
+        }
+
+        runbal = runbal + (dramt - cramt);
+        totdramt = totdramt + dramt;
+        totcramt = totcramt + cramt;
+
+        if ((runbal) > 0) {
+          _jsonData[iCtr]['balance'] = (runbal).toStringAsFixed(2) + ' Dr';
+        } else {
+          _jsonData[iCtr]['balance'] = (runbal).toStringAsFixed(2) + ' Cr';
+        }
+        cgroup = _jsonData[iCtr]['acname'].toString();
       }
 
-      /*
+      _jsonData.add({
+        'date2': '',
+        'refacname': '',
+        'dramt': totdramt.toStringAsFixed(2),
+        'cramt': totcramt.toStringAsFixed(2),
+        'balance': '',
+        'bold': 'Y'
+      });
+      if ((runbal) > 0) {
+        _jsonData.add({
+          'date2': '',
+          'refacname': 'Balance C/f',
+          'dramt': '',
+          'cramt': runbal.toStringAsFixed(2),
+          'balance': '',
+          'bold': 'Y'
+        });
+      } else {
+        _jsonData.add({
+          'date2': '',
+          'refacname': 'Balance C/f',
+          'dramt': runbal.toStringAsFixed(2),
+          'cramt': '',
+          'balance': '',
+          'bold': 'Y'
+        });
+      }
+      if ((totdramt - totcramt) > 0) {
+        _jsonData.add({
+          'date2': '',
+          'refacname': '',
+          'dramt': (totdramt).toStringAsFixed(2),
+          'cramt': (totdramt).toStringAsFixed(2),
+          'balance': '',
+          'bold': 'Y'
+        });
+      } else {
+        _jsonData.add({
+          'date2': '',
+          'refacname': '',
+          'dramt': (totcramt).toStringAsFixed(2),
+          'cramt': (totcramt).toStringAsFixed(2),
+          'balance': '',
+          'bold': 'Y'
+        });
+      }
+
+      //print(_jsonData);
+      oReport.addColumn('date2', 'Date', 'C', 10, 0, 'left', 'N');
+      oReport.addColumn('refacname', 'Description', 'C', 20, 0, 'left', 'N');
+      oReport.addColumn('dramt', 'Debit', 'C', 10, 2, 'right', 'N');
+      oReport.addColumn('cramt', 'Credit', 'C', 10, 2, 'right', 'N');
+      oReport.addColumn('balance', 'Balance', 'C', 12, 2, 'right', 'N');
+
+      //oReport.generate();
+      final pdfFile2 = await oReport.generate();
+      ;
+
+      PdfApi.openFile(pdfFile2);
+
+      return;
+
+      final date2 = DateTime.now();
+      final dueDate2 = date2.add(Duration(days: 7));
+
+      final invoice2 = Invoice(
+        supplier: Supplier(
+          name: '',
+          address: '',
+          paymentInfo: '',
+        ),
+        customer: Customer(
+          name: '',
+          address: '',
+        ),
+        info: InvoiceInfo(
+          date: date2,
+          dueDate: dueDate2,
+          description: 'My description...',
+          number: '${DateTime.now().year}-9999',
+        ),
+        items: [
+          InvoiceItem(
+            description: 'Coffee',
+            date: DateTime.now(),
+            quantity: 3,
+            vat: 0.19,
+            unitPrice: 5.99,
+          ),
+        ],
+      );
+
+      final pdfFile = await PdfReportApi.generate(invoice2);
+
+      PdfApi.openFile(pdfFile);
+      return;
+      // if (_partylist.length <= 0) {
+      //   showAlertDialog(
+      //       context, 'Select Atleast One Party To Generate Ledger Report!!!1');
+      //   return;
+      // }
+
+      // DialogBuilder(context).showLoadingIndicator('Generating Report');
+      // await getreportdata();
+
+      // var result = await Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (_) => LedgerReport(
+      //             companyid: widget.xcompanyid,
+      //             companyname: widget.xcompanyname,
+      //             fbeg: widget.xfbeg,
+      //             fend: widget.xfend,
+      //             fromDate: fromDate,
+      //             toDate: toDate,
+      //             partylist: _partylist,
+      //             data: _jsonData)));
+
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => Ledgerreport(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                    fromDate: fromDate,
-                    toDate: toDate,
-                    partylist: _partylist,
-                  )));
-                  */
+              builder: (_) => LedgerReport(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  fromDate: fromDate,
+                  toDate: toDate,
+                  partylist: _partylist,
+                  data: _jsonData)));
     }
 
     return Scaffold(

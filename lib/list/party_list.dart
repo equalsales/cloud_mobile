@@ -31,6 +31,7 @@ class PartyListState extends State<party_list> {
   List _partylist = [];
   List _orgpartylist = [];
   List _partySelected = [];
+  List _partySelected2 = [];
   List<bool> _selected = [];
   String query = '';
 
@@ -86,7 +87,7 @@ class PartyListState extends State<party_list> {
           ElevatedButton(
             onPressed: () {
               // Navigate back to first route when tapped.
-              Navigator.pop(context, _partySelected);
+              Navigator.pop(context, [_partySelected, _partySelected2]);
             },
             child: Text('Select'),
           ),
@@ -94,6 +95,7 @@ class PartyListState extends State<party_list> {
               child: ListView.builder(
             itemCount: this._partylist.length,
             itemBuilder: (context, index) {
+              int id = this._partylist[index]['id'];
               String account = this._partylist[index]['party'];
               String city = this._partylist[index]['city'];
               return ListTile(
@@ -104,6 +106,8 @@ class PartyListState extends State<party_list> {
                   //print(account);
                   //setState(() => _selected[i] = !_selected[i])
                   _partySelected.add(account);
+                  _partySelected2.add(id);
+                  //setState(() => _selected[index] = !_selected[index]);
                   setState(() => _selected[index] = !_selected[index]);
                   //print(_selected);
                   //showAlertDialog(context, companyid);

@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'common/global.dart' as globals;
 import 'package:cloud_mobile/common/alert.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+
 class YearSelection extends StatefulWidget {
   var xuser;
   var xpwd;
@@ -83,7 +85,9 @@ class _YearSelectionPageState extends State<YearSelection> {
     //companydetails(widget.xuser,widget.xpwd);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Company Selection'),
+        title: Text('Company Selection',
+            style: GoogleFonts.abel(
+                fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
       body: Center(
           child: ListView.builder(

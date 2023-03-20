@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:pdf/pdf.dart';
 
 import 'package:cloud_mobile/yearselection.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +13,19 @@ import 'package:http/http.dart' as http;
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:cloud_mobile/common/alert.dart';
 
-void main() {
+import 'package:google_fonts/google_fonts.dart';
+
+//import 'package:splashscreen/splashscreen.dart';
+
+//import 'package:splashscreen/splashscreen.dart';
+
+import 'dart:io';
+
+import 'package:pdf/widgets.dart' as pw;
+
+//void main() {
+
+Future<void> main() async {
   runApp(const MyApp());
 }
 
@@ -28,7 +43,21 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: Scaffold(
+      home: /*SplashScreen(
+          seconds: 5,
+          navigateAfterSeconds: new MyHomePage(),
+          backgroundColor: Colors.yellow,
+          title: new Text(
+            'Flutter Javatpoint',
+            textScaleFactor: 2,
+          ),
+          image: new Image.network(
+              'https://static.javatpoint.com/tutorial/flutter/images/flutter-creating-android-platform-specific-code3.png'),
+          loadingText: Text("Loading"),
+          photoSize: 150.0,
+          loaderColor: Colors.red,
+        )*/
+          Scaffold(
         appBar:
             AppBar(title: const Text(_title, style: TextStyle(fontSize: 25))),
         body: const MyHomePage(),
@@ -107,30 +136,33 @@ class _MyHomePage extends State<MyHomePage> {
             Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
-                child: const Text(
+                child: Text(
                   'Equal',
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 30),
+                  style: GoogleFonts.oswald(
+                      fontSize: 25.0, fontWeight: FontWeight.bold),
                 )),
             Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
-                child: const Text(
+                child: Text(
                   'Sign in',
-                  style: TextStyle(fontSize: 20),
+                  style: GoogleFonts.oswald(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 )),
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(
+                autofocus: true,
                 controller: nameController,
-                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
-                decoration: const InputDecoration(
+                style: GoogleFonts.oswald(
+                    fontSize: 25.0, fontWeight: FontWeight.bold),
+                //style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                decoration: InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     border: OutlineInputBorder(),
                     labelText: 'User Name',
-                    labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+                    labelStyle: GoogleFonts.oswald(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
               ),
             ),
             Container(
@@ -139,20 +171,22 @@ class _MyHomePage extends State<MyHomePage> {
                 obscureText: true,
                 style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                 controller: passwordController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                     prefixIcon: Icon(Icons.password),
                     border: OutlineInputBorder(),
                     labelText: 'Password',
-                    labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+                    labelStyle: GoogleFonts.oswald(
+                        fontSize: 20, fontWeight: FontWeight.bold)),
               ),
             ),
             Container(
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(10, 6, 10, 0),
                 child: ElevatedButton(
-                  child: const Text(
+                  child: Text(
                     'Login',
-                    style: TextStyle(fontSize: 20),
+                    style: GoogleFonts.oswald(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
                     _username = nameController.text;
