@@ -17,15 +17,16 @@ import '../../common/global.dart' as globals;
 //import 'package:cloud_mobile/common/supplier.dart';
 
 class ReportPdf {
-  var Data;
+  var Data = [];
   var xGrp;
   var xColumns;
-  var xGroupBy = '';
+  var xGroupBy = 'acname';
   var _datalist;
   var nLevel = 0;
 
   var ReportTitle = '';
   var ReportTitle2 = '';
+  var landscape = 'N';
 
   List column = [];
 
@@ -37,7 +38,7 @@ class ReportPdf {
     ReportTitle2 = Title2;
   }
 
-  addColumn(field, caption, datatype, width, decimal, align, hide) {
+  addColumn(field, caption, datatype, width, decimal, align, hide, aggr) {
     var colEle = {
       'field': field,
       'caption': caption,
@@ -46,6 +47,7 @@ class ReportPdf {
       'decimal': decimal,
       'align': align,
       'hide': hide,
+      'aggr': aggr,
     };
     column.add(colEle);
   }
@@ -61,9 +63,10 @@ class ReportPdf {
 
     final pdf = Document();
 
-    //print(ReportTitle);
-    //print(ReportTitle2);
     pdf.addPage(MultiPage(
+      pageFormat: landscape == 'Y'
+          ? PdfPageFormat.a4.landscape
+          : PdfPageFormat.a4.portrait,
       maxPages: 99999,
       header: (context) {
         return buildTitle(ReportTitle, ReportTitle2, column);
@@ -84,7 +87,7 @@ class ReportPdf {
         //buildHeader(invoice),
         //SizedBox(height: 3 * PdfPageFormat.cm),
         //buildTitle('DHRUV FITWALA', ''),
-        buildTitle2(context, Data, column),
+        buildTitle2(context, Data, column, xGroupBy),
         //buildInvoice(column, Data),
         Divider(),
         //buildTotal(invoice),
@@ -148,17 +151,197 @@ class ReportPdf {
         ],
       );
 
-  static Widget buildTitle2(context, reportdata, column) {
+  static Widget buildTitle2(context, reportdata, column, groupby) {
     final List items = [];
 
     var count = reportdata.length;
-    print(reportdata);
+    //print(reportdata);
     var colCount = column.length;
 
+    //Total Array
+    var netTotal = [];
+    var grpTotal1 = [];
+
+    var iCtr = 0;
+
+    for (iCtr = 0; iCtr < colCount; iCtr++) {
+      print(column[iCtr]['field']);
+      netTotal.add(0);
+      grpTotal1.add(0);
+      //grpTotal1[column[iCtr]['field']] = 0;
+    }
+    print(netTotal);
+
+    var nCtr = 0;
+    // Start First Grouping !!!!
+    if (groupby != '') {
+      var cgroup = '';
+      var cNextGroup = '';
+      for (iCtr = 0; iCtr < reportdata.length; iCtr++) {
+        print(iCtr);
+        if ((iCtr + 1) < reportdata.length) {
+          cNextGroup = reportdata[iCtr + 1][groupby].toString();
+        }
+        if (cNextGroup != cgroup) {
+          if (iCtr != 0) {
+            print('------');
+            print(iCtr);
+            if ((iCtr + 1) < reportdata.length) {
+              reportdata[iCtr + 1]['auto'] = 'Y';
+            }
+
+            for (var jCtr = 0; jCtr < colCount; jCtr++) {
+              //field = column[jCtr]['field'].toString();
+              if (column[jCtr]['aggr'] == 'SUM') {
+                grpTotal1[jCtr] = grpTotal1[jCtr] +
+                    double.parse(
+                        reportdata[iCtr][column[jCtr]['field']].toString());
+
+                netTotal[jCtr] = netTotal[jCtr] +
+                    double.parse(
+                        reportdata[iCtr][column[jCtr]['field']].toString());
+              } else if (column[jCtr]['aggr'] == 'COUNT') {
+                grpTotal1[jCtr] += 1;
+                netTotal[jCtr] += 1;
+              }
+            }
+
+            var newRow = {};
+            for (var jCtr = 0; jCtr < colCount; jCtr++) {
+              if ((column[jCtr]['aggr'] == 'SUM') ||
+                  (column[jCtr]['aggr'] == 'COUNT')) {
+                newRow[column[jCtr]['field']] = grpTotal1[jCtr];
+              } else {
+                newRow[column[jCtr]['field']] = '';
+              }
+            }
+            newRow['bold'] = 'Y';
+            newRow['line'] = 'Y';
+
+            grpTotal1 = [];
+            for (var xCtr = 0; xCtr < colCount; xCtr++) {
+              grpTotal1.add(0);
+              //grpTotal1[column[iCtr]['field']] = 0;
+            }
+
+            cgroup = reportdata[iCtr][groupby].toString();
+            reportdata[iCtr]['autoword'] = cgroup;
+            //reportdata[iCtr]['bold'] = 'Y';
+
+            reportdata.insert(iCtr + 1, newRow);
+            iCtr = iCtr + 1;
+
+            print(iCtr);
+            print(reportdata.length);
+            //print(reportdata[iCtr + 2]);
+            //break;
+            // if ((iCtr + 1) < reportdata.length) {
+            //   iCtr = iCtr + 1;
+            // }
+
+            //newRow[groupby] = cgroup;
+          } else {
+            reportdata[iCtr]['auto'] = 'Y';
+
+            cgroup = reportdata[iCtr][groupby].toString();
+            reportdata[iCtr]['autoword'] = cgroup;
+            reportdata[iCtr]['bold'] = 'Y';
+
+            for (var jCtr = 0; jCtr < colCount; jCtr++) {
+              //field = column[jCtr]['field'].toString();
+              if (column[jCtr]['aggr'] == 'SUM') {
+                grpTotal1[jCtr] = grpTotal1[jCtr] +
+                    double.parse(
+                        reportdata[iCtr][column[jCtr]['field']].toString());
+
+                netTotal[jCtr] = netTotal[jCtr] +
+                    double.parse(
+                        reportdata[iCtr][column[jCtr]['field']].toString());
+              } else if (column[jCtr]['aggr'] == 'COUNT') {
+                grpTotal1[jCtr] += 1;
+                netTotal[jCtr] += 1;
+              }
+            }
+          }
+        } else {
+          reportdata[iCtr]['auto'] = '';
+          cgroup = reportdata[iCtr][groupby].toString();
+          reportdata[iCtr]['autoword'] = '';
+          reportdata[iCtr]['bold'] = '';
+
+          for (var jCtr = 0; jCtr < colCount; jCtr++) {
+            //field = column[jCtr]['field'].toString();
+            if (column[jCtr]['aggr'] == 'SUM') {
+              grpTotal1[jCtr] = grpTotal1[jCtr] +
+                  double.parse(
+                      reportdata[iCtr][column[jCtr]['field']].toString());
+
+              netTotal[jCtr] = netTotal[jCtr] +
+                  double.parse(
+                      reportdata[iCtr][column[jCtr]['field']].toString());
+            } else if (column[jCtr]['aggr'] == 'COUNT') {
+              grpTotal1[jCtr] += 1;
+              netTotal[jCtr] += 1;
+            }
+          }
+          //print(grpTotal1);
+        }
+
+        //cgroup = reportdata[iCtr][groupby].toString();
+      }
+    }
+
+    //print(reportdata);
+    //var field = '';
+    //Calculate Net Total !!!!
+    // for (iCtr = 0; iCtr < count; iCtr++) {
+    //   for (var jCtr = 0; jCtr < colCount; jCtr++) {
+    //     //field = column[jCtr]['field'].toString();
+    //     if (column[jCtr]['aggr'] == 'SUM') {
+    //       //print(column[jCtr]['field']);
+    //       netTotal[jCtr] = netTotal[jCtr] +
+    //           double.parse(reportdata[iCtr][column[jCtr]['field']].toString());
+    //     } else if (column[jCtr]['aggr'] == 'COUNT') {
+    //       netTotal[jCtr] += 1;
+    //     }
+    //   }
+    // }
+
+    // if (groupby != '') {
+    //   var newRow = {};
+    //   for (var jCtr = 0; jCtr < colCount; jCtr++) {
+    //     if ((column[jCtr]['aggr'] == 'SUM') ||
+    //         (column[jCtr]['aggr'] == 'COUNT')) {
+    //       newRow[column[jCtr]['field']] = grpTotal1[jCtr];
+    //     } else {
+    //       newRow[column[jCtr]['field']] = '';
+    //     }
+    //   }
+    //   newRow['bold'] = 'Y';
+    //   reportdata.add(newRow);
+    // }
+    //Put Net Total !!!!
+    var newRow = {};
+    for (var jCtr = 0; jCtr < colCount; jCtr++) {
+      if ((column[jCtr]['aggr'] == 'SUM') ||
+          (column[jCtr]['aggr'] == 'COUNT')) {
+        newRow[column[jCtr]['field']] = netTotal[jCtr];
+      } else {
+        newRow[column[jCtr]['field']] = '';
+      }
+    }
+    newRow['bold'] = 'Y';
+    //print(newRow);
+
+    reportdata.add(newRow);
+
+    //print(netTotal);
+    count = reportdata.length;
     for (var iCtr = 0; iCtr < count; iCtr++) {
       items.add({'1', '2', '3', '4'});
     }
-    print(count);
+
+    //print(count);
 
     // var dataCtr = 0;
     // int size = column.length;
@@ -215,23 +398,36 @@ class ReportPdf {
 
     // }];
 
-    var groupby = 'acname';
+    //var groupby = ;
     var cgroup = '';
     var cNextGroup = '';
     var cnextgroup = '';
 
+    print(groupby);
+    print(reportdata);
     return Column(children: <Widget>[
       for (int i = 0; i < items.length; i++) ...[
-        if (reportdata[i]['auto'] == 'Y')
+        if (reportdata[i]['auto'] == 'Y') ...[
+          // if (i != 0) ...[
+          //   Container(
+          //       width: double.infinity,
+          //       child: Text('xxxx',
+          //           style: TextStyle(
+          //               fontSize: 16,
+          //               color: PdfColors.blue,
+          //               fontWeight: FontWeight.bold))),
+          // ],
           Container(
               width: double.infinity,
               //decoration:
               //BoxDecoration(border: Border.all(color: PdfColors.black)),
-              child: Text(reportdata[i]['acname'],
+              child: Text(reportdata[i][groupby].toString(),
                   style: TextStyle(
                       fontSize: 16,
-                      color: PdfColors.blue,
+                      color: PdfColors.red,
                       fontWeight: FontWeight.bold))),
+        ],
+
         // if (i < (items.length - 1)) ...[
         //   cnextgroup = reportdata[i + 1]['acname']
         // ],
@@ -248,9 +444,10 @@ class ReportPdf {
             child: Row(children: <Widget>[
               for (int colCtr = 0; colCtr < column.length; colCtr++) ...[
                 Container(
+                    padding: const EdgeInsets.all(4),
                     //color: i % 2 == 0 ? PdfColors.white : PdfColors.grey100,
-                    // decoration: BoxDecoration(
-                    //     border: Border.all(color: PdfColors.green)),
+                    // `decoration: BoxDecoration(
+                    //     border: Border(top: BorderSide(width: 1))),`
                     width: double.parse(column[colCtr]['width'].toString()) * 8,
                     child: Align(
                         alignment: column[colCtr]['align'].toString() == 'right'
@@ -261,10 +458,13 @@ class ReportPdf {
                               reportdata[i][column[colCtr]['field']].toString(),
                               textAlign: TextAlign.left,
                               style: TextStyle(
-                                  fontWeight:
-                                      reportdata[i]['bold'].toString() == 'Y'
-                                          ? FontWeight.bold
-                                          : FontWeight.normal)),
+                                  fontWeight: (reportdata[i]['bold']
+                                                  .toString() ==
+                                              'Y' &&
+                                          reportdata[i]['auto'].toString() !=
+                                              'Y')
+                                      ? FontWeight.bold
+                                      : FontWeight.normal)),
                         ])))
               ]
             ])),
@@ -469,7 +669,7 @@ class ReportPdf {
 
     for (var iCtr = 0; iCtr < column.length; iCtr++) {
       headers.add(column[iCtr]['caption']);
-      print(column[iCtr]['width']);
+      //print(column[iCtr]['width']);
       double width = double.parse(column[iCtr]['width'].toString());
       col[iCtr] = FixedColumnWidth(width);
       //colWidth.add(FixedColumnWidth(width));

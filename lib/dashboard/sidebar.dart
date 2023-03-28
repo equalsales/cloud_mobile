@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/report/account/view_ledger.dart';
+import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 //import 'package:myfirstapp/screens/loginscreen/login_screen.dart';
 //import 'package:myfirstapp/screens/purchase/purchaseview_screen.dart';
 //import 'package:myfirstapp/screens/sales/saleview_screen.dart';
@@ -65,7 +66,15 @@ class SideDrawer extends StatelessWidget {
             leading: Icon(Icons.shopping_cart),
             title: Text('Sale Bill'),
             onTap: () => {
-              //Navigator.of(context).pop()
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => SaleBillMenu(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
             },
           ),
           ListTile(

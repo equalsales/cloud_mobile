@@ -99,7 +99,7 @@ class _MyHomePage extends State<MyHomePage> {
     setState(() {
       dbController.text = _db;
     });
-    alert(context, _db, _db);
+    //alert(context, _db, _db);
   }
 
   void executelogin(context) async {
@@ -171,8 +171,12 @@ class _MyHomePage extends State<MyHomePage> {
                 padding: const EdgeInsets.all(10),
                 child: Text(
                   'Equal',
-                  style: GoogleFonts.oswald(
-                      fontSize: 25.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontFamily: 'verdana',
+                      fontSize:
+                          20) /*GoogleFonts.oswald(
+                      fontSize: 25.0, fontWeight: FontWeight.bold)*/
+                  ,
                 )),
             Container(
                 alignment: Alignment.center,
@@ -202,7 +206,8 @@ class _MyHomePage extends State<MyHomePage> {
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: TextField(
                 obscureText: true,
-                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                style: GoogleFonts.oswald(
+                    fontSize: 25.0, fontWeight: FontWeight.bold),
                 controller: passwordController,
                 decoration: InputDecoration(
                     prefixIcon: Icon(Icons.password),

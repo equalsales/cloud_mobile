@@ -29,12 +29,12 @@ import 'package:cloud_mobile/common/supplier.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
-class Ledgerview extends StatefulWidget {
+class SaleBillConcView extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
-  Ledgerview({Key? mykey, companyid, companyname, fbeg, fend})
+  SaleBillConcView({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -42,10 +42,10 @@ class Ledgerview extends StatefulWidget {
     xfend = fend;
   }
   @override
-  _LedgerviewState createState() => _LedgerviewState();
+  _SaleBillConcViewState createState() => _SaleBillConcViewState();
 }
 
-class _LedgerviewState extends State<Ledgerview> {
+class _SaleBillConcViewState extends State<SaleBillConcView> {
   //TextEditingController _fromdatecontroller = new TextEditingController(text: 'dhaval');
   List _partylist = [];
   final _formKey = GlobalKey<FormState>();
@@ -65,13 +65,6 @@ class _LedgerviewState extends State<Ledgerview> {
 
     _fromdate.text = fromDate.toString().split(' ')[0];
     _todate.text = toDate.toString().split(' ')[0];
-  }
-
-  //DateTime selectedDate = DateTime.parse();
-  List _companydetails = [];
-
-  Future<bool> companydetails(_user, _pwd) async {
-    return true;
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -113,26 +106,14 @@ class _LedgerviewState extends State<Ledgerview> {
                     companyname: widget.xcompanyname,
                     fbeg: widget.xfbeg,
                     fend: widget.xfend,
-                    acctype: '',
+                    acctype: 'SALE PARTY',
                   )));
 
       setState(() {
         var retResult = result;
         _partylist = result[1];
-        print('xxxxxxxxx');
-        print(_partylist);
         result = result[1];
-        //print('ddddd');
-        //print(result);
         var selParty = '';
-        // for (var ictr = 0; ictr < result.length; ictr++) {
-        //   if (ictr > 0) {
-        //     selParty = selParty + ',';
-        //   }
-        //   selParty = selParty + result[ictr];
-        // }
-
-        //var selParty2 = '';
         for (var ictr = 0; ictr < retResult[0].length; ictr++) {
           if (ictr > 0) {
             selParty = selParty + ',';
@@ -141,7 +122,6 @@ class _LedgerviewState extends State<Ledgerview> {
         }
         _partysel.text = selParty;
       });
-      //print(result);
     }
 
     Future<bool> getreportdata() async {
@@ -168,21 +148,25 @@ class _LedgerviewState extends State<Ledgerview> {
       var ctodate = retconvdate(globals.enddate).toString();
       var cno = globals.companyid;
       var db = globals.dbname;
-      print(partylist); //6288
-      uri = 'https://www.cloud.equalsoftlink.com/api/api_genledger?dbname=' +
-          db +
-          '&party=' +
-          partylist +
-          '&fromdate=' +
-          fromdate +
-          '&todate=' +
-          todate +
-          '&cfromdate=' +
-          cfromdate +
-          '&ctodate=' +
-          ctodate +
-          '&cno=' +
-          cno;
+      //print(partylist); //6288
+
+      uri =
+          'https://www.cloud.equalsoftlink.com/api/api_salelrpending?dbname=' +
+              db +
+              '&conc=Y' +
+              '&fromdate=' +
+              fromdate +
+              '&todate=' +
+              todate +
+              '&cfromdate=' +
+              cfromdate +
+              '&party=' +
+              partylist +
+              '&ctodate=' +
+              ctodate +
+              '&cno=' +
+              cno;
+
       //print('2');
       var response = await http.get(Uri.parse(uri));
       //print('3');
@@ -190,6 +174,13 @@ class _LedgerviewState extends State<Ledgerview> {
       //print('4');
 
       jsonData = jsonData['Data'];
+
+      /*
+      jsonData.sort((a, b) {
+        return a.party.toLowerCase().compareTo(b.party.toLowerCasepp());
+      });*/
+
+      //print(jsonData);
 
       //var list = jsonData['Data'] as List;
       //List<Item> itemsList = list.map((i) => Item.fromJSON(i)).toList();
@@ -215,7 +206,7 @@ class _LedgerviewState extends State<Ledgerview> {
       return true;
     }
 
-    void gotoLedgerReport(BuildContext context) async {
+    void gotoReport(BuildContext context) async {
       //print('1234');
 
       var fromdate = fromDate.toString().split(' ')[0];
@@ -231,144 +222,17 @@ class _LedgerviewState extends State<Ledgerview> {
       var oReport = new ReportPdf(ReportTitle, ReportTitle2);
       oReport.Data = _jsonData;
 
-      var iCtr = 0;
-      double dramt = 0;
-      double cramt = 0;
-      double runbal = 0;
-      double totdramt = 0;
-      double totcramt = 0;
+      oReport.landscape = 'Y';
+      oReport.xGroupBy = 'party';
 
-      //var groupby = 'acname';
-      var cgroup = '';
-      var cNextGroup = '';
-      oReport.xGroupBy = 'acname';
-      //var cnextgroup = '';
-      for (iCtr = 0; iCtr < _jsonData.length; iCtr++) {
-        if ((iCtr + 1) < _jsonData.length) {
-          cNextGroup = _jsonData[iCtr + 1]['acname'].toString();
-        }
-        if (cNextGroup != cgroup) {
-          if (iCtr != 0) {
-            _jsonData[iCtr + 1]['auto'] = 'Y';
-          } else {
-            _jsonData[iCtr]['auto'] = 'Y';
-          }
-          runbal = 0;
-          totdramt = 0;
-          totcramt = 0;
-          cgroup = _jsonData[iCtr]['acname'].toString();
-          _jsonData[iCtr]['autoword'] = cgroup;
-          _jsonData[iCtr]['bold'] = 'Y';
-        } else {
-          _jsonData[iCtr]['auto'] = '';
-          cgroup = _jsonData[iCtr]['acname'].toString();
-          _jsonData[iCtr]['autoword'] = '';
-          _jsonData[iCtr]['bold'] = '';
-        }
-
-        dramt = 0;
-        cramt = 0;
-        //print(_jsonData[iCtr]['dramt']);
-        if (_jsonData[iCtr]['dramt'].toString() != '') {
-          dramt = double.parse(_jsonData[iCtr]['dramt'].toString());
-        }
-        if (_jsonData[iCtr]['cramt'].toString() != '') {
-          cramt = double.parse(_jsonData[iCtr]['cramt'].toString());
-        }
-
-        runbal = runbal + (dramt - cramt);
-        totdramt = totdramt + dramt;
-        totcramt = totcramt + cramt;
-
-        if ((runbal) > 0) {
-          _jsonData[iCtr]['balance'] = (runbal).toStringAsFixed(2) + ' Dr';
-        } else {
-          _jsonData[iCtr]['balance'] = (runbal).toStringAsFixed(2) + ' Cr';
-        }
-        cgroup = _jsonData[iCtr]['acname'].toString();
-      }
-
-      _jsonData.add({
-        'date2': '',
-        'acname': cgroup,
-        'refacname': '',
-        'dramt': totdramt.toStringAsFixed(2),
-        'cramt': totcramt.toStringAsFixed(2),
-        'balance': '',
-        'bold': 'Y'
-      });
-      if ((runbal) > 0) {
-        _jsonData.add({
-          'date2': '',
-          'acname': cgroup,
-          'refacname': 'Closing Balance C/f Cr Amt',
-          'dramt': '',
-          'cramt': runbal.abs().toStringAsFixed(2),
-          'balance': '',
-          'bold': 'Y'
-        });
-      } else {
-        _jsonData.add({
-          'date2': '',
-          'acname': cgroup,
-          'refacname': 'Closing Balance C/f Dr Amt',
-          'dramt': runbal.abs().toStringAsFixed(2),
-          'cramt': '',
-          'balance': '',
-          'bold': 'Y'
-        });
-      }
-      if ((totdramt - totcramt) > 0) {
-        _jsonData.add({
-          'date2': '',
-          'acname': cgroup,
-          'refacname': '',
-          'dramt': (totdramt).toStringAsFixed(2),
-          'cramt': (totdramt).toStringAsFixed(2),
-          'balance': '',
-          'bold': 'Y'
-        });
-      } else {
-        _jsonData.add({
-          'date2': '',
-          'acname': cgroup,
-          'refacname': '',
-          'dramt': (totcramt).toStringAsFixed(2),
-          'cramt': (totcramt).toStringAsFixed(2),
-          'balance': '',
-          'bold': 'Y'
-        });
-      }
-
-      if ((runbal) > 0) {
-        _jsonData.add({
-          'date2': '',
-          'acname': cgroup,
-          'refacname': 'Balance Dr Amt',
-          'dramt': runbal.abs().toStringAsFixed(2),
-          'cramt': '',
-          'balance': '',
-          'bold': 'Y'
-        });
-      } else {
-        _jsonData.add({
-          'date2': '',
-          'acname': cgroup,
-          'refacname': 'Balance Cr Amt',
-          'dramt': '',
-          'cramt': runbal.abs().toStringAsFixed(2),
-          'balance': '',
-          'bold': 'Y'
-        });
-      }
-
-      //print(_jsonData);
+      oReport.addColumn('serial', 'Serial', 'C', 10, 0, 'left', 'N', '');
+      oReport.addColumn('srchr', '(c)', 'C', 3, 0, 'left', 'N', '');
       oReport.addColumn('date2', 'Date', 'C', 10, 0, 'left', 'N', '');
-      oReport.addColumn(
-          'refacname', 'Description', 'C', 20, 0, 'left', 'N', '');
-      oReport.addColumn('dramt', 'Debit', 'C', 10, 2, 'right', 'N', '');
-      oReport.addColumn('cramt', 'Credit', 'C', 10, 2, 'right', 'N', '');
-      oReport.addColumn('balance', 'Balance', 'C', 12, 2, 'right', 'N', '');
+      oReport.addColumn('party', 'Party', 'C', 20, 0, 'left', 'N', '');
+      oReport.addColumn('netamt', 'Bill Amt', 'C', 13, 2, 'right', 'N', 'SUM');
+      oReport.addColumn('transport', 'Transport', 'C', 20, 0, 'left', 'N', '');
+      oReport.addColumn('station', 'Station', 'C', 10, 0, 'left', 'N', '');
+      oReport.addColumn('lrno', 'LR No.', 'C', 10, 0, 'left', 'N', '');
 
       //oReport.generate();
       final pdfFile2 = await oReport.generate();
@@ -452,7 +316,7 @@ class _LedgerviewState extends State<Ledgerview> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Ledger',
+          'Sale Bill Concise Report',
           style:
               GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
@@ -503,7 +367,7 @@ class _LedgerviewState extends State<Ledgerview> {
               },
             ),
             ElevatedButton(
-              onPressed: () => {gotoLedgerReport(context)},
+              onPressed: () => {gotoReport(context)},
               child: Text('Generate Report',
                   style: GoogleFonts.oswald(
                       fontSize: 22.0, fontWeight: FontWeight.normal)),
