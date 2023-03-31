@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/report/account/view_ledger.dart';
 import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
+import 'package:cloud_mobile/module/enq/enqlist.dart';
 //import 'package:myfirstapp/screens/loginscreen/login_screen.dart';
 //import 'package:myfirstapp/screens/purchase/purchaseview_screen.dart';
 //import 'package:myfirstapp/screens/sales/saleview_screen.dart';
@@ -86,18 +87,17 @@ class SideDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
-            title: Text('Grey Purchase'),
+            title: Text('Enquiry'),
             onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (_) => GreyPurchaseview(
-              //               companyid: xcompanyid,
-              //               companyname: xcompanyname,
-              //               fbeg: xfbeg,
-              //               fend: xfend,
-              //             )))
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => EnqList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
             },
           ),
           ListTile(

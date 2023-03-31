@@ -28,24 +28,27 @@ import 'package:cloud_mobile/common/invoice.dart';
 import 'package:cloud_mobile/common/supplier.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_mobile/module/enq/enqlist.dart';
 
-class SaleBillConcView extends StatefulWidget {
+class EnqAdd extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
-  SaleBillConcView({Key? mykey, companyid, companyname, fbeg, fend})
+  var xid;
+  EnqAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
     xfend = fend;
+    xid = id;
   }
   @override
-  _SaleBillConcViewState createState() => _SaleBillConcViewState();
+  _EnqAddState createState() => _EnqAddState();
 }
 
-class _SaleBillConcViewState extends State<SaleBillConcView> {
+class _EnqAddState extends State<EnqAdd> {
   //TextEditingController _fromdatecontroller = new TextEditingController(text: 'dhaval');
   List _partylist = [];
   final _formKey = GlobalKey<FormState>();
@@ -53,7 +56,15 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
   DateTime toDate = DateTime.now();
 
   TextEditingController _fromdate = new TextEditingController();
-  TextEditingController _todate = new TextEditingController();
+  TextEditingController _name = new TextEditingController();
+  TextEditingController _address = new TextEditingController();
+  TextEditingController _city = new TextEditingController();
+  TextEditingController _type = new TextEditingController();
+  TextEditingController _business = new TextEditingController();
+  TextEditingController _node = new TextEditingController();
+  TextEditingController _amc = new TextEditingController();
+  TextEditingController _amount = new TextEditingController();
+  TextEditingController _conf = new TextEditingController();
   TextEditingController _partysel = new TextEditingController();
 
   var _jsonData = [];
@@ -64,7 +75,15 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
     toDate = retconvdate(widget.xfend);
 
     _fromdate.text = fromDate.toString().split(' ')[0];
-    _todate.text = toDate.toString().split(' ')[0];
+
+    //print('0');
+    //_todate.text = toDate.toString().split(' ')[0];
+  }
+
+  void setDefValue() {
+    _node.text = '0';
+    _amc.text = '0';
+    _amount.text = '0';
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -90,7 +109,7 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
     if (picked != null && picked != toDate)
       setState(() {
         toDate = picked;
-        _todate.text = picked.toString().split(' ')[0];
+        //_todate.text = picked.toString().split(' ')[0];
         //print(toDate);
       });
   }
@@ -122,6 +141,101 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
         }
         _partysel.text = selParty;
       });
+    }
+
+    Future<bool> saveData() async {
+      String uri = '';
+      var cno = globals.companyid;
+      var db = globals.dbname;
+      var name = _name.text;
+      var address = _address.text;
+      var city = _city.text;
+      var type = _type.text;
+      var business = _business.text;
+      var node = _node.text;
+      var amc = _amc.text;
+      var amount = _amount.text;
+      var conf = '';
+      var id = widget.xid;
+      id = int.parse(id);
+
+      uri = 'https://www.cloud.equalsoftlink.com/api/api_createenq?dbname=' +
+          db +
+          '&name=' +
+          name +
+          '&address=' +
+          address +
+          '&city=' +
+          city +
+          '&type=' +
+          type +
+          '&business=' +
+          business +
+          '&node=' +
+          node +
+          '&amc=' +
+          amc +
+          '&amount=' +
+          amount +
+          '&conf=' +
+          conf +
+          '&id=' +
+          id.toString();
+
+      print(uri);
+      var response = await http.get(Uri.parse(uri));
+
+      var jsonData = jsonDecode(response.body);
+      //print('4');
+
+      jsonData = jsonData['Data'];
+
+      showAlertDialog(context, 'Saved !!!');
+
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => EnqList(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                  )));
+      return true;
+    }
+
+    Future<bool> loadData() async {
+      String uri = '';
+      var cno = globals.companyid;
+      var db = globals.dbname;
+      var id = widget.xid;
+
+      uri = 'https://www.cloud.equalsoftlink.com/api/api_enqlist?dbname=' +
+          db +
+          '&id=' +
+          id;
+
+      var response = await http.get(Uri.parse(uri));
+
+      var jsonData = jsonDecode(response.body);
+      //print('4');
+
+      jsonData = jsonData['Data'];
+      jsonData = jsonData[0];
+      print(jsonData);
+
+      _name.text = jsonData['name'];
+      _address.text = jsonData['address'];
+      _city.text = jsonData['city'];
+      _type.text = jsonData['type'];
+      _business.text = jsonData['business'];
+      _amount.text = jsonData['amount'];
+      _node.text = jsonData['node'];
+      _amc.text = jsonData['amc'];
+
+      print(_name.text);
+
+      return true;
     }
 
     Future<bool> getreportdata() async {
@@ -175,31 +289,6 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
 
       jsonData = jsonData['Data'];
 
-      /*
-      jsonData.sort((a, b) {
-        return a.party.toLowerCase().compareTo(b.party.toLowerCasepp());
-      });*/
-
-      //print(jsonData);
-
-      //var list = jsonData['Data'] as List;
-      //List<Item> itemsList = list.map((i) => Item.fromJSON(i)).toList();
-
-      //print(itemsList);
-
-      //print(jsonData);
-      //print(uri);
-
-      //http.Response response = await http.get(Uri.parse(Uri.encodeFull(uri)));
-      //var response = await http.get(Uri.parse(uri));
-
-      //print('1');
-      //var Data = jsonDecode(response.body);
-      //print('2');
-      //Data = Data['Data'];
-      //print('3');
-      //print(Data);
-
       setState(() {
         _jsonData = jsonData;
       });
@@ -242,95 +331,45 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
 
       //DialogBuilder(context).hideOpenDialog();
       return;
-
-      final date2 = DateTime.now();
-      final dueDate2 = date2.add(Duration(days: 7));
-
-      final invoice2 = Invoice(
-        supplier: Supplier(
-          name: '',
-          address: '',
-          paymentInfo: '',
-        ),
-        customer: Customer(
-          name: '',
-          address: '',
-        ),
-        info: InvoiceInfo(
-          date: date2,
-          dueDate: dueDate2,
-          description: 'My description...',
-          number: '${DateTime.now().year}-9999',
-        ),
-        items: [
-          InvoiceItem(
-            description: 'Coffee',
-            date: DateTime.now(),
-            quantity: 3,
-            vat: 0.19,
-            unitPrice: 5.99,
-          ),
-        ],
-      );
-
-      final pdfFile = await PdfReportApi.generate(invoice2);
-
-      PdfApi.openFile(pdfFile);
-      return;
-      // if (_partylist.length <= 0) {
-      //   showAlertDialog(
-      //       context, 'Select Atleast One Party To Generate Ledger Report!!!1');
-      //   return;
-      // }
-
-      // DialogBuilder(context).showLoadingIndicator('Generating Report');
-      // await getreportdata();
-
-      // var result = await Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //         builder: (_) => LedgerReport(
-      //             companyid: widget.xcompanyid,
-      //             companyname: widget.xcompanyname,
-      //             fbeg: widget.xfbeg,
-      //             fend: widget.xfend,
-      //             fromDate: fromDate,
-      //             toDate: toDate,
-      //             partylist: _partylist,
-      //             data: _jsonData)));
-
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => LedgerReport(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend,
-                  fromDate: fromDate,
-                  toDate: toDate,
-                  partylist: _partylist,
-                  data: _jsonData)));
     }
 
-    String dropdownvalue = 'PARTY';
+    String dropdownvalueType = 'CLOUD';
     var items = [
-      'PARTY',
-      'BOOK',
-      'AGENT',
-      'HASTE',
-      'TRANSPORT',
-      'STATION',
+      'CLOUD',
+      'OFFLINE',
     ];
+
+    String dropdownvalueBusiness = 'TRADING';
+    var itemsBusiness = [
+      'TRADING',
+      'ADHAT',
+      'AGENCY',
+      'EMBROIDERY',
+      'LOOMS',
+      'USERDEFINED',
+      'RETAIL',
+    ];
+
+    setDefValue();
+
+    if (int.parse(widget.xid) > 0) {
+      loadData();
+    }
+    print('1');
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Sale Bill Concise Report',
+          'Enquiry [ ADD ]',
           style:
               GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
-      body: Form(
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.done),
+          backgroundColor: Colors.green,
+          onPressed: () => {saveData()}),
+      body: SingleChildScrollView(
+          child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,8 +378,8 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
               controller: _fromdate,
               decoration: const InputDecoration(
                 icon: const Icon(Icons.person),
-                hintText: 'From Date',
-                labelText: 'From Date',
+                hintText: 'Date',
+                labelText: 'Date',
               ),
               onTap: () {
                 _selectDate(context);
@@ -350,37 +389,53 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
               },
             ),
             TextFormField(
-              controller: _todate,
+              controller: _name,
+              autofocus: true,
               decoration: const InputDecoration(
                 icon: const Icon(Icons.person),
-                hintText: 'To Date',
-                labelText: 'To Date',
+                hintText: 'Name Of Customer',
+                labelText: 'Name Of Customer',
               ),
               onTap: () {
-                _selecttoDate(context);
+                //_selecttoDate(context);
               },
               validator: (value) {
                 return null;
               },
             ),
             TextFormField(
-              controller: _partysel,
+              controller: _address,
               decoration: const InputDecoration(
                 icon: const Icon(Icons.person),
-                hintText: 'Select Party',
-                labelText: 'Select Party',
+                hintText: 'Address',
+                labelText: 'Address',
               ),
               onTap: () {
-                print('going to party screen');
-                gotoPartyScreen(context);
+                //_selecttoDate(context);
+              },
+              validator: (value) {
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: _city,
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.person),
+                hintText: 'City',
+                labelText: 'City',
+              ),
+              onTap: () {
+                //_selecttoDate(context);
+              },
+              validator: (value) {
+                return null;
               },
             ),
             DropdownButtonFormField(
-                value: dropdownvalue,
+                value: dropdownvalueType,
                 decoration: const InputDecoration(
                   icon: const Icon(Icons.person),
-                  //hintText: 'To Date',
-                  labelText: 'Group By',
+                  labelText: 'Type',
                 ),
                 items: items.map((String items) {
                   return DropdownMenuItem(
@@ -391,78 +446,89 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
                 icon: const Icon(Icons.arrow_drop_down_circle),
                 onChanged: (String? newValue) {
                   setState(() {
-                    dropdownvalue = newValue!;
+                    dropdownvalueType = newValue!;
                   });
                 }),
-            // DropdownButton(
-            //   value: dropdownvalue,
-            //   icon: const Icon(Icons.keyboard_arrow_down),
-            //   // Array list of items
-            //   items: items.map((String items) {
-            //     return DropdownMenuItem(
-            //       value: items,
-            //       child: Text(items),
-            //     );
-            //   }).toList(),
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       dropdownvalue = newValue!;
-            //     });
-            //   },
-            // ),
+            DropdownButtonFormField(
+                value: dropdownvalueBusiness,
+                decoration: const InputDecoration(
+                  icon: const Icon(Icons.person),
+                  labelText: 'Type Of Business',
+                ),
+                items: itemsBusiness.map((String items) {
+                  return DropdownMenuItem(
+                    value: items,
+                    child: Text(items),
+                  );
+                }).toList(),
+                icon: const Icon(Icons.arrow_drop_down_circle),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownvalueBusiness = newValue!;
+                  });
+                }),
+            TextFormField(
+              controller: _amount,
+              //initialValue: _amount.text,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.person),
+                hintText: 'Value',
+                labelText: 'Value',
+              ),
+              onTap: () {
+                //_selecttoDate(context);
+              },
+              validator: (value) {
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: _node,
+              //initialValue: _node.text,
+              keyboardType: TextInputType.numberWithOptions(decimal: false),
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.person),
+                hintText: 'Node',
+                labelText: 'Node',
+              ),
+              onTap: () {
+                //_selecttoDate(context);
+              },
+              validator: (value) {
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: _amc,
+              //initialValue: _amc.text,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(
+                icon: const Icon(Icons.person),
+                hintText: 'AMC',
+                labelText: 'AMC',
+              ),
+              onTap: () {
+                //_selecttoDate(context);
+              },
+              validator: (value) {
+                return null;
+              },
+            ),
             ElevatedButton(
               onPressed: () => {gotoReport(context)},
-              child: Text('Generate Report',
+              child: Text('Save',
                   style: GoogleFonts.oswald(
                       fontSize: 22.0, fontWeight: FontWeight.normal)),
             ),
           ],
         ),
-      ),
+      )),
       bottomNavigationBar: BottomBar(
         companyname: widget.xcompanyname,
         fbeg: widget.xfbeg,
         fend: widget.xfend,
       ),
     );
-
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text('Ledger ['+widget.xcompanyid+']'),
-    //   ),
-    //   body: Center(
-    //       child: Column(children: <Widget>[
-    //           Text('ssss', style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),),
-    //           Text('ssss', style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),),
-    //            FlatButton(
-    //               onPressed: null,
-    //               child: Text('From Date'),
-    //             ),
-    //           Container(
-    //           width: 100,
-    //           child: FlatButton(
-    //               onPressed: null,
-    //               child: Text('From Date'),
-    //             )
-    //           ),
-    //           Container(
-    //           width: 280,
-    //           child: Text('Date')
-    //           ),
-    //           Container(
-    //           width: 280,
-    //           padding: EdgeInsets.all(10.0),
-    //           child: RaisedButton(
-    //               child: Text('Generate Ledger', style: TextStyle(fontSize: 15.0),),
-    //             onPressed: () { /*executelogin(context);*/},
-    //             )
-    //           ),
-    //       ],)
-    //      //child: JobsListView()
-    //   ),
-    //   bottomNavigationBar: BottomAppBar(child: Text(widget.xcompanyname,
-    //   style: TextStyle(color: Colors.white,fontSize: 15)),
-    //   color: Colors.red,),
-    // );
   }
 }
