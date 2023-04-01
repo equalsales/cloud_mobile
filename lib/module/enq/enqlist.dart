@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:cloud_mobile/dashboard.dart';
 
 import 'dart:convert';
@@ -76,7 +76,7 @@ class _EnqListPageState extends State<EnqList> {
                         companyname: widget.xcompanyname,
                         fbeg: widget.xfbeg,
                         fend: widget.xfend,
-                        id: 0,
+                        id: '0',
                       )))
         },
       ),
@@ -120,9 +120,7 @@ class _EnqListPageState extends State<EnqList> {
             },
           )));
         },
-      )
-          //child: JobsListView()
-          ),
+      )),
     );
   }
 }

@@ -359,7 +359,7 @@ class _EnqAddState extends State<EnqAdd> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Enquiry [ ADD ]',
+          'Enquiry [ ' + (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') + ' ] ',
           style:
               GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
@@ -514,12 +514,6 @@ class _EnqAddState extends State<EnqAdd> {
               validator: (value) {
                 return null;
               },
-            ),
-            ElevatedButton(
-              onPressed: () => {gotoReport(context)},
-              child: Text('Save',
-                  style: GoogleFonts.oswald(
-                      fontSize: 22.0, fontWeight: FontWeight.normal)),
             ),
           ],
         ),
