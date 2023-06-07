@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_mobile/report/account/view_ledger.dart';
 import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 import 'package:cloud_mobile/module/enq/enqlist.dart';
+import 'package:cloud_mobile/report/task/pendingtask.dart';
+import 'package:cloud_mobile/report/task/pendingcall.dart';
+import 'package:cloud_mobile/report/task/checkingcall.dart';
 //import 'package:myfirstapp/screens/loginscreen/login_screen.dart';
 //import 'package:myfirstapp/screens/purchase/purchaseview_screen.dart';
 //import 'package:myfirstapp/screens/sales/saleview_screen.dart';
@@ -50,12 +52,12 @@ class SideDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: Text('Ledger'),
+            title: Text('Pending Task'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => Ledgerview(
+                      builder: (_) => PendingTask(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,
@@ -64,13 +66,13 @@ class SideDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Sale Bill'),
+            leading: Icon(Icons.home),
+            title: Text('Pending Call'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => SaleBillMenu(
+                      builder: (_) => PendingCall(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,
@@ -79,10 +81,18 @@ class SideDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Purchase Bill'),
+            leading: Icon(Icons.home),
+            title: Text('Checking Task'),
             onTap: () => {
-              //Navigator.of(context).pop()
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => CheckingTask(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
             },
           ),
           ListTile(
@@ -98,79 +108,6 @@ class SideDrawer extends StatelessWidget {
                             fbeg: xfbeg,
                             fend: xfend,
                           )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Mill GP'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (_) => MillGpview(
-              //               companyid: xcompanyid,
-              //               companyname: xcompanyname,
-              //               fbeg: xfbeg,
-              //               fend: xfend,
-              //             )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Finish Jobwork'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (_) => FinishJobview(
-              //               companyid: xcompanyid,
-              //               companyname: xcompanyname,
-              //               fbeg: xfbeg,
-              //               fend: xfend,
-              //             )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('General Purchase'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (_) => GenPurcview(
-              //               companyid: xcompanyid,
-              //               companyname: xcompanyname,
-              //               fbeg: xfbeg,
-              //               fend: xfend,
-              //             )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Outstanding'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (_) => OsView(
-              //               companyid: xcompanyid,
-              //               companyname: xcompanyname,
-              //               fbeg: xfbeg,
-              //               fend: xfend,
-              //             )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Sale Order'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (_) => SaleOrderView()))
             },
           ),
           ListTile(

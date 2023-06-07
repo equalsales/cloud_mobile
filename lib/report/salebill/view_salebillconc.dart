@@ -34,6 +34,7 @@ class SaleBillConcView extends StatefulWidget {
   var xcompanyname;
   var xfbeg;
   var xfend;
+  var dropdownvalue = 'PARTY';
   SaleBillConcView({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
@@ -55,6 +56,11 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
   TextEditingController _fromdate = new TextEditingController();
   TextEditingController _todate = new TextEditingController();
   TextEditingController _partysel = new TextEditingController();
+  TextEditingController _booksel = new TextEditingController();
+  TextEditingController _agentsel = new TextEditingController();
+  TextEditingController _hastesel = new TextEditingController();
+  TextEditingController _transportsel = new TextEditingController();
+  TextEditingController _stationsel = new TextEditingController();
 
   var _jsonData = [];
 
@@ -97,6 +103,8 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
 
   @override
   Widget build(BuildContext context) {
+    //String dropdownvalue = 'PARTY';
+
     void gotoPartyScreen(BuildContext context) async {
       var result = await Navigator.push(
           context,
@@ -121,6 +129,8 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
           selParty = selParty + retResult[0][ictr];
         }
         _partysel.text = selParty;
+
+        
       });
     }
 
@@ -129,6 +139,8 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
       var fromdate = fromDate.toString().split(' ')[0];
       var todate = toDate.toString().split(' ')[0];
       var partylist = '';
+      var groupby = widget.dropdownvalue;
+      groupby = groupby.toLowerCase();
       for (var ictr = 0; ictr < _partylist.length; ictr++) {
         if (ictr > 0) {
           partylist = partylist + ',';
@@ -165,7 +177,9 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
               '&ctodate=' +
               ctodate +
               '&cno=' +
-              cno;
+              cno +
+              '&groupby=' +
+              groupby;
 
       //print('2');
       var response = await http.get(Uri.parse(uri));
@@ -207,7 +221,12 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
     }
 
     void gotoReport(BuildContext context) async {
+      //print(dropdownvalue);
+      print(widget.dropdownvalue);
+      var groupby = widget.dropdownvalue;
+      groupby = groupby.toLowerCase();
       //print('1234');
+      //print()
 
       var fromdate = fromDate.toString().split(' ')[0];
       var todate = toDate.toString().split(' ')[0];
@@ -215,7 +234,7 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
       //DialogBuilder(context).showLoadingIndicator('');
       await getreportdata();
 
-      var ReportTitle = 'Account Ledger Report';
+      var ReportTitle = 'Sales Bill Report';
       var ReportTitle2 =
           'Reportitng Period Between ' + fromdate + ' To ' + todate;
 
@@ -223,7 +242,8 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
       oReport.Data = _jsonData;
 
       oReport.landscape = 'Y';
-      oReport.xGroupBy = 'party';
+      //oReport.xGroupBy = 'party';
+      oReport.xGroupBy = groupby;
 
       oReport.addColumn('serial', 'Serial', 'C', 10, 0, 'left', 'N', '');
       oReport.addColumn('srchr', '(c)', 'C', 3, 0, 'left', 'N', '');
@@ -313,7 +333,6 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
                   data: _jsonData)));
     }
 
-    String dropdownvalue = 'PARTY';
     var items = [
       'PARTY',
       'BOOK',
@@ -376,7 +395,7 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
               },
             ),
             DropdownButtonFormField(
-                value: dropdownvalue,
+                value: widget.dropdownvalue,
                 decoration: const InputDecoration(
                   icon: const Icon(Icons.person),
                   //hintText: 'To Date',
@@ -391,7 +410,8 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
                 icon: const Icon(Icons.arrow_drop_down_circle),
                 onChanged: (String? newValue) {
                   setState(() {
-                    dropdownvalue = newValue!;
+                    widget.dropdownvalue = newValue!;
+                    print(widget.dropdownvalue);
                   });
                 }),
             // DropdownButton(
