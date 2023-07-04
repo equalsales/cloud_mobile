@@ -94,9 +94,16 @@ class _MyHomePage extends State<MyHomePage> {
   void getDbDetails() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     _db = prefs.getString('cloud_db').toString();
+    _username = prefs.getString('cloud_username').toString();
+    _password = prefs.getString('cloud_password').toString();
 
     //dbController = TextEditingController(text: _db);
     setState(() {
+      //showAlertDialog(context, _username);
+      if ((_username != '') && (_username != 'null')) {
+        nameController.text = _username;
+        passwordController.text = _password;
+      }
       dbController.text = _db;
     });
     //alert(context, _db, _db);
@@ -107,6 +114,8 @@ class _MyHomePage extends State<MyHomePage> {
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('cloud_db', _db);
+    prefs.setString('cloud_username', _username);
+    prefs.setString('cloud_password', _password);
     globals.dbname = _db;
 
     var url = Uri.parse(

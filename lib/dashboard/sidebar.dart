@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_mobile/report/account/view_ledger.dart';
 import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 import 'package:cloud_mobile/module/enq/enqlist.dart';
+import 'package:cloud_mobile/module/bankbook/bankbooklist.dart';
+import 'package:cloud_mobile/mastermenu.dart';
+
 //import 'package:myfirstapp/screens/loginscreen/login_screen.dart';
 //import 'package:myfirstapp/screens/purchase/purchaseview_screen.dart';
 //import 'package:myfirstapp/screens/sales/saleview_screen.dart';
@@ -50,6 +53,21 @@ class SideDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.home),
+            title: Text('Master'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => Mastermenu(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.home),
             title: Text('Ledger'),
             onTap: () => {
               Navigator.push(
@@ -83,6 +101,21 @@ class SideDrawer extends StatelessWidget {
             title: Text('Purchase Bill'),
             onTap: () => {
               //Navigator.of(context).pop()
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Bank Book'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => BankBookList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
             },
           ),
           ListTile(

@@ -9,6 +9,7 @@ String fend = '';
 String startdate = '';
 String enddate = '';
 String dbname = '';
+String username = '';
 
 void alert(context, _title, _msg) {
   Alert(
