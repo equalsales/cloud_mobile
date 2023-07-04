@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_mobile/report/account/view_ledger.dart';
 import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 import 'package:cloud_mobile/module/enq/enqlist.dart';
 import 'package:cloud_mobile/module/bankbook/bankbooklist.dart';
 import 'package:cloud_mobile/mastermenu.dart';
 
+//import 'package:cloud_mobile/report/task/pendingtask.dart';
+//import 'package:cloud_mobile/report/task/pendingcall.dart';
+//import 'package:cloud_mobile/report/task/checkingcall.dart';
+//>>>>>>> 074aa7a8b52fbfcc81e98c791470e254ad6414e8
 //import 'package:myfirstapp/screens/loginscreen/login_screen.dart';
 //import 'package:myfirstapp/screens/purchase/purchaseview_screen.dart';
 //import 'package:myfirstapp/screens/sales/saleview_screen.dart';
@@ -67,43 +70,6 @@ class SideDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Ledger'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => Ledgerview(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Sale Bill'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => SaleBillMenu(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Purchase Bill'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-            },
-          ),
-          ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Bank Book'),
             onTap: () => {
@@ -131,79 +97,6 @@ class SideDrawer extends StatelessWidget {
                             fbeg: xfbeg,
                             fend: xfend,
                           )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Mill GP'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (_) => MillGpview(
-              //               companyid: xcompanyid,
-              //               companyname: xcompanyname,
-              //               fbeg: xfbeg,
-              //               fend: xfend,
-              //             )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Finish Jobwork'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (_) => FinishJobview(
-              //               companyid: xcompanyid,
-              //               companyname: xcompanyname,
-              //               fbeg: xfbeg,
-              //               fend: xfend,
-              //             )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('General Purchase'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (_) => GenPurcview(
-              //               companyid: xcompanyid,
-              //               companyname: xcompanyname,
-              //               fbeg: xfbeg,
-              //               fend: xfend,
-              //             )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Outstanding'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (_) => OsView(
-              //               companyid: xcompanyid,
-              //               companyname: xcompanyname,
-              //               fbeg: xfbeg,
-              //               fend: xfend,
-              //             )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Sale Order'),
-            onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (_) => SaleOrderView()))
             },
           ),
           ListTile(
