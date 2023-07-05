@@ -26,6 +26,7 @@ class SideDrawer extends StatelessWidget {
   var xcompanyname;
   var xfbeg;
   var xfend;
+
   SideDrawer({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
