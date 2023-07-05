@@ -129,8 +129,6 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
           selParty = selParty + retResult[0][ictr];
         }
         _partysel.text = selParty;
-
-        
       });
     }
 
