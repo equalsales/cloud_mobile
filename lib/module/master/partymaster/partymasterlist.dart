@@ -11,7 +11,7 @@ import 'package:cloud_mobile/common/alert.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:cloud_mobile/module/master/partymaster/add_partymaster';
+import 'package:cloud_mobile/module/master/partymaster/add_partymaster.dart';
 
 class PartyMasterList extends StatefulWidget {
   var xcompanyid;

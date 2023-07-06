@@ -117,6 +117,7 @@ class _MyHomePage extends State<MyHomePage> {
     prefs.setString('cloud_username', _username);
     prefs.setString('cloud_password', _password);
     globals.dbname = _db;
+    globals.username = _username;
 
     var url = Uri.parse(
         'https://www.cloud.equalsoftlink.com/api/api_authuser?dbname=' +
