@@ -14,3 +14,20 @@ DateTime getsystemdate() {
   DateTime newDate = DateTime.parse(now.toString().substring(0, 10));
   return newDate;
 }
+
+String getValue(xValue, DataType) {
+  if (DataType == 'C') {
+    if (xValue == null) {
+      xValue = '';
+    } else if (xValue == 'null') {
+      xValue = '';
+    }
+  } else if (DataType == 'N') {
+    if (xValue == null) {
+      xValue = 0;
+    } else if (xValue == 'null') {
+      xValue = 0;
+    }
+  }
+  return xValue;
+}

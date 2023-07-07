@@ -60,6 +60,9 @@ class _PartyMasterAddState extends State<PartyMasterAdd> {
   List _citylist = [];
   List _statelist = [];
 
+  String dropdownvalueType = '';
+  String dropdownvalueBusiness = '';
+
   TextEditingController _acchead = new TextEditingController();
   TextEditingController _acctype = new TextEditingController();
   TextEditingController _addr1 = new TextEditingController();
@@ -85,10 +88,63 @@ class _PartyMasterAddState extends State<PartyMasterAdd> {
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
+    if (int.parse(widget.xid) > 0) {
+      loadData();
+    }
+
+    //print('====================================');
+    //print(widget.xid);
+
     //_fromdate.text = fromDate.toString().split(' ')[0];
 
     //print('0');
     //_todate.text = toDate.toString().split(' ')[0];
+  }
+
+  Future<bool> loadData() async {
+    String uri = '';
+    var cno = globals.companyid;
+    var db = globals.dbname;
+    var id = widget.xid;
+
+    uri = 'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
+        db +
+        '&id=' +
+        id;
+    //print(uri);
+    var response = await http.get(Uri.parse(uri));
+
+    var jsonData = jsonDecode(response.body);
+    //print('4');
+
+    jsonData = jsonData['Data'];
+    jsonData = jsonData[0];
+    //print(jsonData);
+
+    _party.text = getValue(jsonData['party'], 'C');
+    _addr1.text = getValue(jsonData['addr1'], 'C');
+    _addr2.text = getValue(jsonData['addr2'], 'C');
+    _addr3.text = getValue(jsonData['addr3'], 'C');
+    _city.text = getValue(jsonData['city'], 'C');
+    _state.text = getValue(jsonData['state'], 'C');
+    _pincode.text = getValue(jsonData['pincode'], 'C');
+    _phoneno.text = getValue(jsonData['phoneno'], 'C');
+    _mobileno.text = getValue(jsonData['mobileno'], 'C');
+    _acchead.text = getValue(jsonData['acchead'], 'C');
+    _acctype.text = getValue(jsonData['acctype'], 'C');
+    _gstregno.text = getValue(jsonData['gstregno'], 'C');
+
+    setState(() {
+      dropdownvalueType = _acctype.text;
+      dropdownvalueBusiness = _acchead.text;
+    });
+    print(dropdownvalueType);
+    print(dropdownvalueBusiness);
+
+    //print(jsonData['acchead']);
+    print('here');
+
+    return true;
   }
 
   void setDefValue() {
@@ -121,7 +177,7 @@ class _PartyMasterAddState extends State<PartyMasterAdd> {
           }
           selCity = selCity + retResult[0][ictr];
         }
-        print(selCity);
+        //print(selCity);
         //_citysel.text = selCity;
         _city.text = selCity;
       });
@@ -229,7 +285,7 @@ class _PartyMasterAddState extends State<PartyMasterAdd> {
           '&id=' +
           id.toString();
 
-      print(uri);
+      //print(uri);
       var response = await http.post(Uri.parse(uri));
 
       var jsonData = jsonDecode(response.body);
@@ -238,9 +294,9 @@ class _PartyMasterAddState extends State<PartyMasterAdd> {
       var jsonCode = jsonData['Code'];
       var jsonMsg = jsonData['Message'];
 
-      print('------------------------------');
-      print(jsonData);
-      print(jsonCode);
+      //print('------------------------------');
+      //print(jsonData);
+      //print(jsonCode);
 
       if (jsonCode == '500') {
         showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
@@ -260,46 +316,12 @@ class _PartyMasterAddState extends State<PartyMasterAdd> {
       return true;
     }
 
-    Future<bool> loadData() async {
-      String uri = '';
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var id = widget.xid;
-
-      uri = 'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
-          db +
-          '&id=' +
-          id;
-      print(uri);
-      var response = await http.get(Uri.parse(uri));
-
-      var jsonData = jsonDecode(response.body);
-      //print('4');
-
-      jsonData = jsonData['Data'];
-      jsonData = jsonData[0];
-      print(jsonData);
-
-      _party.text = jsonData['party'];
-      _addr1.text = jsonData['addr1'];
-      _addr2.text = jsonData['addr2'];
-      _addr3.text = jsonData['addr3'];
-      _city.text = jsonData['city'];
-      _state.text = jsonData['state'];
-      _pincode.text = jsonData['pincode'];
-      _phoneno.text = jsonData['phoneno'];
-      _mobileno.text = jsonData['mobileno'];
-      _acchead.text = jsonData['acchead'];
-      _acctype.text = jsonData['acctype'];
-      _gstregno.text = jsonData['gstregno'];
-
-      return true;
-    }
-
-    String dropdownvalueType = '';
-    if (_acchead.text != '') {
-      dropdownvalueType = _acchead.text;
-    }
+    //print('here2');
+    //String dropdownvalueType = '';
+    //print(_acchead.text);
+    // if (_acchead.text != '') {
+    //   dropdownvalueType = _acchead.text;
+    // }
     var items = [
       '',
       'SALE PARTY',
@@ -337,7 +359,7 @@ class _PartyMasterAddState extends State<PartyMasterAdd> {
     ];
 
     //String dropdownvalueBusiness = 'TRADING';
-    String dropdownvalueBusiness = '';
+    //String dropdownvalueBusiness = '';
     var itemsBusiness = [
       '',
       'SUNDRY CREDITORS',
@@ -376,9 +398,6 @@ class _PartyMasterAddState extends State<PartyMasterAdd> {
 
     setDefValue();
 
-    if (int.parse(widget.xid) > 0) {
-      loadData();
-    }
     print('1');
     return Scaffold(
       appBar: AppBar(
