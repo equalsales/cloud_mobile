@@ -12,7 +12,7 @@ import 'package:cloud_mobile/common/alert.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:cloud_mobile/module/enq/add_enq.dart';
+import 'package:cloud_mobile/module/bankbook/add_bankbook.dart';
 
 class BankBookList extends StatefulWidget {
   var xcompanyid;
@@ -91,7 +91,7 @@ class _BankBookListPageState extends State<BankBookList> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => EnqAdd(
+                  builder: (_) => BankBookAdd(
                         companyid: widget.xcompanyid,
                         companyname: widget.xcompanyname,
                         fbeg: widget.xfbeg,
@@ -158,7 +158,7 @@ class _BankBookListPageState extends State<BankBookList> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => EnqAdd(
+                      builder: (_) => BankBookAdd(
                             companyid: widget.xcompanyid,
                             companyname: widget.xcompanyname,
                             fbeg: widget.xfbeg,
