@@ -138,11 +138,8 @@ class _PartyMasterAddState extends State<PartyMasterAdd> {
       dropdownvalueType = _acctype.text;
       dropdownvalueBusiness = _acchead.text;
     });
-    print(dropdownvalueType);
-    print(dropdownvalueBusiness);
 
     //print(jsonData['acchead']);
-    print('here');
 
     return true;
   }
@@ -180,6 +177,14 @@ class _PartyMasterAddState extends State<PartyMasterAdd> {
         //print(selCity);
         //_citysel.text = selCity;
         _city.text = selCity;
+        //print(selCity);
+        if (selCity != '') {
+          getCityDetails(_city.text, 0).then((value) {
+            setState(() {
+              _state.text = value[0]['state'];
+            });
+          });
+        }
       });
     }
 

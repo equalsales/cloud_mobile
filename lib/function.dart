@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 DateTime retconvdate(String dDate) {
   String startdate = dDate;
 
@@ -30,4 +34,25 @@ String getValue(xValue, DataType) {
     }
   }
   return xValue;
+}
+
+Future<List<dynamic>> getCityDetails(String City, int Id) async {
+  String uri = '';
+  City = getValue(City, 'C');
+
+  Id = int.parse(getValue(Id.toString(), 'N'));
+
+  uri =
+      'https://www.cloud.equalsoftlink.com/api/getcitylist?dbname=admin_dhruv&city=' +
+          City.toString() +
+          '&id=' +
+          Id.toString();
+
+  var response = await http.get(Uri.parse(uri));
+
+  var jsonData = jsonDecode(response.body);
+
+  jsonData = jsonData['Data'];
+
+  return jsonData;
 }
