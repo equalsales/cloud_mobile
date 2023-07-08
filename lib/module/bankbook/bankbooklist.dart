@@ -5,6 +5,7 @@ import 'package:cloud_mobile/dashboard.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:cloud_mobile/function.dart';
 
 import '../../common/global.dart' as globals;
 import 'package:cloud_mobile/common/alert.dart';
@@ -45,23 +46,24 @@ class _BankBookListPageState extends State<BankBookList> {
     var todate = widget.xfend;
 
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_bankbooklist?dbname=' +
+        'https://www.cloud.equalsoftlink.com/api/api_getbankbooklist?dbname=' +
             db +
             '&cno=' +
             cno +
-            '&fromdate=' +
+            '&startdate=' +
             fromdate +
-            '&todate=' +
+            '&enddate=' +
             todate));
 
-    print('https://www.cloud.equalsoftlink.com/api/api_bankbooklist?dbname=' +
-        db +
-        '&cno=' +
-        cno +
-        '&fromdate=' +
-        fromdate +
-        '&todate=' +
-        todate);
+    print(
+        'https://www.cloud.equalsoftlink.com/api/api_getbankbooklist?dbname=' +
+            db +
+            '&cno=' +
+            cno +
+            '&startdate=' +
+            fromdate +
+            '&enddate=' +
+            todate);
     var jsonData = jsonDecode(response.body);
 
     jsonData = jsonData['Data'];
@@ -79,7 +81,7 @@ class _BankBookListPageState extends State<BankBookList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('List Of Enquiry',
+        title: Text('Bank Book List',
             style: GoogleFonts.abel(
                 fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
@@ -103,10 +105,11 @@ class _BankBookListPageState extends State<BankBookList> {
         itemCount: this._companydetails.length,
         itemBuilder: (context, index) {
           print(this._companydetails[index]);
-          String date = this._companydetails[index]['date'].toString();
+          String date = this._companydetails[index]['date2'].toString();
+          //date = retconvdatestr(date);
           String serial = this._companydetails[index]['serial'].toString();
           String trntype = this._companydetails[index]['trntype'].toString();
-          String bank = this._companydetails[index]['bank'].toString();
+          String bank = this._companydetails[index]['book'].toString();
           String party = this._companydetails[index]['party'].toString();
           String cheque = this._companydetails[index]['cheque'].toString();
           String narration =
@@ -131,16 +134,18 @@ class _BankBookListPageState extends State<BankBookList> {
                     ' [ ' +
                     id +
                     ' ]' +
-                    ' ' +
-                    trntype,
+                    ' Party : ' +
+                    party,
                 style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
             subtitle: Text(
-                'Account :' +
-                    party +
+                'Type :' +
+                    trntype +
                     ' Cheque : ' +
                     cheque +
                     ' Amount : ' +
-                    amount,
+                    amount +
+                    ' Narration :' +
+                    narration,
                 style: TextStyle(fontSize: 11.0, fontWeight: FontWeight.bold)),
             leading: Icon(Icons.select_all),
             trailing: Icon(Icons.arrow_forward),

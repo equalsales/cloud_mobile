@@ -203,8 +203,6 @@ class _MyHomePage extends State<MyHomePage> {
               child: TextField(
                 autofocus: true,
                 controller: nameController,
-                style: GoogleFonts.oswald(
-                    fontSize: 25.0, fontWeight: FontWeight.bold),
                 //style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
                     prefixIcon: Icon(Icons.email),
@@ -218,8 +216,6 @@ class _MyHomePage extends State<MyHomePage> {
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
               child: TextField(
                 obscureText: true,
-                style: GoogleFonts.oswald(
-                    fontSize: 25.0, fontWeight: FontWeight.bold),
                 controller: passwordController,
                 decoration: InputDecoration(
                     prefixIcon: Icon(Icons.password),
