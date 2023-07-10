@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 import 'package:cloud_mobile/module/enq/enqlist.dart';
 import 'package:cloud_mobile/module/bankbook/bankbooklist.dart';
+import 'package:cloud_mobile/module/cashbook/cashbooklist.dart';
+
+import 'package:cloud_mobile/report/account/view_ledger.dart';
+
+import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
+
 import 'package:cloud_mobile/mastermenu.dart';
 
 //import 'package:cloud_mobile/report/task/pendingtask.dart';
@@ -78,6 +84,36 @@ class SideDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (_) => BankBookList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Cash Book'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => CashBookList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.money),
+            title: Text('Party Statement (Ledger)'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => Ledgerview(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,

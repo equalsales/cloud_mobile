@@ -12,15 +12,15 @@ import 'package:cloud_mobile/common/alert.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:cloud_mobile/module/bankbook/add_bankbook.dart';
+import 'package:cloud_mobile/module/cashbook/add_cashbook.dart';
 
-class BankBookList extends StatefulWidget {
+class CashBookList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
 
-  BankBookList({Key? mykey, companyid, companyname, fbeg, fend})
+  CashBookList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -29,10 +29,10 @@ class BankBookList extends StatefulWidget {
   }
 
   @override
-  _BankBookListPageState createState() => _BankBookListPageState();
+  _CashBookListPageState createState() => _CashBookListPageState();
 }
 
-class _BankBookListPageState extends State<BankBookList> {
+class _CashBookListPageState extends State<CashBookList> {
   List _companydetails = [];
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _BankBookListPageState extends State<BankBookList> {
     var enddate = globals.fend;
 
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_getbankbooklist?dbname=' +
+        'https://www.cloud.equalsoftlink.com/api/api_getcashbooklist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -70,7 +70,7 @@ class _BankBookListPageState extends State<BankBookList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bank Book List',
+        title: Text('Cash Book List',
             style: GoogleFonts.abel(
                 fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
@@ -80,7 +80,7 @@ class _BankBookListPageState extends State<BankBookList> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => BankBookAdd(
+                  builder: (_) => CashBookAdd(
                         companyid: widget.xcompanyid,
                         companyname: widget.xcompanyname,
                         fbeg: widget.xfbeg,
@@ -97,9 +97,8 @@ class _BankBookListPageState extends State<BankBookList> {
           //date = retconvdatestr(date);
           String serial = this._companydetails[index]['serial'].toString();
           String trntype = this._companydetails[index]['trntype'].toString();
-          String bank = this._companydetails[index]['book'].toString();
+          String cash = this._companydetails[index]['book'].toString();
           String party = this._companydetails[index]['party'].toString();
-          String cheque = this._companydetails[index]['cheque'].toString();
           String narration =
               this._companydetails[index]['narration'].toString();
           String amount = this._companydetails[index]['amount'].toString();
@@ -136,8 +135,8 @@ class _BankBookListPageState extends State<BankBookList> {
               title: Text(
                   'Dt :' +
                       date +
-                      ' Bank : ' +
-                      bank +
+                      ' Cash : ' +
+                      cash +
                       ' [ ' +
                       id +
                       ' ]' +
@@ -148,8 +147,6 @@ class _BankBookListPageState extends State<BankBookList> {
               subtitle: Text(
                   'Type :' +
                       trntype +
-                      ' Cheque : ' +
-                      cheque +
                       ' Amount : ' +
                       amount +
                       ' Narration :' +
@@ -162,7 +159,7 @@ class _BankBookListPageState extends State<BankBookList> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => BankBookAdd(
+                        builder: (_) => CashBookAdd(
                               companyid: widget.xcompanyid,
                               companyname: widget.xcompanyname,
                               fbeg: widget.xfbeg,
@@ -182,7 +179,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: const Text('Delete Bank Book Voucher ??'),
+      title: const Text('Delete Cash Cash Voucher ??'),
       content: Text('Do you want to delete this entry ?'),
       actions: <Widget>[
         TextButton(
@@ -195,7 +192,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             var cno = globals.companyid;
 
             var response = await http.post(Uri.parse(
-                'https://www.cloud.equalsoftlink.com/api/api_deletebankbook?dbname=' +
+                'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
                     db +
                     '&cno=' +
                     cno +
@@ -203,7 +200,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
                     id.toString()));
 
             print(
-                'https://www.cloud.equalsoftlink.com/api/api_deletebankbook?dbname=' +
+                'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
                     db +
                     '&id=' +
                     id.toString());
@@ -214,7 +211,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => BankBookList(
+                      builder: (_) => CashBookList(
                           companyid: globals.companyid,
                           companyname: globals.companyname,
                           fbeg: globals.fbeg,
@@ -232,16 +229,16 @@ void execDelete(BuildContext context, int index, int id, String name) {
   return;
 }
 
-Future<bool> deleteBankBook(id) async {
+Future<bool> deleteCashBook(id) async {
   var db = globals.dbname;
 
   var response = await http.post(Uri.parse(
-      'https://www.cloud.equalsoftlink.com/api/api_deletebankbook?dbname=' +
+      'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
           db +
           '&id=' +
           id.toString()));
 
-  print('https://www.cloud.equalsoftlink.com/api/api_deletebankbook?dbname=' +
+  print('https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
       db +
       '&id=' +
       id.toString());

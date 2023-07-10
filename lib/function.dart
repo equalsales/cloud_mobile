@@ -2,14 +2,22 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-DateTime retconvdate(String dDate) {
+DateTime retconvdate(String dDate, [format = 'dd-mm-yyyy']) {
   String startdate = dDate;
 
-  String dd = startdate.substring(0, 2);
-  String mm = startdate.toString().substring(3, 5);
-  String yy = startdate.toString().substring(6);
+  String dd = '';
+  String mm = '';
+  String yy = '';
+  DateTime selectedDate;
+  if (format == 'yyyy-mm-dd') {
+    selectedDate = DateTime.parse(startdate);
+  } else {
+    dd = startdate.substring(0, 2);
+    mm = startdate.toString().substring(3, 5);
+    yy = startdate.toString().substring(6);
+    selectedDate = DateTime.parse(yy + '-' + mm + '-' + dd);
+  }
 
-  DateTime selectedDate = DateTime.parse(yy + '-' + mm + '-' + dd);
   return selectedDate;
 }
 

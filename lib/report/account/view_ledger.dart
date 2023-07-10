@@ -11,6 +11,7 @@ import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/list/party_list.dart';
 import 'package:cloud_mobile/report/account/report_ledger.dart';
+import 'package:cloud_mobile/report/account/show_ledger.dart';
 //import 'package:myfirstapp/screens/account/ledger_report.dart';
 import '../../common/global.dart' as globals;
 
@@ -48,6 +49,7 @@ class Ledgerview extends StatefulWidget {
 class _LedgerviewState extends State<Ledgerview> {
   //TextEditingController _fromdatecontroller = new TextEditingController(text: 'dhaval');
   List _partylist = [];
+  String SelectedParty = '';
   final _formKey = GlobalKey<FormState>();
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
@@ -115,6 +117,58 @@ class _LedgerviewState extends State<Ledgerview> {
                     fend: widget.xfend,
                     acctype: '',
                   )));
+
+      //print(result);
+      setState(() {
+        var retResult = result;
+
+        print(retResult);
+        _partylist = result[1];
+        result = result[1];
+
+        var selParty = '';
+        SelectedParty = '';
+        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+          if (ictr > 0) {
+            selParty = selParty + ',';
+            SelectedParty = SelectedParty + retResult[1][ictr];
+          }
+          selParty = selParty + retResult[0][ictr];
+          SelectedParty = SelectedParty + retResult[1][ictr].toString();
+        }
+
+        _partysel.text = selParty;
+
+        print(SelectedParty);
+      });
+    }
+
+    void GenerateReport(BuildContext context) async {
+      var fromdate = fromDate.toString().split(' ')[0];
+      var todate = toDate.toString().split(' ')[0];
+
+      var partylist = '';
+      for (var ictr = 0; ictr < _partylist.length; ictr++) {
+        if (ictr > 0) {
+          partylist = partylist + ',';
+        }
+        partylist = partylist + _partylist[ictr].toString();
+      }
+
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => ShowLedgerList(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                    fromdate: fromdate,
+                    todate: todate,
+                    partylist: SelectedParty,
+                  )));
+
+      return;
 
       setState(() {
         var retResult = result;
@@ -216,6 +270,17 @@ class _LedgerviewState extends State<Ledgerview> {
     }
 
     void gotoLedgerReport(BuildContext context) async {
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => party_list(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                    acctype: 'BANK',
+                  )));
+
       //print('1234');
 
       var fromdate = fromDate.toString().split(' ')[0];
@@ -435,18 +500,18 @@ class _LedgerviewState extends State<Ledgerview> {
       //             partylist: _partylist,
       //             data: _jsonData)));
 
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => LedgerReport(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend,
-                  fromDate: fromDate,
-                  toDate: toDate,
-                  partylist: _partylist,
-                  data: _jsonData)));
+      // var result = await Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (_) => LedgerReport(
+      //             companyid: widget.xcompanyid,
+      //             companyname: widget.xcompanyname,
+      //             fbeg: widget.xfbeg,
+      //             fend: widget.xfend,
+      //             fromDate: fromDate,
+      //             toDate: toDate,
+      //             partylist: _partylist,
+      //             data: _jsonData)));
     }
 
     return Scaffold(
@@ -503,7 +568,8 @@ class _LedgerviewState extends State<Ledgerview> {
               },
             ),
             ElevatedButton(
-              onPressed: () => {gotoLedgerReport(context)},
+              //onPressed: () => {gotoLedgerReport(context)},
+              onPressed: () => {GenerateReport(context)},
               child: Text('Generate Report',
                   style: GoogleFonts.oswald(
                       fontSize: 22.0, fontWeight: FontWeight.normal)),

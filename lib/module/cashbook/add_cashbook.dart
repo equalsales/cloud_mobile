@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:cloud_mobile/module/bankbook/bankbooklist.dart';
+import 'package:cloud_mobile/module/cashbook/cashbooklist.dart';
 import 'package:flutter/material.dart';
 
 //import 'dart:convert';
@@ -21,8 +21,8 @@ import 'package:cloud_mobile/common/bottombar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_mobile/module/master/partymaster/partymasterlist.dart';
 
-class BankBookAdd extends StatefulWidget {
-  BankBookAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
+class CashBookAdd extends StatefulWidget {
+  CashBookAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -38,24 +38,22 @@ class BankBookAdd extends StatefulWidget {
   var xid;
 
   @override
-  _BankBookAddState createState() => _BankBookAddState();
+  _CashBookAddState createState() => _CashBookAddState();
 }
 
-class _BankBookAddState extends State<BankBookAdd> {
+class _CashBookAddState extends State<CashBookAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
-  List _banklist = [];
+  List _cashlist = [];
   List _partylist = [];
 
   String dropdownTrnType = 'DEPOSIT';
 
-  TextEditingController _bank = new TextEditingController();
+  TextEditingController _cash = new TextEditingController();
   TextEditingController _date = new TextEditingController();
   TextEditingController _trntype = new TextEditingController();
   TextEditingController _party = new TextEditingController();
-  TextEditingController _cheque = new TextEditingController();
-  TextEditingController _chqdate = new TextEditingController();
   TextEditingController _narration = new TextEditingController();
   TextEditingController _amount = new TextEditingController();
 
@@ -71,7 +69,6 @@ class _BankBookAddState extends State<BankBookAdd> {
 
     var curDate = getsystemdate();
     _date.text = curDate.toString().split(' ')[0];
-    _chqdate.text = curDate.toString().split(' ')[0];
 
     if (int.parse(widget.xid) > 0) {
       loadData();
@@ -87,7 +84,7 @@ class _BankBookAddState extends State<BankBookAdd> {
     var todate = widget.xfend;
 
     uri =
-        'https://www.cloud.equalsoftlink.com/api/api_getbankbooklist?dbname=' +
+        'https://www.cloud.equalsoftlink.com/api/api_getcashbooklist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -105,12 +102,10 @@ class _BankBookAddState extends State<BankBookAdd> {
     jsonData = jsonData['Data'];
     jsonData = jsonData[0];
 
-    _bank.text = getValue(jsonData['book'], 'C');
+    _cash.text = getValue(jsonData['book'], 'C');
     _date.text = getValue(jsonData['date'], 'C');
     _trntype.text = getValue(jsonData['trntype'], 'C');
     _party.text = getValue(jsonData['party'], 'C');
-    _cheque.text = getValue(jsonData['cheque'], 'C');
-    _chqdate.text = getValue(jsonData['chedate'], 'C');
     _narration.text = getValue(jsonData['narration'], 'C');
     _amount.text = getValue(jsonData['amount'], 'N');
 
@@ -145,7 +140,7 @@ class _BankBookAddState extends State<BankBookAdd> {
 
   @override
   Widget build(BuildContext context) {
-    void gotoBankScreen(BuildContext context) async {
+    void gotoCashScreen(BuildContext context) async {
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -154,23 +149,23 @@ class _BankBookAddState extends State<BankBookAdd> {
                     companyname: widget.xcompanyname,
                     fbeg: widget.xfbeg,
                     fend: widget.xfend,
-                    acctype: 'BANK',
+                    acctype: 'CASH',
                   )));
 
       setState(() {
         var retResult = result;
-        _banklist = result[1];
+        _cashlist = result[1];
         result = result[1];
 
-        var selBank = '';
+        var selCash = '';
         for (var ictr = 0; ictr < retResult[0].length; ictr++) {
           if (ictr > 0) {
-            selBank = selBank + ',';
+            selCash = selCash + ',';
           }
-          selBank = selBank + retResult[0][ictr];
+          selCash = selCash + retResult[0][ictr];
         }
 
-        _bank.text = selBank;
+        _cash.text = selCash;
       });
     }
 
@@ -208,12 +203,10 @@ class _BankBookAddState extends State<BankBookAdd> {
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
-      var bank = _bank.text;
+      var cash = _cash.text;
       var party = _party.text;
       var date = _date.text;
       var trntype = _trntype.text;
-      var cheque = _cheque.text;
-      var chqdate = _chqdate.text;
       var narration = _narration.text;
       var amount = _amount.text;
 
@@ -223,25 +216,20 @@ class _BankBookAddState extends State<BankBookAdd> {
       id = int.parse(id);
 
       uri =
-          'https://www.cloud.equalsoftlink.com/api/api_storebankbook?dbname=' +
+          'https://www.cloud.equalsoftlink.com/api/api_storecashbook?dbname=' +
               db +
               '&date=' +
               date +
-              '&bank=' +
-              bank +
+              '&cash=' +
+              cash +
               '&trntype=' +
               trntype +
               '&party=' +
               party +
-              '&cheque=' +
-              cheque +
-              '&chedate=' +
-              chqdate +
               '&narration=' +
               narration +
               '&amount=' +
               amount +
-              '&chqbank=' +
               '&user=' +
               username +
               '&cno=' +
@@ -265,7 +253,7 @@ class _BankBookAddState extends State<BankBookAdd> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) => BankBookList(
+                builder: (_) => CashBookList(
                       companyid: widget.xcompanyid,
                       companyname: widget.xcompanyname,
                       fbeg: widget.xfbeg,
@@ -286,7 +274,7 @@ class _BankBookAddState extends State<BankBookAdd> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Bank Book [ ' + (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') + ' ] ',
+          'Cash Book [ ' + (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') + ' ] ',
           style:
               GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
@@ -317,14 +305,14 @@ class _BankBookAddState extends State<BankBookAdd> {
               },
             ),
             TextFormField(
-              controller: _bank,
+              controller: _cash,
               decoration: const InputDecoration(
                 icon: const Icon(Icons.person),
-                hintText: 'Select Bank',
-                labelText: 'Bank',
+                hintText: 'Select Cash A/c',
+                labelText: 'Cash',
               ),
               onTap: () {
-                gotoBankScreen(context);
+                gotoCashScreen(context);
               },
               validator: (value) {
                 return null;
@@ -358,37 +346,6 @@ class _BankBookAddState extends State<BankBookAdd> {
               ),
               onTap: () {
                 gotoPartyScreen(context);
-              },
-              validator: (value) {
-                return null;
-              },
-            ),
-            TextFormField(
-              textCapitalization: TextCapitalization.characters,
-              controller: _cheque,
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.person),
-                hintText: 'Cheque No',
-                labelText: 'Cheque',
-              ),
-              onChanged: (value) {
-                _cheque.value = TextEditingValue(
-                    text: value.toUpperCase(), selection: _cheque.selection);
-              },
-              onTap: () {},
-              validator: (value) {
-                return null;
-              },
-            ),
-            TextFormField(
-              controller: _chqdate,
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.person),
-                hintText: 'Cheque Date',
-                labelText: 'Cheque Dt',
-              ),
-              onTap: () {
-                _selectDate(context);
               },
               validator: (value) {
                 return null;
