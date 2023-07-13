@@ -1,28 +1,15 @@
 import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:pdf/pdf.dart';
 
 import 'package:cloud_mobile/yearselection.dart';
 import 'package:flutter/material.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'package:cloud_mobile/common/global.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:loading_indicator/loading_indicator.dart';
 import 'package:cloud_mobile/common/alert.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'common/global.dart' as globals;
-
-//import 'package:splashscreen/splashscreen.dart';
-
-//import 'package:splashscreen/splashscreen.dart';
-
-import 'dart:io';
-
-import 'package:pdf/widgets.dart' as pw;
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -112,10 +99,15 @@ class _MyHomePage extends State<MyHomePage> {
   void executelogin(context) async {
     DialogBuilder(context).showLoadingIndicator('');
 
+    print('1');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    print('2');
     prefs.setString('cloud_db', _db);
+    print('3');
     prefs.setString('cloud_username', _username);
+    print('4');
     prefs.setString('cloud_password', _password);
+    print('5');
     globals.dbname = _db;
     globals.username = _username;
 

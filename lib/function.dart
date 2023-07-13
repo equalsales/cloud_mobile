@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import '../../../common/global.dart' as globals;
 
 DateTime retconvdate(String dDate, [format = 'dd-mm-yyyy']) {
   String startdate = dDate;
@@ -15,6 +16,7 @@ DateTime retconvdate(String dDate, [format = 'dd-mm-yyyy']) {
     dd = startdate.substring(0, 2);
     mm = startdate.toString().substring(3, 5);
     yy = startdate.toString().substring(6);
+    print(yy + '-' + mm + '-' + dd);
     selectedDate = DateTime.parse(yy + '-' + mm + '-' + dd);
   }
 
@@ -58,16 +60,42 @@ String getValue(xValue, DataType) {
 
 Future<List<dynamic>> getCityDetails(String City, int Id) async {
   String uri = '';
+  var db = globals.dbname;
   City = getValue(City, 'C');
 
   Id = int.parse(getValue(Id.toString(), 'N'));
 
-  uri =
-      'https://www.cloud.equalsoftlink.com/api/getcitylist?dbname=admin_dhruv&city=' +
-          City.toString() +
-          '&id=' +
-          Id.toString();
+  uri = 'https://www.cloud.equalsoftlink.com/api/getcitylist?dbname=' +
+      db +
+      '&city=' +
+      City.toString() +
+      '&id=' +
+      Id.toString();
 
+  var response = await http.get(Uri.parse(uri));
+
+  var jsonData = jsonDecode(response.body);
+
+  jsonData = jsonData['Data'];
+
+  return jsonData;
+}
+
+Future<List<dynamic>> getPartyDetails(String Party, int Id) async {
+  String uri = '';
+  var db = globals.dbname;
+
+  Party = getValue(Party, 'C');
+
+  Id = int.parse(getValue(Id.toString(), 'N'));
+
+  uri = 'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
+      db +
+      '&party=' +
+      Party.toString() +
+      '&id=' +
+      Id.toString();
+  print(uri);
   var response = await http.get(Uri.parse(uri));
 
   var jsonData = jsonDecode(response.body);

@@ -98,12 +98,14 @@ class _ShowLedgerListPageState extends State<ShowLedgerList> {
         ctodate +
         '&cno=' +
         cno;
-
+    print(uri);
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
 
     jsonData = jsonData['Data'];
+
+    print(jsonData);
 
     double balance = 0;
     double dramt = 0;

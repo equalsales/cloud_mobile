@@ -1,7 +1,6 @@
 import 'package:cloud_mobile/function.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:cloud_mobile/dashboard.dart';
 
 import 'dart:convert';
 
@@ -12,15 +11,15 @@ import 'package:cloud_mobile/common/alert.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:cloud_mobile/module/cashbook/add_cashbook.dart';
+import 'package:cloud_mobile/module/looms/saleschallan/add_loomsaleschallan.dart';
 
-class CashBookList extends StatefulWidget {
+class LoomSalesChallanList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
 
-  CashBookList({Key? mykey, companyid, companyname, fbeg, fend})
+  LoomSalesChallanList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -29,10 +28,11 @@ class CashBookList extends StatefulWidget {
   }
 
   @override
-  _CashBookListPageState createState() => _CashBookListPageState();
+  _LoomSalesChallanListPageState createState() =>
+      _LoomSalesChallanListPageState();
 }
 
-class _CashBookListPageState extends State<CashBookList> {
+class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
   List _companydetails = [];
   @override
   void initState() {
@@ -45,8 +45,10 @@ class _CashBookListPageState extends State<CashBookList> {
     var startdate = globals.fbeg;
     var enddate = globals.fend;
 
+    print(globals.enddate);
+
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_getcashbooklist?dbname=' +
+        'https://www.looms.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -56,7 +58,7 @@ class _CashBookListPageState extends State<CashBookList> {
             enddate));
 
     print(
-        'https://www.cloud.equalsoftlink.com/api/api_getcashbooklist?dbname=' +
+        'https://www.looms.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -80,7 +82,7 @@ class _CashBookListPageState extends State<CashBookList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cash Book List',
+        title: Text('Sales Challan  List',
             style: GoogleFonts.abel(
                 fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
@@ -90,7 +92,7 @@ class _CashBookListPageState extends State<CashBookList> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => CashBookAdd(
+                  builder: (_) => LoomSalesChallanAdd(
                         companyid: widget.xcompanyid,
                         companyname: widget.xcompanyname,
                         fbeg: widget.xfbeg,
@@ -106,19 +108,14 @@ class _CashBookListPageState extends State<CashBookList> {
           String date = this._companydetails[index]['date2'].toString();
           //date = retconvdatestr(date);
           String serial = this._companydetails[index]['serial'].toString();
-          String trntype = this._companydetails[index]['trntype'].toString();
-          String cash = this._companydetails[index]['book'].toString();
+          String packingtype =
+              this._companydetails[index]['packingtype'].toString();
           String party = this._companydetails[index]['party'].toString();
-          String narration =
-              this._companydetails[index]['narration'].toString();
-          String amount = this._companydetails[index]['amount'].toString();
+          String remarks = this._companydetails[index]['remarks'].toString();
+          String totpcs = this._companydetails[index]['totpcs'].toString();
+          String totmtrs = this._companydetails[index]['totmtrs'].toString();
 
           String id = this._companydetails[index]['id'].toString();
-          if (trntype == 'RECEIPT') {
-            trntype = 'DEPOSIT';
-          } else {
-            trntype = 'WITHDRAWL';
-          }
 
           int newid = 0;
           newid = int.parse(id);
@@ -129,7 +126,7 @@ class _CashBookListPageState extends State<CashBookList> {
                 ActionPane(motion: const BehindMotion(), children: [
               SlidableAction(
                   onPressed: (context) =>
-                      {execDelete(context, index, int.parse(id), '')},
+                      {/*execDelete(context, index, int.parse(id), '')*/},
                   icon: Icons.delete,
                   label: 'Delete',
                   backgroundColor: Color(0xFFFE4A49)),
@@ -145,8 +142,10 @@ class _CashBookListPageState extends State<CashBookList> {
               title: Text(
                   'Dt :' +
                       date +
-                      ' Cash : ' +
-                      cash +
+                      ' Packing Type : ' +
+                      packingtype +
+                      ' Challan No : ' +
+                      serial +
                       ' [ ' +
                       id +
                       ' ]' +
@@ -155,12 +154,12 @@ class _CashBookListPageState extends State<CashBookList> {
                   style:
                       TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
               subtitle: Text(
-                  'Type :' +
-                      trntype +
-                      ' Amount : ' +
-                      amount +
-                      ' Narration :' +
-                      narration,
+                  'Remarks :' +
+                      remarks +
+                      ' Pcs : ' +
+                      totpcs +
+                      ' Meters : ' +
+                      totmtrs,
                   style:
                       TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
               leading: Icon(Icons.select_all),
@@ -169,7 +168,7 @@ class _CashBookListPageState extends State<CashBookList> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => CashBookAdd(
+                        builder: (_) => LoomSalesChallanAdd(
                               companyid: widget.xcompanyid,
                               companyname: widget.xcompanyname,
                               fbeg: widget.xfbeg,
@@ -189,7 +188,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: const Text('Delete Cash Cash Voucher ??'),
+      title: const Text('Delete Sales Challan Entry ??'),
       content: Text('Do you want to delete this entry ?'),
       actions: <Widget>[
         TextButton(
@@ -221,7 +220,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => CashBookList(
+                      builder: (_) => LoomSalesChallanList(
                           companyid: globals.companyid,
                           companyname: globals.companyname,
                           fbeg: globals.fbeg,
@@ -237,29 +236,6 @@ void execDelete(BuildContext context, int index, int id, String name) {
   );
 
   return;
-}
-
-Future<bool> deleteCashBook(id) async {
-  var db = globals.dbname;
-
-  var response = await http.post(Uri.parse(
-      'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
-          db +
-          '&id=' +
-          id.toString()));
-
-  print('https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
-      db +
-      '&id=' +
-      id.toString());
-
-  var jsonData = jsonDecode(response.body);
-
-  var code = jsonData['Code'];
-  if (code == '200') {
-  } else {}
-
-  return true;
 }
 
 void doNothing(BuildContext context) {}
