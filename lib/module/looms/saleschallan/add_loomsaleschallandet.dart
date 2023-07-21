@@ -121,6 +121,11 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
         _ordid.text = ItemDetails[length - 1]['ordid'].toString();
         _orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
+        _itemname.text = ItemDetails[length - 1]['itemname'].toString();
+        _design.text = ItemDetails[length - 1]['design'].toString();
+        _hsncode.text = ItemDetails[length - 1]['hsncode'].toString();
+        _unit.text = ItemDetails[length - 1]['unit'].toString();
+        _rate.text = ItemDetails[length - 1]['rate'].toString();
       });
     }
 
