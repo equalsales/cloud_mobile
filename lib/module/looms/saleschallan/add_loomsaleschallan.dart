@@ -37,6 +37,10 @@ class LoomSalesChallanAdd extends StatefulWidget {
   var xfbeg;
   var xfend;
   var xid;
+  var serial;
+  var srchr;
+  double tottaka=0;
+  double totmtrs=0;
 
   @override
   _LoomSalesChallanAddState createState() => _LoomSalesChallanAddState();
@@ -66,6 +70,8 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
   TextEditingController _packingtype = new TextEditingController();
   TextEditingController _packingsrchr = new TextEditingController();
   TextEditingController _packingserial = new TextEditingController();
+  TextEditingController _serial = new TextEditingController();
+  TextEditingController _srchr = new TextEditingController();
   TextEditingController _book = new TextEditingController();
   TextEditingController _bookno = new TextEditingController();
   TextEditingController _date = new TextEditingController();
@@ -78,7 +84,10 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
   TextEditingController _parcel = new TextEditingController();
   TextEditingController _duedays = new TextEditingController();
   TextEditingController _station = new TextEditingController();
-
+  TextEditingController _tottaka = new TextEditingController();
+  TextEditingController _totmtrs = new TextEditingController();
+  
+  
   final _formKey = GlobalKey<FormState>();
   TextEditingController _gstregno = new TextEditingController();
   var _jsonData = [];
@@ -94,7 +103,81 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
     if (int.parse(widget.xid) > 0) {
       loadData();
+
+      loadDetData();
     }
+  }
+
+  Future<bool> loadDetData() async {
+    String uri = '';
+    var cno = globals.companyid;
+    var db = globals.dbname;
+    var id = widget.xid;
+
+//api_getsalechallandetlist?dbname=admin_looms&cno=2&id=2997
+    uri =
+        'https://www.looms.equalsoftlink.com/api/api_getsalechallandetlist?dbname=' +
+            db +
+            '&cno=' +
+            cno +
+            '&id=' +
+            id;
+    print(uri);
+    var response = await http.get(Uri.parse(uri));
+
+    var jsonData = jsonDecode(response.body);
+
+    jsonData = jsonData['Data'];
+    //jsonData = jsonData[0];
+
+    print(jsonData);
+    List ItemDet = [];
+    ItemDetails = [];
+
+    for (var iCtr = 0; iCtr < jsonData.length; iCtr++) {
+      ItemDet.add({
+        "controlid": jsonData[iCtr]['controlid'].toString(),
+        "id": jsonData[iCtr]['id'].toString(),
+        "orderno": jsonData[iCtr]['ordno'].toString(),
+        "takano": jsonData[iCtr]['takano'].toString(),
+        "takachr": jsonData[iCtr]['takachr'].toString(),
+        "pcs": jsonData[iCtr]['pcs'].toString(),
+        "meters": jsonData[iCtr]['meters'].toString(),
+        "tpmtrs": jsonData[iCtr]['tpmtrs'].toString(),
+        "itemname": jsonData[iCtr]['itemname'].toString(),
+        "hsncode": jsonData[iCtr]['hsncode'].toString(),
+        "rate": jsonData[iCtr]['rate'].toString(),
+        'var': 0,
+        "unit": jsonData[iCtr]['unit'].toString(),
+        'varper': 0,
+        "amount": jsonData[iCtr]['amount'].toString(),
+        "design": jsonData[iCtr]['design'].toString(),
+        "machine": jsonData[iCtr]['machine'].toString(),
+        "orditem": jsonData[iCtr]['itemname'].toString(),
+        "orddesign": jsonData[iCtr]['design'].toString(),
+        "ordmtr": 0,
+        'stdwt': 0,        
+        "ordid": jsonData[iCtr]['ordid'].toString(),
+        "folddate": '',
+        'type': '',
+        'tkid': 0,
+        'tkdetid': 0,
+        "fmode": jsonData[iCtr]['fmode'].toString(),
+        "inwid": jsonData[iCtr]['inwid'].toString(),
+        "inwdetid": jsonData[iCtr]['inwdetid'].toString(),
+        "inwdettkid": jsonData[iCtr]['inwdettkid'].toString(),
+        'cost': 0,
+        'tp': '',
+        "orddetid": jsonData[iCtr]['orddetid'].toString(),
+        'ordbalmtrs': 0
+      });
+    }
+
+    setState(() {
+      ItemDetails = ItemDet;
+    });
+
+    return true;
   }
 
   Future<bool> loadData() async {
@@ -106,7 +189,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     var todate = widget.xfend;
 
     uri =
-        'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
+        'https://www.looms.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -124,14 +207,19 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     jsonData = jsonData['Data'];
     jsonData = jsonData[0];
 
+    print(jsonData);
+
     _branch.text = getValue(jsonData['branch'], 'C');
     _packingtype.text = getValue(jsonData['packingtype'], 'C');
     _packingsrchr.text = getValue(jsonData['packingsrchr'], 'C');
     _packingserial.text = getValue(jsonData['packingserial'], 'C');
+    _serial.text = getValue(jsonData['serial'], 'C');
+    _srchr.text = getValue(jsonData['srchr'], 'C');
     _book.text = getValue(jsonData['book'], 'C');
     _bookno.text = getValue(jsonData['bookno'], 'C');
     _date.text = getValue(jsonData['date'], 'C');
     _party.text = getValue(jsonData['party'], 'C');
+    _delparty.text = getValue(jsonData['delparty'], 'C');
     _agent.text = getValue(jsonData['agent'], 'C');
     _delparty.text = getValue(jsonData['delparty'], 'C');
     _haste.text = getValue(jsonData['haste'], 'C');
@@ -140,6 +228,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     _parcel.text = getValue(jsonData['parcel'], 'C');
     _duedays.text = getValue(jsonData['duedays'], 'C');
     _station.text = getValue(jsonData['station'], 'C');
+
+    widget.serial = jsonData['serial'].toString();
+    widget.srchr = jsonData['srchr'].toString();
 
     setState(() {
       dropdownTrnType = _packingtype.text;
@@ -335,8 +426,10 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       var username = globals.username;
 
       var packingtype = _packingtype.text;
-      var packingsrchr = '';
-      var packingserial = 0;
+      var packingsrchr = _packingsrchr.text;
+      var packingserial = _packingserial.text;
+      var serial = _serial.text;
+      var srchr = _srchr.text;
       var book = _book.text;
       var bookno = _bookno.text;
       var branch = _branch.text;
@@ -356,7 +449,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       var id = widget.xid;
       id = int.parse(id);
 
+      print(packingtype);
       print('In Save....');
+      
       print(jsonEncode(ItemDetails));
       //return true;
 
@@ -381,12 +476,14 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
               transport +
               "&station=" +
               station +
-              "&packingsrchr=&packingserial=&bookno=" +
+              "&packingsrchr=" + packingsrchr + "&packingserial="+ packingserial+"&bookno=" +
               bookno +
-              "&srchr=&serial=&date=" +
+              "&srchr=" + srchr+"&serial=" + serial+"&date=" +
               date +
               "&remarks=" +
               remarks +
+              "&id=" +
+              id.toString() +
               "&parcel=1&duedays=0&GridData=" +
               jsonEncode(ItemDetails);
       print(uri);
@@ -421,16 +518,34 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     ];
 
     setState(() {
-      _packingtype.text = 'PACKING';
+      //_packingtype.text = 'PACKING';
     });
+
+    void deleteRow(index) {
+      setState(() {
+        ItemDetails.removeAt(index);
+      });
+    }
 
     List<DataRow> _createRows() {
       List<DataRow> _datarow = [];
       print(ItemDetails);
+
+      widget.tottaka=0;
+      widget.totmtrs=0;
+
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
+        double nMeters = 0;
+        if(ItemDetails[iCtr]['meters']!='')
+        {
+          nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
+          widget.tottaka+=1;
+          widget.totmtrs+=nMeters;
+        }
+        
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
-            onPressed: () => {},
+            onPressed: () => {deleteRow(iCtr)},
             icon: Icon(
               // <-- Icon
               Icons.delete,
@@ -444,6 +559,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
               ItemDetails[iCtr]['takano'])),
           DataCell(Text(ItemDetails[iCtr]['pcs'])),
           DataCell(Text(ItemDetails[iCtr]['meters'])),
+          DataCell(Text(ItemDetails[iCtr]['tpmtrs'])),
           DataCell(Text(ItemDetails[iCtr]['itemname'])),
           DataCell(Text(ItemDetails[iCtr]['design'])),
           DataCell(Text(ItemDetails[iCtr]['unit'])),
@@ -457,8 +573,16 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
           DataCell(Text(ItemDetails[iCtr]['orddetid'].toString())),
         ]));
       }
+
+      setState(() {
+        _tottaka.text = widget.tottaka.toString();
+        _totmtrs.text = widget.totmtrs.toString();
+      });
+
       return _datarow;
     }
+
+
 
     setDefValue();
 
@@ -467,7 +591,10 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         title: Text(
           'Sales Challan [ ' +
               (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
-              ' ] ',
+              ' ] '  + 'Packing Serial : ' + _packingserial.text + ' '+
+              (int.parse(widget.xid) > 0
+                  ? 'Challan No : ' + widget.serial.toString()
+                  : ''),
           style:
               GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
@@ -518,6 +645,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                       setState(() {
                         dropdownTrnType = newValue!;
                         _packingtype.text = dropdownTrnType;
+                        print(_packingtype.text);
                       });
                     }),
               )
@@ -684,6 +812,80 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                 )
               ],
             ),
+            Row(
+              children: [
+                Expanded(
+                    child: TextFormField(
+                  controller: _duedays,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.person),
+                    hintText: 'Due Days',
+                    labelText: 'Due Days',
+                  ),
+                  onTap: () {
+                    //gotoBranchScreen(context);
+                  },
+                  validator: (value) {
+                    return null;
+                  },
+                )),
+                Expanded(
+                    child: TextFormField(
+                  controller: _parcel,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.person),
+                    hintText: 'Parcel',
+                    labelText: 'Parcel',
+                  ),
+                  onTap: () {
+                    //gotoBranchScreen(context);
+                  },
+                  validator: (value) {
+                    return null;
+                  },
+                ))
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                    child: TextFormField(
+                      enabled: false,
+                  controller: _tottaka,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.person),
+                    hintText: 'Total Taka',
+                    labelText: 'Total Taka',
+                  ),
+                  onTap: () {
+                    //gotoBranchScreen(context);
+                  },
+                  validator: (value) {
+                    return null;
+                  },
+                )),
+                Expanded(
+                    child: TextFormField(
+                      enabled: false,
+                  controller: _totmtrs,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.person),
+                    hintText: 'Total Meters',
+                    labelText: 'Total Meters',
+                  ),
+                  onTap: () {
+                    //gotoBranchScreen(context);
+                  },
+                  validator: (value) {
+                    return null;
+                  },
+                ))
+              ],
+            ),
             Padding(padding: EdgeInsets.all(5)),
             ElevatedButton(
               onPressed: () => {gotoChallanItemDet(context)},
@@ -705,6 +907,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                   ),
                   DataColumn(
                     label: Text("Meters"),
+                  ),
+                  DataColumn(
+                    label: Text("TP Mtrs"),
                   ),
                   DataColumn(
                     label: Text("Item Name"),

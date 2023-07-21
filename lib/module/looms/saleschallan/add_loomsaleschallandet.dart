@@ -23,6 +23,7 @@ import 'package:cloud_mobile/common/bottombar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+//import 'package:barcode_scan/barcode_scan.dart';
 
 //import 'package:cloud_mobile/module/master/partymaster/partymasterlist.dart';
 
@@ -79,6 +80,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
   TextEditingController _ctakano = new TextEditingController();
   TextEditingController _pcs = new TextEditingController();
   TextEditingController _meters = new TextEditingController();
+  TextEditingController _tpmeters = new TextEditingController();
   TextEditingController _itemname = new TextEditingController();
   TextEditingController _design = new TextEditingController();
   TextEditingController _hsncode = new TextEditingController();
@@ -193,6 +195,23 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
     fromdate = fromdate.toString();
     todate = todate.toString();
 
+    List ItemDetails = widget.xItemDetails;
+    int length = ItemDetails.length;
+    print('Length :' + length.toString());
+    if (length > 0) {
+      for (int iCtr = 0; iCtr < length; iCtr++) {
+        if ((ItemDetails[iCtr]['takano'] == takano) &&
+            ((ItemDetails[iCtr]['takachr'] == takachr))) {
+          showAlertDialog(context, 'Taka No Already Exists...');
+          setState(() {
+            _takano.text = '0';
+            _takachr.text = '';
+          });
+          return true;
+        }
+      }
+    }
+
     uri = 'https://looms.equalsoftlink.com/api/commonapi_gettakastock?dbname=' +
         db +
         '&cno=' +
@@ -236,6 +255,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
       _machine.text = jsonData['machine'];
       _pcs.text = jsonData['pcs'].toString();
       _meters.text = jsonData['balmeters'].toString();
+      _tpmeters.text = jsonData['tpmtrs'].toString();
       _unit.text = jsonData['unit'];
       _hsncode.text = jsonData['hsncode'];
       _inwid.text = jsonData['inwid'].toString();
@@ -243,14 +263,19 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
       _inwdettkid.text = jsonData['inwdettkid'].toString();
       _fmode.text = jsonData['fmode'];
 
-      _ordbalmtrs.text =
-          (double.parse(_ordbalmtrs.text) - double.parse(_meters.text))
-              .toString();
+      if (_ordbalmtrs.text != '') {
+        _ordbalmtrs.text =
+            (double.parse(_ordbalmtrs.text) - double.parse(_meters.text))
+                .toString();
+      }
 
       double pcs = double.parse(_pcs.text);
       double meters = double.parse(_meters.text);
       String unit = _unit.text;
-      double rate = double.parse(_rate.text);
+      double rate = 0;
+      if (_rate.text != '') {
+        rate = double.parse(_rate.text);
+      }
       double amount = 0;
       if ((unit == 'P') || (unit == 'T')) {
         amount = pcs * rate;
@@ -272,7 +297,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
     var todate = widget.xfend;
 
     uri =
-        'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
+        'https://www.looms.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -318,8 +343,12 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
+      // barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+      //     '#ff6666', 'Cancel', true, ScanMode.QR);
+
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
+          '#000000', 'Cancel', true, ScanMode.BARCODE);          
+      //barcodeScanRes = await BarcodeScanner.scan();      
       print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
@@ -329,10 +358,20 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
       print(barcodeScanRes);
 
       //const string = barcodeScanRes;
-      final splitted = barcodeScanRes.split('-');
+      final splitted = barcodeScanRes.split('-');      
       print(splitted); // [Hello, world!];
+      print(splitted.length);
+      print('dhruv');
       _takachr.text = splitted[0];
-      _takano.text = splitted[1];
+      if(splitted.length>1)
+      {
+        _takano.text = splitted[1];
+      }
+      else
+      {
+        _takano.text = '0';
+      }
+      
 
       fetchdetails();
       //_scanBarcode = barcodeScanRes;
@@ -354,6 +393,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
       var ctakano = _ctakano.text;
       var pcs = _pcs.text;
       var meters = _meters.text;
+      var tpmtrs = _tpmeters.text;
       var itemname = _itemname.text;
       var design = _design.text;
       var rate = _rate.text;
@@ -377,7 +417,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         'takano': takano,
         'pcs': pcs,
         'meters': meters,
-        'tpmtrs': '',
+        'tpmtrs': tpmtrs,
         'itemname': itemname,
         'hsncode': hsncode,
         'rate': rate,
@@ -647,7 +687,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    controller: _meters,
+                    controller: _tpmeters,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'TP Mtrs',

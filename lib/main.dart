@@ -48,8 +48,10 @@ class MyApp extends StatelessWidget {
           loaderColor: Colors.red,
         )*/
           Scaffold(
-        appBar:
-            AppBar(title: const Text(_title, style: TextStyle(fontSize: 25))),
+        appBar: AppBar(
+            title: Text(_title,
+                style: GoogleFonts.abel(
+                    fontSize: 25.0, fontWeight: FontWeight.normal))),
         body: const MyHomePage(),
       ),
     );
@@ -187,21 +189,26 @@ class _MyHomePage extends State<MyHomePage> {
                 padding: const EdgeInsets.all(10),
                 child: Text(
                   'Sign in',
-                  style: GoogleFonts.oswald(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 )),
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(
                 autofocus: true,
                 controller: nameController,
+                style: TextStyle(
+                  fontFamily: 'verdana',
+                ),
                 //style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     border: OutlineInputBorder(),
                     labelText: 'User Name',
-                    labelStyle: GoogleFonts.oswald(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
+                    labelStyle: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'verdana',
+                    )),
               ),
             ),
             Container(
@@ -209,12 +216,15 @@ class _MyHomePage extends State<MyHomePage> {
               child: TextField(
                 obscureText: true,
                 controller: passwordController,
+                style: TextStyle(
+                  fontFamily: 'verdana',
+                ),
                 decoration: InputDecoration(
                     prefixIcon: Icon(Icons.password),
                     border: OutlineInputBorder(),
                     labelText: 'Password',
-                    labelStyle: GoogleFonts.oswald(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
+                    labelStyle:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               ),
             ),
             Container(
@@ -223,8 +233,11 @@ class _MyHomePage extends State<MyHomePage> {
                 child: ElevatedButton(
                   child: Text(
                     'Login',
-                    style: GoogleFonts.oswald(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'verdana',
+                    ),
                   ),
                   onPressed: () {
                     _username = nameController.text;
@@ -266,15 +279,21 @@ class _MyHomePage extends State<MyHomePage> {
               child: TextField(
                 autofocus: true,
                 controller: dbController,
-                style: GoogleFonts.oswald(
-                    fontSize: 22.0, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'verdana',
+                ),
                 //style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     border: OutlineInputBorder(),
                     labelText: 'DB',
-                    labelStyle: GoogleFonts.oswald(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
+                    labelStyle: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'verdana',
+                    )),
               ),
             ),
           ],

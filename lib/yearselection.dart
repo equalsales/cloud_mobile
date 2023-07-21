@@ -104,7 +104,7 @@ class _YearSelectionPageState extends State<YearSelection> {
           String companyid =
               this._companydetails[index]['companyid'].toString();
           String yearid = this._companydetails[index]['startdate'].toString() +
-              '-' +
+              ' - ' +
               this._companydetails[index]['enddate'].toString();
           String fbeg = this._companydetails[index]['startdate'];
           String fend = this._companydetails[index]['enddate'];
@@ -115,7 +115,11 @@ class _YearSelectionPageState extends State<YearSelection> {
               child: Center(
                   child: ListTile(
             title: Text(companyname + ' [ ' + yearid + ' ]',
-                style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                  fontSize: 10.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'verdana',
+                )),
             subtitle: Text(companyid),
             leading: Icon(Icons.select_all),
             trailing: Icon(Icons.arrow_forward),

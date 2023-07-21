@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_mobile/module/master/partymaster/partymasterlist.dart';
+import 'package:cloud_mobile/module/master/partygroupmaster/partygroupmasterlist.dart';
 import 'package:cloud_mobile/module/master/countrymaster/countrymasterlist.dart';
 import 'package:cloud_mobile/module/master/statemaster/statemasterlist.dart';
 import 'package:cloud_mobile/module/master/citymaster/citymasterlist.dart';
@@ -65,6 +66,19 @@ class _MastermenuState extends State<Mastermenu> {
                   fend: widget.xfend)));
     }
 
+    void gotoPartyGroupMaster(BuildContext context) async {
+      //showAlertDialog(context, 'Party Master Clicked !!!');
+      //return;
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => PartyGroupMasterList(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend)));
+    }
+
     void gotoCityMaster(BuildContext context) async {
       //showAlertDialog(context, 'Party Master Clicked !!!');
       //return;
@@ -122,29 +136,36 @@ class _MastermenuState extends State<Mastermenu> {
               ElevatedButton(
                 onPressed: () => {gotoPartyMaster(context)},
                 child: Text('Party Master',
-                    style: GoogleFonts.oswald(
-                        fontSize: 22.0, fontWeight: FontWeight.normal)),
+                    style: TextStyle(
+                        fontSize: 15.0, fontWeight: FontWeight.normal)),
+              ),
+              Padding(padding: EdgeInsets.all(5)),
+              ElevatedButton(
+                onPressed: () => {gotoPartyGroupMaster(context)},
+                child: Text('Party Group Master',
+                    style: TextStyle(
+                        fontSize: 15.0, fontWeight: FontWeight.normal)),
               ),
               Padding(padding: EdgeInsets.all(5)),
               ElevatedButton(
                 onPressed: () => {gotoCityMaster(context)},
                 child: Text('City Master',
-                    style: GoogleFonts.oswald(
-                        fontSize: 22.0, fontWeight: FontWeight.normal)),
+                    style: TextStyle(
+                        fontSize: 15.0, fontWeight: FontWeight.normal)),
               ),
               Padding(padding: EdgeInsets.all(5)),
               ElevatedButton(
                 onPressed: () => {gotoStateMaster(context)},
                 child: Text('State Master',
-                    style: GoogleFonts.oswald(
-                        fontSize: 22.0, fontWeight: FontWeight.normal)),
+                    style: TextStyle(
+                        fontSize: 15.0, fontWeight: FontWeight.normal)),
               ),
               Padding(padding: EdgeInsets.all(5)),
               ElevatedButton(
                 onPressed: () => {gotoCountryMaster(context)},
                 child: Text('Country Master',
-                    style: GoogleFonts.oswald(
-                        fontSize: 22.0, fontWeight: FontWeight.normal)),
+                    style: TextStyle(
+                        fontSize: 15.0, fontWeight: FontWeight.normal)),
               ),
             ],
           ),

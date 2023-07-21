@@ -21,6 +21,8 @@ import 'package:cloud_mobile/common/bottombar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_mobile/module/master/partymaster/partymasterlist.dart';
 
+import 'package:cloud_mobile/module/master/partymaster/add_partymaster.dart';
+
 class CashBookAdd extends StatefulWidget {
   CashBookAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
       : super(key: mykey) {
@@ -304,19 +306,44 @@ class _CashBookAddState extends State<CashBookAdd> {
                 return null;
               },
             ),
-            TextFormField(
-              controller: _cash,
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.person),
-                hintText: 'Select Cash A/c',
-                labelText: 'Cash',
-              ),
-              onTap: () {
-                gotoCashScreen(context);
-              },
-              validator: (value) {
-                return null;
-              },
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _cash,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Select Cash A/c',
+                      labelText: 'Cash',
+                    ),
+                    onTap: () {
+                      gotoCashScreen(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                SizedBox(
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      print("You pressed Icon Elevated Button");
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => PartyMasterAdd(
+                                    companyid: widget.xcompanyid,
+                                    companyname: widget.xcompanyname,
+                                    fbeg: widget.xfbeg,
+                                    fend: widget.xfend,
+                                    id: '0',
+                                  )));
+                    },
+                    icon: Icon(Icons.add), //icon data for elevated button
+                    label: Text(""), //label text
+                  ),
+                ),
+              ],
             ),
             DropdownButtonFormField(
                 value: dropdownTrnType,

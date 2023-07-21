@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
+//import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 import 'package:cloud_mobile/module/enq/enqlist.dart';
 import 'package:cloud_mobile/module/bankbook/bankbooklist.dart';
 import 'package:cloud_mobile/module/cashbook/cashbooklist.dart';
 
 import 'package:cloud_mobile/report/account/view_ledger.dart';
 
-import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
+//import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 
 import 'package:cloud_mobile/mastermenu.dart';
+import 'package:cloud_mobile/main.dart';
 
 // For Looms
 import 'package:cloud_mobile/module/looms/saleschallan/loomsaleschallanlist.dart';
@@ -158,9 +159,8 @@ class SideDrawer extends StatelessWidget {
             leading: Icon(Icons.exit_to_app),
             title: Text('Logout'),
             onTap: () => {
-              //Navigator.of(context).pop()
-              // Navigator.push(
-              //     context, MaterialPageRoute(builder: (_) => LoginScreen()))
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => MyApp()))
             },
           ),
         ],
