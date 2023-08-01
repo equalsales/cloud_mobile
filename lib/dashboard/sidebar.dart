@@ -13,6 +13,7 @@ import 'package:cloud_mobile/main.dart';
 
 // For Looms
 import 'package:cloud_mobile/module/looms/saleschallan/loomsaleschallanlist.dart';
+import 'package:cloud_mobile/module/looms/greyjobissue/loomgreyjobissuelist.dart';
 
 //import 'package:cloud_mobile/report/task/pendingtask.dart';
 //import 'package:cloud_mobile/report/task/pendingcall.dart';
@@ -88,6 +89,21 @@ class SideDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (_) => LoomSalesChallanList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Grey Job Issue'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => LoomGreyJobIssueList(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,
