@@ -455,6 +455,38 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       print(jsonEncode(ItemDetails));
       //return true;
 
+      // uri =
+      //     "https://looms.equalsoftlink.com/api/api_storeloomssalechln?dbname=" +
+      //         db +
+      //         "&company=&cno=" +
+      //         cno +
+      //         "&user=" +
+      //         username +
+      //         "&branch=" +
+      //         branch +
+      //         "&packingtype=" +
+      //         packingtype +
+      //         "&party=" +
+      //         party +
+      //         "&book=" +
+      //         book +
+      //         "&haste=" +
+      //         haste +
+      //         "&transport=" +
+      //         transport +
+      //         "&station=" +
+      //         station +
+      //         "&packingsrchr=" + packingsrchr + "&packingserial="+ packingserial+"&bookno=" +
+      //         bookno +
+      //         "&srchr=" + srchr+"&serial=" + serial+"&date=" +
+      //         date +
+      //         "&remarks=" +
+      //         remarks +
+      //         "&id=" +
+      //         id.toString() +
+      //         "&parcel=1&duedays=0&GridData=" +
+      //         jsonEncode(ItemDetails);
+
       uri =
           "https://looms.equalsoftlink.com/api/api_storeloomssalechln?dbname=" +
               db +
@@ -484,10 +516,15 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
               remarks +
               "&id=" +
               id.toString() +
-              "&parcel=1&duedays=0&GridData=" +
-              jsonEncode(ItemDetails);
+              "&parcel=1&duedays=0";      
       print(uri);
-      var response = await http.post(Uri.parse(uri));
+
+      final headers = {
+          'Content-Type': 'application/json', // Set the appropriate content-type
+          // Add any other headers required by your API
+        };      
+
+      var response = await http.post(Uri.parse(uri), headers: headers, body: jsonEncode(ItemDetails));
 
       var jsonData = jsonDecode(response.body);
       //print('4');

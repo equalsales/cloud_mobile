@@ -66,6 +66,8 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
   TextEditingController _type = new TextEditingController();
   TextEditingController _serial = new TextEditingController();
   TextEditingController _srchr = new TextEditingController();
+  TextEditingController _chlnno = new TextEditingController();
+  TextEditingController _chlnchr = new TextEditingController();
   TextEditingController _date = new TextEditingController();
   TextEditingController _party = new TextEditingController();
   TextEditingController _remarks = new TextEditingController();
@@ -124,6 +126,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         "pcs": jsonData[iCtr]['pcs'].toString(),
         "meters": jsonData[iCtr]['meters'].toString(),
         "weight": jsonData[iCtr]['weight'].toString(),
+        "avgwt": jsonData[iCtr]['avgwt'].toString(),
         "tpmtrs": jsonData[iCtr]['tpmtrs'].toString(),
         "itemname": jsonData[iCtr]['itemname'].toString(),
         "unit": jsonData[iCtr]['unit'].toString(),
@@ -176,12 +179,14 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     print(jsonData);
 
     _branch.text = getValue(jsonData['branch'], 'C');
-    _type.text = getValue(jsonData['packingtype'], 'C');
+    _type.text = getValue(jsonData['type'], 'C');
     _serial.text = getValue(jsonData['serial'], 'C');
     _srchr.text = getValue(jsonData['srchr'], 'C');
     _date.text = getValue(jsonData['date'], 'C');
     _party.text = getValue(jsonData['party'], 'C');
     _remarks.text = getValue(jsonData['remarks'], 'C');
+    _chlnno.text = getValue(jsonData['chlnno'], 'N');
+    _chlnchr.text = getValue(jsonData['chlnchr'], 'C');
     
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
@@ -353,6 +358,8 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       var date = _date.text;
       var party = _party.text;
       var remarks = _remarks.text;
+      var chlnno = _chlnno.text;
+      var chlnchr = _chlnchr.text;
       
       var id = widget.xid;
       id = int.parse(id);
@@ -378,6 +385,10 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
               date +
               "&remarks=" +
               remarks +
+              "&chlnno=" +
+              chlnno +
+              "&chlnchr=" +
+              chlnchr +
               "&id=" +
               id.toString() +
               "&parcel=1&duedays=0&GridData=" +
@@ -575,6 +586,49 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     onTap: () {
                       gotoPartyScreen2(context, 'JOBWORK PARTY', _party);
                     },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: _chlnno,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Challan No',
+                      labelText: 'Chln No',
+                    ),
+                    onChanged: (value) {
+                      // _remarks.value = TextEditingValue(
+                      //     text: value.toUpperCase(),
+                      //     selection: _remarks.selection);
+                    },
+                    onTap: () {},
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),Expanded(
+                  child: TextFormField(
+                    textCapitalization: TextCapitalization.characters,
+                    controller: _chlnchr,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Challan Chr',
+                      labelText: 'Chln Chr',
+                    ),
+                    onChanged: (value) {
+                      _chlnchr.value = TextEditingValue(
+                          text: value.toUpperCase(),
+                          selection: _chlnchr.selection);
+                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
