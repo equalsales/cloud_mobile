@@ -95,6 +95,8 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
   TextEditingController _orddetid = new TextEditingController();
   TextEditingController _fmode = new TextEditingController();
   TextEditingController _ordbalmtrs = new TextEditingController();
+  TextEditingController _remarks = new TextEditingController();
+  TextEditingController _duedays  = new TextEditingController();
 
   //var ordTaka = 0;
   double ordMeters = 0;
@@ -126,6 +128,8 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         _hsncode.text = ItemDetails[length - 1]['hsncode'].toString();
         _unit.text = ItemDetails[length - 1]['unit'].toString();
         _rate.text = ItemDetails[length - 1]['rate'].toString();
+        _duedays.text = ItemDetails[length - 1]['duedays'].toString();
+        _remarks.text = ItemDetails[length - 1]['remarks'].toString();
       });
     }
 
@@ -180,6 +184,8 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         _orddetid.text = result[0]['orddetid'].toString();
         ordMeters = double.parse(result[0]['balmeters'].toString());
         _ordbalmtrs.text = result[0]['balmeters'].toString();
+        _remarks.text = result[0]['remarks'].toString();
+        _duedays.text = result[0]['duedays'].toString();
       });
     });
   }
@@ -415,6 +421,8 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
       var ordbalmtrs = _ordbalmtrs.text;
       var hsncode = _hsncode.text;
       var folddate = _folddate.text;
+      var remarks = _remarks.text;
+      var duedays = _duedays.text;
 
       widget.xitemDet.add({
         'orderno': orderno,
@@ -448,7 +456,9 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         'inwdetid': inwdetid,
         'tp': '',
         'orddetid': orddetid,
-        'ordbalmtrs': ordbalmtrs
+        'ordbalmtrs': ordbalmtrs,
+        'remarks': remarks,
+        'duedays': duedays,
       });
 
       Navigator.pop(context, widget.xitemDet);

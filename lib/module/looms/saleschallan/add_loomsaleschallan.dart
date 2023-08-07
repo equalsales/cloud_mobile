@@ -169,7 +169,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         'cost': 0,
         'tp': '',
         "orddetid": jsonData[iCtr]['orddetid'].toString(),
-        'ordbalmtrs': 0
+        'ordbalmtrs': 0,
+        'remarks': _remarks.text,
+        'duedays': _duedays.text,
       });
     }
 
@@ -414,6 +416,8 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       //print(result[0]['takachr']);
       setState(() {
         ItemDetails.add(result[0]);
+        _remarks.text = result[0]['remarks'];
+        _duedays.text = result[0]['duedays'];
         //ItemDetails = ItemDetails[0];
         print(ItemDetails);
       });
@@ -442,7 +446,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       var remarks = _remarks.text;
       var parcel = 0;
       //_parcel.text;
-      var duedays = 0;
+      var duedays = _duedays.text;
       // _duedays.text;
       var station = _station.text;
 
@@ -514,9 +518,11 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
               date +
               "&remarks=" +
               remarks +
+              "&duedays=" +
+              duedays.toString() +
               "&id=" +
               id.toString() +
-              "&parcel=1&duedays=0";      
+              "&parcel=1";      
       print(uri);
 
       final headers = {
