@@ -571,7 +571,7 @@ class _LedgerviewState extends State<Ledgerview> {
               //onPressed: () => {gotoLedgerReport(context)},
               onPressed: () => {GenerateReport(context)},
               child: Text('Generate Report',
-                  style: GoogleFonts.oswald(
+                  style: TextStyle(
                       fontSize: 22.0, fontWeight: FontWeight.normal)),
             ),
           ],

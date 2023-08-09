@@ -180,7 +180,7 @@ class _MyHomePage extends State<MyHomePage> {
                   style: TextStyle(
                       fontFamily: 'verdana',
                       fontSize:
-                          20) /*GoogleFonts.oswald(
+                          20) /*TextStyle(
                       fontSize: 25.0, fontWeight: FontWeight.bold)*/
                   ,
                 )),

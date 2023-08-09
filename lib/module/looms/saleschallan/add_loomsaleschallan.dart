@@ -933,7 +933,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
             ElevatedButton(
               onPressed: () => {gotoChallanItemDet(context)},
               child: Text('Add Item Details',
-                  style: GoogleFonts.oswald(
+                  style: TextStyle(
                       fontSize: 15.0, fontWeight: FontWeight.bold)),
             ),
             SingleChildScrollView(

@@ -431,7 +431,7 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
             ElevatedButton(
               onPressed: () => {gotoReport(context)},
               child: Text('Generate Report',
-                  style: GoogleFonts.oswald(
+                  style: TextStyle(
                       fontSize: 22.0, fontWeight: FontWeight.normal)),
             ),
           ],

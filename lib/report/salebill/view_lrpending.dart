@@ -224,7 +224,7 @@ class _LRPendingViewState extends State<LRPendingView> {
             ElevatedButton(
               onPressed: () => {gotoReport(context)},
               child: Text('Generate Report',
-                  style: GoogleFonts.oswald(
+                  style: TextStyle(
                       fontSize: 22.0, fontWeight: FontWeight.normal)),
             ),
           ],
