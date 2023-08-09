@@ -20,7 +20,7 @@ import 'package:cloud_mobile/list/branch_list.dart';
 
 import 'package:cloud_mobile/common/bottombar.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+//// import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 //import 'package:barcode_scan/barcode_scan.dart';
@@ -501,7 +501,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         title: Text(
           'Sales Challan Item Details[ ] ',
           style:
-              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(

@@ -29,7 +29,7 @@ import 'package:cloud_mobile/common/customer.dart';
 import 'package:cloud_mobile/common/invoice.dart';
 import 'package:cloud_mobile/common/supplier.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_mobile/report/salebill/view_lrpending.dart';
 import 'package:cloud_mobile/report/salebill/view_salebillconc.dart';
 
@@ -86,7 +86,7 @@ class _SaleBillMenuState extends State<SaleBillMenu> {
         title: Text(
           'Sale Bill Report',
           style:
-              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       body: Form(

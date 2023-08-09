@@ -8,7 +8,7 @@ import 'package:cloud_mobile/common/global.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/alert.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+// // // import 'package:google_fonts/google_fonts.dart';
 import 'common/global.dart' as globals;
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
           Scaffold(
         appBar: AppBar(
             title: Text(_title,
-                style: GoogleFonts.abel(
+                style: TextStyle(
                     fontSize: 25.0, fontWeight: FontWeight.normal))),
         body: const MyHomePage(),
       ),

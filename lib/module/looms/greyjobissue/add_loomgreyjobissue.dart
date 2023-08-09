@@ -20,7 +20,7 @@ import 'package:cloud_mobile/list/branch_list.dart';
 
 import 'package:cloud_mobile/common/bottombar.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+//// import 'package:google_fonts/google_fonts.dart';
 //import 'package:cloud_mobile/module/master/partymaster/partymasterlist.dart';
 import 'package:cloud_mobile/module/looms/greyjobissue/add_loomgreyjobissuedet.dart';
 
@@ -505,7 +505,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                   ? 'Serial No : ' + widget.serial.toString()
                   : ''),
           style:
-              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(

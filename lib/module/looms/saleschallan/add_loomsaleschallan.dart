@@ -19,7 +19,7 @@ import 'package:cloud_mobile/list/branch_list.dart';
 
 import 'package:cloud_mobile/common/bottombar.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+//// import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_mobile/module/master/partymaster/partymasterlist.dart';
 
 class LoomSalesChallanAdd extends StatefulWidget {
@@ -639,7 +639,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                   ? 'Challan No : ' + widget.serial.toString()
                   : ''),
           style:
-              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(

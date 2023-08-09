@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../common/global.dart' as globals;
 
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 import 'package:cloud_mobile/module/master/partygroupmaster/add_partygroupmaster.dart';
 
@@ -62,7 +62,7 @@ class _PartyGroupMasterListPageState extends State<PartyGroupMasterList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('List Of Account Groups',
-            style: GoogleFonts.abel(
+            style: TextStyle(
                 fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
       floatingActionButton: FloatingActionButton(
