@@ -99,7 +99,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
     var id = widget.xid;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuedetlist?dbname=' +
+        'https://www.looms.equalsoftlink.com/api/api_getyarnjobissuedetlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -121,25 +121,20 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       ItemDet.add({
         "controlid": jsonData[iCtr]['controlid'].toString(),
         "id": jsonData[iCtr]['id'].toString(),
-        "orderno": jsonData[iCtr]['ordno'].toString(),
-        "takano": jsonData[iCtr]['takano'].toString(),
-        "takachr": jsonData[iCtr]['takachr'].toString(),
-        "pcs": jsonData[iCtr]['pcs'].toString(),
-        "meters": jsonData[iCtr]['meters'].toString(),
-        "weight": jsonData[iCtr]['weight'].toString(),
-        "avgwt": jsonData[iCtr]['avgwt'].toString(),
-        "tpmtrs": jsonData[iCtr]['tpmtrs'].toString(),
+        "cartonchr": jsonData[iCtr]['cartonchr'].toString(),
+        "cartonno": jsonData[iCtr]['cartonno'].toString(),
+        "netwt": jsonData[iCtr]['netwt'].toString(),
+        "lotno": jsonData[iCtr]['lotno'].toString(),
+        "cops": jsonData[iCtr]['cops'].toString(),
+        "cone": jsonData[iCtr]['cone'].toString(),
         "itemname": jsonData[iCtr]['itemname'].toString(),
         "unit": jsonData[iCtr]['unit'].toString(),
-        'varper': 0,
         "rate": jsonData[iCtr]['rate'].toString(),
         "amount": jsonData[iCtr]['amount'].toString(),
-        "design": jsonData[iCtr]['design'].toString(),
-        "machine": jsonData[iCtr]['machine'].toString(),
         "fmode": jsonData[iCtr]['fmode'].toString(),
-        "inwid": jsonData[iCtr]['inwid'].toString(),
-        "inwdetid": jsonData[iCtr]['inwdetid'].toString(),
-        "inwdettkid": jsonData[iCtr]['inwdettkid'].toString()        
+        "ychlnsubdetid": jsonData[iCtr]['ychlnsubdetid'].toString(),
+        "ychlnid": jsonData[iCtr]['ychlnid'].toString(),
+        "ychlndetid": jsonData[iCtr]['ychlndetid'].toString()        
       });
     }
 
@@ -459,23 +454,21 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
             label: Text('',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
           )),
-          DataCell(Text(ItemDetails[iCtr]['takachr'] +
-              '-' +
-              ItemDetails[iCtr]['takano'])),
-          DataCell(Text(ItemDetails[iCtr]['pcs'])),
-          DataCell(Text(ItemDetails[iCtr]['meters'])),
-          DataCell(Text(ItemDetails[iCtr]['tpmtrs'])),
+          DataCell(Text(ItemDetails[iCtr]['cartonchr'])) ,
+          DataCell(Text(ItemDetails[iCtr]['cartonno'])),
+          DataCell(Text(ItemDetails[iCtr]['netwt'])),
           DataCell(Text(ItemDetails[iCtr]['itemname'])),
-          DataCell(Text(ItemDetails[iCtr]['design'])),
+          DataCell(Text(ItemDetails[iCtr]['lotno'])),
+          DataCell(Text(ItemDetails[iCtr]['cops'])),
+          DataCell(Text(ItemDetails[iCtr]['cone'])),
           DataCell(Text(ItemDetails[iCtr]['unit'])),
           DataCell(Text(ItemDetails[iCtr]['rate'])),
           DataCell(Text(ItemDetails[iCtr]['amount'])),
-          DataCell(Text(ItemDetails[iCtr]['inwid'])),
-          DataCell(Text(ItemDetails[iCtr]['inwdetid'])),
-          DataCell(Text(ItemDetails[iCtr]['inwdettkid'])),
+          DataCell(Text(ItemDetails[iCtr]['cost'])),
+          DataCell(Text(ItemDetails[iCtr]['ychlnsubdetid'])),
+          DataCell(Text(ItemDetails[iCtr]['ychlnid'])),
+          DataCell(Text(ItemDetails[iCtr]['ychlndetid'])),
           DataCell(Text(ItemDetails[iCtr]['fmode'])),
-          DataCell(Text(ItemDetails[iCtr]['ordid'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['orddetid'].toString())),
         ]));
       }
 
@@ -736,25 +729,25 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                 scrollDirection: Axis.horizontal,
                 child: DataTable(columns: [
                   DataColumn(
-                    label: Text("Action"),
+                    label: Text("Cartonchr"),
                   ),
                   DataColumn(
-                    label: Text("Taka No"),
+                    label: Text("Cartonno"),
                   ),
                   DataColumn(
-                    label: Text("Pcs"),
+                    label: Text("Netwt"),
                   ),
                   DataColumn(
-                    label: Text("Meters"),
+                    label: Text("ItemName"),
                   ),
                   DataColumn(
-                    label: Text("TP Mtrs"),
+                    label: Text("LotNo"),
                   ),
                   DataColumn(
-                    label: Text("Item Name"),
+                    label: Text("Cops"),
                   ),
                   DataColumn(
-                    label: Text("Design No"),
+                    label: Text("Cone"),
                   ),
                   DataColumn(
                     label: Text("Unit"),
@@ -766,22 +759,16 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     label: Text("Amount"),
                   ),
                   DataColumn(
-                    label: Text("InwId"),
+                    label: Text("ychlnsubdetid"),
                   ),
                   DataColumn(
-                    label: Text("InwDetId"),
+                    label: Text("ychlnid"),
                   ),
                   DataColumn(
-                    label: Text("InwDetTkId"),
+                    label: Text("ychlndetid"),
                   ),
                   DataColumn(
                     label: Text("FMode"),
-                  ),
-                  DataColumn(
-                    label: Text("OrdId"),
-                  ),
-                  DataColumn(
-                    label: Text("OrdDetId"),
                   ),
                 ], rows: _createRows())),
           ],
