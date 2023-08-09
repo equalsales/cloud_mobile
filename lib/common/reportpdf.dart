@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
+//// import 'package:google_fonts/google_fonts.dart';
 
 import '../../common/global.dart' as globals;
 

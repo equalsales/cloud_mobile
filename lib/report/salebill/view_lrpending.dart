@@ -26,7 +26,7 @@ import 'package:cloud_mobile/common/customer.dart';
 import 'package:cloud_mobile/common/invoice.dart';
 import 'package:cloud_mobile/common/supplier.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 class LRPendingView extends StatefulWidget {
   var xcompanyid;
@@ -185,7 +185,7 @@ class _LRPendingViewState extends State<LRPendingView> {
         title: Text(
           'LR Pending Report',
           style:
-              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       body: Form(

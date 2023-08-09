@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import '../../common/global.dart' as globals;
 import 'package:cloud_mobile/common/alert.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 class PendingTask extends StatefulWidget {
   var xcompanyid;
@@ -118,7 +118,7 @@ class _PendingTaskPageState extends State<PendingTask> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Pending Task',
-              style: GoogleFonts.abel(
+              style: TextStyle(
                   fontSize: 25.0, fontWeight: FontWeight.normal)),
         ),
         body: Container(

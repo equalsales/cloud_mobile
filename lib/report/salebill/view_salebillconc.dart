@@ -27,7 +27,7 @@ import 'package:cloud_mobile/common/customer.dart';
 import 'package:cloud_mobile/common/invoice.dart';
 import 'package:cloud_mobile/common/supplier.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 class SaleBillConcView extends StatefulWidget {
   var xcompanyid;
@@ -344,7 +344,7 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
         title: Text(
           'Sale Bill Concise Report',
           style:
-              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       body: Form(

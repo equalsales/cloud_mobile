@@ -17,7 +17,7 @@ import 'package:cloud_mobile/common/bottombar.dart';
 
 //import 'package:myfirstapp/screens/dashboard/sidebar.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+//// import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_mobile/module/master/citymaster/citymasterlist.dart';
 
 class CityMasterAdd extends StatefulWidget {
@@ -182,7 +182,7 @@ class _CityMasterAddState extends State<CityMasterAdd> {
               (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
               ' ] ',
           style:
-              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(

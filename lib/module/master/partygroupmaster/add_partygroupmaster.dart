@@ -16,7 +16,7 @@ import 'package:cloud_mobile/list/state_list.dart';
 
 import 'package:cloud_mobile/common/bottombar.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_mobile/module/master/partygroupmaster/partygroupmasterlist.dart';
 
 class PartyGroupMasterAdd extends StatefulWidget {
@@ -301,7 +301,7 @@ class _PartyGroupMasterAddState extends State<PartyGroupMasterAdd> {
               (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
               ' ] ',
           style:
-              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(

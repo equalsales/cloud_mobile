@@ -19,7 +19,7 @@ import '../../common/global.dart' as globals;
 
 import 'package:cloud_mobile/common/bottombar.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+//// import 'package:google_fonts/google_fonts.dart';
 
 class Mastermenu extends StatefulWidget {
   var xcompanyid;
@@ -123,7 +123,7 @@ class _MastermenuState extends State<Mastermenu> {
         title: Text(
           'Master Menu',
           style:
-              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+            TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       body: Center(

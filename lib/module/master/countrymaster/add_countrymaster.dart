@@ -29,7 +29,7 @@ import 'package:cloud_mobile/common/customer.dart';
 import 'package:cloud_mobile/common/invoice.dart';
 import 'package:cloud_mobile/common/supplier.dart';
 
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_mobile/module/master/countrymaster/countrymasterlist.dart';
 
 class CountryMasterAdd extends StatefulWidget {
@@ -156,7 +156,7 @@ class _CountryMasterAddState extends State<CountryMasterAdd> {
               (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
               ' ] ',
           style:
-              GoogleFonts.abel(fontSize: 25.0, fontWeight: FontWeight.normal),
+              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(
