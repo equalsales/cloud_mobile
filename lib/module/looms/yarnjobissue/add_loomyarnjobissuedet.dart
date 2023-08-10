@@ -84,21 +84,12 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
   TextEditingController _rate = new TextEditingController();
   TextEditingController _unit = new TextEditingController();
   TextEditingController _amount = new TextEditingController();
-  
-  //TextEditingController _design = new TextEditingController();
-  
- 
-  //TextEditingController _machine = new TextEditingController();
   TextEditingController _ychlndetid = new TextEditingController();
   TextEditingController _ychlnid = new TextEditingController();
   TextEditingController _ychlnsubdetid = new TextEditingController();
-  //TextEditingController _ordid = new TextEditingController();
-  //TextEditingController _orddetid = new TextEditingController();
   TextEditingController _fmode = new TextEditingController();
-  //TextEditingController _ordbalmtrs = new TextEditingController();
-
-  //var ordTaka = 0;
-  double ordMeters = 0;
+ 
+ 
 
   final _formKey = GlobalKey<FormState>();
 
@@ -122,11 +113,11 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
         //_ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
         //_ordid.text = ItemDetails[length - 1]['ordid'].toString();
         //_orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
-        _itemname.text = ItemDetails[length - 1]['itemname'].toString();
+        //_itemname.text = ItemDetails[length - 1]['itemname'].toString();
         //_design.text = ItemDetails[length - 1]['design'].toString();
-        _lotno.text = ItemDetails[length - 1]['hsncode'].toString();
-        _unit.text = ItemDetails[length - 1]['unit'].toString();
-        _rate.text = ItemDetails[length - 1]['rate'].toString();
+        //_lotno.text = ItemDetails[length - 1]['hsncode'].toString();
+        //_unit.text = ItemDetails[length - 1]['unit'].toString();
+        //_rate.text = ItemDetails[length - 1]['rate'].toString();
       });
     }
 
@@ -255,9 +246,6 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
 
     setState(() {
       _itemname.text = jsonData['itemname'];
-      //_folddate.text = jsonData['date'];
-      //_design.text = jsonData['design'];
-      //_machine.text = jsonData['machine'];
       _netwt.text = jsonData['balwt'].toString();
       _cops.text = jsonData['cops'].toString();
       _unit.text = jsonData['unit'];
@@ -266,8 +254,9 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       _ychlnid.text = jsonData['mstid'].toString();
       _ychlnsubdetid.text = jsonData['subdetid'].toString();
       _fmode.text = jsonData['fmode'];
+      _rate.text = jsonData['rate'];
+      _amount.text = jsonData['amount'];
 
-   
 
       double netwt = double.parse(_netwt.text);
       double cops = double.parse(_cops.text);
@@ -337,7 +326,6 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
-
       var cartonchr = _Cartonchr.text;
       var cartonno = _Cartonno.text;
       var ccartonno = _cCartonno.text;
@@ -346,86 +334,55 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       var cops = _cops.text;
       var cone = _cone.text;
       var itemname = _itemname.text;
-      //var design = _design.text;
+     
       var rate = _rate.text;
       var unit = _unit.text;
       var amount = _amount.text;
-      //var machine = _machine.text;
+     
       var ychlndetid = _ychlndetid.text;
       var ychlnid = _ychlnid.text;
       var ychlnsubdetid = _ychlnsubdetid.text;
       var fmode = _fmode.text;
-      //var orderno = _orderno.text;
-      //var ordid = _ordid.text;
-      // var orddetid = _orddetid.text;
-      //var ordbalmtrs = _ordbalmtrs.text;
       
-      //var folddate = _folddate.text;
-
+      print("jatin");
       widget.xitemDet.add({
-        'cartonchr': ccartonno,
-        'cartonno': cartonchr,
+        'cartonchr': cartonchr,
+        'cartonno': cartonno,
         'netwt': netwt,
         'itemname': itemname,
         'lotno': lotno,
         'cops': cops,
-        'Cone': cone,
+        'cone': cone,
         'unit': unit,
         'rate': rate,
         'amount': amount,
         'cost': 0,
+        'ychlnsubdetid': ychlnsubdetid.toString(),
+        'ychlnid': ychlnid.toString(),
+        'ychlndetid': ychlndetid.toString(),
         'fmode': fmode,
-        'ychlndetid': ychlndetid,
-        'ychlnid': ychlnid,
-        'ychlnsubdetid': ychlnsubdetid,
       });
 
+      //print("tanshul");
       Navigator.pop(context, widget.xitemDet);
 
-      // var response = await http.post(Uri.parse(uri));
-
-      // var jsonData = jsonDecode(response.body);
-      // //print('4');
-
-      // var jsonCode = jsonData['Code'];
-      // var jsonMsg = jsonData['Message'];
-
-      // if (jsonCode == '500') {
-      //   showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      // } else {
-      //   showAlertDialog(context, 'Saved !!!');
-      //   Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //           builder: (_) => LoomSalesChallanList(
-      //                 companyid: widget.xcompanyid,
-      //                 companyname: widget.xcompanyname,
-      //                 fbeg: widget.xfbeg,
-      //                 fend: widget.xfend,
-      //               )));
-      // }
-
+      // print("panshul");    
       return true;
     }
-
-    var items = [
-      'PACKING',
-      'DELIVERY',
-    ];
 
     setDefValue();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Sales Challan Item Details[ ] ',
+          'Yarn JobWork Item Details [ ] ',
           style:
               TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done),
-          backgroundColor: Colors.green,
+          backgroundColor: const Color.fromRGBO(76, 175, 80, 1),
           onPressed: () => {saveData()}),
       body: SingleChildScrollView(
           child: Form(

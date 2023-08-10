@@ -58,13 +58,12 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
 
   List ItemDetails = [];
 
-  String dropdownTrnType = 'REGULAR';
+  //String dropdownTrnType = 'REGULAR';
 
   var branchid = 0;
   var partyid = 0;
 
   TextEditingController _branch = new TextEditingController();
-  //TextEditingController _type = new TextEditingController();
   TextEditingController _serial = new TextEditingController();
   TextEditingController _srchr = new TextEditingController();
   TextEditingController _chlnno = new TextEditingController();
@@ -441,17 +440,17 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         double nNetwt = 0;
         double nCops = 0;
         double nCone= 0;
-        if(ItemDetails[iCtr]['netwt']!='')
-        {
-          nNetwt = nNetwt + double.parse(ItemDetails[iCtr]['netwt']);
-          nCops = nCops + double.parse(ItemDetails[iCtr]['cops']);
-          nCone = nCone + double.parse(ItemDetails[iCtr]['cone']);
-          widget.totcops += nCops;
-          widget.totwt +=nNetwt;
-          widget.totcone +=nCone;
-        }
+        // if(ItemDetails[iCtr]['netwt']!='')
+        // {
+        //   nNetwt = nNetwt + double.parse(ItemDetails[iCtr]['netwt']);
+        //   nCops = nCops + double.parse(ItemDetails[iCtr]['cops']);
+        //   nCone = nCone + double.parse(ItemDetails[iCtr]['cone']);
+        //   widget.totcops += nCops;
+        //   widget.totwt +=nNetwt;
+        //   widget.totcone +=nCone;
+        // }
 
-        //print(ItemDetails[iCtr]);
+        print(ItemDetails[iCtr]);
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
             onPressed: () => {deleteRow(iCtr)},
