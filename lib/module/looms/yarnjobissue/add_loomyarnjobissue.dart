@@ -41,8 +41,9 @@ class YarnJobIssueAdd extends StatefulWidget {
   var xid;
   var serial;
   var srchr;
-  double tottaka=0;
-  double totmtrs=0;
+  double totwt = 0;
+  double totcops = 0;
+  double totcone = 0;
 
   @override
   _YarnJobIssueAddState createState() => _YarnJobIssueAddState();
@@ -54,29 +55,31 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
 
   List _branchlist = [];
   List _partylist = [];
-  
+
   List ItemDetails = [];
 
   String dropdownTrnType = 'REGULAR';
 
   var branchid = 0;
   var partyid = 0;
-  
+
   TextEditingController _branch = new TextEditingController();
   //TextEditingController _type = new TextEditingController();
   TextEditingController _serial = new TextEditingController();
   TextEditingController _srchr = new TextEditingController();
   TextEditingController _chlnno = new TextEditingController();
   TextEditingController _machine = new TextEditingController();
+  TextEditingController _item = new TextEditingController();
   TextEditingController _creelno = new TextEditingController();
   TextEditingController _date = new TextEditingController();
   TextEditingController _party = new TextEditingController();
   TextEditingController _remarks = new TextEditingController();
-  TextEditingController _tottaka = new TextEditingController();
-  TextEditingController _totmtrs = new TextEditingController();
-    
+  TextEditingController _totWt = new TextEditingController();
+  TextEditingController _totcops = new TextEditingController();
+  TextEditingController _totcone = new TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
-    
+
   @override
   void initState() {
     fromDate = retconvdate(widget.xfbeg);
@@ -131,13 +134,15 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         "unit": jsonData[iCtr]['unit'].toString(),
         "rate": jsonData[iCtr]['rate'].toString(),
         "amount": jsonData[iCtr]['amount'].toString(),
+        "cost": jsonData[iCtr]['cost'].toString(),
         "fmode": jsonData[iCtr]['fmode'].toString(),
         "ychlnsubdetid": jsonData[iCtr]['ychlnsubdetid'].toString(),
         "ychlnid": jsonData[iCtr]['ychlnid'].toString(),
-        "ychlndetid": jsonData[iCtr]['ychlndetid'].toString()        
+        "ychlndetid": jsonData[iCtr]['ychlndetid'].toString(),
       });
     }
 
+    print(ItemDet);
     setState(() {
       ItemDetails = ItemDet;
     });
@@ -181,8 +186,10 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
     _party.text = getValue(jsonData['party'], 'C');
     _remarks.text = getValue(jsonData['remarks'], 'C');
     _chlnno.text = getValue(jsonData['chlnno'], 'N');
-    _creelno.text = getValue(jsonData['creelno'], 'C');
-    
+    _creelno.text = getValue(jsonData['creelno'], 'N');
+    _machine.text = getValue(jsonData['machine'], 'N');
+    _item.text = getValue(jsonData['itemname'], 'N');
+
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
 
@@ -277,8 +284,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
 
         if (selParty != '') {
           getPartyDetails(obj.text, 0).then((value) {
-            setState(() {              
-            });
+            setState(() {});
           });
         }
       });
@@ -314,7 +320,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         _branch.text = selBranch;
       });
     }
-    
+
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
       print('in');
@@ -355,14 +361,14 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       var remarks = _remarks.text;
       var chlnno = _chlnno.text;
       var creelno = _creelno.text;
-      
+
       var id = widget.xid;
       id = int.parse(id);
 
       print('In Save....');
-      
+
       print(jsonEncode(ItemDetails));
-      
+
       uri =
           "https://looms.equalsoftlink.com/api/api_storeloomsgreyjobissue?dbname=" +
               db +
@@ -374,7 +380,11 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
               branch +
               "&party=" +
               party +
-              "&srchr=" + srchr+"&serial=" + serial+"&date=" +
+              "&srchr=" +
+              srchr +
+              "&serial=" +
+              serial +
+              "&date=" +
               date +
               "&remarks=" +
               remarks +
@@ -384,7 +394,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
               id.toString() +
               "&parcel=1&duedays=0&GridData=" +
               jsonEncode(ItemDetails);
-      print(uri);
+      //print(uri);
       var response = await http.post(Uri.parse(uri));
 
       var jsonData = jsonDecode(response.body);
@@ -410,15 +420,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       return true;
     }
 
-    var items = [
-      '',
-      'REGULAR',
-      'RETURN',
-    ];
-
-    setState(() {
-      
-    });
+    setState(() {});
 
     void deleteRow(index) {
       setState(() {
@@ -430,19 +432,26 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       List<DataRow> _datarow = [];
       print(ItemDetails);
 
-      widget.tottaka=0;
-      widget.totmtrs=0;
-
+      widget.totwt = 0;
+      widget.totcops = 0;
+      widget.totcone = 0;
+      print(ItemDetails.length);
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
-        double nMeters = 0;
-        if(ItemDetails[iCtr]['meters']!='')
+        print(iCtr);
+        double nNetwt = 0;
+        double nCops = 0;
+        double nCone= 0;
+        if(ItemDetails[iCtr]['netwt']!='')
         {
-          nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
-          widget.tottaka+=1;
-          widget.totmtrs+=nMeters;
+          nNetwt = nNetwt + double.parse(ItemDetails[iCtr]['netwt']);
+          nCops = nCops + double.parse(ItemDetails[iCtr]['cops']);
+          nCone = nCone + double.parse(ItemDetails[iCtr]['cone']);
+          widget.totcops += nCops;
+          widget.totwt +=nNetwt;
+          widget.totcone +=nCone;
         }
-        
-        print(ItemDetails[iCtr]);
+
+        //print(ItemDetails[iCtr]);
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
             onPressed: () => {deleteRow(iCtr)},
@@ -454,7 +463,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
             label: Text('',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
           )),
-          DataCell(Text(ItemDetails[iCtr]['cartonchr'])) ,
+          DataCell(Text(ItemDetails[iCtr]['cartonchr'])),
           DataCell(Text(ItemDetails[iCtr]['cartonno'])),
           DataCell(Text(ItemDetails[iCtr]['netwt'])),
           DataCell(Text(ItemDetails[iCtr]['itemname'])),
@@ -465,22 +474,22 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
           DataCell(Text(ItemDetails[iCtr]['rate'])),
           DataCell(Text(ItemDetails[iCtr]['amount'])),
           DataCell(Text(ItemDetails[iCtr]['cost'])),
-          DataCell(Text(ItemDetails[iCtr]['ychlnsubdetid'])),
-          DataCell(Text(ItemDetails[iCtr]['ychlnid'])),
-          DataCell(Text(ItemDetails[iCtr]['ychlndetid'])),
+          DataCell(Text(ItemDetails[iCtr]['ychlnsubdetid'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['ychlnid'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['ychlndetid'].toString())),
           DataCell(Text(ItemDetails[iCtr]['fmode'])),
         ]));
       }
 
       setState(() {
-        _tottaka.text = widget.tottaka.toString();
-        _totmtrs.text = widget.totmtrs.toString();
+        _totWt.text = widget.totwt.toString();
+        _totcops.text = widget.totcops.toString();
+        _totcone.text = widget.totcone.toString();
       });
 
+      print('out');
       return _datarow;
     }
-
-
 
     setDefValue();
 
@@ -489,12 +498,11 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         title: Text(
           'Yarn Job Issue Challan [ ' +
               (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
-              ' ] '  +
+              ' ] ' +
               (int.parse(widget.xid) > 0
                   ? 'Serial No : ' + widget.serial.toString()
                   : ''),
-          style:
-              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
+          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -581,7 +589,8 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                       return null;
                     },
                   ),
-                ),Expanded(
+                ),
+                Expanded(
                   child: TextFormField(
                     textCapitalization: TextCapitalization.characters,
                     controller: _creelno,
@@ -623,7 +632,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    controller: _machine,
+                    controller: _item,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Item',
@@ -652,8 +661,8 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     ),
                     onChanged: (value) {
                       _remarks.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _remarks.selection);
+                      text: value.toUpperCase(),
+                      selection: _remarks.selection);
                     },
                     onTap: () {},
                     validator: (value) {
@@ -667,13 +676,13 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
               children: [
                 Expanded(
                     child: TextFormField(
-                      enabled: false,
-                  controller: _tottaka,
+                  enabled: false,
+                  controller: _totWt,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
-                    hintText: 'Total Taka',
-                    labelText: 'Total Taka',
+                    hintText: 'Total Wt',
+                    labelText: 'Total Wt',
                   ),
                   onTap: () {
                     //gotoBranchScreen(context);
@@ -684,13 +693,13 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                 )),
                 Expanded(
                     child: TextFormField(
-                      enabled: false,
-                  controller: _totmtrs,
+                  enabled: false,
+                  controller: _totcops,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
-                    hintText: 'Total Meters',
-                    labelText: 'Total Meters',
+                    hintText: 'Total Cops',
+                    labelText: 'Total Cops',
                   ),
                   onTap: () {
                     //gotoBranchScreen(context);
@@ -701,13 +710,13 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                 )),
                 Expanded(
                     child: TextFormField(
-                      enabled: false,
-                  controller: _totmtrs,
+                  enabled: false,
+                  controller: _totcone,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
-                    hintText: 'Total Meters',
-                    labelText: 'Total Meters',
+                    hintText: 'Total Cone',
+                    labelText: 'Total Cone',
                   ),
                   onTap: () {
                     //gotoBranchScreen(context);
@@ -722,12 +731,15 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
             ElevatedButton(
               onPressed: () => {gotoChallanItemDet(context)},
               child: Text('Add Item Details',
-                  style: TextStyle(
-                      fontSize: 15.0, fontWeight: FontWeight.bold)),
+                  style:
+                      TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
             ),
             SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: DataTable(columns: [
+                  DataColumn(
+                    label: Text("Action"),
+                  ),
                   DataColumn(
                     label: Text("Cartonchr"),
                   ),
@@ -757,6 +769,9 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                   ),
                   DataColumn(
                     label: Text("Amount"),
+                  ),
+                  DataColumn(
+                    label: Text("Cost"),
                   ),
                   DataColumn(
                     label: Text("ychlnsubdetid"),

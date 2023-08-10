@@ -71,28 +71,31 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
-  TextEditingController _orderno = new TextEditingController();
-  TextEditingController _folddate = new TextEditingController();
-  TextEditingController _takachr = new TextEditingController();
-  TextEditingController _takano = new TextEditingController();
-  TextEditingController _ctakano = new TextEditingController();
-  TextEditingController _pcs = new TextEditingController();
-  TextEditingController _meters = new TextEditingController();
-  TextEditingController _tpmeters = new TextEditingController();
+  //TextEditingController _orderno = new TextEditingController();
+  //TextEditingController _folddate = new TextEditingController();
+  TextEditingController _Cartonchr = new TextEditingController();
+  TextEditingController _Cartonno = new TextEditingController();
+  TextEditingController _netwt = new TextEditingController();
+  TextEditingController _cCartonno = new TextEditingController();
   TextEditingController _itemname = new TextEditingController();
-  TextEditingController _design = new TextEditingController();
-  TextEditingController _hsncode = new TextEditingController();
+  TextEditingController _lotno = new TextEditingController();
+  TextEditingController _cops = new TextEditingController();
+  TextEditingController _cone = new TextEditingController();
   TextEditingController _rate = new TextEditingController();
   TextEditingController _unit = new TextEditingController();
   TextEditingController _amount = new TextEditingController();
-  TextEditingController _machine = new TextEditingController();
-  TextEditingController _inwid = new TextEditingController();
-  TextEditingController _inwdetid = new TextEditingController();
-  TextEditingController _inwdettkid = new TextEditingController();
-  TextEditingController _ordid = new TextEditingController();
-  TextEditingController _orddetid = new TextEditingController();
+  
+  //TextEditingController _design = new TextEditingController();
+  
+ 
+  //TextEditingController _machine = new TextEditingController();
+  TextEditingController _ychlndetid = new TextEditingController();
+  TextEditingController _ychlnid = new TextEditingController();
+  TextEditingController _ychlnsubdetid = new TextEditingController();
+  //TextEditingController _ordid = new TextEditingController();
+  //TextEditingController _orddetid = new TextEditingController();
   TextEditingController _fmode = new TextEditingController();
-  TextEditingController _ordbalmtrs = new TextEditingController();
+  //TextEditingController _ordbalmtrs = new TextEditingController();
 
   //var ordTaka = 0;
   double ordMeters = 0;
@@ -114,14 +117,14 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     print('Length :' + length.toString());
     if (length > 0) {
       setState(() {
-        _orderno.text = ItemDetails[length - 1]['orderno'].toString();
+        //_orderno.text = ItemDetails[length - 1]['orderno'].toString();
         //_folddate.text = ItemDetails[length - 1]['folddate'].toString();
-        _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
-        _ordid.text = ItemDetails[length - 1]['ordid'].toString();
-        _orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
+        //_ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
+        //_ordid.text = ItemDetails[length - 1]['ordid'].toString();
+        //_orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
         _itemname.text = ItemDetails[length - 1]['itemname'].toString();
-        _design.text = ItemDetails[length - 1]['design'].toString();
-        _hsncode.text = ItemDetails[length - 1]['hsncode'].toString();
+        //_design.text = ItemDetails[length - 1]['design'].toString();
+        _lotno.text = ItemDetails[length - 1]['hsncode'].toString();
         _unit.text = ItemDetails[length - 1]['unit'].toString();
         _rate.text = ItemDetails[length - 1]['rate'].toString();
       });
@@ -189,8 +192,8 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     var id = widget.xid;
     var fromdate = widget.xfbeg;
     var todate = widget.xfend;
-    var takano = _takano.text;
-    var takachr = _takachr.text;
+    var cartonno = _Cartonno.text;
+    var cartonchr = _Cartonchr.text;
 
     fromdate = retconvdate(fromdate);
     todate = retconvdate(todate);
@@ -203,19 +206,19 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     print('Length :' + length.toString());
     if (length > 0) {
       for (int iCtr = 0; iCtr < length; iCtr++) {
-        if ((ItemDetails[iCtr]['takano'] == takano) &&
-            ((ItemDetails[iCtr]['takachr'] == takachr))) {
-          showAlertDialog(context, 'Taka No Already Exists...');
+        if ((ItemDetails[iCtr]['cartonno'] == cartonno) &&
+            ((ItemDetails[iCtr]['cartonchr'] == cartonchr))) {
+          showAlertDialog(context, 'Carton no Already Exists...');
           setState(() {
-            _takano.text = '0';
-            _takachr.text = '';
+            _Cartonno.text = '0';
+            _Cartonchr.text = '';
           });
           return true;
         }
       }
     }
 
-    uri = 'https://looms.equalsoftlink.com/api/commonapi_gettakastock?dbname=' +
+    uri = 'https://looms.equalsoftlink.com/api/commonapi_cartoonstock?dbname=' +
         db +
         '&cno=' +
         cno +
@@ -223,11 +226,10 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
         fromdate +
         '&todate=' +
         todate +
-        '&groupby=&created_at=&tocreated_at=&branch=&itemname=&design=&machineno=&takachr=' +
-        takachr +
-        '&takano=' +
-        takano +
-        '&rvalue=P&ncompany=&rtype=D&limit=1000&offset=0';
+        '&branch=&itemname=&cartonchr=' +
+        cartonchr +
+        '&cartonno=' +
+        cartonno ;
     // 'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
     //     db +
     //     '&cno=' +
@@ -245,7 +247,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
 
     jsonData = jsonData['Data'];
     if (jsonData == null) {
-      showAlertDialog(context, 'Taka No Found...');
+      showAlertDialog(context, 'Carton no No Found...');
       return true;
     }
 
@@ -253,37 +255,33 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
 
     setState(() {
       _itemname.text = jsonData['itemname'];
-      _folddate.text = jsonData['date'];
-      _design.text = jsonData['design'];
-      _machine.text = jsonData['machine'];
-      _pcs.text = jsonData['pcs'].toString();
-      _meters.text = jsonData['balmeters'].toString();
-      _tpmeters.text = jsonData['tpmtrs'].toString();
+      //_folddate.text = jsonData['date'];
+      //_design.text = jsonData['design'];
+      //_machine.text = jsonData['machine'];
+      _netwt.text = jsonData['balwt'].toString();
+      _cops.text = jsonData['cops'].toString();
       _unit.text = jsonData['unit'];
-      _hsncode.text = jsonData['hsncode'];
-      _inwid.text = jsonData['inwid'].toString();
-      _inwdetid.text = jsonData['inwdetid'].toString();
-      _inwdettkid.text = jsonData['inwdettkid'].toString();
+      _lotno.text = jsonData['lotno'];
+      _ychlndetid.text = jsonData['detid'].toString();
+      _ychlnid.text = jsonData['mstid'].toString();
+      _ychlnsubdetid.text = jsonData['subdetid'].toString();
       _fmode.text = jsonData['fmode'];
 
-      if (_ordbalmtrs.text != '') {
-        _ordbalmtrs.text =
-            (double.parse(_ordbalmtrs.text) - double.parse(_meters.text))
-                .toString();
-      }
+   
 
-      double pcs = double.parse(_pcs.text);
-      double meters = double.parse(_meters.text);
+      double netwt = double.parse(_netwt.text);
+      double cops = double.parse(_cops.text);
+      
       String unit = _unit.text;
       double rate = 0;
       if (_rate.text != '') {
         rate = double.parse(_rate.text);
       }
       double amount = 0;
-      if ((unit == 'P') || (unit == 'T')) {
-        amount = pcs * rate;
+      if ((unit == 'W') || (unit == '')) {
+        amount = netwt * rate;
       } else {
-        amount = meters * rate;
+        amount = cops * rate;
       }
       _amount.text = amount.toString();
     });
@@ -314,14 +312,14 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       print(splitted); // [Hello, world!];
       print(splitted.length);
       print('dhruv');
-      _takachr.text = splitted[0];
+      _Cartonchr.text = splitted[0];
       if(splitted.length>1)
       {
-        _takano.text = splitted[1];
+        _Cartonno.text = splitted[1];
       }
       else
       {
-        _takano.text = '0';
+        _Cartonno.text = '0';
       }
       
 
@@ -340,62 +338,46 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       var db = globals.dbname;
       var username = globals.username;
 
-      var takachr = _takachr.text;
-      var takano = _takano.text;
-      var ctakano = _ctakano.text;
-      var pcs = _pcs.text;
-      var meters = _meters.text;
-      var tpmtrs = _tpmeters.text;
+      var cartonchr = _Cartonchr.text;
+      var cartonno = _Cartonno.text;
+      var ccartonno = _cCartonno.text;
+      var netwt = _netwt.text;
+      var lotno = _lotno.text;
+      var cops = _cops.text;
+      var cone = _cone.text;
       var itemname = _itemname.text;
-      var design = _design.text;
+      //var design = _design.text;
       var rate = _rate.text;
       var unit = _unit.text;
       var amount = _amount.text;
-      var machine = _machine.text;
-      var inwid = _inwid.text;
-      var inwdetid = _inwdetid.text;
-      var inwdettkid = _inwdettkid.text;
+      //var machine = _machine.text;
+      var ychlndetid = _ychlndetid.text;
+      var ychlnid = _ychlnid.text;
+      var ychlnsubdetid = _ychlnsubdetid.text;
       var fmode = _fmode.text;
-      var orderno = _orderno.text;
-      var ordid = _ordid.text;
-      var orddetid = _orddetid.text;
-      var ordbalmtrs = _ordbalmtrs.text;
-      var hsncode = _hsncode.text;
-      var folddate = _folddate.text;
+      //var orderno = _orderno.text;
+      //var ordid = _ordid.text;
+      // var orddetid = _orddetid.text;
+      //var ordbalmtrs = _ordbalmtrs.text;
+      
+      //var folddate = _folddate.text;
 
       widget.xitemDet.add({
-        'orderno': orderno,
-        'takachr': takachr,
-        'takano': takano,
-        'pcs': pcs,
-        'meters': meters,
-        'tpmtrs': tpmtrs,
+        'cartonchr': ccartonno,
+        'cartonno': cartonchr,
+        'netwt': netwt,
         'itemname': itemname,
-        'hsncode': hsncode,
-        'rate': rate,
-        'var': 0,
+        'lotno': lotno,
+        'cops': cops,
+        'Cone': cone,
         'unit': unit,
-        'varper': 0,
+        'rate': rate,
         'amount': amount,
-        'design': design,
-        'machine': machine,
-        'orditem': itemname,
-        'orddesign': design,
-        'ordmtr': ordbalmtrs,
-        'stdwt': 0,
-        'ordid': ordid,
-        'folddate': folddate,
-        'type': '',
-        'tkid': 0,
-        'tkdetid': 0,
-        'fmode': fmode,
-        'inwid': inwid,
-        'inwdettkid': inwdettkid,
         'cost': 0,
-        'inwdetid': inwdetid,
-        'tp': '',
-        'orddetid': orddetid,
-        'ordbalmtrs': ordbalmtrs
+        'fmode': fmode,
+        'ychlndetid': ychlndetid,
+        'ychlnid': ychlnid,
+        'ychlnsubdetid': ychlnsubdetid,
       });
 
       Navigator.pop(context, widget.xitemDet);
@@ -455,69 +437,17 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    controller: _orderno,
+                    controller: _Cartonchr,
                     autofocus: true,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Select Sales Order',
-                      labelText: 'Order No',
-                    ),
-                    onTap: () {
-                      gotoOrderScreen(context);
-                    },
-                    onChanged: (value) {
-                      ;
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _folddate,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Fold Date',
-                      labelText: 'Fold Date',
-                    ),
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _ordbalmtrs,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Order Balance',
-                      labelText: 'Order Balance',
-                    ),
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _takachr,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Taka ',
-                      labelText: 'Takachr',
+                      hintText: 'Select carton ',
+                      labelText: 'Cartonchr',
                     ),
                     onChanged: (value) {
-                      _takachr.value = TextEditingValue(
+                      _Cartonchr.value = TextEditingValue(
                           text: value.toUpperCase(),
-                          selection: _takachr.selection);
+                          selection: _Cartonchr.selection);
                     },
                     validator: (value) {
                       return null;
@@ -526,12 +456,12 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    controller: _takano,
+                    controller: _Cartonno,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Select Taka No',
-                      labelText: 'Taka No',
+                      hintText: 'Select Carton No',
+                      labelText: 'Carton No',
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);
@@ -580,14 +510,33 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                     },
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
-                    controller: _design,
+                    controller: _netwt,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Design',
-                      labelText: 'Design',
+                      hintText: 'Net Weight',
+                      labelText: 'NetWt',
+                    ),
+                    onTap: () {
+                      //gotoBranchScreen(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _cops,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Cops',
+                      labelText: 'Cops',
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);
@@ -603,11 +552,11 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    controller: _pcs,
+                    controller: _cone,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Pcs / Taka',
-                      labelText: 'Pcs',
+                      hintText: 'Cone',
+                      labelText: 'Cone',
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);
@@ -619,47 +568,11 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    controller: _meters,
+                    controller: _lotno,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Meters',
-                      labelText: 'Meters',
-                    ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _tpmeters,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'TP Mtrs',
-                      labelText: 'TP Meters',
-                    ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _hsncode,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'HSN Code',
-                      labelText: 'HSN Code',
+                      hintText: 'Lot No',
+                      labelText: 'Lot No',
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);
@@ -725,23 +638,6 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                     },
                   ),
                 ),
-                Expanded(
-                  child: TextFormField(
-                    enabled: false,
-                    controller: _machine,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Machine No',
-                      labelText: 'Machine',
-                    ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )
               ],
             ),
             Row(
@@ -749,11 +645,11 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                 Expanded(
                   child: TextFormField(
                     enabled: false,
-                    controller: _inwid,
+                    controller: _ychlndetid,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'InwId',
-                      labelText: 'InwId',
+                      hintText: 'ychlndetid',
+                      labelText: 'ychlndetid',
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);
@@ -766,11 +662,11 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                 Expanded(
                   child: TextFormField(
                     enabled: false,
-                    controller: _inwdetid,
+                    controller: _ychlnid,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'InwDetid',
-                      labelText: 'InwDetId',
+                      hintText: 'ychlnid',
+                      labelText: 'ychlnid',
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);
@@ -783,11 +679,11 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                 Expanded(
                   child: TextFormField(
                     enabled: false,
-                    controller: _inwdettkid,
+                    controller: _ychlnsubdetid,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'InwTkDetid',
-                      labelText: 'InwTkDetId',
+                      hintText: 'ychlnsubdetid',
+                      labelText: 'ychlnsubdetid',
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);
