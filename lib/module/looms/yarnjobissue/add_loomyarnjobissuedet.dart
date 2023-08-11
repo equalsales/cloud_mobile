@@ -88,8 +88,6 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
   TextEditingController _ychlnid = new TextEditingController();
   TextEditingController _ychlnsubdetid = new TextEditingController();
   TextEditingController _fmode = new TextEditingController();
- 
- 
 
   final _formKey = GlobalKey<FormState>();
 
@@ -108,16 +106,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     print('Length :' + length.toString());
     if (length > 0) {
       setState(() {
-        //_orderno.text = ItemDetails[length - 1]['orderno'].toString();
-        //_folddate.text = ItemDetails[length - 1]['folddate'].toString();
-        //_ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
-        //_ordid.text = ItemDetails[length - 1]['ordid'].toString();
-        //_orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
-        //_itemname.text = ItemDetails[length - 1]['itemname'].toString();
-        //_design.text = ItemDetails[length - 1]['design'].toString();
-        //_lotno.text = ItemDetails[length - 1]['hsncode'].toString();
-        //_unit.text = ItemDetails[length - 1]['unit'].toString();
-        //_rate.text = ItemDetails[length - 1]['rate'].toString();
+        
       });
     }
 
@@ -183,6 +172,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     var id = widget.xid;
     var fromdate = widget.xfbeg;
     var todate = widget.xfend;
+    var branch = widget.xbranch;
     var cartonno = _Cartonno.text;
     var cartonchr = _Cartonchr.text;
 
@@ -217,10 +207,12 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
         fromdate +
         '&todate=' +
         todate +
-        '&branch=&itemname=&cartonchr=' +
+        '&branch=' + 
+        branch + 
+        '&itemname=&cartonchr=' +
         cartonchr +
         '&cartonno=' +
-        cartonno ;
+        cartonno;
     // 'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
     //     db +
     //     '&cno=' +
@@ -256,11 +248,11 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       _fmode.text = jsonData['fmode'];
       _rate.text = jsonData['rate'];
       _amount.text = jsonData['amount'];
-
+      _cone.text = '0';
 
       double netwt = double.parse(_netwt.text);
       double cops = double.parse(_cops.text);
-      
+
       String unit = _unit.text;
       double rate = 0;
       if (_rate.text != '') {
@@ -286,8 +278,8 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       //     '#ff6666', 'Cancel', true, ScanMode.QR);
 
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#000000', 'Cancel', true, ScanMode.BARCODE);          
-      //barcodeScanRes = await BarcodeScanner.scan();      
+          '#000000', 'Cancel', true, ScanMode.BARCODE);
+      //barcodeScanRes = await BarcodeScanner.scan();
       print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
@@ -297,20 +289,16 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       print(barcodeScanRes);
 
       //const string = barcodeScanRes;
-      final splitted = barcodeScanRes.split('-');      
+      final splitted = barcodeScanRes.split('-');
       print(splitted); // [Hello, world!];
       print(splitted.length);
       print('dhruv');
       _Cartonchr.text = splitted[0];
-      if(splitted.length>1)
-      {
+      if (splitted.length > 1) {
         _Cartonno.text = splitted[1];
-      }
-      else
-      {
+      } else {
         _Cartonno.text = '0';
       }
-      
 
       fetchdetails();
       //_scanBarcode = barcodeScanRes;
@@ -334,16 +322,16 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       var cops = _cops.text;
       var cone = _cone.text;
       var itemname = _itemname.text;
-     
+
       var rate = _rate.text;
       var unit = _unit.text;
       var amount = _amount.text;
-     
+
       var ychlndetid = _ychlndetid.text;
       var ychlnid = _ychlnid.text;
       var ychlnsubdetid = _ychlnsubdetid.text;
       var fmode = _fmode.text;
-      
+
       print("jatin");
       widget.xitemDet.add({
         'cartonchr': cartonchr,
@@ -356,7 +344,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
         'unit': unit,
         'rate': rate,
         'amount': amount,
-        'cost': 0,
+        'cost': '0',
         'ychlnsubdetid': ychlnsubdetid.toString(),
         'ychlnid': ychlnid.toString(),
         'ychlndetid': ychlndetid.toString(),
@@ -365,8 +353,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
 
       //print("tanshul");
       Navigator.pop(context, widget.xitemDet);
-
-      // print("panshul");    
+      // print("panshul");
       return true;
     }
 
@@ -375,9 +362,8 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Yarn JobWork Item Details [ ] ',
-          style:
-              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
+          'Yarn Job JobWork Item Details [ ] ',
+          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(

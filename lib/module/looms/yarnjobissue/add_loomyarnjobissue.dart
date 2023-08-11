@@ -17,6 +17,8 @@ import '../../../common/global.dart' as globals;
 //import 'package:cloud_mobile/list/city_list.dart';
 //import 'package:cloud_mobile/list/state_list.dart';
 import 'package:cloud_mobile/list/branch_list.dart';
+import 'package:cloud_mobile/list/item_list.dart';
+import 'package:cloud_mobile/list/machine_list.dart';
 
 import 'package:cloud_mobile/common/bottombar.dart';
 
@@ -55,12 +57,16 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
 
   List _branchlist = [];
   List _partylist = [];
+  List _itemlist = [];
+  List _machinelist = [];
 
   List ItemDetails = [];
 
   //String dropdownTrnType = 'REGULAR';
 
   var branchid = 0;
+  var itemid = 0;
+  var machineid = 0;
   var partyid = 0;
 
   TextEditingController _branch = new TextEditingController();
@@ -320,6 +326,68 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       });
     }
 
+    void gotoItemScreen(BuildContext contex) async {
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => item_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend)));
+
+      setState(() {
+        var retResult = result;
+
+        print(retResult);
+        _itemlist = result[1];
+        result = result[1];
+        itemid = _itemlist[0];
+        print(itemid);
+
+        var stritem = '';
+        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+          if (ictr > 0) {
+            stritem = stritem + ',';
+          }
+          stritem = stritem + retResult[0][ictr];
+        }
+
+        _item.text = stritem;
+      });
+    }
+
+    void gotoMachineScreen(BuildContext contex) async {
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => machine_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend)));
+
+      setState(() {
+        var retResult = result;
+
+        print(retResult);
+        _machinelist = result[1];
+        result = result[1];
+        machineid = _machinelist[0];
+        print(machineid);
+
+        var strmachine = '';
+        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+          if (ictr > 0) {
+            strmachine = strmachine + ',';
+          }
+          strmachine = strmachine + retResult[0][ictr];
+        }
+        print(strmachine);
+        _machine.text = strmachine;
+      });
+    }
+
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
       print('in');
@@ -345,13 +413,14 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       });
     }
 
-    Future<bool> saveData() async {
+   
+
+
+     Future<bool> saveData() async {
       String uri = '';
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
-
-      //var type = _type.text;
       var serial = _serial.text;
       var srchr = _srchr.text;
       var branch = _branch.text;
@@ -360,16 +429,21 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       var remarks = _remarks.text;
       var chlnno = _chlnno.text;
       var creelno = _creelno.text;
+      var cmachine = _machine.text;
+      var citem = _item.text;
 
       var id = widget.xid;
       id = int.parse(id);
 
       print('In Save....');
-
+      
       print(jsonEncode(ItemDetails));
+      //return true;
+
+      
 
       uri =
-          "https://looms.equalsoftlink.com/api/api_storeloomsgreyjobissue?dbname=" +
+          "https://looms.equalsoftlink.com/api/api_storeloomsyarnissuechln?dbname=" +
               db +
               "&company=&cno=" +
               cno +
@@ -379,22 +453,25 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
               branch +
               "&party=" +
               party +
-              "&srchr=" +
-              srchr +
-              "&serial=" +
-              serial +
-              "&date=" +
+              "&item=" +
+              citem +
+              "&machine=" + cmachine + "&creelno="+ creelno+"&chlnno=" +
+              chlnno +
+              "&srchr=" + srchr+"&serial=" + serial+"&date=" +
               date +
               "&remarks=" +
               remarks +
-              "&chlnno=" +
-              chlnno +
               "&id=" +
               id.toString() +
-              "&parcel=1&duedays=0&GridData=" +
-              jsonEncode(ItemDetails);
-      //print(uri);
-      var response = await http.post(Uri.parse(uri));
+              "&parcel=1";      
+      print(uri);
+
+      final headers = {
+          'Content-Type': 'application/json', // Set the appropriate content-type
+          // Add any other headers required by your API
+        };      
+
+      var response = await http.post(Uri.parse(uri), headers: headers, body: jsonEncode(ItemDetails));
 
       var jsonData = jsonDecode(response.body);
       //print('4');
@@ -419,14 +496,11 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       return true;
     }
 
-    setState(() {});
-
     void deleteRow(index) {
       setState(() {
         ItemDetails.removeAt(index);
       });
     }
-
     List<DataRow> _createRows() {
       List<DataRow> _datarow = [];
       print(ItemDetails);
@@ -439,15 +513,14 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         print(iCtr);
         double nNetwt = 0;
         double nCops = 0;
-        double nCone= 0;
-        if(ItemDetails[iCtr]['netwt']!='')
-        {
+        double nCone = 0;
+        if (ItemDetails[iCtr]['netwt'] != '') {
           nNetwt = nNetwt + double.parse(ItemDetails[iCtr]['netwt']);
           nCops = nCops + double.parse(ItemDetails[iCtr]['cops']);
           nCone = nCone + double.parse(ItemDetails[iCtr]['cone']);
           widget.totcops += nCops;
-          widget.totwt +=nNetwt;
-          widget.totcone +=nCone;
+          widget.totwt += nNetwt;
+          widget.totcone += nCone;
         }
 
         print(ItemDetails[iCtr]);
@@ -622,7 +695,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                       labelText: 'Machine',
                     ),
                     onTap: () {
-                      gotoPartyScreen2(context, 'JOBWORK PARTY', _party);
+                      gotoMachineScreen(context);
                     },
                     validator: (value) {
                       return null;
@@ -638,7 +711,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                       labelText: 'Item',
                     ),
                     onTap: () {
-                      gotoPartyScreen2(context, 'JOBWORK PARTY', _party);
+                      gotoItemScreen(context);
                     },
                     validator: (value) {
                       return null;
@@ -660,8 +733,8 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     ),
                     onChanged: (value) {
                       _remarks.value = TextEditingValue(
-                      text: value.toUpperCase(),
-                      selection: _remarks.selection);
+                          text: value.toUpperCase(),
+                          selection: _remarks.selection);
                     },
                     onTap: () {},
                     validator: (value) {
