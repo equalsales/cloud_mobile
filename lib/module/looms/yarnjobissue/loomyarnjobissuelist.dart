@@ -82,7 +82,7 @@ class _LoomYarnJobIssueListPageState extends State<LoomYarnJobIssueList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Yarn Jobwork List',
+        title: Text('Yarn Job Issue List',
             style: TextStyle(
                 fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
