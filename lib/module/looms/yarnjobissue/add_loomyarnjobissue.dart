@@ -462,8 +462,8 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
               "&remarks=" +
               remarks +
               "&id=" +
-              id.toString() +
-              "&parcel=1";      
+              id.toString();
+                   
       print(uri);
 
       final headers = {
@@ -472,8 +472,8 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         };      
 
       var response = await http.post(Uri.parse(uri), headers: headers, body: jsonEncode(ItemDetails));
-
       var jsonData = jsonDecode(response.body);
+
       //print('4');
 
       var jsonCode = jsonData['Code'];
