@@ -159,6 +159,7 @@ class _LRPendingViewState extends State<LRPendingView> {
           'Reportitng Period Between ' + fromdate + ' To ' + todate;
 
       var oReport = new ReportPdf(ReportTitle, ReportTitle2);
+      print(_jsonData);
       oReport.Data = _jsonData;
       oReport.landscape = 'Y';
 

@@ -179,7 +179,7 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
               '&groupby=' +
               groupby;
 
-      //print('2');
+      print(uri);
       var response = await http.get(Uri.parse(uri));
       //print('3');
       var jsonData = jsonDecode(response.body);
