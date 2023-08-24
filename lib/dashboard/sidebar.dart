@@ -1,14 +1,16 @@
+import 'package:cloud_mobile/module/purchase/purchasebilllist.dart';
 import 'package:flutter/material.dart';
 //import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 import 'package:cloud_mobile/module/enq/enqlist.dart';
 import 'package:cloud_mobile/module/bankbook/bankbooklist.dart';
 import 'package:cloud_mobile/module/cashbook/cashbooklist.dart';
-
+import 'package:cloud_mobile/module/purchase/purchasebilllist.dart';
 import 'package:cloud_mobile/report/account/view_ledger.dart';
 
 //import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 
 import 'package:cloud_mobile/mastermenu.dart';
+import 'package:cloud_mobile/transactionmenu.dart';
 import 'package:cloud_mobile/main.dart';
 
 // For Looms
@@ -82,6 +84,36 @@ class SideDrawer extends StatelessWidget {
                           )))
             },
           ),
+          // ListTile(
+          //   leading: Icon(Icons.shopping_cart),
+          //   title: Text('Transaction'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (_) => Transactionmenu(
+          //                   companyid: xcompanyid,
+          //                   companyname: xcompanyname,
+          //                   fbeg: xfbeg,
+          //                   fend: xfend,
+          //                 )))
+          //   },
+          // ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Purchase Bill'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => PurchaseBillList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Sales Challan'),
@@ -97,21 +129,21 @@ class SideDrawer extends StatelessWidget {
                           )))
             },
           ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Grey Job Issue'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => LoomGreyJobIssueList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.shopping_cart),
+          //   title: Text('Grey Job Issue'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (_) => LoomGreyJobIssueList(
+          //                   companyid: xcompanyid,
+          //                   companyname: xcompanyname,
+          //                   fbeg: xfbeg,
+          //                   fend: xfend,
+          //                 )))
+          //   },
+          // ),
            ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Yarn Job Issue'),

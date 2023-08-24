@@ -293,12 +293,12 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       print(splitted); // [Hello, world!];
       print(splitted.length);
       print('dhruv');
-      _Cartonchr.text = splitted[0];
-      if (splitted.length > 1) {
-        _Cartonno.text = splitted[1];
-      } else {
-        _Cartonno.text = '0';
-      }
+      _Cartonno.text = splitted[0];
+      // if (splitted.length > 1) {
+      //   _Cartonno.text = splitted[1];
+      // } else {
+      //   _Cartonno.text = '0';
+      // }
 
       fetchdetails();
       //_scanBarcode = barcodeScanRes;
