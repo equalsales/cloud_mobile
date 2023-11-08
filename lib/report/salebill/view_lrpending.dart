@@ -163,7 +163,7 @@ class _LRPendingViewState extends State<LRPendingView> {
       oReport.Data = _jsonData;
       oReport.landscape = 'Y';
 
-      oReport.addColumn('serial', 'Serial', 'C', 10, 0, 'left', 'N', '');
+      oReport.addColumn('serial', 'Serial', 'C', 10, 0, 'left',  'N', '');
       oReport.addColumn('srchr', '(c)', 'C', 3, 0, 'left', 'N', '');
       oReport.addColumn('date2', 'Date', 'C', 10, 0, 'left', 'N', '');
       oReport.addColumn('party', 'Party', 'C', 20, 0, 'left', 'N', '');

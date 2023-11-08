@@ -130,11 +130,11 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         "tpmtrs": jsonData[iCtr]['tpmtrs'].toString(),
         "itemname": jsonData[iCtr]['itemname'].toString(),
         "unit": jsonData[iCtr]['unit'].toString(),
-        'varper': 0,
         "rate": jsonData[iCtr]['rate'].toString(),
         "amount": jsonData[iCtr]['amount'].toString(),
         "design": jsonData[iCtr]['design'].toString(),
         "machine": jsonData[iCtr]['machine'].toString(),
+        "ordid": jsonData[iCtr]['ordid'].toString(),
         "fmode": jsonData[iCtr]['fmode'].toString(),
         "inwid": jsonData[iCtr]['inwid'].toString(),
         "inwdetid": jsonData[iCtr]['inwdetid'].toString(),
@@ -177,7 +177,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     jsonData = jsonData[0];
 
     print(jsonData);
-
+    print( "jatin"+ getValue(jsonData['type'], 'C'));
     _branch.text = getValue(jsonData['branch'], 'C');
     _type.text = getValue(jsonData['type'], 'C');
     _serial.text = getValue(jsonData['serial'], 'C');
@@ -391,12 +391,19 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
               chlnchr +
               "&id=" +
               id.toString() +
-              "&parcel=1&duedays=0&GridData=" +
-              jsonEncode(ItemDetails);
-      print(uri);
-      var response = await http.post(Uri.parse(uri));
+              "&parcel=1";  
+               print(uri);
+
+      final headers = {
+          'Content-Type': 'application/json', // Set the appropriate content-type
+          // Add any other headers required by your API
+        };      
+      print(ItemDetails);
+      var response = await http.post(Uri.parse(uri), headers: headers, body: jsonEncode(ItemDetails));
 
       var jsonData = jsonDecode(response.body);
+
+      
       //print('4');
 
       var jsonCode = jsonData['Code'];
@@ -480,6 +487,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
           DataCell(Text(ItemDetails[iCtr]['fmode'])),
           DataCell(Text(ItemDetails[iCtr]['ordid'].toString())),
           DataCell(Text(ItemDetails[iCtr]['orddetid'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['machine'].toString())),
         ]));
       }
 
@@ -755,6 +763,9 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                   ),
                   DataColumn(
                     label: Text("OrdDetId"),
+                  ),
+                  DataColumn(
+                    label: Text("machine"),
                   ),
                 ], rows: _createRows())),
           ],

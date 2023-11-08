@@ -130,21 +130,21 @@ class SideDrawer extends StatelessWidget {
                           )))
             },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.shopping_cart),
-          //   title: Text('Grey Job Issue'),
-          //   onTap: () => {
-          //     Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //             builder: (_) => LoomGreyJobIssueList(
-          //                   companyid: xcompanyid,
-          //                   companyname: xcompanyname,
-          //                   fbeg: xfbeg,
-          //                   fend: xfend,
-          //                 )))
-          //   },
-          // ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Grey Job Issue'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => LoomGreyJobIssueList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
            ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Yarn Job Issue'),

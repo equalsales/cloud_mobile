@@ -373,27 +373,15 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
         'itemname': itemname,
         'hsncode': hsncode,
         'rate': rate,
-        'var': 0,
         'unit': unit,
-        'varper': 0,
         'amount': amount,
         'design': design,
         'machine': machine,
-        'orditem': itemname,
-        'orddesign': design,
-        'ordmtr': ordbalmtrs,
-        'stdwt': 0,
         'ordid': ordid,
-        'folddate': folddate,
-        'type': '',
-        'tkid': 0,
-        'tkdetid': 0,
         'fmode': fmode,
         'inwid': inwid,
         'inwdettkid': inwdettkid,
-        'cost': 0,
         'inwdetid': inwdetid,
-        'tp': '',
         'orddetid': orddetid,
         'ordbalmtrs': ordbalmtrs
       });
@@ -436,7 +424,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Sales Challan Item Details[ ] ',
+          'Grey Job Issue Challan Item Details[ ] ',
           style:
               TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
@@ -459,7 +447,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
                     autofocus: true,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Select Sales Order',
+                      hintText: 'Select Job Order',
                       labelText: 'Order No',
                     ),
                     onTap: () {
