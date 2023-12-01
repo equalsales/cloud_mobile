@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'dart:convert';
-
+import 'package:cloud_mobile/common/PdfPreviewPagePrint.dart';
 import 'package:http/http.dart' as http;
-
+import 'dart:io';
 import '../../../common/global.dart' as globals;
 import 'package:cloud_mobile/common/alert.dart';
+//import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 //// import 'package:google_fonts/google_fonts.dart';
 
@@ -37,6 +39,34 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
   @override
   void initState() {
     loaddetails();
+  }
+
+  void execExportPDF(id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => PdfViewerPagePrint(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  id: id.toString(),
+                  cPW: "PDF",
+                )));
+  }
+
+  void execWhatsApp(id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => PdfViewerPagePrint(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  id: id.toString(),
+                  cPW: "WhatsApp",
+                )));
   }
 
   Future<bool> loaddetails() async {
@@ -83,8 +113,7 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Sales Challan  List',
-            style: TextStyle(
-                fontSize: 25.0, fontWeight: FontWeight.normal)),
+            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -108,7 +137,8 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
           String date = this._companydetails[index]['date2'].toString();
           //date = retconvdatestr(date);
           String serial = this._companydetails[index]['serial'].toString();
-          String packingserial = this._companydetails[index]['packingserial'].toString();
+          String packingserial =
+              this._companydetails[index]['packingserial'].toString();
           String packingtype =
               this._companydetails[index]['packingtype'].toString();
           String party = this._companydetails[index]['party'].toString();
@@ -126,10 +156,14 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
             startActionPane:
                 ActionPane(motion: const BehindMotion(), children: [
               SlidableAction(
-                  onPressed: (context) =>
-                      {/*execDelete(context, index, int.parse(id), '')*/},
-                  icon: Icons.delete,
-                  label: 'Delete',
+                  onPressed: (context) => {execWhatsApp(int.parse(id))},
+                  icon: Icons.sms_sharp,
+                  label: 'WhatsApp',
+                  backgroundColor: Color.fromARGB(226, 73, 254, 197)),
+              SlidableAction(
+                  onPressed: (context) => {execExportPDF(int.parse(id))},
+                  icon: Icons.print,
+                  label: 'Print',
                   backgroundColor: Color(0xFFFE4A49)),
               SlidableAction(
                   onPressed: (context) => {},
@@ -146,7 +180,7 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
                       ' Packing Type : ' +
                       packingtype +
                       ' Packing No : ' +
-                    packingserial +
+                      packingserial +
                       ' Challan No : ' +
                       serial +
                       ' [ ' +

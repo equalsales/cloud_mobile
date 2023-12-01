@@ -542,6 +542,11 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
       } else {
         showAlertDialog(context, 'Saved !!!');
+
+        var url ='https://looms.equalsoftlink.com/printsaleorderdf/'+id.toString()+'?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
+        final response = await http.get(Uri.parse(url));
+
+
         Navigator.push(
             context,
             MaterialPageRoute(
