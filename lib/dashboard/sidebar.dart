@@ -17,6 +17,7 @@ import 'package:cloud_mobile/main.dart';
 import 'package:cloud_mobile/module/looms/saleschallan/loomsaleschallanlist.dart';
 import 'package:cloud_mobile/module/looms/greyjobissue/loomgreyjobissuelist.dart';
 import 'package:cloud_mobile/module/looms/yarnjobissue/loomyarnjobissuelist.dart';
+import 'package:cloud_mobile/module/looms/beamjobissue/loombeamjobissuelist.dart';
 
 import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 //import 'package:cloud_mobile/report/task/pendingtask.dart';
@@ -153,6 +154,21 @@ class SideDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (_) => LoomYarnJobIssueList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Beam Job Issue'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => LoomBeamJobIssueList(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,
