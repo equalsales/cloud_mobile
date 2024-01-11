@@ -200,20 +200,16 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
       }
     }
 
-    uri = 'https://looms.equalsoftlink.com/api/commonapi_cartoonstock?dbname=' +
-        db +
-        '&cno=' +
-        cno +
-        '&fromdate=' +
-        fromdate +
-        '&todate=' +
-        todate +
-        '&branch=' + 
-        branch + 
-        '&itemname=&cartonchr=' +
-        cbeamchr +
-        '&cartonno=' +
-        cbeamno;
+    // uri = 'https://looms.equalsoftlink.com/api/api_commonapi_beamstock?dbname=' +
+    //     db +
+    //     '&cno=' +
+    //     cno +
+    //     '&beamno=' +
+    //     cbeamno +
+    //     '&beamchr=' +
+    //     cbeamchr +
+    //     '&branch=' + 
+    //     branch;
     // 'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
     //     db +
     //     '&cno=' +
@@ -224,8 +220,31 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
     //     fromdate +
     //     '&enddate=' +
     //     todate;
-    print(uri);
-    var response = await http.get(Uri.parse(uri));
+    uri = 'https://www.looms.equalsoftlink.com/api/api_beamstockiss?dbname=' +
+            db +
+            '&cno=' +
+            cno +
+            '&beamchr=' +
+            cbeamchr +
+            '&beamno=' +
+            cbeamchr +
+            '&branch=' +
+            branch;
+            print(uri);
+     var response = await http.get(Uri.parse(
+        'https://www.looms.equalsoftlink.com/api/api_beamstockiss?dbname=' +
+            db +
+            '&cno=' +
+            cno +
+            '&beamchr=' +
+            cbeamchr +
+            '&beamno=' +
+            cbeamchr +
+            '&branch=' +
+            branch
+            ));
+    // print(uri);
+    // var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
 
@@ -239,29 +258,17 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
 
     setState(() {
       _itemname.text = jsonData['itemname'];
-      _meters.text = jsonData['balwt'].toString();
-      _pcs.text = jsonData['cops'].toString();
-      _unit.text = jsonData['unit'];
-      _Weight.text = jsonData['lotno'];
-      _rate.text = jsonData['rate'];
-      _amount.text = jsonData['amount'];
-      _pcs.text = '0';
-
-      double netwt = double.parse(_meters.text);
-      double cops = double.parse(_pcs.text);
-
-      String unit = _unit.text;
-      double rate = 0;
-      if (_rate.text != '') {
-        rate = double.parse(_rate.text);
-      }
-      double amount = 0;
-      if ((unit == 'W') || (unit == '')) {
-        amount = netwt * rate;
-      } else {
-        amount = cops * rate;
-      }
-      _amount.text = amount.toString();
+      _meters.text = jsonData['balbeammtrs'].toString();
+      _pcs.text = jsonData['baltaka'].toString();
+      _ends.text =   jsonData['ends'].toString();
+       _Weight.text = jsonData['balbeamwt'].toString();
+      _unit.text = 'M';
+      _beamno.text  = jsonData['beamno'].toString();
+      _beamchr.text  = jsonData['beamchr'].toString();
+      _rate.text = jsonData['rate'].toString();
+      _amount.text = jsonData['amount'].toString();
+      _beamid.text = jsonData['beamid'].toString();
+      //_machine.text =  jsonData['amount'];
     });
     print(jsonData);
     return true;
