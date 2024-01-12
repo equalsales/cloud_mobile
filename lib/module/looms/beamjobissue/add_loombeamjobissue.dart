@@ -58,7 +58,7 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
   
   List ItemDetails = [];
 
-  String dropdownTrnType = 'REGULAR';
+  String dropdownTrnType = 'Y';
 
   var branchid = 0;
   var partyid = 0;
@@ -74,6 +74,7 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
   TextEditingController _remarks = new TextEditingController();
   TextEditingController _tottaka = new TextEditingController();
   TextEditingController _totmtrs = new TextEditingController();
+  TextEditingController _masterbeam = new TextEditingController();
     
   final _formKey = GlobalKey<FormState>();
     
@@ -180,6 +181,7 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
     _remarks.text = getValue(jsonData['remarks'], 'C');
     _chlnno.text = getValue(jsonData['chlnno'], 'N');
     _chlnchr.text = getValue(jsonData['chlnchr'], 'C');
+    _masterbeam.text = getValue(jsonData['masterbeam'], 'C');
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
 
@@ -314,6 +316,7 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
     
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
+      var masterbeam = _masterbeam.text;
       print('in');
       var result = await Navigator.push(
           context,
@@ -325,6 +328,7 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
                     fend: widget.xfend,
                     branch: branch,
                     partyid: partyid,
+                    masterbeam: masterbeam,
                     itemDet: ItemDetails,
                   )));
       //print('out');
@@ -352,6 +356,7 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
       var remarks = _remarks.text;
       var chlnno = _chlnno.text;
       var chlnchr = _chlnchr.text;
+      var masterbeam = _masterbeam.text;
       
       var id = widget.xid;
       id = int.parse(id);
@@ -381,7 +386,8 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
               chlnchr +
               "&id=" +
               id.toString() +
-              "&parcel=1";  
+              "&masterbeam=" +
+              masterbeam;  
                print(uri);
 
       final headers = {
@@ -419,6 +425,10 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
       
     });
 
+     var items = [
+      'Y',
+      'N',
+    ];
     void deleteRow(index) {
       setState(() {
         ItemDetails.removeAt(index);
@@ -642,7 +652,29 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
                       return null;
                     },
                   ),
-                )
+                ),
+              Expanded(
+              child: DropdownButtonFormField(
+                    value: dropdownTrnType,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      labelText: 'Master Beam',
+                    ),
+                    items: items.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    icon: const Icon(Icons.arrow_drop_down_circle),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownTrnType = newValue!;
+                        _masterbeam.text = dropdownTrnType;
+                        print(_masterbeam.text);
+                      });
+                    }),
+              )
               ],
             ),
             Row(

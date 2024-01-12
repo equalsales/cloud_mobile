@@ -34,6 +34,7 @@ class LoomBeamJobIssueDetAdd extends StatefulWidget {
       fend,
       branch,
       partyid,
+      masterbeam,
       itemDet,
       id})
       : super(key: mykey) {
@@ -43,6 +44,7 @@ class LoomBeamJobIssueDetAdd extends StatefulWidget {
     xfend = fend;
     xbranch = branch;
     xparty = partyid;
+    xmasterbeam=masterbeam;
     xid = id;
     xItemDetails = itemDet;
     //xitemDet = itemDet;
@@ -51,6 +53,7 @@ class LoomBeamJobIssueDetAdd extends StatefulWidget {
     print(xbranch);
     print(xparty);
     print(xItemDetails);
+    print(xmasterbeam);
   }
 
   var xcompanyid;
@@ -60,6 +63,7 @@ class LoomBeamJobIssueDetAdd extends StatefulWidget {
   var xid;
   var xbranch;
   var xparty;
+  var xmasterbeam;
   List xitemDet = [];
   List xItemDetails = [];
 
@@ -168,6 +172,7 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
 
   Future<bool> fetchdetails() async {
     String uri = '';
+    print(_beamno.text);
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
@@ -176,7 +181,9 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
     var branch = widget.xbranch;
     var cbeamno = _beamno.text;
     var cbeamchr = _beamchr.text;
-
+    var masterbeam = widget.xmasterbeam;
+    
+    print("JATIN " + _beamno.text);
     fromdate = retconvdate(fromdate);
     todate = retconvdate(todate);
 
@@ -227,9 +234,11 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
             '&beamchr=' +
             cbeamchr +
             '&beamno=' +
-            cbeamchr +
+            cbeamno +
             '&branch=' +
-            branch;
+            branch +
+            '&masterbeam=' +
+            masterbeam;
             print(uri);
      var response = await http.get(Uri.parse(
         'https://www.looms.equalsoftlink.com/api/api_beamstockiss?dbname=' +
@@ -239,9 +248,11 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
             '&beamchr=' +
             cbeamchr +
             '&beamno=' +
-            cbeamchr +
+            cbeamno +
             '&branch=' +
-            branch
+            branch + 
+            '&masterbeam=' +
+            masterbeam
             ));
     // print(uri);
     // var response = await http.get(Uri.parse(uri));
@@ -249,6 +260,7 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
     var jsonData = jsonDecode(response.body);
 
     jsonData = jsonData['Data'];
+    
     if (jsonData == null) {
       showAlertDialog(context, 'Carton no No Found...');
       return true;
@@ -263,12 +275,12 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
       _ends.text =   jsonData['ends'].toString();
        _Weight.text = jsonData['balbeamwt'].toString();
       _unit.text = 'M';
-      _beamno.text  = jsonData['beamno'].toString();
-      _beamchr.text  = jsonData['beamchr'].toString();
+      //_beamno.text  = jsonData['beamno'].toString();
+      //_beamchr.text  = jsonData['beamchr'].toString();
       _rate.text = jsonData['rate'].toString();
       _amount.text = jsonData['amount'].toString();
       _beamid.text = jsonData['beamid'].toString();
-      //_machine.text =  jsonData['amount'];
+      _machine.text =  jsonData['machine'].toString();
     });
     print(jsonData);
     return true;
@@ -297,7 +309,7 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
       print(splitted); // [Hello, world!];
       print(splitted.length);
       print('dhruv');
-      _cbeamno.text = splitted[0];
+      _beamno.text = splitted[0];
       // if (splitted.length > 1) {
       //   _Cartonno.text = splitted[1];
       // } else {
