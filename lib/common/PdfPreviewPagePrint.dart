@@ -117,6 +117,7 @@ class _PdfViewerPagePrintState extends State<PdfViewerPagePrint> {
     //     'https://vansh.equalsoftlink.com/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=10&printid=1&call=1&mobile=&email=&noofcopy=1&cWAApi=&cEmail=&sendwhatsapp=PARTY&nemailtemplate=0&cno=$companyid';
     var url =
         'https://looms.equalsoftlink.com/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=$formatid&printid=$printid&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=$companyid';
+        print(url);
     final response = await http.get(Uri.parse(url));
     final bytes = response.bodyBytes;
     final filename = basename(url);
