@@ -36,9 +36,60 @@ class LoomSalesChallanList extends StatefulWidget {
 
 class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
   List _companydetails = [];
+  List PrintFormatDetails = [];
+  List PrintidDetails = [];
+  var Printid = '';
+  var formatid = '';
+  TextEditingController _printid = new TextEditingController();
+  TextEditingController _formatid = new TextEditingController();
+  String dropdownPrintFormat = 'Print Format';
   @override
   void initState() {
     loaddetails();
+    loadprintformet();
+  }
+
+  Future<bool> loadprintformet() async {
+    var companyid = widget.xcompanyid;
+    var db = globals.dbname;
+    String uri = '';
+    uri =
+        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
+    var response = await http.get(Uri.parse(uri));
+    print(uri);
+    var jsonData = jsonDecode(response.body);
+    jsonData = jsonData['Data'];
+    print(jsonData);
+    //print(jsonData);
+    List unitDet = [];
+
+    for (var iCtr = 0; iCtr < jsonData.length; iCtr++) {
+      unitDet.add({
+        "caption": jsonData[iCtr]['caption'].toString(),
+      });
+    }
+    setState(() {
+      PrintFormatDetails = unitDet;
+    });
+    print(PrintFormatDetails);
+    return true;
+  }
+
+   Future<bool> setprintformet(printformet)  async {
+    var companyid = widget.xcompanyid;
+    var db = globals.dbname;
+    String uri = '';
+    uri =
+        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
+    var response = await http.get(Uri.parse(uri));
+    print(uri);
+    var jsonData = jsonDecode(response.body);
+    jsonData = jsonData['Data'];
+    this.setState(() {
+      PrintidDetails = jsonData;
+    });
+    print(PrintidDetails);
+    return true;
   }
 
   void execExportPDF(id) {
@@ -161,7 +212,88 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
                   label: 'WhatsApp',
                   backgroundColor: Color.fromARGB(226, 73, 254, 197)),
               SlidableAction(
-                  onPressed: (context) => {execExportPDF(int.parse(id))},
+                  onPressed: (context) => {
+                        //execExportPDF(int.parse(id))
+                        //exeprint(context,PrintFormatDetails)
+                        showDialog<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Select Format To Print'),
+                              content: Container(
+                                height: 70,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: DropdownButtonFormField(
+                                          //value: items.first,
+                                          decoration: const InputDecoration(
+                                              labelText: 'Print Format',
+                                              hintText: "Print Format"),
+                                          items: PrintFormatDetails.map<
+                                                  DropdownMenuItem<String>>(
+                                              (items) {
+                                            return DropdownMenuItem<String>(
+                                              value: items['caption'],
+                                              child: Text(items['caption']),
+                                            );
+                                          }).toList(),
+                                          icon: const Icon(
+                                              Icons.arrow_drop_down_circle),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              dropdownPrintFormat = newValue!;
+                                              setprintformet(dropdownPrintFormat);
+                                            });
+                                          }),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                    style: TextButton.styleFrom(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    ),
+                                    child: Text('Okay'),
+                                    onPressed: () {
+                                      
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                              PdfViewerPagePrint(
+                                              companyid: widget.xcompanyid,
+                                              companyname: widget.xcompanyname,
+                                              fbeg: widget.xfbeg,
+                                              fend: widget.xfend,
+                                              id: id.toString(),
+                                              cPW: "PDF",
+                                              formatid: PrintidDetails[0]['formatid'],
+                                              printid: PrintidDetails[0]['printid'],
+                                            ),
+                                          ));
+                                    }),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    textStyle:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                  child: const Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                          //onPressed: (context) => {execWhatsApp(int.parse(id))},
+                        )
+                      },
                   icon: Icons.print,
                   label: 'Print',
                   backgroundColor: Color(0xFFFE4A49)),
