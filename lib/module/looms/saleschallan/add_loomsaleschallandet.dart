@@ -739,6 +739,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _rate,
+                    enabled:false,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Rate',

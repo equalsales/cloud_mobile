@@ -259,9 +259,8 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
                                           .textTheme
                                           .labelLarge,
                                     ),
-                                    child: Text('Okay'),
+                                    child: Text('PDF'),
                                     onPressed: () {
-                                      
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -273,6 +272,30 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
                                               fend: widget.xfend,
                                               id: id.toString(),
                                               cPW: "PDF",
+                                              formatid: PrintidDetails[0]['formatid'],
+                                              printid: PrintidDetails[0]['printid'],
+                                            ),
+                                          ));
+                                    }),
+                                    TextButton(
+                                    style: TextButton.styleFrom(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    ),
+                                    child: Text('WhatsApp'),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                              PdfViewerPagePrint(
+                                              companyid: widget.xcompanyid,
+                                              companyname: widget.xcompanyname,
+                                              fbeg: widget.xfbeg,
+                                              fend: widget.xfend,
+                                              id: id.toString(),
+                                              cPW: "WhatsApp",
                                               formatid: PrintidDetails[0]['formatid'],
                                               printid: PrintidDetails[0]['printid'],
                                             ),

@@ -769,6 +769,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _agent,
+                    enabled:false,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Agent',
@@ -805,6 +806,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _transport,
+                    enabled:false,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Transport',
