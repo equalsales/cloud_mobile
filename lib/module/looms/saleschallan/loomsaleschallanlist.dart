@@ -40,8 +40,8 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
   List PrintidDetails = [];
   var Printid = '';
   var formatid = '';
-  TextEditingController _printid = new TextEditingController();
-  TextEditingController _formatid = new TextEditingController();
+  //TextEditingController _printid = new TextEditingController();
+  //TextEditingController _formatid = new TextEditingController();
   String dropdownPrintFormat = 'Print Format';
   @override
   void initState() {

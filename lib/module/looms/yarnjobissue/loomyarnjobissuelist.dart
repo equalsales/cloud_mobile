@@ -5,7 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-
+import 'package:cloud_mobile/common/PdfPreviewPagePrint.dart';
 import '../../../common/global.dart' as globals;
 import 'package:cloud_mobile/common/alert.dart';
 
@@ -34,9 +34,57 @@ class LoomYarnJobIssueList extends StatefulWidget {
 
 class _LoomYarnJobIssueListPageState extends State<LoomYarnJobIssueList> {
   List _companydetails = [];
+  List PrintFormatDetails = [];
+  List PrintidDetails = [];
+  var Printid = '';
+  var formatid = '';
+  String dropdownPrintFormat = 'Print Format';
   @override
   void initState() {
     loaddetails();
+    loadprintformet();
+  }
+   Future<bool> loadprintformet() async {
+    var companyid = widget.xcompanyid;
+    var db = globals.dbname;
+    String uri = '';
+    uri =
+        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=YARNJOBISSUEMST";
+    var response = await http.get(Uri.parse(uri));
+    print(uri);
+    var jsonData = jsonDecode(response.body);
+    jsonData = jsonData['Data'];
+    print(jsonData);
+    //print(jsonData);
+    List unitDet = [];
+
+    for (var iCtr = 0; iCtr < jsonData.length; iCtr++) {
+      unitDet.add({
+        "caption": jsonData[iCtr]['caption'].toString(),
+      });
+    }
+    setState(() {
+      PrintFormatDetails = unitDet;
+    });
+    print(PrintFormatDetails);
+    return true;
+  }
+
+   Future<bool> setprintformet(printformet)  async {
+    var companyid = widget.xcompanyid;
+    var db = globals.dbname;
+    String uri = '';
+    uri =
+        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=YARNJOBISSUEMST&printformet=$printformet";
+    var response = await http.get(Uri.parse(uri));
+    print(uri);
+    var jsonData = jsonDecode(response.body);
+    jsonData = jsonData['Data'];
+    this.setState(() {
+      PrintidDetails = jsonData;
+    });
+    print(PrintidDetails);
+    return true;
   }
 
   Future<bool> loaddetails() async {
@@ -124,10 +172,113 @@ class _LoomYarnJobIssueListPageState extends State<LoomYarnJobIssueList> {
             startActionPane:
                 ActionPane(motion: const BehindMotion(), children: [
               SlidableAction(
-                  onPressed: (context) =>
-                      {/*execDelete(context, index, int.parse(id), '')*/},
-                  icon: Icons.delete,
-                  label: 'Delete',
+                  onPressed: (context) => {
+                        //execExportPDF(int.parse(id))
+                        //exeprint(context,PrintFormatDetails)
+                        showDialog<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Select Format To Print'),
+                              content: Container(
+                                height: 70,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: DropdownButtonFormField(
+                                          //value: items.first,
+                                          decoration: const InputDecoration(
+                                              labelText: 'Print Format',
+                                              hintText: "Print Format"),
+                                          items: PrintFormatDetails.map<
+                                                  DropdownMenuItem<String>>(
+                                              (items) {
+                                            return DropdownMenuItem<String>(
+                                              value: items['caption'],
+                                              child: Text(items['caption']),
+                                            );
+                                          }).toList(),
+                                          icon: const Icon(
+                                              Icons.arrow_drop_down_circle),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              dropdownPrintFormat = newValue!;
+                                              setprintformet(dropdownPrintFormat);
+                                            });
+                                          }),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                    style: TextButton.styleFrom(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    ),
+                                    child: Text('PDF'),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                              PdfViewerPagePrint(
+                                              companyid: widget.xcompanyid,
+                                              companyname: widget.xcompanyname,
+                                              fbeg: widget.xfbeg,
+                                              fend: widget.xfend,
+                                              id: id.toString(),
+                                              cPW: "PDF",
+                                              formatid: PrintidDetails[0]['formatid'],
+                                              printid: PrintidDetails[0]['printid'],
+                                            ),
+                                          ));
+                                    }),
+                                    TextButton(
+                                    style: TextButton.styleFrom(
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    ),
+                                    child: Text('WhatsApp'),
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                              PdfViewerPagePrint(
+                                              companyid: widget.xcompanyid,
+                                              companyname: widget.xcompanyname,
+                                              fbeg: widget.xfbeg,
+                                              fend: widget.xfend,
+                                              id: id.toString(),
+                                              cPW: "WhatsApp",
+                                              formatid: PrintidDetails[0]['formatid'],
+                                              printid: PrintidDetails[0]['printid'],
+                                            ),
+                                          ));
+                                    }),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    textStyle:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                  child: const Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                          //onPressed: (context) => {execWhatsApp(int.parse(id))},
+                        )
+                      },
+                  icon: Icons.print,
+                  label: 'Print',
                   backgroundColor: Color(0xFFFE4A49)),
               SlidableAction(
                   onPressed: (context) => {},
