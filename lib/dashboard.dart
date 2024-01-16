@@ -69,12 +69,12 @@ class _DashboardState extends State<Dashboard> {
     print(jsonX);
     print(jsonY);
 
-    for (var ictr = 0; ictr < jsonX.length; ictr++) {
-      data.add(BarChartModel(
-          xValues: jsonX[ictr].toString(),
-          yValues: double.parse(jsonY[ictr]),
-          color: charts.ColorUtil.fromDartColor(Colors.blue)));
-    }
+    // for (var ictr = 0; ictr < jsonX.length; ictr++) {
+    //   data.add(BarChartModel(
+    //       xValues: jsonX[ictr].toString(),
+    //       yValues: double.parse(jsonY[ictr]),
+    //       color: charts.ColorUtil.fromDartColor(Colors.blue)));
+    // }
 
     this.setState(() {
       _companydetailsX = jsonX;
