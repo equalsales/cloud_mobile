@@ -490,6 +490,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       //         id.toString() +
       //         "&parcel=1&duedays=0&GridData=" +
       //         jsonEncode(ItemDetails);
+      party = party.replaceAll('&', '_');
 
       uri =
           "https://looms.equalsoftlink.com/api/api_storeloomssalechln?dbname=" +
