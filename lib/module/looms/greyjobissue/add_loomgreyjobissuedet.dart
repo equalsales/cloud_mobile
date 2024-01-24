@@ -35,7 +35,9 @@ class LoomGreyJobIssueDetAdd extends StatefulWidget {
       branch,
       partyid,
       itemDet,
-      id})
+      id,
+      branchid
+      })
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -44,6 +46,7 @@ class LoomGreyJobIssueDetAdd extends StatefulWidget {
     xbranch = branch;
     xparty = partyid;
     xid = id;
+    xbranchid = branchid;
     xItemDetails = itemDet;
     //xitemDet = itemDet;
 
@@ -51,6 +54,7 @@ class LoomGreyJobIssueDetAdd extends StatefulWidget {
     print(xbranch);
     print(xparty);
     print(xItemDetails);
+    print(xbranchid);
   }
 
   var xcompanyid;
@@ -59,6 +63,7 @@ class LoomGreyJobIssueDetAdd extends StatefulWidget {
   var xfend;
   var xid;
   var xbranch;
+  var xbranchid;
   var xparty;
   List xitemDet = [];
   List xItemDetails = [];
@@ -93,6 +98,10 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
   TextEditingController _orddetid = new TextEditingController();
   TextEditingController _fmode = new TextEditingController();
   TextEditingController _ordbalmtrs = new TextEditingController();
+  TextEditingController _weight = new TextEditingController();
+  TextEditingController _avgwt = new TextEditingController();
+  TextEditingController _beamno = new TextEditingController();
+  TextEditingController _beamitem = new TextEditingController();
 
   //var ordTaka = 0;
   double ordMeters = 0;
@@ -189,8 +198,10 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
     var id = widget.xid;
     var fromdate = widget.xfbeg;
     var todate = widget.xfend;
+    var branch = widget.xbranchid;
     var takano = _takano.text;
     var takachr = _takachr.text;
+    
 
     fromdate = retconvdate(fromdate);
     todate = retconvdate(todate);
@@ -214,20 +225,14 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
         }
       }
     }
-
-    uri = 'https://looms.equalsoftlink.com/api/commonapi_gettakastock?dbname=' +
+//commonapi_gettakastock?partyfilter=N&takano=28430&takachr=AJ&branchid=(2)&getdata=Y&dbname=admin_looms
+    uri = 'https://looms.equalsoftlink.com/api/commonapi_gettakastock2?dbname=' +
         db +
-        '&cno=' +
-        cno +
-        '&fromdate=' +
-        fromdate +
-        '&todate=' +
-        todate +
-        '&groupby=&created_at=&tocreated_at=&branch=&itemname=&design=&machineno=&takachr=' +
+        '&partyfilter=N&takachr=' +
         takachr +
         '&takano=' +
         takano +
-        '&rvalue=P&ncompany=&rtype=D&limit=1000&offset=0';
+        '&branchid=('+ branch +')&getdata=Y';
     // 'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
     //     db +
     //     '&cno=' +
@@ -243,6 +248,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
 
     var jsonData = jsonDecode(response.body);
 
+     print(jsonData);
     jsonData = jsonData['Data'];
     if (jsonData == null) {
       showAlertDialog(context, 'Taka No Found...');
@@ -250,21 +256,26 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
     }
 
     jsonData = jsonData[0];
+    print(jsonData);
 
     setState(() {
-      _itemname.text = jsonData['itemname'];
-      _folddate.text = jsonData['date'];
-      _design.text = jsonData['design'];
-      _machine.text = jsonData['machine'];
+      _itemname.text = jsonData['itemname'].toString();
+      _folddate.text = jsonData['date'].toString();
+      _design.text = jsonData['design'].toString();
+      _machine.text = jsonData['machine'].toString();
       _pcs.text = jsonData['pcs'].toString();
-      _meters.text = jsonData['balmeters'].toString();
+      _meters.text = jsonData['meters'].toString();
       _tpmeters.text = jsonData['tpmtrs'].toString();
-      _unit.text = jsonData['unit'];
-      _hsncode.text = jsonData['hsncode'];
+      _unit.text = jsonData['unit'].toString();
+      _hsncode.text = jsonData['hsncode'].toString();
       _inwid.text = jsonData['inwid'].toString();
       _inwdetid.text = jsonData['inwdetid'].toString();
       _inwdettkid.text = jsonData['inwdettkid'].toString();
-      _fmode.text = jsonData['fmode'];
+      _fmode.text = jsonData['fmode'].toString();
+      _weight.text = jsonData['weight'].toString();
+      _avgwt.text = jsonData['avgwt'].toString();
+      _beamno.text = jsonData['beamno'].toString();
+      _beamitem.text = jsonData['beamitem'].toString();
 
       if (_ordbalmtrs.text != '') {
         _ordbalmtrs.text =
@@ -362,6 +373,10 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
       var ordbalmtrs = _ordbalmtrs.text;
       var hsncode = _hsncode.text;
       var folddate = _folddate.text;
+      var weight = _weight.text;
+      var avgwt = _avgwt.text;
+      var beamno = _beamno.text;
+      var beamitem = _beamitem.text;
 
       widget.xitemDet.add({
         'orderno': orderno,
@@ -383,7 +398,11 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
         'inwdettkid': inwdettkid,
         'inwdetid': inwdetid,
         'orddetid': orddetid,
-        'ordbalmtrs': ordbalmtrs
+        'ordbalmtrs': ordbalmtrs,
+        'weight': weight,
+        'avgwt': avgwt,
+        'beamno': beamno,
+        'beamitem': beamitem
       });
 
       Navigator.pop(context, widget.xitemDet);
@@ -721,6 +740,80 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
                       icon: const Icon(Icons.person),
                       hintText: 'Machine No',
                       labelText: 'Machine',
+                    ),
+                    onTap: () {
+                      //gotoBranchScreen(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                )
+              ],
+            ),
+              Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _weight,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Weight',
+                      labelText: 'Weight',
+                    ),
+                    onTap: () {
+                      //gotoBranchScreen(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    enabled: false,
+                    controller: _avgwt,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Avg Weight',
+                      labelText: 'Avg Weight',
+                    ),
+                    onTap: () {
+                      //gotoBranchScreen(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _beamno,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Beam No',
+                      labelText: 'Beam No',
+                    ),
+                    onTap: () {
+                      //gotoBranchScreen(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    enabled: false,
+                    controller: _beamitem,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Beam Item',
+                      labelText: 'Beam Item',
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);

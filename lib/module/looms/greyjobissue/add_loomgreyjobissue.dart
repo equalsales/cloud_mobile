@@ -73,6 +73,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
   TextEditingController _remarks = new TextEditingController();
   TextEditingController _tottaka = new TextEditingController();
   TextEditingController _totmtrs = new TextEditingController();
+  TextEditingController _branchid = new TextEditingController();
     
   final _formKey = GlobalKey<FormState>();
     
@@ -138,7 +139,9 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         "fmode": jsonData[iCtr]['fmode'].toString(),
         "inwid": jsonData[iCtr]['inwid'].toString(),
         "inwdetid": jsonData[iCtr]['inwdetid'].toString(),
-        "inwdettkid": jsonData[iCtr]['inwdettkid'].toString()        
+        "inwdettkid": jsonData[iCtr]['inwdettkid'].toString(),
+        "beamno": jsonData[iCtr]['beamno'].toString(),
+        "beamitem": jsonData[iCtr]['beamitem'].toString()        
       });
     }
 
@@ -179,6 +182,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     print(jsonData);
     print( "jatin"+ getValue(jsonData['type'], 'C'));
     _branch.text = getValue(jsonData['branch'], 'C');
+    _branchid.text = getValue(jsonData['branchid'], 'C');
     _type.text = getValue(jsonData['type'], 'C');
     _serial.text = getValue(jsonData['serial'], 'C');
     _srchr.text = getValue(jsonData['srchr'], 'C');
@@ -317,11 +321,13 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         }
 
         _branch.text = selBranch;
+        _branchid.text = branchid.toString();
       });
     }
     
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
+      var branchid = _branchid.text;
       print('in');
       var result = await Navigator.push(
           context,
@@ -334,6 +340,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     branch: branch,
                     partyid: partyid,
                     itemDet: ItemDetails,
+                    branchid:branchid,
                   )));
       //print('out');
       //print(result);
@@ -488,6 +495,10 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
           DataCell(Text(ItemDetails[iCtr]['ordid'].toString())),
           DataCell(Text(ItemDetails[iCtr]['orddetid'].toString())),
           DataCell(Text(ItemDetails[iCtr]['machine'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['weight'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['avgwt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['beamno'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['beamitem'].toString())),
         ]));
       }
 
@@ -766,6 +777,18 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                   ),
                   DataColumn(
                     label: Text("machine"),
+                  ),
+                  DataColumn(
+                    label: Text("weight"),
+                  ),
+                  DataColumn(
+                    label: Text("avgwt"),
+                  ),
+                  DataColumn(
+                    label: Text("beamno"),
+                  ),
+                  DataColumn(
+                    label: Text("beamitem"),
                   ),
                 ], rows: _createRows())),
           ],
