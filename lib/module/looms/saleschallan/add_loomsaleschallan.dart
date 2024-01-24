@@ -86,6 +86,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
   TextEditingController _station = new TextEditingController();
   TextEditingController _tottaka = new TextEditingController();
   TextEditingController _totmtrs = new TextEditingController();
+  TextEditingController _branchid = new TextEditingController();
   
   
   final _formKey = GlobalKey<FormState>();
@@ -172,6 +173,10 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         'ordbalmtrs': 0,
         'remarks': _remarks.text,
         'duedays': _duedays.text,
+        "netwt": jsonData[iCtr]['netwt'].toString(),
+        "avgwt": jsonData[iCtr]['avgwt'].toString(),
+        "beamno": jsonData[iCtr]['beamno'].toString(),
+        "beamitem": jsonData[iCtr]['beamitem'].toString(),
       });
     }
 
@@ -230,6 +235,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     _parcel.text = getValue(jsonData['parcel'], 'C');
     _duedays.text = getValue(jsonData['duedays'], 'C');
     _station.text = getValue(jsonData['station'], 'C');
+    _branchid.text = getValue(jsonData['branchid'], 'C');
 
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
@@ -364,7 +370,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
           }
           selBranch = selBranch + retResult[0][ictr];
         }
-
+        _branchid.text =  branchid.toString();
         _branch.text = selBranch;
       });
     }
@@ -398,6 +404,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
+      var branchid = _branchid.text;
       print('in');
       var result = await Navigator.push(
           context,
@@ -410,6 +417,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                     branch: branch,
                     partyid: partyid,
                     itemDet: ItemDetails,
+                    branchid:branchid,
                   )));
       //print('out');
       //print(result);
@@ -620,6 +628,10 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
           DataCell(Text(ItemDetails[iCtr]['fmode'])),
           DataCell(Text(ItemDetails[iCtr]['ordid'].toString())),
           DataCell(Text(ItemDetails[iCtr]['orddetid'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['netwt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['avgwt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['beamno'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['beamitem'].toString())),
         ]));
       }
 
@@ -994,6 +1006,18 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                   ),
                   DataColumn(
                     label: Text("OrdDetId"),
+                  ),
+                  DataColumn(
+                    label: Text("netwt"),
+                  ),
+                  DataColumn(
+                    label: Text("avgwt"),
+                  ),
+                  DataColumn(
+                    label: Text("beamno"),
+                  ),
+                  DataColumn(
+                    label: Text("beamitem"),
                   ),
                 ], rows: _createRows())),
           ],
