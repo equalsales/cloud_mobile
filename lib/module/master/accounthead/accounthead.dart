@@ -156,10 +156,10 @@ class _AccountHeadState extends State<AccountHead> {
       //   ),
       // ),
       appBar: EqAppBar(AppBarTitle: "Account Head Add"),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.done),
-          backgroundColor: Colors.green,
-          onPressed: () => {saveData()}),
+      // floatingActionButton: FloatingActionButton(
+      //     child: Icon(Icons.done),
+      //     backgroundColor: Colors.green,
+      //     onPressed: () => {saveData()}),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -287,7 +287,50 @@ class _AccountHeadState extends State<AccountHead> {
                 ),
               ],
             ),
-            Padding(padding: EdgeInsets.all(5)),
+                        Padding(padding: EdgeInsets.all(5)),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
+                      backgroundColor: Colors.green, 
+                      // Background color
+                    ),
+                    onPressed: () {
+                      saveData();
+                    },
+                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                  )),
+                  SizedBox(
+                   width: 10
+                  ),
+                  Expanded(
+                    child: TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
+                      backgroundColor: Colors.green, // Background color
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                        Fluttertoast.showToast(
+                        msg: "CANCEL !!!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.white,
+                        textColor: Colors.purple,
+                        fontSize: 16.0,
+                        );
+                    },
+                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                  ))
+                ],
+              ),
+            )
           ],
         ),
       )),
