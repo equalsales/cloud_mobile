@@ -21,12 +21,12 @@ import 'package:cloud_mobile/common/bottombar.dart';
 
 //// import 'package:google_fonts/google_fonts.dart';
 
-class Mastermenu extends StatefulWidget {
+class Mastermenu1 extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
-  Mastermenu({Key? mykey, companyid, companyname, fbeg, fend})
+  Mastermenu1({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -34,10 +34,10 @@ class Mastermenu extends StatefulWidget {
     xfend = fend;
   }
   @override
-  _MastermenuState createState() => _MastermenuState();
+  _Mastermenu1State createState() => _Mastermenu1State();
 }
 
-class _MastermenuState extends State<Mastermenu> {
+class _Mastermenu1State extends State<Mastermenu1> {
   final _formKey = GlobalKey<FormState>();
 
   DateTime fromDate = DateTime.now();

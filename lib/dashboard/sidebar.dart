@@ -1,3 +1,4 @@
+import 'package:cloud_mobile/module/master/master.dart';
 import 'package:cloud_mobile/module/purchase/purchasebilllist.dart';
 import 'package:flutter/material.dart';
 //import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
@@ -9,7 +10,6 @@ import 'package:cloud_mobile/report/account/view_ledger.dart';
 
 //import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 
-import 'package:cloud_mobile/mastermenu.dart';
 import 'package:cloud_mobile/transactionmenu.dart';
 import 'package:cloud_mobile/main.dart';
 
@@ -78,7 +78,7 @@ class SideDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => Mastermenu(
+                      builder: (_) => MasterMenu(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,
