@@ -1,57 +1,48 @@
 // ignore_for_file: must_be_immutable
-
 import 'dart:convert';
 import 'package:cloud_mobile/common/moduleview.dart';
-import 'package:cloud_mobile/module/master/citymaster/citymaster.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_mobile/module/master/itemmaster/itemmaster.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
-
-class CityMasterList extends StatefulWidget {
+class ItemMasterList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
-
-  CityMasterList({Key? mykey, companyid, companyname, fbeg, fend})
+  ItemMasterList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
     xfend = fend;
   }
-
   @override
-  _CityMasterListPageState createState() => _CityMasterListPageState();
+  _ItemMasterListPageState createState() => _ItemMasterListPageState();
 }
-
-class _CityMasterListPageState extends State<CityMasterList> {
+class _ItemMasterListPageState extends State<ItemMasterList> {
   List _companydetails = [];
+  
   @override
   void initState() {
     super.initState();
     loaddetails();
   }
-
-Future<bool> loaddetails() async {
+  Future<bool> loaddetails() async {
     var companyid = widget.xcompanyid;
     var clientid = globals.dbname;
     print(globals.enddate);
-
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_citylist?dbname=$clientid&cno=$companyid";
+        "https://www.cloud.equalsoftlink.com/api/api_itemlist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
-
     print(jsonData);
-
     this.setState(() {
       _companydetails = jsonData['Data'];
     });
-
     return true;
   }
 
@@ -60,7 +51,7 @@ Future<bool> loaddetails() async {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=citymst&id=$id";
+        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=itemmst&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -69,7 +60,7 @@ Future<bool> loaddetails() async {
     if (jsonData['Code'].toString() != '100') {
       loaddetails();
       Fluttertoast.showToast(
-        msg: "City Delete Successfully !!!",
+        msg: "Item Delete Successfully !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -80,7 +71,7 @@ Future<bool> loaddetails() async {
     } else {
       loaddetails();
       Fluttertoast.showToast(
-        msg: "City in Used !!!",
+        msg: "Item in Used !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -92,12 +83,12 @@ Future<bool> loaddetails() async {
     return true;
   }
 
-void onAdd() {
+  void onAdd() {
     print('You Clicked Add..');
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => CityMaster(
+            builder: (_) => ItemMaster(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -105,25 +96,22 @@ void onAdd() {
                   id: '0',
                 ))).then((value) => loaddetails());
   }
-
   void onBack() {
     print('You Clicked Back..');
     Navigator.pop(context);
   }
-
   void onPDF(id) {
     print(id);
     print('Clicked PDF');
   }
-
-  void onDel(id) {
+   void onDel(id) {
     print('Del Clicked...');
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         //saveData();
         return AlertDialog(
-          title: const Text('Do You Want To Delete City Master !!??'),
+          title: const Text('Do You Want To Delete Item Master !!??'),
           content: Container(
             height: 10,
             child: Column(
@@ -140,7 +128,7 @@ void onAdd() {
               onPressed: () {
                 setState(() {
                   DeleteData(id);
-                  Navigator.pop(context);
+                 Navigator.pop(context);
                 });
               },
             ),
@@ -158,13 +146,12 @@ void onAdd() {
       },
     );
   }
-
   void onEdit(id) {
     print('Clicked Edit');
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => CityMaster(
+            builder: (_) => ItemMaster(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -172,7 +159,6 @@ void onAdd() {
                   id: id.toString(),
                 ))).then((value) => loaddetails());
   }
-
 @override
   Widget build(BuildContext context) {
     return ModuleVIew(
@@ -181,8 +167,8 @@ void onAdd() {
       fbeg: widget.xfbeg,
       fend: widget.xfend,
       Data: this._companydetails,
-      Title: 'List Of City',
-      DataFormat: 'City : #city#  State : #state# ',
+      Title: 'List Of Item ',
+      DataFormat: 'ItemName : #itemname#  Type : #type# Hsncode : #hsncode#' ,
       onAdd: onAdd,
       onBack: onBack,
       onPDF: onPDF,

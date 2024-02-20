@@ -1,20 +1,21 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:convert';
-import 'package:cloud_mobile/common/moduleview.dart';
-import 'package:cloud_mobile/module/master/citymaster/citymaster.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_mobile/module/master/country/countrymaster.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:cloud_mobile/common/moduleview.dart';
 import '../../../common/global.dart' as globals;
 
-class CityMasterList extends StatefulWidget {
+
+class CountryMasterList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
 
-  CityMasterList({Key? mykey, companyid, companyname, fbeg, fend})
+  CountryMasterList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -23,16 +24,18 @@ class CityMasterList extends StatefulWidget {
   }
 
   @override
-  _CityMasterListPageState createState() => _CityMasterListPageState();
+  _CountryMasterListPageState createState() => _CountryMasterListPageState();
 }
 
-class _CityMasterListPageState extends State<CityMasterList> {
+class _CountryMasterListPageState extends State<CountryMasterList> {
   List _companydetails = [];
+  
   @override
   void initState() {
     super.initState();
     loaddetails();
   }
+
 
 Future<bool> loaddetails() async {
     var companyid = widget.xcompanyid;
@@ -40,10 +43,10 @@ Future<bool> loaddetails() async {
     print(globals.enddate);
 
     String uri = '';
-    uri =
-        "https://www.cloud.equalsoftlink.com/api/api_citylist?dbname=$clientid&cno=$companyid";
-    var response = await http.get(Uri.parse(uri));
+    uri = "https://www.cloud.equalsoftlink.com/api/api_countrylist?dbname=$clientid&cno=$companyid";
     print(uri);
+    var response = await http.get(Uri.parse(uri));
+  
     var jsonData = jsonDecode(response.body);
 
     print(jsonData);
@@ -60,7 +63,7 @@ Future<bool> loaddetails() async {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=citymst&id=$id";
+        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=countrymst&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -69,18 +72,18 @@ Future<bool> loaddetails() async {
     if (jsonData['Code'].toString() != '100') {
       loaddetails();
       Fluttertoast.showToast(
-        msg: "City Delete Successfully !!!",
+        msg: "Country Delete Successfully !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.white,
-        textColor: Colors.purple,
+        textColor: const Color.fromRGBO(156, 39, 176, 1),
         fontSize: 16.0,
       );
     } else {
       loaddetails();
       Fluttertoast.showToast(
-        msg: "City in Used !!!",
+        msg: "Country in Used !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -97,7 +100,7 @@ void onAdd() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => CityMaster(
+            builder: (_) => CountryMaster(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -110,7 +113,6 @@ void onAdd() {
     print('You Clicked Back..');
     Navigator.pop(context);
   }
-
   void onPDF(id) {
     print(id);
     print('Clicked PDF');
@@ -123,7 +125,7 @@ void onAdd() {
       builder: (BuildContext context) {
         //saveData();
         return AlertDialog(
-          title: const Text('Do You Want To Delete City Master !!??'),
+          title: const Text('Do You Want To Delete Country Master !!??'),
           content: Container(
             height: 10,
             child: Column(
@@ -164,7 +166,7 @@ void onAdd() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => CityMaster(
+            builder: (_) => CountryMaster(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -181,8 +183,8 @@ void onAdd() {
       fbeg: widget.xfbeg,
       fend: widget.xfend,
       Data: this._companydetails,
-      Title: 'List Of City',
-      DataFormat: 'City : #city#  State : #state# ',
+      Title: 'List Of Country',
+      DataFormat: 'Country : #country#  ',
       onAdd: onAdd,
       onBack: onBack,
       onPDF: onPDF,

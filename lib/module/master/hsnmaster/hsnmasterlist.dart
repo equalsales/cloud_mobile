@@ -2,56 +2,48 @@
 
 import 'dart:convert';
 import 'package:cloud_mobile/common/moduleview.dart';
-import 'package:cloud_mobile/module/master/citymaster/citymaster.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_mobile/module/master/hsnmaster/hsnmaster.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
 
-class CityMasterList extends StatefulWidget {
+class HSNMasterList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
-
-  CityMasterList({Key? mykey, companyid, companyname, fbeg, fend})
+  HSNMasterList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
     xfend = fend;
   }
-
   @override
-  _CityMasterListPageState createState() => _CityMasterListPageState();
+  _HSNMasterListPageState createState() => _HSNMasterListPageState();
 }
-
-class _CityMasterListPageState extends State<CityMasterList> {
+class _HSNMasterListPageState extends State<HSNMasterList> {
   List _companydetails = [];
+
   @override
   void initState() {
     super.initState();
     loaddetails();
   }
-
-Future<bool> loaddetails() async {
+  Future<bool> loaddetails() async {
     var companyid = widget.xcompanyid;
     var clientid = globals.dbname;
-    print(globals.enddate);
-
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_citylist?dbname=$clientid&cno=$companyid";
+        "https://www.cloud.equalsoftlink.com/api/api_hsncodelist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
-    print(uri);
+    //print(uri);
     var jsonData = jsonDecode(response.body);
-
-    print(jsonData);
-
+    //print(jsonData);
     this.setState(() {
       _companydetails = jsonData['Data'];
     });
-
     return true;
   }
 
@@ -60,7 +52,7 @@ Future<bool> loaddetails() async {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=citymst&id=$id";
+        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=hsncodemst&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -69,7 +61,7 @@ Future<bool> loaddetails() async {
     if (jsonData['Code'].toString() != '100') {
       loaddetails();
       Fluttertoast.showToast(
-        msg: "City Delete Successfully !!!",
+        msg: "HSN Delete Successfully !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -78,9 +70,10 @@ Future<bool> loaddetails() async {
         fontSize: 16.0,
       );
     } else {
+      print("jatin");
       loaddetails();
       Fluttertoast.showToast(
-        msg: "City in Used !!!",
+        msg: "HSNcode in Used !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -92,12 +85,12 @@ Future<bool> loaddetails() async {
     return true;
   }
 
-void onAdd() {
+  void onAdd() {
     print('You Clicked Add..');
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => CityMaster(
+            builder: (_) => HSNMaster(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -123,7 +116,7 @@ void onAdd() {
       builder: (BuildContext context) {
         //saveData();
         return AlertDialog(
-          title: const Text('Do You Want To Delete City Master !!??'),
+          title: const Text('Do You Want To Delete HsnCode Master !!??'),
           content: Container(
             height: 10,
             child: Column(
@@ -164,7 +157,7 @@ void onAdd() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => CityMaster(
+            builder: (_) => HSNMaster(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -173,7 +166,7 @@ void onAdd() {
                 ))).then((value) => loaddetails());
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return ModuleVIew(
       companyid: widget.xcompanyid,
@@ -181,8 +174,8 @@ void onAdd() {
       fbeg: widget.xfbeg,
       fend: widget.xfend,
       Data: this._companydetails,
-      Title: 'List Of City',
-      DataFormat: 'City : #city#  State : #state# ',
+      Title: 'List Of HsnCode ',
+      DataFormat: 'Hsncode : #hsncode#  Type : #type#',
       onAdd: onAdd,
       onBack: onBack,
       onPDF: onPDF,
@@ -192,4 +185,7 @@ void onAdd() {
   }
 }
 
+
+
 void doNothing(BuildContext context) {}
+

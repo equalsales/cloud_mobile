@@ -2,19 +2,14 @@
 
 import 'dart:convert';
 import 'package:cloud_mobile/common/moduleview.dart';
-import 'package:cloud_mobile/module/master/citymaster/citymaster.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_mobile/module/master/unitmaster/unitmaster.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
 
-class CityMasterList extends StatefulWidget {
-  var xcompanyid;
-  var xcompanyname;
-  var xfbeg;
-  var xfend;
-
-  CityMasterList({Key? mykey, companyid, companyname, fbeg, fend})
+class UnitMasterList extends StatefulWidget {
+  UnitMasterList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -22,26 +17,30 @@ class CityMasterList extends StatefulWidget {
     xfend = fend;
   }
 
+  var xcompanyid;
+  var xcompanyname;
+  var xfbeg;
+  var xfend;
+
   @override
-  _CityMasterListPageState createState() => _CityMasterListPageState();
+  _UnitMasterListPageState createState() => _UnitMasterListPageState();
 }
 
-class _CityMasterListPageState extends State<CityMasterList> {
+class _UnitMasterListPageState extends State<UnitMasterList> {
   List _companydetails = [];
+
   @override
   void initState() {
     super.initState();
     loaddetails();
   }
 
-Future<bool> loaddetails() async {
+  Future<bool> loaddetails() async {
     var companyid = widget.xcompanyid;
     var clientid = globals.dbname;
-    print(globals.enddate);
-
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_citylist?dbname=$clientid&cno=$companyid";
+        "https://www.cloud.equalsoftlink.com/api/api_unitlist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -60,7 +59,7 @@ Future<bool> loaddetails() async {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=citymst&id=$id";
+        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=unitmst&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -69,7 +68,7 @@ Future<bool> loaddetails() async {
     if (jsonData['Code'].toString() != '100') {
       loaddetails();
       Fluttertoast.showToast(
-        msg: "City Delete Successfully !!!",
+        msg: "Unit Delete Successfully !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -80,7 +79,7 @@ Future<bool> loaddetails() async {
     } else {
       loaddetails();
       Fluttertoast.showToast(
-        msg: "City in Used !!!",
+        msg: "Unit in Used !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -92,12 +91,12 @@ Future<bool> loaddetails() async {
     return true;
   }
 
-void onAdd() {
+  void onAdd() {
     print('You Clicked Add..');
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => CityMaster(
+            builder: (_) => UnitMaster(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -123,7 +122,7 @@ void onAdd() {
       builder: (BuildContext context) {
         //saveData();
         return AlertDialog(
-          title: const Text('Do You Want To Delete City Master !!??'),
+          title: const Text('Do You Want To Delete Unit Master !!??'),
           content: Container(
             height: 10,
             child: Column(
@@ -164,7 +163,7 @@ void onAdd() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => CityMaster(
+            builder: (_) => UnitMaster(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -173,7 +172,7 @@ void onAdd() {
                 ))).then((value) => loaddetails());
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return ModuleVIew(
       companyid: widget.xcompanyid,
@@ -181,8 +180,8 @@ void onAdd() {
       fbeg: widget.xfbeg,
       fend: widget.xfend,
       Data: this._companydetails,
-      Title: 'List Of City',
-      DataFormat: 'City : #city#  State : #state# ',
+      Title: 'List Of Unit',
+      DataFormat: 'Unit : #unit#',
       onAdd: onAdd,
       onBack: onBack,
       onPDF: onPDF,

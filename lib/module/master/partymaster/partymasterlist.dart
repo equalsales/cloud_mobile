@@ -1,18 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:cloud_mobile/dashboard.dart';
-
+// ignore_for_file: must_be_immutable
 import 'dart:convert';
-
+import 'package:cloud_mobile/common/moduleview.dart';
+import 'package:cloud_mobile/module/master/partymaster/partymaster.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
 import '../../../common/global.dart' as globals;
-import 'package:cloud_mobile/common/alert.dart';
-
-// import 'package:google_fonts/google_fonts.dart';
-
-import 'package:cloud_mobile/module/master/partymaster/add_partymaster.dart';
-
+ 
 class PartyMasterList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
@@ -33,346 +27,169 @@ class PartyMasterList extends StatefulWidget {
 
 class _PartyMasterListPageState extends State<PartyMasterList> {
   List _companydetails = [];
+
   @override
   void initState() {
+    super.initState();
     loaddetails();
   }
 
   Future<bool> loaddetails() async {
-    var db = globals.dbname;
-
-    var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
-            db));
-
+    var companyid = widget.xcompanyid;
+    var clientid = globals.dbname;
+    String uri = '';
+    uri =
+        "https://www.cloud.equalsoftlink.com/api/api_partylist?dbname=$clientid&cno=$companyid";
+    var response = await http.get(Uri.parse(uri));
+    print(uri);
     var jsonData = jsonDecode(response.body);
-
-    jsonData = jsonData['Data'];
 
     //print(jsonData);
 
     this.setState(() {
-      _companydetails = jsonData;
+      _companydetails = jsonData['Data'];
     });
 
     return true;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    void takeAction() {}
+  Future<bool> DeleteData(id) async {
+    var companyid = widget.xcompanyid;
+    var clientid = globals.dbname;
+    String uri = '';
+    uri =
+        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=partymst&id=$id";
+    var response = await http.get(Uri.parse(uri));
+    print(uri);
+    var jsonData = jsonDecode(response.body);
+    jsonData['Code'];
+    print(jsonData['Code']);
+    if (jsonData['Code'].toString() != '100') {
+      loaddetails();
+      Fluttertoast.showToast(
+        msg: "Party Delete Successfully !!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: Colors.purple,
+        fontSize: 16.0,
+      );
+    } else {
+      loaddetails();
+      Fluttertoast.showToast(
+        msg: "Party in Used !!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: Colors.purple,
+        fontSize: 16.0,
+      );
+    }
+    return true;
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('List Of Account',
-            style: TextStyle(
-                fontSize: 25.0, fontWeight: FontWeight.normal)),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => PartyMasterAdd(
-                        companyid: widget.xcompanyid,
-                        companyname: widget.xcompanyname,
-                        fbeg: widget.xfbeg,
-                        fend: widget.xfend,
-                        id: '0',
-                      )))
-        },
-      ),
-      body: Center(
-          child: ListView.builder(
-        itemCount: this._companydetails.length,
-        itemBuilder: (context, index) {
-          print(this._companydetails[index]);
-          String name = this._companydetails[index]['party'];
-          String id = this._companydetails[index]['id'].toString();
-          int newid = 0;
-          newid = int.parse(id);
-          String address = this._companydetails[index]['addr1'].toString() +
-              ' ' +
-              this._companydetails[index]['addr2'].toString() +
-              ' ' +
-              this._companydetails[index]['addr3'].toString() +
-              '-' +
-              this._companydetails[index]['city'].toString();
-          String phoneno = this._companydetails[index]['phoneno'].toString();
-          String mobileno = this._companydetails[index]['mobileno'].toString();
-          String gstregno = this._companydetails[index]['gstregno'].toString();
-          String acctype = this._companydetails[index]['acctype'].toString();
-          String acchead = this._companydetails[index]['acchead'].toString();
+  void onAdd() {
+    print('You Clicked Add..');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => PartyMaster(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  id: '0',
+                ))).then((value) => loaddetails())
+                ;
+  }
 
-          return Slidable(
-            key: ValueKey(index),
-            startActionPane:
-                ActionPane(motion: const BehindMotion(), children: [
-              SlidableAction(
-                  onPressed: (context) =>
-                      {execDelete(context, index, int.parse(id), name)},
-                  icon: Icons.delete,
-                  label: 'Delete',
-                  backgroundColor: Color(0xFFFE4A49)),
-              SlidableAction(
-                  onPressed: (context) => {},
-                  icon: Icons.edit,
-                  label: 'Edit',
-                  backgroundColor: Colors.blue)
-            ]),
-            child: Card(
-                child: Center(
-                    child: ListTile(
-              title: Text(name + ' [ ' + id + ' ]',
-                  style:
-                      TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
-              subtitle: Text(
-                  'Type : ' +
-                      acctype +
-                      ' Schedule : ' +
-                      acchead +
-                      ' ' +
-                      address +
-                      ' Mobile No : ' +
-                      phoneno +
-                      ' ' +
-                      mobileno,
-                  style:
-                      TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
-              leading: Icon(Icons.select_all),
-              trailing: Icon(Icons.arrow_forward),
-              onTap: () {
-                ///showAlertDialog(context, id);
+  void onBack() {
+    print('You Clicked Back..');
+    Navigator.pop(context);
+  }
 
-                //var editInfo = {};
-                //editInfo['id'] = id;
+  void onPDF(id) {
+    print(id);
+    print('Clicked PDF');
+  }
 
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => PartyMasterAdd(
-                              companyid: widget.xcompanyid,
-                              companyname: widget.xcompanyname,
-                              fbeg: widget.xfbeg,
-                              fend: widget.xfend,
-                              id: id,
-                            )));
+  void onDel(id) {
+    print('Del Clicked...');
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        //saveData();
+        return AlertDialog(
+          title: const Text('Do You Want To Delete Party Master !!??'),
+          content: Container(
+            height: 10,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('YES'),
+              onPressed: () {
+                setState(() {
+                  DeleteData(id);
+                  Navigator.pop(context);
+                });
               },
-            ))),
-          );
-          // return Dismissible(
-          //   key: UniqueKey(),
-          //   // only allows the user swipe from right to left
-          //   direction: DismissDirection.endToStart,
-          //   // Remove this product from the list
-          //   // In production enviroment, you may want to send some request to delete it on server side
-          //   onDismissed: (_) {
-          //     setState(() {
-          //       this._companydetails.removeAt(index);
-          //     });
-          //   },
-          //   // This will show up when the user performs dismissal action
-          //   // It is a red background and a trash icon
-          //   background: Container(
-          //     color: Colors.red,
-          //     margin: const EdgeInsets.symmetric(horizontal: 15),
-          //     alignment: Alignment.centerRight,
-          //     child: const Icon(
-          //       Icons.delete,
-          //       color: Colors.white,
-          //     ),
-          //   ),
-          //   child: Card(
-          //       child: Center(
-          //           child: ListTile(
-          //     title: Text(name + ' [ ' + id + ' ]',
-          //         style:
-          //             TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
-          //     subtitle: Text(
-          //         'Type : ' +
-          //             acctype +
-          //             ' Schedule : ' +
-          //             acchead +
-          //             ' ' +
-          //             address +
-          //             ' Mobile No : ' +
-          //             phoneno +
-          //             ' ' +
-          //             mobileno,
-          //         style:
-          //             TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
-          //     leading: Icon(Icons.select_all),
-          //     trailing: Icon(Icons.arrow_forward),
-          //     onTap: () {
-          //       ///showAlertDialog(context, id);
-
-          //       //var editInfo = {};
-          //       //editInfo['id'] = id;
-
-          //       Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //               builder: (_) => PartyMasterAdd(
-          //                     companyid: widget.xcompanyid,
-          //                     companyname: widget.xcompanyname,
-          //                     fbeg: widget.xfbeg,
-          //                     fend: widget.xfend,
-          //                     id: id,
-          //                   )));
-          //     },
-          //   ))),
-          // );
-          // Card(
-          //     child: Center(
-          //         child: ListTile(
-          //   title: Text(name + ' [ ' + id + ' ]',
-          //       style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
-          //   subtitle: Text(
-          //       'Type : ' +
-          //           acctype +
-          //           ' Schedule : ' +
-          //           acchead +
-          //           ' ' +
-          //           address +
-          //           ' Mobile No : ' +
-          //           phoneno +
-          //           ' ' +
-          //           mobileno,
-          //       style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
-          //   leading: Icon(Icons.select_all),
-          //   trailing: Icon(Icons.arrow_forward),
-          //   onTap: () {
-          //     ///showAlertDialog(context, id);
-
-          //     //var editInfo = {};
-          //     //editInfo['id'] = id;
-
-          //     Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //             builder: (_) => PartyMasterAdd(
-          //                   companyid: widget.xcompanyid,
-          //                   companyname: widget.xcompanyname,
-          //                   fbeg: widget.xfbeg,
-          //                   fend: widget.xfend,
-          //                   id: id,
-          //                 )));
-          //   },
-          // )));
-        },
-      )),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('NO'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
-}
 
-void execDelete(BuildContext context, int index, int id, String name) {
-  showDialog<String>(
-    context: context,
-    builder: (BuildContext context) => AlertDialog(
-      title: const Text('Delete Account ??'),
-      content: Text('Do you want to delete this account ' + name + ' ?'),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () => {Navigator.pop(context, 'Cancel')},
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () async {
-            var db = globals.dbname;
+  void onEdit(id) {
+    print('Clicked Edit');
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => PartyMaster(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  id: id.toString(),
+                ))).then((value) => loaddetails());
+  }
 
-            var response = await http.post(Uri.parse(
-                'https://www.cloud.equalsoftlink.com/api/api_delparty?dbname=' +
-                    db +
-                    '&id=' +
-                    id.toString()));
-
-            var jsonData = jsonDecode(response.body);
-            var code = jsonData['Code'];
-            if (code == '200') {
-              await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => PartyMasterList(
-                          companyid: globals.companyid,
-                          companyname: globals.companyname,
-                          fbeg: globals.fbeg,
-                          fend: globals.fend)));
-            }
-          },
-          child: const Text('OK'),
-        ),
-      ],
-    ),
-  );
-  // // set up the buttons
-  // Widget cancelButton = ElevatedButton(
-  //   child: Text("Cancel"),
-  //   onPressed: () {
-  //     Navigator.pop(context, 'Cancel');
-  //   },
-  // );
-  // Widget continueButton = ElevatedButton(
-  //   child: Text("Delete"),
-  //   onPressed: () {
-  //     deleteParty(id);
-  //   },
-  // );
-  // // set up the AlertDialog
-  // AlertDialog alert = AlertDialog(
-  //   title: Text("Delete Dialog"),
-  //   content: Text("Would you like to delet this account?"),
-  //   actions: [
-  //     cancelButton,
-  //     continueButton,
-  //   ],
-  // );
-
-  // // show the dialog
-  // showDialog(
-  //   context: context,
-  //   builder: (BuildContext context) {
-  //     return alert;
-  //   },
-  // );
-
-  //showAlertDialog(context, index.toString() + '  ' + id.toString());
-  return;
-}
-
-Future<bool> deleteParty(id) async {
-  var db = globals.dbname;
-
-  var response = await http.post(Uri.parse(
-      'https://www.cloud.equalsoftlink.com/api/api_delparty?dbname=' +
-          db +
-          '&id=' +
-          id.toString()));
-
-  print('https://www.cloud.equalsoftlink.com/api/api_delparty?dbname=' +
-      db +
-      '&id=' +
-      id.toString());
-
-  print('here');
-  var jsonData = jsonDecode(response.body);
-  print('here2');
-  print(jsonData);
-
-  var code = jsonData['Code'];
-  if (code == '200') {
-    print('in....');
-    // await Navigator.push(
-    //     BuildContext context,
-    //     MaterialPageRoute(
-    //         builder: (_) => PartyMasterList(
-    //             companyid: globals.companyid,
-    //             companyname: globals.companyname,
-    //             fbeg: globals.fbeg,
-    //             fend: globals.fend)));
-  } else {}
-
-  return true;
+  @override
+  Widget build(BuildContext context) {
+    return ModuleVIew(
+      companyid: widget.xcompanyid,
+      companyname: widget.xcompanyname,
+      fbeg: widget.xfbeg,
+      fend: widget.xfend,
+      Data: this._companydetails,
+      Title: 'List Of Party',
+      DataFormat:
+          'Party : #party#  Acctype : #acctype#   GSTRegNo : #gstregno#  MobileNo : mobileno  City : #city#  State : #state#',
+      onAdd: onAdd,
+      onBack: onBack,
+      onPDF: onPDF,
+      onDel: onDel,
+      onEdit: onEdit,
+    );
+  }
 }
 
 void doNothing(BuildContext context) {}

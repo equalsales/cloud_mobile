@@ -58,6 +58,19 @@ String getValue(xValue, DataType) {
   return xValue;
 }
 
+getValueN(xValue) {
+  if (xValue == null) {
+    xValue = double.parse('0');
+  } else if (xValue == 'null') {
+    xValue = double.parse('0');
+  } else if (xValue == '') {
+    xValue = double.parse('0');
+  } else {
+    xValue = double.parse(xValue);
+  }
+  return xValue;
+}
+
 Future<List<dynamic>> getCityDetails(String City, int Id) async {
   String uri = '';
   var db = globals.dbname;

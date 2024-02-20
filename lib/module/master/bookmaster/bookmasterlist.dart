@@ -1,20 +1,21 @@
 // ignore_for_file: must_be_immutable
 
+
 import 'dart:convert';
 import 'package:cloud_mobile/common/moduleview.dart';
-import 'package:cloud_mobile/module/master/citymaster/citymaster.dart';
+import 'package:cloud_mobile/module/master/bookmaster/bookmaster.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
 
-class CityMasterList extends StatefulWidget {
+class BookMasterList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
 
-  CityMasterList({Key? mykey, companyid, companyname, fbeg, fend})
+  BookMasterList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -23,10 +24,10 @@ class CityMasterList extends StatefulWidget {
   }
 
   @override
-  _CityMasterListPageState createState() => _CityMasterListPageState();
+  _BookMasterListPageState createState() => _BookMasterListPageState();
 }
 
-class _CityMasterListPageState extends State<CityMasterList> {
+class _BookMasterListPageState extends State<BookMasterList> {
   List _companydetails = [];
   @override
   void initState() {
@@ -35,13 +36,11 @@ class _CityMasterListPageState extends State<CityMasterList> {
   }
 
 Future<bool> loaddetails() async {
-    var companyid = widget.xcompanyid;
-    var clientid = globals.dbname;
-    print(globals.enddate);
-
-    String uri = '';
-    uri =
-        "https://www.cloud.equalsoftlink.com/api/api_citylist?dbname=$clientid&cno=$companyid";
+  var companyid = widget.xcompanyid;
+  var clientid = globals.dbname;
+  String uri = '';
+  uri =
+        "https://www.cloud.equalsoftlink.com/api/api_booklist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -60,16 +59,17 @@ Future<bool> loaddetails() async {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=citymst&id=$id";
+        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=u=partymst&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
     jsonData['Code'];
     print(jsonData['Code']);
+    DeleteData(id);
     if (jsonData['Code'].toString() != '100') {
       loaddetails();
       Fluttertoast.showToast(
-        msg: "City Delete Successfully !!!",
+        msg: "Book Delete Successfully !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -80,7 +80,7 @@ Future<bool> loaddetails() async {
     } else {
       loaddetails();
       Fluttertoast.showToast(
-        msg: "City in Used !!!",
+        msg: "Book in Used !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -97,7 +97,7 @@ void onAdd() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => CityMaster(
+            builder: (_) => BookMaster(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -123,7 +123,7 @@ void onAdd() {
       builder: (BuildContext context) {
         //saveData();
         return AlertDialog(
-          title: const Text('Do You Want To Delete City Master !!??'),
+          title: const Text('Do You Want To Delete Book Master !!??'),
           content: Container(
             height: 10,
             child: Column(
@@ -150,7 +150,7 @@ void onAdd() {
               ),
               child: const Text('NO'),
               onPressed: () {
-                Navigator.pop(context);
+               Navigator.pop(context);
               },
             ),
           ],
@@ -164,7 +164,7 @@ void onAdd() {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (_) => CityMaster(
+            builder: (_) => BookMaster(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -181,8 +181,8 @@ void onAdd() {
       fbeg: widget.xfbeg,
       fend: widget.xfend,
       Data: this._companydetails,
-      Title: 'List Of City',
-      DataFormat: 'City : #city#  State : #state# ',
+      Title: 'List Of Book',
+      DataFormat: 'Party : #party#  AccType : #acctype#  ',
       onAdd: onAdd,
       onBack: onBack,
       onPDF: onPDF,
@@ -193,3 +193,4 @@ void onAdd() {
 }
 
 void doNothing(BuildContext context) {}
+
