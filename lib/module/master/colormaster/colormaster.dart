@@ -10,8 +10,8 @@ import 'package:http/http.dart' as http;
 import '../../../common/alert.dart';
 import '../../../common/global.dart' as globals;
 
-class CityMaster extends StatefulWidget {
-  CityMaster({Key? mykey, companyid, companyname, fbeg, fend, id})
+class ColorMaster extends StatefulWidget {
+  ColorMaster({Key? mykey, companyid, companyname, fbeg, fend, id})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -30,19 +30,15 @@ class CityMaster extends StatefulWidget {
   var xid;
 
   @override
-  _CityMasterState createState() => _CityMasterState();
+  _ColorMasterState createState() => _ColorMasterState();
 }
 
-class _CityMasterState extends State<CityMaster> {
+class _ColorMasterState extends State<ColorMaster> {
   List ItemDetails = [];
- 
 
- 
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _cityname = new TextEditingController();
-  TextEditingController _statename = new TextEditingController();
- 
-  
+  TextEditingController _colorname = new TextEditingController();
+  TextEditingController _descr = new TextEditingController();
 
   @override
   void initState() {
@@ -58,15 +54,15 @@ class _CityMasterState extends State<CityMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_citylist?dbname=$clientid&cno=$companyid&id=$id";
+        "https://www.cloud.equalsoftlink.com/api/api_colorlist?dbname=$clientid&cno=$companyid&id=$id";
     print(uri);
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
     jsonData = jsonData['Data'];
     jsonData = jsonData[0];
     print(jsonData);
-    _cityname.text = getValue(jsonData['city'], 'C');
-    _statename.text = getValue(jsonData['state'], 'C');
+    _colorname.text = getValue(jsonData['color'], 'C');
+    _descr.text = getValue(jsonData['descr'], 'C');
     id = jsonData['id'].toString();
     return true;
   }
@@ -75,23 +71,22 @@ class _CityMasterState extends State<CityMaster> {
 
   @override
   Widget build(BuildContext context) {
-
-     Future<bool> saveData() async {
+    Future<bool> saveData() async {
       //UnitVld();
       String uri = '';
       var companyid = widget.xcompanyid;
       var clientid = globals.dbname;
-      var statename = _statename.text;
-      var cityname = _cityname.text;
+      var colorname = _colorname.text;
+      var descr = _descr.text;
       var id = widget.xid;
       id = int.parse(id);
       //print('In Save....');
       uri =
-          "https://www.cloud.equalsoftlink.com/api/api_citystort?dbname=$clientid" +
-              "&state=" +
-              statename +
-              "&city=" +
-              cityname +
+          "https://www.cloud.equalsoftlink.com/api/api_colorstort?dbname=$clientid" +
+              "&descr=" +
+              descr +
+              "&color=" +
+              colorname +
               "&id=" +
               id.toString();
       print(uri);
@@ -107,20 +102,19 @@ class _CityMasterState extends State<CityMaster> {
       } else {
         Navigator.pop(context);
         Fluttertoast.showToast(
-        msg: "Saved !!!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.white,
-        textColor: Colors.purple,
-        fontSize: 16.0,
+          msg: "Saved !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
         );
       }
       return true;
     }
 
-    setState(() {
-    });
+    setState(() {});
 
     setDefValue();
     return Scaffold(
@@ -128,11 +122,11 @@ class _CityMasterState extends State<CityMaster> {
       //   title: Text("City Master",style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
       //   ),
       // ),
-      appBar: EqAppBar(AppBarTitle: "City Master"),
-      // floatingActionButton: FloatingActionButton(
-      //     child: Icon(Icons.done),
-      //     backgroundColor: Colors.green,
-      //     onPressed: () => {saveData()}),
+      appBar: EqAppBar(AppBarTitle: "Color Master"),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.done),
+          backgroundColor: Colors.green,
+          onPressed: () => {saveData()}),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -143,17 +137,17 @@ class _CityMasterState extends State<CityMaster> {
               children: [
                 Expanded(
                   child: EqTextField(
-                    controller: _cityname,
+                    controller: _colorname,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     autofocus: true,
-                    hintText: 'City Name',
-                    labelText: 'City Name',
+                    hintText: 'Color Name',
+                    labelText: 'Color Name',
                     onTap: () {
                       //gotoPartyScreen2(context, 'SALE PARTY', _party);
                     },
                     onChanged: (value) {
-                      _cityname.value = _cityname.value.copyWith(
+                      _colorname.value = _colorname.value.copyWith(
                         text: value.toUpperCase(),
                         selection:
                             TextSelection.collapsed(offset: value.length),
@@ -167,16 +161,16 @@ class _CityMasterState extends State<CityMaster> {
               children: [
                 Expanded(
                   child: EqTextField(
-                    controller: _statename,
+                    controller: _descr,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
-                    hintText: 'Statename',
-                    labelText: 'Statename',
+                    hintText: 'Description',
+                    labelText: 'Description',
                     onTap: () {
                       // gotoAgentScreen(context);
                     },
                     onChanged: (value) {
-                      _statename.value = _statename.value.copyWith(
+                      _descr.value = _descr.value.copyWith(
                         text: value.toUpperCase(),
                         selection:
                             TextSelection.collapsed(offset: value.length),
@@ -194,29 +188,39 @@ class _CityMasterState extends State<CityMaster> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, 
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: const Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
+                      backgroundColor: Colors.green,
                       // Background color
                     ),
                     onPressed: () {
                       saveData();
                     },
-                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'SAVE',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   )),
-                  SizedBox(
-                   width: 10
-                  ),
+                  SizedBox(width: 10),
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
                       backgroundColor: Colors.green, // Background color
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-                        Fluttertoast.showToast(
+                      Fluttertoast.showToast(
                         msg: "CANCEL !!!",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
@@ -224,9 +228,15 @@ class _CityMasterState extends State<CityMaster> {
                         backgroundColor: Colors.white,
                         textColor: Colors.purple,
                         fontSize: 16.0,
-                        );
+                      );
                     },
-                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'CANCEL',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   ))
                 ],
               ),

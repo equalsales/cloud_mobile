@@ -4,6 +4,7 @@ import 'package:cloud_mobile/module/master/accounthead/accountheadlist.dart';
 import 'package:cloud_mobile/module/master/bankmaster/bankmasterlist.dart';
 import 'package:cloud_mobile/module/master/bookmaster/bookmasterlist.dart';
 import 'package:cloud_mobile/module/master/citymaster/citymasterlist.dart';
+import 'package:cloud_mobile/module/master/colormaster/colormasterlist.dart';
 import 'package:cloud_mobile/module/master/country/countrymasterlist.dart';
 import 'package:cloud_mobile/module/master/designmaster/designmasterlist.dart';
 import 'package:cloud_mobile/module/master/hsnmaster/hsnmasterlist.dart';
@@ -119,15 +120,15 @@ class _MasterMenuState extends State<MasterMenu> {
   }
 
    void gotoColorMaster(BuildContext context) async {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (_) => ColorMasterList(
-    //               companyid: widget.xcompanyid,
-    //               companyname: widget.xcompanyname,
-    //               fbeg: widget.xfbeg,
-    //               fend: widget.xfend,
-    //             )));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => ColorMasterList(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                )));
   }
 
   void gotoUnitMaster(BuildContext context) async {
