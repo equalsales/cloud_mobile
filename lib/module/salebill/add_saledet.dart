@@ -25,7 +25,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 //import 'package:cloud_mobile/module/master/partymaster/partymasterlist.dart';
 
-class  SaleBillDetAdd  extends StatefulWidget {
+class SaleBillDetAdd extends StatefulWidget {
   SaleBillDetAdd(
       {Key? mykey,
       companyid,
@@ -36,8 +36,7 @@ class  SaleBillDetAdd  extends StatefulWidget {
       partyid,
       itemDet,
       id,
-      branchid
-      })
+      branchid})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -201,7 +200,6 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
     var branch = widget.xbranchid;
     var takano = _takano.text;
     var takachr = _takachr.text;
-    
 
     fromdate = retconvdate(fromdate);
     todate = retconvdate(todate);
@@ -226,13 +224,16 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
       }
     }
 //commonapi_gettakastock?partyfilter=N&takano=28430&takachr=AJ&branchid=(2)&getdata=Y&dbname=admin_looms
-    uri = 'https://looms.equalsoftlink.com/api/commonapi_gettakastock2?dbname=' +
-        db +
-        '&partyfilter=N&takachr=' +
-        takachr +
-        '&takano=' +
-        takano +
-        '&branchid=('+ branch +')&getdata=Y';
+    uri =
+        'https://looms.equalsoftlink.com/api/commonapi_gettakastock2?dbname=' +
+            db +
+            '&partyfilter=N&takachr=' +
+            takachr +
+            '&takano=' +
+            takano +
+            '&branchid=(' +
+            branch +
+            ')&getdata=Y';
     // 'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
     //     db +
     //     '&cno=' +
@@ -248,7 +249,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
 
     var jsonData = jsonDecode(response.body);
 
-     print(jsonData);
+    print(jsonData);
     jsonData = jsonData['Data'];
     if (jsonData == null) {
       showAlertDialog(context, 'Taka No Found...');
@@ -310,8 +311,8 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
       //     '#ff6666', 'Cancel', true, ScanMode.QR);
 
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#000000', 'Cancel', true, ScanMode.BARCODE);          
-      //barcodeScanRes = await BarcodeScanner.scan();      
+          '#000000', 'Cancel', true, ScanMode.BARCODE);
+      //barcodeScanRes = await BarcodeScanner.scan();
       print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
@@ -321,20 +322,16 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
       print(barcodeScanRes);
 
       //const string = barcodeScanRes;
-      final splitted = barcodeScanRes.split('-');      
+      final splitted = barcodeScanRes.split('-');
       print(splitted); // [Hello, world!];
       print(splitted.length);
       print('dhruv');
       _takachr.text = splitted[0];
-      if(splitted.length>1)
-      {
+      if (splitted.length > 1) {
         _takano.text = splitted[1];
-      }
-      else
-      {
+      } else {
         _takano.text = '0';
       }
-      
 
       fetchdetails();
       //_scanBarcode = barcodeScanRes;
@@ -444,8 +441,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
       appBar: AppBar(
         title: Text(
           'Grey Job Issue Challan Item Details[ ] ',
-          style:
-              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
+          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -751,7 +747,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                 )
               ],
             ),
-              Row(
+            Row(
               children: [
                 Expanded(
                   child: TextFormField(
@@ -897,14 +893,15 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                 )
               ],
             ),
+            
           ],
         ),
       )),
-      bottomNavigationBar: BottomBar(
-        companyname: widget.xcompanyname,
-        fbeg: widget.xfbeg,
-        fend: widget.xfend,
-      ),
+      // bottomNavigationBar: BottomBar(
+      //   companyname: widget.xcompanyname,
+      //   fbeg: widget.xfbeg,
+      //   fend: widget.xfend,
+      // ),
     );
   }
 }

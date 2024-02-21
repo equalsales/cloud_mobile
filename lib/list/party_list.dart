@@ -62,11 +62,15 @@ class PartyListState extends State<party_list> {
               db +
               '&acctype='));
     }
+    print('https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
+              db +
+              '&acctype=' +
+              widget.xacctype);
 
     var jsonData = jsonDecode(response.body);
 
     jsonData = jsonData['Data'];
-    //print(jsonData);
+    print(jsonData);
 
     this.setState(() {
       _partylist = jsonData;

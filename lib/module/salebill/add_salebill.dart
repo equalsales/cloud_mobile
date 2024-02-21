@@ -1,30 +1,14 @@
 import 'dart:convert';
-
-//import 'package:cloud_mobile/module/looms/saleschallan/loomsaleschallanlist.dart';
-//import 'package:cloud_mobile/module/looms/saleschallan/add_loomsaleschallandet.dart';
-import 'package:cloud_mobile/module/looms/greyjobissue/loomgreyjobissuelist.dart';
+import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:cloud_mobile/module/salebill/add_saledet.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
-
-//import 'dart:convert';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/list/party_list.dart';
-
 import '../../../common/global.dart' as globals;
-//import 'package:cloud_mobile/list/city_list.dart';
-//import 'package:cloud_mobile/list/state_list.dart';
 import 'package:cloud_mobile/list/branch_list.dart';
-
-import 'package:cloud_mobile/common/bottombar.dart';
-
-//// import 'package:google_fonts/google_fonts.dart';
-//import 'package:cloud_mobile/module/master/partymaster/partymasterlist.dart';
-//import 'package:cloud_mobile/module/looms/greyjobissue/add_loomgreyjobissuedet.dart';
-
 class SalesBillAdd extends StatefulWidget {
   SalesBillAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
       : super(key: mykey) {
@@ -62,151 +46,92 @@ class _SalesBillAddState extends State<SalesBillAdd> {
 
   var branchid = 0;
   var partyid = 0;
-
-  TextEditingController _branch = new TextEditingController();
-  TextEditingController _type = new TextEditingController();
   TextEditingController _serial = new TextEditingController();
   TextEditingController _srchr = new TextEditingController();
-  TextEditingController _chlnno = new TextEditingController();
-  TextEditingController _chlnchr = new TextEditingController();
   TextEditingController _date = new TextEditingController();
   TextEditingController _party = new TextEditingController();
   TextEditingController _remarks = new TextEditingController();
-  TextEditingController _tottaka = new TextEditingController();
-  TextEditingController _totmtrs = new TextEditingController();
-  TextEditingController _branchid = new TextEditingController();
-
+  TextEditingController _tottqty = new TextEditingController();
+  TextEditingController _totnetamt = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
   @override
   void initState() {
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
-
     var curDate = getsystemdate();
     _date.text = curDate.toString().split(' ')[0];
-
     if (int.parse(widget.xid) > 0) {
       loadData();
-
       loadDetData();
     }
   }
-
-  Future<bool> loadDetData() async {
+ Future<bool> loadDetData() async {
     String uri = '';
-    var cno = globals.companyid;
-    var db = globals.dbname;
+    var companyid = widget.xcompanyid;
+    var clientid = globals.dbname;
     var id = widget.xid;
-
-    uri =
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuedetlist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&id=' +
-            id;
-    print(uri);
+  uri =
+        'https://www.cloud.equalsoftlink.com/api/api_salebilldetlist?dbname=$clientid&cno=$companyid&id=$id';
     var response = await http.get(Uri.parse(uri));
-
     var jsonData = jsonDecode(response.body);
-
+    print(uri);
     jsonData = jsonData['Data'];
-    //jsonData = jsonData[0];
-
-    print(jsonData);
     List ItemDet = [];
     ItemDetails = [];
-
     for (var iCtr = 0; iCtr < jsonData.length; iCtr++) {
       ItemDet.add({
         "controlid": jsonData[iCtr]['controlid'].toString(),
-        "id": jsonData[iCtr]['id'].toString(),
-        "orderno": jsonData[iCtr]['ordno'].toString(),
-        "takano": jsonData[iCtr]['takano'].toString(),
-        "takachr": jsonData[iCtr]['takachr'].toString(),
-        "pcs": jsonData[iCtr]['pcs'].toString(),
-        "meters": jsonData[iCtr]['meters'].toString(),
-        "weight": jsonData[iCtr]['weight'].toString(),
-        "avgwt": jsonData[iCtr]['avgwt'].toString(),
-        "tpmtrs": jsonData[iCtr]['tpmtrs'].toString(),
+        "entryid": jsonData[iCtr]['entryid'].toString(),
+        "barcode": jsonData[iCtr]['barcode'].toString(),
         "itemname": jsonData[iCtr]['itemname'].toString(),
-        "unit": jsonData[iCtr]['unit'].toString(),
+        "hsncode": jsonData[iCtr]['hsncode'].toString(),
+        "pcs": jsonData[iCtr]['pcs'].toString(),
+        "cut": jsonData[iCtr]['cut'].toString(),
+        "meters": jsonData[iCtr]['meters'].toString(),
         "rate": jsonData[iCtr]['rate'].toString(),
+        "unit": jsonData[iCtr]['unit'].toString(),
         "amount": jsonData[iCtr]['amount'].toString(),
-        "design": jsonData[iCtr]['design'].toString(),
-        "machine": jsonData[iCtr]['machine'].toString(),
-        "ordid": jsonData[iCtr]['ordid'].toString(),
-        "fmode": jsonData[iCtr]['fmode'].toString(),
-        "inwid": jsonData[iCtr]['inwid'].toString(),
-        "inwdetid": jsonData[iCtr]['inwdetid'].toString(),
-        "inwdettkid": jsonData[iCtr]['inwdettkid'].toString(),
-        "beamno": jsonData[iCtr]['beamno'].toString(),
-        "beamitem": jsonData[iCtr]['beamitem'].toString()
+        "discper": jsonData[iCtr]['discper'].toString(),
+        "discamt": jsonData[iCtr]['discamt'].toString(),
+        "addamt": jsonData[iCtr]['addamt'].toString(),
+        "taxablevalue": jsonData[iCtr]['taxablevalue'].toString(),
+        "sgstrate": jsonData[iCtr]['sgstrate'].toString(),
+        "sgstamt": jsonData[iCtr]['sgstamt'].toString(),
+        "cgstrate": jsonData[iCtr]['cgstrate'].toString(),
+        "cgstamt": jsonData[iCtr]['cgstamt'].toString(),
+        "igstrate": jsonData[iCtr]['igstrate'].toString(),
+        "igstamt": jsonData[iCtr]['igstamt'].toString(),
+        "finalamt": jsonData[iCtr]['finalamt'].toString(),
+        "remarks": jsonData[iCtr]['remarks'].toString(),
+        "catalog": jsonData[iCtr]['catalog'].toString(),
       });
     }
-
     setState(() {
       ItemDetails = ItemDet;
     });
-
     return true;
   }
-
-  Future<bool> loadData() async {
+ Future<bool> loadData() async {
     String uri = '';
-    var cno = globals.companyid;
-    var db = globals.dbname;
+    var companyid = widget.xcompanyid;
+    var clientid = globals.dbname;
     var id = widget.xid;
-    var fromdate = widget.xfbeg;
-    var todate = widget.xfend;
-
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuelist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&id=' +
-            id +
-            '&startdate=' +
-            fromdate +
-            '&enddate=' +
-            todate;
+        'https://www.cloud.equalsoftlink.com/api/api_getsalebilllist?dbname=$clientid&cno=$companyid&id=$id&startdate=${fromDate.toString()}&enddate=${toDate.toString()}';
     print(uri);
     var response = await http.get(Uri.parse(uri));
-
     var jsonData = jsonDecode(response.body);
-
-    jsonData = jsonData['Data'];
-    jsonData = jsonData[0];
-
-    print(jsonData);
-    print("jatin" + getValue(jsonData['type'], 'C'));
-    _branch.text = getValue(jsonData['branch'], 'C');
-    _branchid.text = getValue(jsonData['branchid'], 'C');
-    _type.text = getValue(jsonData['type'], 'C');
-    _serial.text = getValue(jsonData['serial'], 'C');
-    _srchr.text = getValue(jsonData['srchr'], 'C');
-    _date.text = getValue(jsonData['date'], 'C');
-    _party.text = getValue(jsonData['party'], 'C');
+    jsonData = jsonData['Data'][0];
+    _serial.text = jsonData['serial'].toString();
+    _srchr.text = jsonData['srchr'].toString();
+    String dt = jsonData['date'];
+    _party.text = jsonData['party'];
     _remarks.text = getValue(jsonData['remarks'], 'C');
-    _chlnno.text = getValue(jsonData['chlnno'], 'N');
-    _chlnchr.text = getValue(jsonData['chlnchr'], 'C');
-
-    widget.serial = jsonData['serial'].toString();
-    widget.srchr = jsonData['srchr'].toString();
-
-    setState(() {
-      dropdownTrnType = _type.text;
-    });
-
     return true;
   }
-
   Future<void> _selectDate(BuildContext context) async {
     if (_date.text != '') {
       fromDate = retconvdate(_date.text, 'yyyy-mm-dd');
-      //print(fromDate);
     }
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -219,9 +144,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         _date.text = picked.toString().split(' ')[0];
       });
   }
-
   void setDefValue() {}
-
   @override
   Widget build(BuildContext context) {
     void gotoPartyScreen(
@@ -236,12 +159,10 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                     fend: widget.xfend,
                     acctype: acctype,
                   )));
-
       setState(() {
         var retResult = result;
         _partylist = result[1];
         result = result[1];
-
         var selParty = '';
         for (var ictr = 0; ictr < retResult[0].length; ictr++) {
           if (ictr > 0) {
@@ -249,11 +170,9 @@ class _SalesBillAddState extends State<SalesBillAdd> {
           }
           selParty = selParty + retResult[0][ictr];
         }
-
         obj.text = selParty;
       });
     }
-
     void gotoPartyScreen2(
         BuildContext context, acctype, TextEditingController obj) async {
       var result = await Navigator.push(
@@ -266,15 +185,12 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                     fend: widget.xfend,
                     acctype: acctype,
                   )));
-
       setState(() {
         var retResult = result;
         _partylist = result[1];
         result = result[1];
-
         partyid = _partylist[0];
         print(partyid);
-
         var selParty = '';
         for (var ictr = 0; ictr < retResult[0].length; ictr++) {
           if (ictr > 0) {
@@ -282,9 +198,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
           }
           selParty = selParty + retResult[0][ictr];
         }
-
         obj.text = selParty;
-
         if (selParty != '') {
           getPartyDetails(obj.text, 0).then((value) {
             setState(() {});
@@ -292,7 +206,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         }
       });
     }
-
     void gotoBranchScreen(BuildContext contex) async {
       var result = await Navigator.push(
           context,
@@ -302,16 +215,13 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
                   fend: widget.xfend)));
-
       setState(() {
         var retResult = result;
-
         print(retResult);
         _branchlist = result[1];
         result = result[1];
         branchid = _branchlist[0];
         print(branchid);
-
         var selBranch = '';
         for (var ictr = 0; ictr < retResult[0].length; ictr++) {
           if (ictr > 0) {
@@ -319,15 +229,9 @@ class _SalesBillAddState extends State<SalesBillAdd> {
           }
           selBranch = selBranch + retResult[0][ictr];
         }
-
-        _branch.text = selBranch;
-        _branchid.text = branchid.toString();
       });
     }
-
     void gotoChallanItemDet(BuildContext contex) async {
-      var branch = _branch.text;
-      var branchid = _branchid.text;
       print('in');
       var result = await Navigator.push(
           context,
@@ -337,44 +241,29 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                     companyname: widget.xcompanyname,
                     fbeg: widget.xfbeg,
                     fend: widget.xfend,
-                    branch: branch,
                     partyid: partyid,
                     itemDet: ItemDetails,
                     branchid: branchid,
                   )));
-      //print('out');
-      //print(result);
-      //print(result[0]['takachr']);
       setState(() {
         ItemDetails.add(result[0]);
-        //ItemDetails = ItemDetails[0];
         print(ItemDetails);
       });
     }
-
     Future<bool> saveData() async {
       String uri = '';
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
-
-      var type = _type.text;
       var serial = _serial.text;
       var srchr = _srchr.text;
-      var branch = _branch.text;
       var date = _date.text;
       var party = _party.text;
       var remarks = _remarks.text;
-      var chlnno = _chlnno.text;
-      var chlnchr = _chlnchr.text;
-
       var id = widget.xid;
       id = int.parse(id);
-
       print('In Save....');
-
       print(jsonEncode(ItemDetails));
-
       uri =
           "https://looms.equalsoftlink.com/api/api_storeloomsgreyjobissue?dbname=" +
               db +
@@ -382,10 +271,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
               cno +
               "&user=" +
               username +
-              "&branch=" +
-              branch +
-              "&type=" +
-              type +
               "&party=" +
               party +
               "&srchr=" +
@@ -396,27 +281,17 @@ class _SalesBillAddState extends State<SalesBillAdd> {
               date +
               "&remarks=" +
               remarks +
-              "&chlnno=" +
-              chlnno +
-              "&chlnchr=" +
-              chlnchr +
               "&id=" +
               id.toString() +
               "&parcel=1";
       print(uri);
-
       final headers = {
-        'Content-Type': 'application/json', // Set the appropriate content-type
-        // Add any other headers required by your API
+        'Content-Type': 'application/json', 
       };
       print(ItemDetails);
       var response = await http.post(Uri.parse(uri),
           headers: headers, body: jsonEncode(ItemDetails));
-
       var jsonData = jsonDecode(response.body);
-
-      //print('4');
-
       var jsonCode = jsonData['Code'];
       var jsonMsg = jsonData['Message'];
 
@@ -427,7 +302,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) => LoomGreyJobIssueList(
+                builder: (_) => SalesBillAdd(
                       companyid: widget.xcompanyid,
                       companyname: widget.xcompanyname,
                       fbeg: widget.xfbeg,
@@ -436,146 +311,196 @@ class _SalesBillAddState extends State<SalesBillAdd> {
       }
       return true;
     }
-
-    var items = [
-      '',
-      'REGULAR',
-      'RETURN',
-    ];
-
     setState(() {});
-
     void deleteRow(index) {
       setState(() {
         ItemDetails.removeAt(index);
       });
     }
 
-    List<DataRow> _createRows() {
+      List<DataRow> _createRows() {
       List<DataRow> _datarow = [];
-      print(ItemDetails);
 
       widget.tottaka = 0;
-      widget.totmtrs = 0;
-
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
-        double nMeters = 0;
-        if (ItemDetails[iCtr]['meters'] != '') {
-          nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
-          widget.tottaka += 1;
-          widget.totmtrs += nMeters;
+        double nPcs = 0;
+        if (ItemDetails[iCtr]['pcs'].toString() != '') {
+          nPcs = nPcs + double.parse(ItemDetails[iCtr]['pcs']);
+          widget.tottaka += nPcs;
         }
-
-        print(ItemDetails[iCtr]);
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
-            onPressed: () => {deleteRow(iCtr)},
+            onPressed: () => {
+                 showDialog<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  //saveData();
+                  return AlertDialog(
+                    title: const Text('Do You Want To Remove is Item Details !!??'),
+                    content: Container(
+                      height: 10,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        child: const Text('YES'),
+                        onPressed: () {
+                          setState(() {
+                              deleteRow(iCtr);
+                            });
+                          Navigator.of(context).pop();
+                        },
+                        ),
+                        TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        child: const Text('NO'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              )
+              },
             icon: Icon(
               // <-- Icon
               Icons.delete,
-              size: 24.0,
+              size: 20.0,
             ),
             label: Text('',
-                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
-          )),
-          DataCell(Text(ItemDetails[iCtr]['takachr'] +
-              '-' +
-              ItemDetails[iCtr]['takano'])),
-          DataCell(Text(ItemDetails[iCtr]['pcs'])),
-          DataCell(Text(ItemDetails[iCtr]['meters'])),
-          DataCell(Text(ItemDetails[iCtr]['tpmtrs'])),
-          DataCell(Text(ItemDetails[iCtr]['itemname'])),
-          DataCell(Text(ItemDetails[iCtr]['design'])),
-          DataCell(Text(ItemDetails[iCtr]['unit'])),
-          DataCell(Text(ItemDetails[iCtr]['rate'])),
-          DataCell(Text(ItemDetails[iCtr]['amount'])),
-          DataCell(Text(ItemDetails[iCtr]['inwid'])),
-          DataCell(Text(ItemDetails[iCtr]['inwdetid'])),
-          DataCell(Text(ItemDetails[iCtr]['inwdettkid'])),
-          DataCell(Text(ItemDetails[iCtr]['fmode'])),
-          DataCell(Text(ItemDetails[iCtr]['ordid'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['orddetid'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['machine'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['weight'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['avgwt'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['beamno'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['beamitem'].toString())),
+                style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
+          ) ),
+          
+          DataCell(Text(ItemDetails[iCtr]['itemname'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['hsncode'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['meters'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['rate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['unit'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['remarks'].toString())),
+          DataCell(
+             Container( 
+                child:Text(ItemDetails[iCtr]['cut'].toString()),
+              ),
+            ),
+          DataCell(
+             Container( 
+                child:Text(ItemDetails[iCtr]['pcs'].toString()),
+              ),
+          ),
+          
+
+          DataCell(
+             Container(
+                child:Text(ItemDetails[iCtr]['amount'].toString()),
+              ),
+          ),
+          DataCell(
+            Container( 
+                width:1, // Set the desired width
+                child:Text(ItemDetails[iCtr]['discper'].toString()),
+              ),
+            ),
+          DataCell(
+            Container( 
+                child:Text(ItemDetails[iCtr]['discamt'].toString()),
+              ),
+            ),
+          DataCell(
+            Container( 
+                child:Text(ItemDetails[iCtr]['addamt'].toString()),
+              ),
+            ),
+          DataCell(
+            Container( 
+                child:Text(ItemDetails[iCtr]['taxablevalue'].toString()),
+              ),
+            ),
+          DataCell(
+            Container( 
+                child:Text(ItemDetails[iCtr]['sgstrate'].toString()),
+              ),
+            ),
+          DataCell(
+            Container( 
+                child:Text(ItemDetails[iCtr]['sgstamt'].toString()),
+              ),
+            ),
+          DataCell(
+             Container( 
+                child:Text(ItemDetails[iCtr]['cgstrate'].toString()),
+              ),
+            ),
+          DataCell(
+              Container( 
+                child:Text(ItemDetails[iCtr]['cgstamt'].toString()),
+              ),
+            ),
+          DataCell(
+            Container( 
+                child:Text(ItemDetails[iCtr]['igstrate'].toString()),
+              ),
+            
+            ),
+          DataCell(
+            Container( 
+                child:Text(ItemDetails[iCtr]['igstamt'].toString()),
+              ),
+            ),
+          DataCell(
+             Container( 
+                child:Text(ItemDetails[iCtr]['finalamt'].toString()),
+              ),
+           
+            ),
+            DataCell(
+             Container( // Wrap the content with a Container
+                width:0, // Set the desired width
+                child:Text(ItemDetails[iCtr]['barcode'].toString()),
+              ),
+            ),
+            
+
+          DataCell(
+            Container( // Wrap the content with a Container
+                width:1, // Set the desired width
+                child:Text(ItemDetails[iCtr]['entryid'].toString()),
+              ),
+            //Text(ItemDetails[iCtr]['entryid'].toString())
+            ),
         ]));
       }
 
       setState(() {
-        _tottaka.text = widget.tottaka.toString();
-        _totmtrs.text = widget.totmtrs.toString();
+        _tottqty.text = widget.tottaka.toString();
       });
 
       return _datarow;
     }
-
     setDefValue();
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Grey Job Issue Challan [ ' +
-              (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
-              ' ] ' +
-              (int.parse(widget.xid) > 0
-                  ? 'Serial No : ' + widget.serial.toString()
-                  : ''),
-          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
-        ),
+      appBar: EqAppBar(
+        AppBarTitle: 'Sale Bill [ ' +
+            (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
+            ' ] ' +
+            (int.parse(widget.xid) > 0
+                ? 'Serial No : ' + widget.serial.toString()
+                : ''),
       ),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.done),
-          backgroundColor: Colors.green,
-          onPressed: () => {saveData()}),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _branch,
-                  autofocus: true,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Select Branch',
-                    labelText: 'Branch',
-                  ),
-                  onTap: () {
-                    gotoBranchScreen(context);
-                  },
-                  validator: (value) {
-                    return null;
-                  },
-                ),
-              ),
-              Expanded(
-                child: DropdownButtonFormField(
-                    value: dropdownTrnType,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      labelText: 'Type',
-                    ),
-                    items: items.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    icon: const Icon(Icons.arrow_drop_down_circle),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownTrnType = newValue!;
-                        _type.text = dropdownTrnType;
-                        print(_type.text);
-                      });
-                    }),
-              )
-            ]),
             TextFormField(
               controller: _date,
               decoration: const InputDecoration(
@@ -601,52 +526,8 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                       labelText: 'Party',
                     ),
                     onTap: () {
-                      gotoPartyScreen2(context, 'JOBWORK PARTY', _party);
+                      gotoPartyScreen2(context, 'SALE PARTY', _party);
                     },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: _chlnno,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Challan No',
-                      labelText: 'Chln No',
-                    ),
-                    onChanged: (value) {
-                      // _remarks.value = TextEditingValue(
-                      //     text: value.toUpperCase(),
-                      //     selection: _remarks.selection);
-                    },
-                    onTap: () {},
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    textCapitalization: TextCapitalization.characters,
-                    controller: _chlnchr,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Challan Chr',
-                      labelText: 'Chln Chr',
-                    ),
-                    onChanged: (value) {
-                      _chlnchr.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _chlnchr.selection);
-                    },
-                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -683,12 +564,12 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                 Expanded(
                     child: TextFormField(
                   enabled: false,
-                  controller: _tottaka,
+                  controller: _tottqty,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
-                    hintText: 'Total Taka',
-                    labelText: 'Total Taka',
+                    hintText: 'Total Qty',
+                    labelText: 'Total Qty',
                   ),
                   onTap: () {
                     //gotoBranchScreen(context);
@@ -700,12 +581,12 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                 Expanded(
                     child: TextFormField(
                   enabled: false,
-                  controller: _totmtrs,
+                  controller: _totnetamt,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
-                    hintText: 'Total Meters',
-                    labelText: 'Total Meters',
+                    hintText: 'Net Amt',
+                    labelText: 'Net Amt',
                   ),
                   onTap: () {
                     //gotoBranchScreen(context);
@@ -717,87 +598,195 @@ class _SalesBillAddState extends State<SalesBillAdd> {
               ],
             ),
             Padding(padding: EdgeInsets.all(5)),
-            ElevatedButton(
-              onPressed: () => {gotoChallanItemDet(context)},
-              child: Text('Add Item Details',
-                  style:
-                      TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: TextStyle(
+                          fontSize: 25,
+                          color: const Color.fromARGB(231, 255, 255, 255),
+                        ), // Text style
+                        backgroundColor: Colors.green,
+                        // Background color
+                      ),
+                      onPressed: () {
+                        gotoChallanItemDet(context);
+                      },
+                      child: const Text(
+                        'Add Item Details',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color.fromARGB(231, 255, 255, 255),
+                        ),
+                      ),
+                    )),
+                  ]),
             ),
-            SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(columns: [
-                  DataColumn(
-                    label: Text("Action"),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
+                      backgroundColor: Colors.green, 
+                      // Background color
+                    ),
+                    onPressed: () {
+                      saveData();
+                    },
+                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                  )),
+                  SizedBox(
+                   width: 10
                   ),
-                  DataColumn(
-                    label: Text("Taka No"),
-                  ),
-                  DataColumn(
-                    label: Text("Pcs"),
-                  ),
-                  DataColumn(
-                    label: Text("Meters"),
-                  ),
-                  DataColumn(
-                    label: Text("TP Mtrs"),
-                  ),
-                  DataColumn(
-                    label: Text("Item Name"),
-                  ),
-                  DataColumn(
-                    label: Text("Design No"),
-                  ),
-                  DataColumn(
-                    label: Text("Unit"),
-                  ),
-                  DataColumn(
-                    label: Text("Rate"),
-                  ),
-                  DataColumn(
-                    label: Text("Amount"),
-                  ),
-                  DataColumn(
-                    label: Text("InwId"),
-                  ),
-                  DataColumn(
-                    label: Text("InwDetId"),
-                  ),
-                  DataColumn(
-                    label: Text("InwDetTkId"),
-                  ),
-                  DataColumn(
-                    label: Text("FMode"),
-                  ),
-                  DataColumn(
-                    label: Text("OrdId"),
-                  ),
-                  DataColumn(
-                    label: Text("OrdDetId"),
-                  ),
-                  DataColumn(
-                    label: Text("machine"),
-                  ),
-                  DataColumn(
-                    label: Text("weight"),
-                  ),
-                  DataColumn(
-                    label: Text("avgwt"),
-                  ),
-                  DataColumn(
-                    label: Text("beamno"),
-                  ),
-                  DataColumn(
-                    label: Text("beamitem"),
-                  ),
-                ], rows: _createRows())),
+                  Expanded(
+                    child: TextButton(
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
+                      backgroundColor: Colors.green, // Background color
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                        Fluttertoast.showToast(
+                        msg: "CANCEL !!!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.white,
+                        textColor: Colors.purple,
+                        fontSize: 16.0,
+                        );
+                    },
+                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                  ))
+                ],
+              ),
+            ),
+             SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: InkWell(
+                    onDoubleTap: () {
+                      if (_party.text == "") {
+                      } else {
+                        gotoChallanItemDet(context);
+                      }
+                    },
+                    child: DataTable(columns: [
+                      DataColumn(
+                        label: Text("Action"),
+                      ),
+                      DataColumn(
+                        label: Text("Item Name"),
+                      ),
+                      DataColumn(
+                        label: Text("HSN Code"),
+                      ),
+                      DataColumn(
+                        label: Text("Qty"),
+                      ),
+                      DataColumn(
+                        label: Text("Rate"),
+                      ),
+                      DataColumn(
+                        label: Text("Unit"),
+                      ),
+                      DataColumn(
+                        label: Text("Remarks"),
+                      ),
+                      DataColumn(
+                        //label: Text("Cut"),
+                        label: SizedBox( 
+                          child: Text('Cut'),
+                        ), 
+                      ),
+                      DataColumn(
+                         label: SizedBox( 
+                          child: Text('Pcs'),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('Amount'),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('Disc Rate'),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('Disc Amt'),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('Add Amt'),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox(
+                          child: Text('Taxable Value'),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox(
+                          child: Text('SGST Rate'),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('SGST Amt'),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('CGST Rate'),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('CGST Amt'),
+                        ),
+                      ),
+                      DataColumn(
+                         label: SizedBox( 
+                          child: Text('IGST Rate'),
+                        ),
+                      ),
+                      DataColumn(
+                         label: SizedBox( 
+                          child: Text('IGST Amt'),
+                        ),
+                      ),
+                      DataColumn(
+                         label: SizedBox( 
+                          child: Text('Final Amt'),
+                        ),
+                      ),
+                       DataColumn(
+                          label: SizedBox( // Wrap the label with SizedBox to set width
+                          width: 1, // Set the desired width
+                          child: Text('Barcode'),
+                        ),
+                      ),
+                      DataColumn(
+                          label: SizedBox( 
+                          child: Text('EntryId'),
+                        ),
+                      ),
+                    ], rows: _createRows()),
+                  )),
           ],
         ),
       )),
-      bottomNavigationBar: BottomBar(
-        companyname: widget.xcompanyname,
-        fbeg: widget.xfbeg,
-        fend: widget.xfend,
-      ),
     );
   }
 }
