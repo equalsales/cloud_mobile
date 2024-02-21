@@ -1,11 +1,12 @@
 import 'package:cloud_mobile/module/master/master.dart';
 import 'package:cloud_mobile/module/purchase/purchasebilllist.dart';
+import 'package:cloud_mobile/module/salebill/add_salebill.dart';
 import 'package:flutter/material.dart';
 //import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 import 'package:cloud_mobile/module/enq/enqlist.dart';
 import 'package:cloud_mobile/module/bankbook/bankbooklist.dart';
 import 'package:cloud_mobile/module/cashbook/cashbooklist.dart';
-import 'package:cloud_mobile/module/purchase/purchasebilllist.dart';
+import 'package:cloud_mobile/module/salebill/salebilllist.dart';
 import 'package:cloud_mobile/report/account/view_ledger.dart';
 
 //import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
@@ -103,12 +104,12 @@ class SideDrawer extends StatelessWidget {
           // ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
-            title: Text('Purchase Bill'),
+            title: Text('Sale Bill'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => PurchaseBillList(
+                      builder: (_) => SalesBillList(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,
@@ -146,7 +147,7 @@ class SideDrawer extends StatelessWidget {
                           )))
             },
           ),
-           ListTile(
+          ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Yarn Job Issue'),
             onTap: () => {
