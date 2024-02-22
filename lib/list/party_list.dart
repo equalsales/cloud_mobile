@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:cloud_mobile/module/master/partymaster/partymaster.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:convert';
@@ -63,9 +64,9 @@ class PartyListState extends State<party_list> {
               '&acctype='));
     }
     print('https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
-              db +
-              '&acctype=' +
-              widget.xacctype);
+        db +
+        '&acctype=' +
+        widget.xacctype);
 
     var jsonData = jsonDecode(response.body);
 
@@ -80,6 +81,29 @@ class PartyListState extends State<party_list> {
     return true;
   }
 
+  Widget add() {
+    if (query.length >= 1) {
+      print("Add");
+      return Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                // Your button action here
+                print("Button pressed");
+              },
+              child: Text('Add'),
+            ),
+          ],
+        ),
+      );
+    } else{
+      print("Not add");
+      return Container();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.Title == '') {
@@ -92,6 +116,7 @@ class PartyListState extends State<party_list> {
       body: Column(
         children: <Widget>[
           buildSearch(),
+          add(),
           Text("${_partySelected}"),
           ElevatedButton(
             onPressed: () {
@@ -148,8 +173,6 @@ class PartyListState extends State<party_list> {
         final titlelower = party.toString().toLowerCase();
         final searchlower = query.toLowerCase();
 
-        //print(titlelower);
-        //print(searchlower);
         return titlelower.contains(searchlower);
       }).toList();
 

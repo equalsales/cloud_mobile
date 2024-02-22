@@ -7,20 +7,24 @@ import 'package:cloud_mobile/common/eqtextfield.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/list/city_list.dart';
 import 'package:cloud_mobile/list/head_list.dart';
+import 'package:cloud_mobile/list/party_list.dart';
 import 'package:cloud_mobile/list/state_list.dart';
+import 'package:cloud_mobile/module/salebill/add_salebill.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
 
 class PartyMaster extends StatefulWidget {
-  PartyMaster({Key? mykey, companyid, companyname, fbeg, fend, id})
+  PartyMaster({Key? mykey, companyid, companyname, fbeg, fend, id, acctype,newParty})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
     xfend = fend;
     xid = id;
+    xacctype = acctype;
+    xnewParty = newParty;
   }
 
   var orderchr;
@@ -31,6 +35,8 @@ class PartyMaster extends StatefulWidget {
   var xfbeg;
   var xfend;
   var xid;
+  var xacctype;
+  var xnewParty;
 
   @override
   _PartyMasterState createState() => _PartyMasterState();
@@ -184,6 +190,13 @@ class _PartyMasterState extends State<PartyMaster> {
   @override
   void initState() {
     super.initState();
+    // _partyname.text = widget.xnewParty ?? _partyname.text;
+    if (widget.xnewParty != null && widget.xnewParty != '') {
+      dropdownAccType = widget.xacctype;
+      _partyname.text = widget.xnewParty;
+    } else {
+      dropdownAccType = dropdownAccType;
+    }
     if (int.parse(widget.xid) > 0) {
       loadData();
     }
@@ -361,16 +374,31 @@ class _PartyMasterState extends State<PartyMaster> {
       } else if (jsonCode == '100') {
         showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
       } else {
-        Navigator.pop(context);
-        Fluttertoast.showToast(
-          msg: "Saved !!!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.white,
-          textColor: Colors.purple,
-          fontSize: 16.0,
-        );
+        // Navigator.pop(context);
+        if (widget.xnewParty == '') {
+          Navigator.pop(context);
+          Fluttertoast.showToast(
+            msg: "Saved !!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.white,
+            textColor: Colors.purple,
+            fontSize: 16.0,
+          );
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SalesBillAdd(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                    id: '0',
+                    partyname: _partyname.text),
+              ));
+        }
       }
       return true;
     }

@@ -10,13 +10,14 @@ import 'package:cloud_mobile/list/party_list.dart';
 import '../../../common/global.dart' as globals;
 import 'package:cloud_mobile/list/branch_list.dart';
 class SalesBillAdd extends StatefulWidget {
-  SalesBillAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
+  SalesBillAdd({Key? mykey, companyid, companyname, fbeg, fend, id, partyname})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
     xfend = fend;
     xid = id;
+    xpartyname = partyname;
   }
 
   var xcompanyid;
@@ -26,6 +27,7 @@ class SalesBillAdd extends StatefulWidget {
   var xid;
   var serial;
   var srchr;
+  var xpartyname;
   double tottaka = 0;
   double totmtrs = 0;
 
@@ -56,6 +58,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
   final _formKey = GlobalKey<FormState>();
   @override
   void initState() {
+    _party.text = widget.xpartyname;
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
     var curDate = getsystemdate();

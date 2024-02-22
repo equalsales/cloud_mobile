@@ -76,11 +76,13 @@ void onAdd() {
                   fbeg: widget.xfbeg,
                   fend: widget.xfend,
                   id: '0',
+                  partyname: ''
                 )));
   }
 
   void onBack() {
     print('You Clicked Back..');
+    Navigator.pop(context);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -151,6 +153,7 @@ void onAdd() {
                   fbeg: widget.xfbeg,
                   fend: widget.xfend,
                   id: id.toString(),
+                  partyname: ''
                 )));
   }
 
