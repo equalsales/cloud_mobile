@@ -83,15 +83,6 @@ void onAdd() {
   void onBack() {
     print('You Clicked Back..');
     Navigator.pop(context);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => SideDrawer(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend,
-                )));
   }
 
   void onPDF(id) {

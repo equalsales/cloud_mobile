@@ -108,7 +108,7 @@ Future<List<dynamic>> getPartyDetails(String Party, int Id) async {
       Party.toString() +
       '&id=' +
       Id.toString();
-  print(uri);
+  print("123123"+uri);
   var response = await http.get(Uri.parse(uri));
 
   var jsonData = jsonDecode(response.body);

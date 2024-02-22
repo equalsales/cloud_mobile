@@ -10,6 +10,7 @@ String startdate = '';
 String enddate = '';
 String dbname = '';
 String username = '';
+String companystate = '';
 
 void alert(context, _title, _msg) {
   Alert(

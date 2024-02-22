@@ -10,7 +10,6 @@ import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/list/party_list.dart';
 import '../../../common/global.dart' as globals;
 import 'package:cloud_mobile/list/branch_list.dart';
-
 class SalesBillAdd extends StatefulWidget {
   SalesBillAdd({Key? mykey, companyid, companyname, fbeg, fend, id, partyname})
       : super(key: mykey) {
@@ -31,6 +30,7 @@ class SalesBillAdd extends StatefulWidget {
   var srchr;
   var xpartyname;
   double tottaka = 0;
+  double totfinalamt = 0;
   double totmtrs = 0;
 
   @override
@@ -45,7 +45,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
   List _partylist = [];
 
   List ItemDetails = [];
-
+  var partystate='';
   String dropdownTrnType = 'REGULAR';
 
   var branchid = 0;
@@ -70,13 +70,12 @@ class _SalesBillAddState extends State<SalesBillAdd> {
       loadDetData();
     }
   }
-
-  Future<bool> loadDetData() async {
+ Future<bool> loadDetData() async {
     String uri = '';
     var companyid = widget.xcompanyid;
     var clientid = globals.dbname;
     var id = widget.xid;
-    uri =
+  uri =
         'https://www.cloud.equalsoftlink.com/api/api_salebilldetlist?dbname=$clientid&cno=$companyid&id=$id';
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
@@ -117,8 +116,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
     });
     return true;
   }
-
-  Future<bool> loadData() async {
+ Future<bool> loadData() async {
     String uri = '';
     var companyid = widget.xcompanyid;
     var clientid = globals.dbname;
@@ -136,7 +134,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
     _remarks.text = getValue(jsonData['remarks'], 'C');
     return true;
   }
-
   Future<void> _selectDate(BuildContext context) async {
     if (_date.text != '') {
       fromDate = retconvdate(_date.text, 'yyyy-mm-dd');
@@ -152,7 +149,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         _date.text = picked.toString().split(' ')[0];
       });
   }
-
   void setDefValue() {}
   @override
   Widget build(BuildContext context) {
@@ -183,6 +179,37 @@ class _SalesBillAddState extends State<SalesBillAdd> {
       });
     }
 
+    Future<bool> getPartyDet() async {
+      try {
+        String uri = '';
+        var companyid = widget.xcompanyid;
+        var clientid = globals.dbname;
+        //var id = widget.xid;
+
+        uri =
+            'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
+                clientid +
+                '&party=' +
+                _party.text.toString() +
+                '&id=0';
+
+        var response = await http.get(Uri.parse(uri));
+
+        var jsonData = jsonDecode(response.body);
+
+        jsonData = jsonData['Data'];
+        //print(jsonData);
+
+        setState(() {
+          jsonData = jsonData[0];
+          partystate = jsonData['state'].toString();
+        });
+      } catch (e) {
+        showAlertDialog(context, e.toString());
+      }
+      return true;
+    }
+
     void gotoPartyScreen2(
         BuildContext context, acctype, TextEditingController obj) async {
       var result = await Navigator.push(
@@ -210,13 +237,10 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         }
         obj.text = selParty;
         if (selParty != '') {
-          getPartyDetails(obj.text, 0).then((value) {
-            setState(() {});
-          });
+         getPartyDet();
         }
       });
     }
-
     void gotoBranchScreen(BuildContext contex) async {
       var result = await Navigator.push(
           context,
@@ -242,7 +266,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         }
       });
     }
-
     void gotoChallanItemDet(BuildContext contex) async {
       print('in');
       var result = await Navigator.push(
@@ -253,7 +276,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                     companyname: widget.xcompanyname,
                     fbeg: widget.xfbeg,
                     fend: widget.xfend,
-                    partyid: partyid,
+                    partystate: partystate,
                     itemDet: ItemDetails,
                     branchid: branchid,
                   )));
@@ -262,69 +285,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         print(ItemDetails);
       });
     }
-    // Future<bool> saveData() async {
-    //   String uri = '';
-    //   var cno = globals.companyid;
-    //   var db = globals.dbname;
-    //   var username = globals.username;
-    //   var serial = _serial.text;
-    //   var srchr = _srchr.text;
-    //   var date = _date.text;
-    //   var party = _party.text;
-    //   var remarks = _remarks.text;
-    //   var id = widget.xid;
-    //   id = int.parse(id);
-    //   print('In Save....');
-    //   print(jsonEncode(ItemDetails));
-    //   uri =
-    //       "https://looms.equalsoftlink.com/api/api_storeloomsgreyjobissue?dbname=" +
-    //           db +
-    //           "&company=&cno=" +
-    //           cno +
-    //           "&user=" +
-    //           username +
-    //           "&party=" +
-    //           party +
-    //           "&srchr=" +
-    //           srchr +
-    //           "&serial=" +
-    //           serial +
-    //           "&date=" +
-    //           date +
-    //           "&remarks=" +
-    //           remarks +
-    //           "&id=" +
-    //           id.toString() +
-    //           "&parcel=1";
-    //   print(uri);
-    //   final headers = {
-    //     'Content-Type': 'application/json',
-    //   };
-    //   print(ItemDetails);
-    //   var response = await http.post(Uri.parse(uri),
-    //       headers: headers, body: jsonEncode(ItemDetails));
-    //   var jsonData = jsonDecode(response.body);
-    //   var jsonCode = jsonData['Code'];
-    //   var jsonMsg = jsonData['Message'];
-
-    //   if (jsonCode == '500') {
-    //     showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-    //   } else {
-    //     showAlertDialog(context, 'Saved !!!');
-    //     Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //             builder: (_) => SalesBillAdd(
-    //                   companyid: widget.xcompanyid,
-    //                   companyname: widget.xcompanyname,
-    //                   fbeg: widget.xfbeg,
-    //                   fend: widget.xfend,
-    //                 )));
-    //   }
-    //   return true;
-    // }
-
-    Future<bool> saveData() async {
+   Future<bool> saveData() async {
       print(widget.tottaka);
       if (widget.tottaka == "0.0") {
         showAlertDialog(context, 'Item Details Can Not be Blank !!!');
@@ -470,11 +431,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         return true;
       }
     }
-
-    setState(() {
-      //_packingtype.text = 'PACKING';
-    });
-
     setState(() {});
     void deleteRow(index) {
       setState(() {
@@ -482,26 +438,29 @@ class _SalesBillAddState extends State<SalesBillAdd> {
       });
     }
 
-    List<DataRow> _createRows() {
+      List<DataRow> _createRows() {
       List<DataRow> _datarow = [];
 
       widget.tottaka = 0;
+      widget.totfinalamt = 0;
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
         double nPcs = 0;
+         double nfinalamt = 0;
         if (ItemDetails[iCtr]['meters'].toString() != '') {
           nPcs = nPcs + double.parse(ItemDetails[iCtr]['meters']);
           widget.tottaka += nPcs;
+           nfinalamt = nfinalamt + double.parse(ItemDetails[iCtr]['finalamt']);
+           widget.totfinalamt += nfinalamt;
         }
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
             onPressed: () => {
-              showDialog<void>(
+                 showDialog<void>(
                 context: context,
                 builder: (BuildContext context) {
                   //saveData();
                   return AlertDialog(
-                    title: const Text(
-                        'Do You Want To Remove is Item Details !!??'),
+                    title: const Text('Do You Want To Remove is Item Details !!??'),
                     content: Container(
                       height: 10,
                       child: Column(
@@ -517,12 +476,12 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                         child: const Text('YES'),
                         onPressed: () {
                           setState(() {
-                            deleteRow(iCtr);
-                          });
+                              deleteRow(iCtr);
+                            });
                           Navigator.of(context).pop();
                         },
-                      ),
-                      TextButton(
+                        ),
+                        TextButton(
                         style: TextButton.styleFrom(
                           textStyle: Theme.of(context).textTheme.labelLarge,
                         ),
@@ -535,7 +494,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                   );
                 },
               )
-            },
+              },
             icon: Icon(
               // <-- Icon
               Icons.delete,
@@ -543,7 +502,8 @@ class _SalesBillAddState extends State<SalesBillAdd> {
             ),
             label: Text('',
                 style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
-          )),
+          ) ),
+          
           DataCell(Text(ItemDetails[iCtr]['itemname'].toString())),
           DataCell(Text(ItemDetails[iCtr]['hsncode'].toString())),
           DataCell(Text(ItemDetails[iCtr]['meters'].toString())),
@@ -551,101 +511,105 @@ class _SalesBillAddState extends State<SalesBillAdd> {
           DataCell(Text(ItemDetails[iCtr]['unit'].toString())),
           DataCell(Text(ItemDetails[iCtr]['remarks'].toString())),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['cut'].toString()),
+             Container( 
+                child:Text(ItemDetails[iCtr]['cut'].toString()),
+              ),
             ),
+          DataCell(
+             Container( 
+                child:Text(ItemDetails[iCtr]['pcs'].toString()),
+              ),
+          ),
+          
+
+          DataCell(
+             Container(
+                child:Text(ItemDetails[iCtr]['amount'].toString()),
+              ),
           ),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['pcs'].toString()),
+            Container( 
+                width:1, // Set the desired width
+                child:Text(ItemDetails[iCtr]['discper'].toString()),
+              ),
             ),
-          ),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['amount'].toString()),
+            Container( 
+                child:Text(ItemDetails[iCtr]['discamt'].toString()),
+              ),
             ),
-          ),
           DataCell(
-            Container(
-              width: 1, // Set the desired width
-              child: Text(ItemDetails[iCtr]['discper'].toString()),
+            Container( 
+                child:Text(ItemDetails[iCtr]['addamt'].toString()),
+              ),
             ),
-          ),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['discamt'].toString()),
+            Container( 
+                child:Text(ItemDetails[iCtr]['taxablevalue'].toString()),
+              ),
             ),
-          ),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['addamt'].toString()),
+            Container( 
+                child:Text(ItemDetails[iCtr]['sgstrate'].toString()),
+              ),
             ),
-          ),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['taxablevalue'].toString()),
+            Container( 
+                child:Text(ItemDetails[iCtr]['sgstamt'].toString()),
+              ),
             ),
-          ),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['sgstrate'].toString()),
+             Container( 
+                child:Text(ItemDetails[iCtr]['cgstrate'].toString()),
+              ),
             ),
-          ),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['sgstamt'].toString()),
+              Container( 
+                child:Text(ItemDetails[iCtr]['cgstamt'].toString()),
+              ),
             ),
-          ),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['cgstrate'].toString()),
+            Container( 
+                child:Text(ItemDetails[iCtr]['igstrate'].toString()),
+              ),
+            
             ),
-          ),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['cgstamt'].toString()),
+            Container( 
+                child:Text(ItemDetails[iCtr]['igstamt'].toString()),
+              ),
             ),
-          ),
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['igstrate'].toString()),
+             Container( 
+                child:Text(ItemDetails[iCtr]['finalamt'].toString()),
+              ),
+           
             ),
-          ),
+            DataCell(
+             Container( // Wrap the content with a Container
+                width:0, // Set the desired width
+                child:Text(ItemDetails[iCtr]['barcode'].toString()),
+              ),
+            ),
+            
+
           DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['igstamt'].toString()),
-            ),
-          ),
-          DataCell(
-            Container(
-              child: Text(ItemDetails[iCtr]['finalamt'].toString()),
-            ),
-          ),
-          DataCell(
-            Container(
-              // Wrap the content with a Container
-              width: 0, // Set the desired width
-              child: Text(ItemDetails[iCtr]['barcode'].toString()),
-            ),
-          ),
-          DataCell(
-            Container(
-              // Wrap the content with a Container
-              width: 1, // Set the desired width
-              child: Text(ItemDetails[iCtr]['entryid'].toString()),
-            ),
+            Container( // Wrap the content with a Container
+                width:1, // Set the desired width
+                child:Text(ItemDetails[iCtr]['entryid'].toString()),
+              ),
             //Text(ItemDetails[iCtr]['entryid'].toString())
-          ),
+            ),
         ]));
       }
 
       setState(() {
         _tottqty.text = widget.tottaka.toString();
+        _totnetamt.text = widget.totfinalamt.toString();
       });
 
       return _datarow;
     }
-
     setDefValue();
     return Scaffold(
       appBar: EqAppBar(
@@ -653,7 +617,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
             (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
             ' ] ' +
             (int.parse(widget.xid) > 0
-                ? 'Serial No : ' + _serial.text.toString()
+                ? 'Serial No : ' + widget.serial.toString()
                 : ''),
       ),
       body: SingleChildScrollView(
@@ -793,39 +757,29 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                      child: TextButton(
+                    child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(
-                        fontSize: 25,
-                        color: const Color.fromARGB(231, 255, 255, 255),
-                      ), // Text style
-                      backgroundColor: Colors.green,
+                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
+                      backgroundColor: Colors.green, 
                       // Background color
                     ),
                     onPressed: () {
                       saveData();
                     },
-                    child: const Text(
-                      'SAVE',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(231, 255, 255, 255),
-                      ),
-                    ),
+                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
                   )),
-                  SizedBox(width: 10),
+                  SizedBox(
+                   width: 10
+                  ),
                   Expanded(
-                      child: TextButton(
+                    child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(
-                        fontSize: 25,
-                        color: Color.fromARGB(231, 255, 255, 255),
-                      ), // Text style
+                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
                       backgroundColor: Colors.green, // Background color
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-                      Fluttertoast.showToast(
+                        Fluttertoast.showToast(
                         msg: "CANCEL !!!",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
@@ -833,135 +787,128 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                         backgroundColor: Colors.white,
                         textColor: Colors.purple,
                         fontSize: 16.0,
-                      );
+                        );
                     },
-                    child: const Text(
-                      'CANCEL',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(231, 255, 255, 255),
-                      ),
-                    ),
+                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
                   ))
                 ],
               ),
             ),
-            SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: InkWell(
-                  onDoubleTap: () {
-                    if (_party.text == "") {
-                    } else {
-                      gotoChallanItemDet(context);
-                    }
-                  },
-                  child: DataTable(columns: [
-                    DataColumn(
-                      label: Text("Action"),
-                    ),
-                    DataColumn(
-                      label: Text("Item Name"),
-                    ),
-                    DataColumn(
-                      label: Text("HSN Code"),
-                    ),
-                    DataColumn(
-                      label: Text("Qty"),
-                    ),
-                    DataColumn(
-                      label: Text("Rate"),
-                    ),
-                    DataColumn(
-                      label: Text("Unit"),
-                    ),
-                    DataColumn(
-                      label: Text("Remarks"),
-                    ),
-                    DataColumn(
-                      //label: Text("Cut"),
-                      label: SizedBox(
-                        child: Text('Cut'),
+             SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: InkWell(
+                    onDoubleTap: () {
+                      if (_party.text == "") {
+                      } else {
+                        gotoChallanItemDet(context);
+                      }
+                    },
+                    child: DataTable(columns: [
+                      DataColumn(
+                        label: Text("Action"),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('Pcs'),
+                      DataColumn(
+                        label: Text("Item Name"),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('Amount'),
+                      DataColumn(
+                        label: Text("HSN Code"),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('Disc Rate'),
+                      DataColumn(
+                        label: Text("Qty"),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('Disc Amt'),
+                      DataColumn(
+                        label: Text("Rate"),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('Add Amt'),
+                      DataColumn(
+                        label: Text("Unit"),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('Taxable Value'),
+                      DataColumn(
+                        label: Text("Remarks"),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('SGST Rate'),
+                      DataColumn(
+                        //label: Text("Cut"),
+                        label: SizedBox( 
+                          child: Text('Cut'),
+                        ), 
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('SGST Amt'),
+                      DataColumn(
+                         label: SizedBox( 
+                          child: Text('Pcs'),
+                        ),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('CGST Rate'),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('Amount'),
+                        ),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('CGST Amt'),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('Disc Rate'),
+                        ),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('IGST Rate'),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('Disc Amt'),
+                        ),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('IGST Amt'),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('Add Amt'),
+                        ),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('Final Amt'),
+                      DataColumn(
+                        label: SizedBox(
+                          child: Text('Taxable Value'),
+                        ),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        // Wrap the label with SizedBox to set width
-                        width: 1, // Set the desired width
-                        child: Text('Barcode'),
+                      DataColumn(
+                        label: SizedBox(
+                          child: Text('SGST Rate'),
+                        ),
                       ),
-                    ),
-                    DataColumn(
-                      label: SizedBox(
-                        child: Text('EntryId'),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('SGST Amt'),
+                        ),
                       ),
-                    ),
-                  ], rows: _createRows()),
-                )),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('CGST Rate'),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox( 
+                          child: Text('CGST Amt'),
+                        ),
+                      ),
+                      DataColumn(
+                         label: SizedBox( 
+                          child: Text('IGST Rate'),
+                        ),
+                      ),
+                      DataColumn(
+                         label: SizedBox( 
+                          child: Text('IGST Amt'),
+                        ),
+                      ),
+                      DataColumn(
+                         label: SizedBox( 
+                          child: Text('Final Amt'),
+                        ),
+                      ),
+                       DataColumn(
+                          label: SizedBox( // Wrap the label with SizedBox to set width
+                          width: 1, // Set the desired width
+                          child: Text('Barcode'),
+                        ),
+                      ),
+                      DataColumn(
+                          label: SizedBox( 
+                          child: Text('EntryId'),
+                        ),
+                      ),
+                    ], rows: _createRows()),
+                  )),
           ],
         ),
       )),
