@@ -90,8 +90,20 @@ class PartyListState extends State<party_list> {
           children: [
             ElevatedButton(
               onPressed: () {
-                // Your button action here
-                print("Button pressed");
+               Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PartyMaster(
+                      companyid: widget.xcompanyid,
+                      companyname: widget.xcompanyname,
+                      fbeg: widget.xfbeg,
+                      fend: widget.xfend,
+                      id: '0',
+                      acctype: "SALE PARTY",
+                      newParty: query,
+                    ),
+                  ),
+                );
               },
               child: Text('Add'),
             ),
