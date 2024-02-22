@@ -122,22 +122,47 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
     Future<bool> saveData() async {
       String uri = '';
       var itemname = _itemname.text;
+      var hsncode = _hsncode.text;
       var rate = _rate.text;
       var unit = _unit.text;
       var amount = _amount.text;
-      var pcs = _pcs.text;
-      var meters = _meters.text;
-      var hsncode = _hsncode.text;
+      var meters = _pcs.text;
       var remark = _remark.text;
-
+      var discper = _discrate.text;
+      var discamt = _discamt.text;
+      var  addamt = _addamt.text;
+      var  taxablevalue = _taxablevalue.text;
+      var  sgstrate = _sgstrate.text;
+      var  sgstamt = _sgstamt.text;
+      var  cgstrate = _cgstrate.text;
+      var  cgstamt = _cgstamt.text;
+      var  igstrate = _igstrate.text;
+      var  igstamt = _igstamt.text;
+      var  finalamt = _finalamt.text;
+      
       widget.xitemDet.add({
+        'barcode':'',
         'itemname': itemname,
         'hsncode': hsncode,
-        'pcs': pcs,
+        'pcs': '0',
+        'cut':'0',
         'meters': meters,
         'rate': rate,
         'unit': unit,
         'amount': amount,
+        'discper': discper,
+        'discamt': discamt,
+        'addamt': addamt,
+        'taxablevalue': taxablevalue,
+        'sgstrate': sgstrate,
+        'sgstamt': sgstamt,
+        'cgstrate': cgstrate,
+        'cgstamt': cgstamt,
+        'igstrate': igstrate,
+        'igstamt': igstamt,
+        'finalamt': finalamt,
+        'remarks': remark,
+        'catalog': '',
       });
 
       Navigator.pop(context, widget.xitemDet);

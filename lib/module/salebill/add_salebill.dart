@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:cloud_mobile/module/salebill/add_saledet.dart';
+import 'package:cloud_mobile/module/salebill/salebilllist.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,6 +10,7 @@ import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/list/party_list.dart';
 import '../../../common/global.dart' as globals;
 import 'package:cloud_mobile/list/branch_list.dart';
+
 class SalesBillAdd extends StatefulWidget {
   SalesBillAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
       : super(key: mykey) {
@@ -65,12 +67,13 @@ class _SalesBillAddState extends State<SalesBillAdd> {
       loadDetData();
     }
   }
- Future<bool> loadDetData() async {
+
+  Future<bool> loadDetData() async {
     String uri = '';
     var companyid = widget.xcompanyid;
     var clientid = globals.dbname;
     var id = widget.xid;
-  uri =
+    uri =
         'https://www.cloud.equalsoftlink.com/api/api_salebilldetlist?dbname=$clientid&cno=$companyid&id=$id';
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
@@ -111,7 +114,8 @@ class _SalesBillAddState extends State<SalesBillAdd> {
     });
     return true;
   }
- Future<bool> loadData() async {
+
+  Future<bool> loadData() async {
     String uri = '';
     var companyid = widget.xcompanyid;
     var clientid = globals.dbname;
@@ -129,6 +133,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
     _remarks.text = getValue(jsonData['remarks'], 'C');
     return true;
   }
+
   Future<void> _selectDate(BuildContext context) async {
     if (_date.text != '') {
       fromDate = retconvdate(_date.text, 'yyyy-mm-dd');
@@ -144,6 +149,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         _date.text = picked.toString().split(' ')[0];
       });
   }
+
   void setDefValue() {}
   @override
   Widget build(BuildContext context) {
@@ -173,6 +179,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         obj.text = selParty;
       });
     }
+
     void gotoPartyScreen2(
         BuildContext context, acctype, TextEditingController obj) async {
       var result = await Navigator.push(
@@ -206,6 +213,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         }
       });
     }
+
     void gotoBranchScreen(BuildContext contex) async {
       var result = await Navigator.push(
           context,
@@ -231,6 +239,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         }
       });
     }
+
     void gotoChallanItemDet(BuildContext contex) async {
       print('in');
       var result = await Navigator.push(
@@ -250,67 +259,219 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         print(ItemDetails);
       });
     }
-    Future<bool> saveData() async {
-      String uri = '';
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var username = globals.username;
-      var serial = _serial.text;
-      var srchr = _srchr.text;
-      var date = _date.text;
-      var party = _party.text;
-      var remarks = _remarks.text;
-      var id = widget.xid;
-      id = int.parse(id);
-      print('In Save....');
-      print(jsonEncode(ItemDetails));
-      uri =
-          "https://looms.equalsoftlink.com/api/api_storeloomsgreyjobissue?dbname=" +
-              db +
-              "&company=&cno=" +
-              cno +
-              "&user=" +
-              username +
-              "&party=" +
-              party +
-              "&srchr=" +
-              srchr +
-              "&serial=" +
-              serial +
-              "&date=" +
-              date +
-              "&remarks=" +
-              remarks +
-              "&id=" +
-              id.toString() +
-              "&parcel=1";
-      print(uri);
-      final headers = {
-        'Content-Type': 'application/json', 
-      };
-      print(ItemDetails);
-      var response = await http.post(Uri.parse(uri),
-          headers: headers, body: jsonEncode(ItemDetails));
-      var jsonData = jsonDecode(response.body);
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
+    // Future<bool> saveData() async {
+    //   String uri = '';
+    //   var cno = globals.companyid;
+    //   var db = globals.dbname;
+    //   var username = globals.username;
+    //   var serial = _serial.text;
+    //   var srchr = _srchr.text;
+    //   var date = _date.text;
+    //   var party = _party.text;
+    //   var remarks = _remarks.text;
+    //   var id = widget.xid;
+    //   id = int.parse(id);
+    //   print('In Save....');
+    //   print(jsonEncode(ItemDetails));
+    //   uri =
+    //       "https://looms.equalsoftlink.com/api/api_storeloomsgreyjobissue?dbname=" +
+    //           db +
+    //           "&company=&cno=" +
+    //           cno +
+    //           "&user=" +
+    //           username +
+    //           "&party=" +
+    //           party +
+    //           "&srchr=" +
+    //           srchr +
+    //           "&serial=" +
+    //           serial +
+    //           "&date=" +
+    //           date +
+    //           "&remarks=" +
+    //           remarks +
+    //           "&id=" +
+    //           id.toString() +
+    //           "&parcel=1";
+    //   print(uri);
+    //   final headers = {
+    //     'Content-Type': 'application/json',
+    //   };
+    //   print(ItemDetails);
+    //   var response = await http.post(Uri.parse(uri),
+    //       headers: headers, body: jsonEncode(ItemDetails));
+    //   var jsonData = jsonDecode(response.body);
+    //   var jsonCode = jsonData['Code'];
+    //   var jsonMsg = jsonData['Message'];
 
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+    //   if (jsonCode == '500') {
+    //     showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+    //   } else {
+    //     showAlertDialog(context, 'Saved !!!');
+    //     Navigator.push(
+    //         context,
+    //         MaterialPageRoute(
+    //             builder: (_) => SalesBillAdd(
+    //                   companyid: widget.xcompanyid,
+    //                   companyname: widget.xcompanyname,
+    //                   fbeg: widget.xfbeg,
+    //                   fend: widget.xfend,
+    //                 )));
+    //   }
+    //   return true;
+    // }
+
+    Future<bool> saveData() async {
+      print(widget.tottaka);
+      if (widget.tottaka == "0.0") {
+        showAlertDialog(context, 'Item Details Can Not be Blank !!!');
+        return true;
       } else {
         showAlertDialog(context, 'Saved !!!');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => SalesBillAdd(
-                      companyid: widget.xcompanyid,
-                      companyname: widget.xcompanyname,
-                      fbeg: widget.xfbeg,
-                      fend: widget.xfend,
-                    )));
+        String uri = '';
+        var companyid = widget.xcompanyid;
+        var clientid = globals.dbname;
+
+        var orderno = _serial.text;
+        var orderchr = _srchr.text;
+        var date = _date.text;
+        var party = _party.text;
+        var agent = '';
+        var haste = '';
+        var book = 'SALES A/C';
+        var transport = '';
+        var remarks = _remarks.text;
+        var station = '';
+
+        var id = widget.xid;
+        id = int.parse(id);
+
+        //return true;
+
+        //https://mssqlapi.equalsoftlink.com/api/storesaleorder?companyid=eqpikasho20232024&clientid=1003&party=AAKAISH JINDAL&agent=&haste=&transport=&station=&orderchr=&orderno=&date=2023-07-31&remarks=&id=0&GridData=[{"orderno":"0","orderchr":"0","itemname":"3.D","per":"P","pcs":"1","rate":"100","entryid":"0","controlid":null}]
+        // uri = "https://cloud.equalsoftlink.com/api/api_storesaleorder?dbname=" +
+        //     clientid +
+        //     "&company=&cno=" +
+        //     companyid +
+        //     "&orderchr=" +
+        //     orderchr +
+        //     "&orderno=" +
+        //     orderno +
+        //     "&date=" +
+        //     date +
+        //     "&party=" +
+        //     party +
+        //     "&agent=" +
+        //     agent +
+        //     "&transport=" +
+        //     transport +
+        //     "&station=" +
+        //     station +
+        //     "&salesman=" +
+        //     _salesman.text +
+        //     "&haste=" +
+        //     _haste.text +
+        //     "&ptyordno=" +
+        //     _ptyordno.text +
+        //     "&ptyorddt=" +
+        //     _ptyorddt.text +
+        //     "&remarks=" +
+        //     remarks +
+        //     "&user=" +
+        //     globals.username +
+        //     "&ratetype=" +
+        //     _ratetype.text +
+        //     "&billtype=" +
+        //     _billtype +
+        //     "&id=" +
+        //     id.toString();
+        // final headers = {
+        //   'Content-Type': 'application/json', // Set the appropriate content-type
+        //   // Add any other headers required by your API
+        // };
+
+        uri = "https://cloud.equalsoftlink.com/api/api_storesalebill?dbname=" +
+            clientid +
+            "&company=&cno=" +
+            companyid +
+            "&srchr=" +
+            orderchr +
+            "&serial=" +
+            orderno +
+            "&date=" +
+            date +
+            "&party=" +
+            party +
+            "&book=" +
+            book +
+            "&agent=" +
+            agent +
+            "&transport=" +
+            transport +
+            "&station=" +
+            station +
+            "&remarks=" +
+            remarks +
+            "&user=" +
+            globals.username +
+            "&id=" +
+            id.toString();
+        final headers = {
+          'Content-Type':
+              'application/json', // Set the appropriate content-type
+          // Add any other headers required by your API
+        };
+
+        //print("Save Entry");
+        var response = await http.post(Uri.parse(uri),
+            headers: headers, body: jsonEncode(ItemDetails));
+        var jsonData = jsonDecode(response.body);
+        //print(jsonData);
+
+        var jsonCode = jsonData['Code'];
+        var jsonMsg = jsonData['Message'];
+        var PrintID = jsonData['id'];
+        var norderno = jsonData['serial'];
+
+        if (jsonCode == '500') {
+          showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+        } else {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Save / Update Dialog'),
+                content: Text('Serial No  :-' +
+                    norderno.toString() +
+                    ' Save / Update Successfully !!!'),
+                actions: <Widget>[
+                  TextButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => SalesBillList(
+                                    companyid: widget.xcompanyid,
+                                    companyname: widget.xcompanyname,
+                                    fbeg: widget.xfbeg,
+                                    fend: widget.xfend,
+                                  )));
+                    },
+                  )
+                ],
+              );
+            },
+          );
+        }
+        return true;
       }
-      return true;
     }
+
+    setState(() {
+      //_packingtype.text = 'PACKING';
+    });
+
     setState(() {});
     void deleteRow(index) {
       setState(() {
@@ -318,25 +479,26 @@ class _SalesBillAddState extends State<SalesBillAdd> {
       });
     }
 
-      List<DataRow> _createRows() {
+    List<DataRow> _createRows() {
       List<DataRow> _datarow = [];
 
       widget.tottaka = 0;
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
         double nPcs = 0;
-        if (ItemDetails[iCtr]['pcs'].toString() != '') {
-          nPcs = nPcs + double.parse(ItemDetails[iCtr]['pcs']);
+        if (ItemDetails[iCtr]['meters'].toString() != '') {
+          nPcs = nPcs + double.parse(ItemDetails[iCtr]['meters']);
           widget.tottaka += nPcs;
         }
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
             onPressed: () => {
-                 showDialog<void>(
+              showDialog<void>(
                 context: context,
                 builder: (BuildContext context) {
                   //saveData();
                   return AlertDialog(
-                    title: const Text('Do You Want To Remove is Item Details !!??'),
+                    title: const Text(
+                        'Do You Want To Remove is Item Details !!??'),
                     content: Container(
                       height: 10,
                       child: Column(
@@ -352,12 +514,12 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                         child: const Text('YES'),
                         onPressed: () {
                           setState(() {
-                              deleteRow(iCtr);
-                            });
+                            deleteRow(iCtr);
+                          });
                           Navigator.of(context).pop();
                         },
-                        ),
-                        TextButton(
+                      ),
+                      TextButton(
                         style: TextButton.styleFrom(
                           textStyle: Theme.of(context).textTheme.labelLarge,
                         ),
@@ -370,7 +532,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                   );
                 },
               )
-              },
+            },
             icon: Icon(
               // <-- Icon
               Icons.delete,
@@ -378,8 +540,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
             ),
             label: Text('',
                 style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
-          ) ),
-          
+          )),
           DataCell(Text(ItemDetails[iCtr]['itemname'].toString())),
           DataCell(Text(ItemDetails[iCtr]['hsncode'].toString())),
           DataCell(Text(ItemDetails[iCtr]['meters'].toString())),
@@ -387,95 +548,91 @@ class _SalesBillAddState extends State<SalesBillAdd> {
           DataCell(Text(ItemDetails[iCtr]['unit'].toString())),
           DataCell(Text(ItemDetails[iCtr]['remarks'].toString())),
           DataCell(
-             Container( 
-                child:Text(ItemDetails[iCtr]['cut'].toString()),
-              ),
+            Container(
+              child: Text(ItemDetails[iCtr]['cut'].toString()),
             ),
-          DataCell(
-             Container( 
-                child:Text(ItemDetails[iCtr]['pcs'].toString()),
-              ),
-          ),
-          
-
-          DataCell(
-             Container(
-                child:Text(ItemDetails[iCtr]['amount'].toString()),
-              ),
           ),
           DataCell(
-            Container( 
-                width:1, // Set the desired width
-                child:Text(ItemDetails[iCtr]['discper'].toString()),
-              ),
+            Container(
+              child: Text(ItemDetails[iCtr]['pcs'].toString()),
             ),
+          ),
           DataCell(
-            Container( 
-                child:Text(ItemDetails[iCtr]['discamt'].toString()),
-              ),
+            Container(
+              child: Text(ItemDetails[iCtr]['amount'].toString()),
             ),
+          ),
           DataCell(
-            Container( 
-                child:Text(ItemDetails[iCtr]['addamt'].toString()),
-              ),
+            Container(
+              width: 1, // Set the desired width
+              child: Text(ItemDetails[iCtr]['discper'].toString()),
             ),
+          ),
           DataCell(
-            Container( 
-                child:Text(ItemDetails[iCtr]['taxablevalue'].toString()),
-              ),
+            Container(
+              child: Text(ItemDetails[iCtr]['discamt'].toString()),
             ),
+          ),
           DataCell(
-            Container( 
-                child:Text(ItemDetails[iCtr]['sgstrate'].toString()),
-              ),
+            Container(
+              child: Text(ItemDetails[iCtr]['addamt'].toString()),
             ),
+          ),
           DataCell(
-            Container( 
-                child:Text(ItemDetails[iCtr]['sgstamt'].toString()),
-              ),
+            Container(
+              child: Text(ItemDetails[iCtr]['taxablevalue'].toString()),
             ),
+          ),
           DataCell(
-             Container( 
-                child:Text(ItemDetails[iCtr]['cgstrate'].toString()),
-              ),
+            Container(
+              child: Text(ItemDetails[iCtr]['sgstrate'].toString()),
             ),
+          ),
           DataCell(
-              Container( 
-                child:Text(ItemDetails[iCtr]['cgstamt'].toString()),
-              ),
+            Container(
+              child: Text(ItemDetails[iCtr]['sgstamt'].toString()),
             ),
+          ),
           DataCell(
-            Container( 
-                child:Text(ItemDetails[iCtr]['igstrate'].toString()),
-              ),
-            
+            Container(
+              child: Text(ItemDetails[iCtr]['cgstrate'].toString()),
             ),
+          ),
           DataCell(
-            Container( 
-                child:Text(ItemDetails[iCtr]['igstamt'].toString()),
-              ),
+            Container(
+              child: Text(ItemDetails[iCtr]['cgstamt'].toString()),
             ),
+          ),
           DataCell(
-             Container( 
-                child:Text(ItemDetails[iCtr]['finalamt'].toString()),
-              ),
-           
+            Container(
+              child: Text(ItemDetails[iCtr]['igstrate'].toString()),
             ),
-            DataCell(
-             Container( // Wrap the content with a Container
-                width:0, // Set the desired width
-                child:Text(ItemDetails[iCtr]['barcode'].toString()),
-              ),
-            ),
-            
-
+          ),
           DataCell(
-            Container( // Wrap the content with a Container
-                width:1, // Set the desired width
-                child:Text(ItemDetails[iCtr]['entryid'].toString()),
-              ),
+            Container(
+              child: Text(ItemDetails[iCtr]['igstamt'].toString()),
+            ),
+          ),
+          DataCell(
+            Container(
+              child: Text(ItemDetails[iCtr]['finalamt'].toString()),
+            ),
+          ),
+          DataCell(
+            Container(
+              // Wrap the content with a Container
+              width: 0, // Set the desired width
+              child: Text(ItemDetails[iCtr]['barcode'].toString()),
+            ),
+          ),
+          DataCell(
+            Container(
+              // Wrap the content with a Container
+              width: 1, // Set the desired width
+              child: Text(ItemDetails[iCtr]['entryid'].toString()),
+            ),
             //Text(ItemDetails[iCtr]['entryid'].toString())
-            ),
+          ),
         ]));
       }
 
@@ -485,6 +642,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
 
       return _datarow;
     }
+
     setDefValue();
     return Scaffold(
       appBar: EqAppBar(
@@ -492,7 +650,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
             (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
             ' ] ' +
             (int.parse(widget.xid) > 0
-                ? 'Serial No : ' + widget.serial.toString()
+                ? 'Serial No : ' + _serial.text.toString()
                 : ''),
       ),
       body: SingleChildScrollView(
@@ -632,29 +790,39 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, 
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: const Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
+                      backgroundColor: Colors.green,
                       // Background color
                     ),
                     onPressed: () {
                       saveData();
                     },
-                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'SAVE',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   )),
-                  SizedBox(
-                   width: 10
-                  ),
+                  SizedBox(width: 10),
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
                       backgroundColor: Colors.green, // Background color
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-                        Fluttertoast.showToast(
+                      Fluttertoast.showToast(
                         msg: "CANCEL !!!",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
@@ -662,128 +830,135 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                         backgroundColor: Colors.white,
                         textColor: Colors.purple,
                         fontSize: 16.0,
-                        );
+                      );
                     },
-                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'CANCEL',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   ))
                 ],
               ),
             ),
-             SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: InkWell(
-                    onDoubleTap: () {
-                      if (_party.text == "") {
-                      } else {
-                        gotoChallanItemDet(context);
-                      }
-                    },
-                    child: DataTable(columns: [
-                      DataColumn(
-                        label: Text("Action"),
+            SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: InkWell(
+                  onDoubleTap: () {
+                    if (_party.text == "") {
+                    } else {
+                      gotoChallanItemDet(context);
+                    }
+                  },
+                  child: DataTable(columns: [
+                    DataColumn(
+                      label: Text("Action"),
+                    ),
+                    DataColumn(
+                      label: Text("Item Name"),
+                    ),
+                    DataColumn(
+                      label: Text("HSN Code"),
+                    ),
+                    DataColumn(
+                      label: Text("Qty"),
+                    ),
+                    DataColumn(
+                      label: Text("Rate"),
+                    ),
+                    DataColumn(
+                      label: Text("Unit"),
+                    ),
+                    DataColumn(
+                      label: Text("Remarks"),
+                    ),
+                    DataColumn(
+                      //label: Text("Cut"),
+                      label: SizedBox(
+                        child: Text('Cut'),
                       ),
-                      DataColumn(
-                        label: Text("Item Name"),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('Pcs'),
                       ),
-                      DataColumn(
-                        label: Text("HSN Code"),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('Amount'),
                       ),
-                      DataColumn(
-                        label: Text("Qty"),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('Disc Rate'),
                       ),
-                      DataColumn(
-                        label: Text("Rate"),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('Disc Amt'),
                       ),
-                      DataColumn(
-                        label: Text("Unit"),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('Add Amt'),
                       ),
-                      DataColumn(
-                        label: Text("Remarks"),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('Taxable Value'),
                       ),
-                      DataColumn(
-                        //label: Text("Cut"),
-                        label: SizedBox( 
-                          child: Text('Cut'),
-                        ), 
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('SGST Rate'),
                       ),
-                      DataColumn(
-                         label: SizedBox( 
-                          child: Text('Pcs'),
-                        ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('SGST Amt'),
                       ),
-                      DataColumn(
-                        label: SizedBox( 
-                          child: Text('Amount'),
-                        ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('CGST Rate'),
                       ),
-                      DataColumn(
-                        label: SizedBox( 
-                          child: Text('Disc Rate'),
-                        ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('CGST Amt'),
                       ),
-                      DataColumn(
-                        label: SizedBox( 
-                          child: Text('Disc Amt'),
-                        ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('IGST Rate'),
                       ),
-                      DataColumn(
-                        label: SizedBox( 
-                          child: Text('Add Amt'),
-                        ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('IGST Amt'),
                       ),
-                      DataColumn(
-                        label: SizedBox(
-                          child: Text('Taxable Value'),
-                        ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('Final Amt'),
                       ),
-                      DataColumn(
-                        label: SizedBox(
-                          child: Text('SGST Rate'),
-                        ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        // Wrap the label with SizedBox to set width
+                        width: 1, // Set the desired width
+                        child: Text('Barcode'),
                       ),
-                      DataColumn(
-                        label: SizedBox( 
-                          child: Text('SGST Amt'),
-                        ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        child: Text('EntryId'),
                       ),
-                      DataColumn(
-                        label: SizedBox( 
-                          child: Text('CGST Rate'),
-                        ),
-                      ),
-                      DataColumn(
-                        label: SizedBox( 
-                          child: Text('CGST Amt'),
-                        ),
-                      ),
-                      DataColumn(
-                         label: SizedBox( 
-                          child: Text('IGST Rate'),
-                        ),
-                      ),
-                      DataColumn(
-                         label: SizedBox( 
-                          child: Text('IGST Amt'),
-                        ),
-                      ),
-                      DataColumn(
-                         label: SizedBox( 
-                          child: Text('Final Amt'),
-                        ),
-                      ),
-                       DataColumn(
-                          label: SizedBox( // Wrap the label with SizedBox to set width
-                          width: 1, // Set the desired width
-                          child: Text('Barcode'),
-                        ),
-                      ),
-                      DataColumn(
-                          label: SizedBox( 
-                          child: Text('EntryId'),
-                        ),
-                      ),
-                    ], rows: _createRows()),
-                  )),
+                    ),
+                  ], rows: _createRows()),
+                )),
           ],
         ),
       )),
