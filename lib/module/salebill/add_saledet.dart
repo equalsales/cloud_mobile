@@ -9,7 +9,6 @@ import 'package:cloud_mobile/function.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
-
 class SaleBillDetAdd extends StatefulWidget {
   SaleBillDetAdd(
       {Key? mykey,
@@ -32,14 +31,7 @@ class SaleBillDetAdd extends StatefulWidget {
     xid = id;
     xbranchid = branchid;
     xItemDetails = itemDet;
-
-    print('in Item Details');
-    print(xbranch);
-    print(xpartystate);
-    print(xItemDetails);
-    print(xbranchid);
   }
-
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
@@ -50,15 +42,12 @@ class SaleBillDetAdd extends StatefulWidget {
   var xpartystate;
   List xitemDet = [];
   List xItemDetails = [];
-
   @override
   _SaleBillDetAddAddState createState() => _SaleBillDetAddAddState();
 }
-
 class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
-
   TextEditingController _itemname = new TextEditingController();
   TextEditingController _hsncode = new TextEditingController();
   TextEditingController _meters = new TextEditingController();
@@ -79,27 +68,12 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
   TextEditingController _igstrate = new TextEditingController();
   TextEditingController _igstamt = new TextEditingController();
   TextEditingController _finalamt = new TextEditingController();
-  TextEditingController _ratetype = new TextEditingController();
-
-  //var ordTaka = 0;
   double ordMeters = 0;
-
   final _formKey = GlobalKey<FormState>();
-
-  //TextEditingController _fromdatecontroller = new TextEditingController(text: 'dhaval');
-
-
-  var _jsonData = [];
   List _itemlist = [];
-
-  
-  var _alternative = 'NO';
   var partystate = '';
-
-
   List<Widget> ratelist = [];
   List<TextEditingController> ratecontroller = [];
-
   @override
   void initState() {
     _itemname.addListener(() {_itemname.text.toString();});
@@ -138,41 +112,18 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
         _rate.text = ItemDetails[length - 1]['rate'].toString();
       });
     }
-
-    //_date.text = curDate.toString().split(' ')[0];
-
-    // if (int.parse(widget.xid) > 0) {
-    //   //loadData();
-    // }
   }
-
     Future<bool> loadgst() async {
     String uri = '';
-    double calcrate = 0;
-    var companyid = globals.companyid;
     var clientid = globals.dbname;
-    var id = widget.xid;
     var companystate = globals.companystate;
-    var partystate = widget.xpartystate;
-
-    //var fromdate = widget.xfbeg;
-    //var todate = widget.xfend;
-
     uri =
         'https://www.cloud.equalsoftlink.com/api/api_gethsndet?dbname=$clientid&hsncode=${_hsncode.text}&rate=${_rate.text}&statename=${widget.xpartystate}&costatename=GUJARAT';
-
     var response = await http.get(Uri.parse(uri));
-
     var jsonData = jsonDecode(response.body);
-
-    print("//////////////11112222" + uri);
-
       _sgstrate.text = jsonData['sgstrate'].toString();
       _cgstrate.text = jsonData['cgstrate'].toString();
       _igstrate.text = jsonData['igstrate'].toString();
-
-    
-
     double cut = getValueN(_cut.text);
     double pcs = getValueN(_pcs.text);
     double meters = getValueN(_meters.text);
@@ -186,7 +137,6 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
     double finalamt= getValueN(_finalamt.text);
     double discAmt = getValueN(_discamt.text);
     double addamt = getValueN(_addamt.text);
-    
     amount= Rate*pcs;
      setState(() {
         if (DiscRate > 0) {
@@ -199,41 +149,24 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
         _addamt.text == "" ? 0 : double.parse(_addamt.text);
        taxablevalue = (amount - discAmt + addamt);
       _taxablevalue.text = taxablevalue.toStringAsFixed(2);
-      print("sdjkchjksd");
-      print(taxablevalue);
     });
-
-    
     double sGstrate = getValueN(_sgstrate.text);
     double cGstrate = getValueN(_cgstrate.text);
     double iGstrate = getValueN(_igstrate.text);
-    //print(taxable);
     setState(() {
       sgstamt = ((taxablevalue * sGstrate) / 100);
       cgstamt = ((taxablevalue * cGstrate) / 100);
       igstamt = ((taxablevalue * iGstrate) / 100);
-      print(sgstamt);
-      print("2222222");
-      print(cgstamt);
-      print("2222222");
-      print(igstamt);
-      print("2222222");
     });
-
-    // double iGstAmt = getValueN(igstamt);
-    // double cGstAmt = getValueN(cgstamt);
-    // double sGstAmt = getValueN(sgstamt);
     finalamt = (taxablevalue + sgstamt + cgstamt + igstamt);
 
     setState(() {
-      //_rate.text = calcrate.toStringAsFixed(2);
       _amount.text = amount.toStringAsFixed(2);
      _amount.text = amount.toStringAsFixed(2);
       _finalamt.text = finalamt.toStringAsFixed(2);
       _sgstamt.text = sgstamt.toStringAsFixed(2);
       _cgstamt.text = cgstamt.toStringAsFixed(2);
       _igstamt.text = igstamt.toStringAsFixed(2);
-      //_finalamt.text = finalamt.toStringAsFixed(2);
     });
     return true;
   }
@@ -254,19 +187,6 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
     );
 
     setState(() {    
-      // var retResult = result;
-      // _itemlist = result;
-      // result = result;
-
-      // var selItem = '';
-      // selItem = _itemlist.firstOrNull;
-
-      // _itemname.text = selItem;
-
-      // if (selItem != '') {
-      //   getItemDet();
-      // }
-
       if (result != null && result.isNotEmpty) {
         var selItem = result.first;
         _itemlist = result;
@@ -276,7 +196,6 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
           _hsncode.text = selItem['hsncode']; // Fix the typo here
           _unit.text = selItem['unit'];
           _rate.text = selItem['salerate'];
-          // getItemDet();
           loadgst();
         }
       }
@@ -334,20 +253,13 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
         'remarks': remark,
         'catalog': '',
       });
-
       Navigator.pop(context, widget.xitemDet);
-
       return true;
     }
 
     setDefValue();
-
     return Scaffold(
       appBar: EqAppBar(AppBarTitle: 'Sale Bill Item Details[ ] '),
-      // floatingActionButton: FloatingActionButton(
-      //     child: Icon(Icons.done),
-      //     backgroundColor: Colors.green,
-      //     onPressed: () => {saveData()}),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -384,7 +296,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       labelText: 'HSN Code',
                     ),
                     onTap: () {
-                      //gotoBranchScreen(context);
+                      
                     },
                     validator: (value) {
                       return null;
@@ -449,7 +361,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       labelText: 'Unit',
                     ),
                     onTap: () {
-                      //gotoBranchScreen(context);
+                      
                     },
                     validator: (value) {
                       return null;
@@ -467,7 +379,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       labelText: 'Amount',
                     ),
                     onTap: () {
-                      //gotoBranchScreen(context);
+                      
                     },
                     validator: (value) {
                       return null;
@@ -556,7 +468,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       loadgst();
                     },
                     onTap: () {
-                      //gotoBranchScreen(context);
+                      
                     },
                     validator: (value) {
                       return null;
@@ -580,7 +492,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       loadgst();
                     },
                     onTap: () {
-                      //gotoBranchScreen(context);
+                     
                     },
                     validator: (value) {
                       return null;
@@ -601,7 +513,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       loadgst();
                     },
                     onTap: () {
-                      //gotoBranchScreen(context);
+                     
                     },
                     validator: (value) {
                       return null;
@@ -625,7 +537,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       loadgst();
                     },
                     onTap: () {
-                      //gotoBranchScreen(context);
+                     
                     },
                     validator: (value) {
                       return null;
@@ -646,7 +558,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       loadgst();
                     },
                     onTap: () {
-                      //gotoBranchScreen(context);
+                      
                     },
                     validator: (value) {
                       return null;
@@ -670,7 +582,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       loadgst();
                     },
                     onTap: () {
-                      //gotoBranchScreen(context);
+                      
                     },
                     validator: (value) {
                       return null;
@@ -691,7 +603,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       loadgst();
                     },
                     onTap: () {
-                      //gotoBranchScreen(context);
+                    
                     },
                     validator: (value) {
                       return null;
@@ -716,7 +628,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       loadgst();
                     },
                     onTap: () {
-                      //gotoBranchScreen(context);
+                     
                     },
                     validator: (value) {
                       return null;
@@ -733,7 +645,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
                       labelText: 'Remark',
                     ),
                     onTap: () {
-                      //gotoBranchScreen(context);
+              
                     },
                     validator: (value) {
                       return null;
@@ -804,11 +716,6 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
           ],
         ),
       )),
-      // bottomNavigationBar: BottomBar(
-      //   companyname: widget.xcompanyname,
-      //   fbeg: widget.xfbeg,
-      //   fend: widget.xfend,
-      // ),
     );
   }
 }

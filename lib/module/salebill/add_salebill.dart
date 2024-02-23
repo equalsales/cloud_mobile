@@ -184,22 +184,15 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         String uri = '';
         var companyid = widget.xcompanyid;
         var clientid = globals.dbname;
-        //var id = widget.xid;
-
         uri =
             'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
                 clientid +
                 '&party=' +
                 _party.text.toString() +
                 '&id=0';
-
         var response = await http.get(Uri.parse(uri));
-
         var jsonData = jsonDecode(response.body);
-
         jsonData = jsonData['Data'];
-        //print(jsonData);
-
         setState(() {
           jsonData = jsonData[0];
           partystate = jsonData['state'].toString();
@@ -209,7 +202,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
       }
       return true;
     }
-
     void gotoPartyScreen2(
         BuildContext context, acctype, TextEditingController obj) async {
       var result = await Navigator.push(
@@ -295,65 +287,17 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         String uri = '';
         var companyid = widget.xcompanyid;
         var clientid = globals.dbname;
-
         var orderno = _serial.text;
         var orderchr = _srchr.text;
         var date = _date.text;
         var party = _party.text;
         var agent = '';
-        var haste = '';
         var book = 'SALES A/C';
         var transport = '';
         var remarks = _remarks.text;
         var station = '';
-
         var id = widget.xid;
         id = int.parse(id);
-
-        //return true;
-
-        //https://mssqlapi.equalsoftlink.com/api/storesaleorder?companyid=eqpikasho20232024&clientid=1003&party=AAKAISH JINDAL&agent=&haste=&transport=&station=&orderchr=&orderno=&date=2023-07-31&remarks=&id=0&GridData=[{"orderno":"0","orderchr":"0","itemname":"3.D","per":"P","pcs":"1","rate":"100","entryid":"0","controlid":null}]
-        // uri = "https://cloud.equalsoftlink.com/api/api_storesaleorder?dbname=" +
-        //     clientid +
-        //     "&company=&cno=" +
-        //     companyid +
-        //     "&orderchr=" +
-        //     orderchr +
-        //     "&orderno=" +
-        //     orderno +
-        //     "&date=" +
-        //     date +
-        //     "&party=" +
-        //     party +
-        //     "&agent=" +
-        //     agent +
-        //     "&transport=" +
-        //     transport +
-        //     "&station=" +
-        //     station +
-        //     "&salesman=" +
-        //     _salesman.text +
-        //     "&haste=" +
-        //     _haste.text +
-        //     "&ptyordno=" +
-        //     _ptyordno.text +
-        //     "&ptyorddt=" +
-        //     _ptyorddt.text +
-        //     "&remarks=" +
-        //     remarks +
-        //     "&user=" +
-        //     globals.username +
-        //     "&ratetype=" +
-        //     _ratetype.text +
-        //     "&billtype=" +
-        //     _billtype +
-        //     "&id=" +
-        //     id.toString();
-        // final headers = {
-        //   'Content-Type': 'application/json', // Set the appropriate content-type
-        //   // Add any other headers required by your API
-        // };
-
         uri = "https://cloud.equalsoftlink.com/api/api_storesalebill?dbname=" +
             clientid +
             "&company=&cno=" +
@@ -385,13 +329,9 @@ class _SalesBillAddState extends State<SalesBillAdd> {
               'application/json', // Set the appropriate content-type
           // Add any other headers required by your API
         };
-
-        //print("Save Entry");
         var response = await http.post(Uri.parse(uri),
             headers: headers, body: jsonEncode(ItemDetails));
         var jsonData = jsonDecode(response.body);
-        //print(jsonData);
-
         var jsonCode = jsonData['Code'];
         var jsonMsg = jsonData['Message'];
         var PrintID = jsonData['id'];
@@ -437,10 +377,8 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         ItemDetails.removeAt(index);
       });
     }
-
       List<DataRow> _createRows() {
       List<DataRow> _datarow = [];
-
       widget.tottaka = 0;
       widget.totfinalamt = 0;
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
@@ -496,7 +434,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
               )
               },
             icon: Icon(
-              // <-- Icon
               Icons.delete,
               size: 20.0,
             ),
@@ -520,8 +457,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                 child:Text(ItemDetails[iCtr]['pcs'].toString()),
               ),
           ),
-          
-
           DataCell(
              Container(
                 child:Text(ItemDetails[iCtr]['amount'].toString()),
@@ -591,8 +526,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                 child:Text(ItemDetails[iCtr]['barcode'].toString()),
               ),
             ),
-            
-
           DataCell(
             Container( // Wrap the content with a Container
                 width:1, // Set the desired width
@@ -602,12 +535,10 @@ class _SalesBillAddState extends State<SalesBillAdd> {
             ),
         ]));
       }
-
       setState(() {
         _tottqty.text = widget.tottaka.toString();
         _totnetamt.text = widget.totfinalamt.toString();
       });
-
       return _datarow;
     }
     setDefValue();
@@ -617,7 +548,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
             (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
             ' ] ' +
             (int.parse(widget.xid) > 0
-                ? 'Serial No : ' + widget.serial.toString()
+                ? 'Serial No : ' + _serial.text.toString()
                 : ''),
       ),
       body: SingleChildScrollView(
@@ -736,7 +667,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                           color: const Color.fromARGB(231, 255, 255, 255),
                         ), // Text style
                         backgroundColor: Colors.green,
-                        // Background color
                       ),
                       onPressed: () {
                         gotoChallanItemDet(context);
@@ -761,7 +691,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                     style: TextButton.styleFrom(
                       textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
                       backgroundColor: Colors.green, 
-                      // Background color
                     ),
                     onPressed: () {
                       saveData();
@@ -826,7 +755,6 @@ class _SalesBillAddState extends State<SalesBillAdd> {
                         label: Text("Remarks"),
                       ),
                       DataColumn(
-                        //label: Text("Cut"),
                         label: SizedBox( 
                           child: Text('Cut'),
                         ), 

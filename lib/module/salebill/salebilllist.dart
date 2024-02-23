@@ -1,26 +1,14 @@
 import 'package:cloud_mobile/common/moduleview.dart';
-import 'package:cloud_mobile/dashboard/sidebar.dart';
 import 'package:cloud_mobile/module/salebill/add_salebill.dart';
 import 'package:flutter/material.dart';
-
-
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-
 import '../../../common/global.dart' as globals;
-
-
-//// import 'package:google_fonts/google_fonts.dart';
-
-//import 'package:cloud_mobile/module/looms/greyjobissue/add_loomgreyjobissue.dart';
-
 class SalesBillList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
-
   SalesBillList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
@@ -28,39 +16,29 @@ class SalesBillList extends StatefulWidget {
     xfbeg = fbeg;
     xfend = fend;
   }
-
   @override
   _SalesBillListPageState createState() => _SalesBillListPageState();
 }
-
 class _SalesBillListPageState extends State<SalesBillList> {
   List _companydetails = [];
-  
   @override
   void initState() {
     loaddetails();
   }
-
   Future<bool> loaddetails() async {
     var companyid = widget.xcompanyid;
     var clientid = globals.dbname;
     var startdate = globals.startdate;
     var enddate = globals.enddate;
-    //print(globals.enddate);
-
     String uri = '';
     uri =
         "https://www.cloud.equalsoftlink.com/api/api_getsalebilllist?dbname=$clientid&cno=$companyid&startdate=${startdate.toString()}&enddate=${enddate.toString()}";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
-
-    //print(uri);
-
     this.setState(() {
       _companydetails = jsonData['Data'];
     });
-
     return true;
   }
 
@@ -95,7 +73,6 @@ void onAdd() {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
-        //saveData();
         return AlertDialog(
           title: const Text('Do You Want To Delete Sale Bill Add !!??'),
           content: Container(
@@ -132,7 +109,6 @@ void onAdd() {
       },
     );
   }
-
   void onEdit(id) {
     print('Clicked Edit');
     Navigator.push(
