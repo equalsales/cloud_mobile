@@ -1,6 +1,7 @@
 //ignore_for_file: prefer_const_constructors
 import 'dart:convert';
 
+import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -128,13 +129,9 @@ class _DashboardState extends State<Dashboard> {
           companyname: widget.xcompanyname,
           fbeg: widget.xfbeg,
           fend: widget.xfend),
-      appBar: AppBar(
-        title: Text(
-          'Dashboard [' + widget.xcompanyid + ']',
-          style:
-              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
-        ),
-      ),
+      appBar: EqAppBar(
+     
+         AppBarTitle: 'Dashboard [' + widget.xcompanyid + ']',      ),
       body: Center(
         child: Container(
             width: 700,

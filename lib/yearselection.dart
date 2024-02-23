@@ -1,3 +1,4 @@
+import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_mobile/dashboard.dart';
@@ -90,10 +91,11 @@ class _YearSelectionPageState extends State<YearSelection> {
 
     //companydetails(widget.xuser,widget.xpwd);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Company Selection',
-            style: TextStyle(
-                fontSize: 25.0, fontWeight: FontWeight.normal)),
+      appBar: EqAppBar(
+         AppBarTitle: 'Company Selection'
+        // title: Text('Company Selection',
+        //     style: TextStyle(
+        //         fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
       body: Center(
           child: ListView.builder(

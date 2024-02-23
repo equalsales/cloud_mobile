@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:cloud_mobile/yearselection.dart';
 import 'package:flutter/material.dart';
 
@@ -48,10 +49,12 @@ class MyApp extends StatelessWidget {
           loaderColor: Colors.red,
         )*/
           Scaffold(
-        appBar: AppBar(
-            title: Text(_title,
-                style: TextStyle(
-                    fontSize: 25.0, fontWeight: FontWeight.normal))),
+        appBar: EqAppBar(
+          AppBarTitle: _title,
+            // title: Text(_title,
+            //     style: TextStyle(
+            //         fontSize: 25.0, fontWeight: FontWeight.normal))
+            ),
         body: const MyHomePage(),
       ),
     );
