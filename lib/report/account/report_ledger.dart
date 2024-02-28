@@ -6,9 +6,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/function.dart';
-import 'package:cloud_mobile/common/xreport.dart';
+//import 'package:cloud_mobile/common/xreport.dart';
 
-import 'package:pluto_grid/pluto_grid.dart';
+//import 'package:pluto_grid/pluto_grid.dart';
 import '../../common/global.dart' as globals;
 
 import 'package:cloud_mobile/common/bottombar.dart';
@@ -56,9 +56,9 @@ class LedgerReport extends StatefulWidget {
 class _LedgerReport extends State<LedgerReport> {
   List _datalist = [];
   var apptitle = 'Ledger Report';
-  List<PlutoColumn> columns = [];
-  List<PlutoRow> rows = [];
-  List<PlutoRow> rows2 = [];
+  //List<PlutoColumn> columns = [];
+  //List<PlutoRow> rows = [];
+  //List<PlutoRow> rows2 = [];
 
   @override
   void initState() {
