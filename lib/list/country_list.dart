@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:cloud_mobile/projFunction.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:convert';
@@ -82,6 +83,7 @@ class CountryListState extends State<country_list> {
         children: <Widget>[
           buildSearch(),
           Text("${_countrySelected}"),
+          add(),
           ElevatedButton(
             onPressed: () {
               // Navigate back to first route when tapped.
@@ -124,6 +126,37 @@ class CountryListState extends State<country_list> {
         //child: JobsListView()
       ),
     );
+  }
+
+  Widget add() {
+    if (query.length >= 1) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: Row(
+          children: [
+            ElevatedButton(
+              style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blueGrey),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    // Change your radius here
+                    borderRadius: BorderRadius.circular(0),
+                  ))),
+              onPressed: () {
+                countryMaster_Add(context, widget.xcompanyid,
+                    widget.xcompanyname, widget.xfbeg, widget.xfend, query);
+              },
+              child: Text('Add'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      print("Not add");
+      return Container();
+    }
   }
 
   Widget buildSearch() => SearchWidget(

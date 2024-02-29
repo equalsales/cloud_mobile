@@ -3,6 +3,7 @@ import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:cloud_mobile/common/eqtextfield.dart';
 import 'package:cloud_mobile/function.dart';
+import 'package:cloud_mobile/projFunction.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -213,6 +214,8 @@ class _StateMasterState extends State<StateMaster> {
       hintText: 'Country ',
       labelText: 'Country ',
       onTap: () {
+        openCountry_List(context, widget.xcompanyid, widget.xcompanyname,
+            widget.xfbeg, widget.xfend);
         //gotoPartyScreen2(context, 'SALE PARTY', _party);
       },
       onChanged: (value) {
