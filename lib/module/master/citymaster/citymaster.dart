@@ -117,39 +117,42 @@ class _CityMasterState extends State<CityMaster> {
     setDefValue();
     return Scaffold(
       appBar: EqAppBar(AppBarTitle: "City Master"),
-      body: SingleChildScrollView(
-          child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
+      body: SingleChildScrollView(child: cityMasterForm()),
+    );
+  }
+
+  Form cityMasterForm() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: [
+              Expanded(child: cityTextfield()),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: stateTextField(),
+              )
+            ],
+          ),
+          Padding(padding: EdgeInsets.all(5)),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: cityTextfield()),
+                Expanded(child: saveTextButton()),
+                SizedBox(width: 10),
+                Expanded(child: cancelTextButton())
               ],
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: stateTextField(),
-                )
-              ],
-            ),
-            Padding(padding: EdgeInsets.all(5)),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(child: saveTextButton()),
-                  SizedBox(width: 10),
-                  Expanded(child: cancelTextButton())
-                ],
-              ),
-            )
-          ],
-        ),
-      )),
+          )
+        ],
+      ),
     );
   }
 
