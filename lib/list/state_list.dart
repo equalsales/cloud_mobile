@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:convert';
@@ -74,9 +75,7 @@ class StateListState extends State<state_list> {
       widget.Title = 'State List';
     }
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.Title),
-      ),
+      appBar: EqAppBar(AppBarTitle: widget.Title),
       body: Column(
         children: <Widget>[
           buildSearch(),
