@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:convert';
+import 'package:cloud_mobile/projFunction.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../../common/eqtextfield.dart';
 import 'package:cloud_mobile/common/eqappbar.dart';
@@ -65,6 +66,25 @@ class _CityMasterState extends State<CityMaster> {
     _statename.text = getValue(jsonData['state'], 'C');
     id = jsonData['id'].toString();
     return true;
+  }
+
+  void gotoStateScreen(BuildContext context) async {
+    var result = await openState_List(context, widget.xcompanyid,
+        widget.xcompanyname, widget.xfbeg, widget.xfbeg);
+
+    print(result);
+
+    var retResult = result[0];
+    var selState = '';
+    for (var ictr = 0; ictr < retResult.length; ictr++) {
+      if (ictr > 0) {
+        selState = selState + ',';
+      }
+      selState = selState + retResult[ictr];
+    }
+    setState(() {
+      _statename.text = selState;
+    });
   }
 
   void setDefValue() {}
@@ -184,6 +204,7 @@ class _CityMasterState extends State<CityMaster> {
       hintText: 'State',
       labelText: 'State',
       onTap: () {
+        gotoStateScreen(context);
         // gotoAgentScreen(context);
       },
       onChanged: (value) {
