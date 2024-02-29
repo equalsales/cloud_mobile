@@ -35,14 +35,10 @@ class CityMaster extends StatefulWidget {
 
 class _CityMasterState extends State<CityMaster> {
   List ItemDetails = [];
- 
 
- 
   final _formKey = GlobalKey<FormState>();
   TextEditingController _cityname = new TextEditingController();
   TextEditingController _statename = new TextEditingController();
- 
-  
 
   @override
   void initState() {
@@ -73,40 +69,37 @@ class _CityMasterState extends State<CityMaster> {
 
   void setDefValue() {}
 
-  @override
-  Widget build(BuildContext context) {
-
-     Future<bool> saveData() async {
-      //UnitVld();
-      String uri = '';
-      var companyid = widget.xcompanyid;
-      var clientid = globals.dbname;
-      var statename = _statename.text;
-      var cityname = _cityname.text;
-      var id = widget.xid;
-      id = int.parse(id);
-      //print('In Save....');
-      uri =
-          "https://www.cloud.equalsoftlink.com/api/api_citystort?dbname=$clientid" +
-              "&state=" +
-              statename +
-              "&city=" +
-              cityname +
-              "&id=" +
-              id.toString();
-      print(uri);
-      var response = await http.post(Uri.parse(uri));
-      var jsonData = jsonDecode(response.body);
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
-      print(jsonCode);
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else if (jsonCode == '100') {
-        showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
-      } else {
-        Navigator.pop(context);
-        Fluttertoast.showToast(
+  Future<bool> saveData() async {
+    //UnitVld();
+    String uri = '';
+    var companyid = widget.xcompanyid;
+    var clientid = globals.dbname;
+    var statename = _statename.text;
+    var cityname = _cityname.text;
+    var id = widget.xid;
+    id = int.parse(id);
+    //print('In Save....');
+    uri =
+        "https://www.cloud.equalsoftlink.com/api/api_citystort?dbname=$clientid" +
+            "&state=" +
+            statename +
+            "&city=" +
+            cityname +
+            "&id=" +
+            id.toString();
+    print(uri);
+    var response = await http.post(Uri.parse(uri));
+    var jsonData = jsonDecode(response.body);
+    var jsonCode = jsonData['Code'];
+    var jsonMsg = jsonData['Message'];
+    print(jsonCode);
+    if (jsonCode == '500') {
+      showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+    } else if (jsonCode == '100') {
+      showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
+    } else {
+      Navigator.pop(context);
+      Fluttertoast.showToast(
         msg: "Saved !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
@@ -114,25 +107,16 @@ class _CityMasterState extends State<CityMaster> {
         backgroundColor: Colors.white,
         textColor: Colors.purple,
         fontSize: 16.0,
-        );
-      }
-      return true;
+      );
     }
+    return true;
+  }
 
-    setState(() {
-    });
-
+  @override
+  Widget build(BuildContext context) {
     setDefValue();
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("City Master",style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
-      //   ),
-      // ),
       appBar: EqAppBar(AppBarTitle: "City Master"),
-      // floatingActionButton: FloatingActionButton(
-      //     child: Icon(Icons.done),
-      //     backgroundColor: Colors.green,
-      //     onPressed: () => {saveData()}),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -141,99 +125,130 @@ class _CityMasterState extends State<CityMaster> {
           children: <Widget>[
             Row(
               children: [
-                Expanded(
-                  child: EqTextField(
-                    controller: _cityname,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    autofocus: true,
-                    hintText: 'City Name',
-                    labelText: 'City Name',
-                    onTap: () {
-                      //gotoPartyScreen2(context, 'SALE PARTY', _party);
-                    },
-                    onChanged: (value) {
-                      _cityname.value = _cityname.value.copyWith(
-                        text: value.toUpperCase(),
-                        selection:
-                            TextSelection.collapsed(offset: value.length),
-                      );
-                    },
-                  ),
-                ),
+                Expanded(child: cityTextfield()),
               ],
             ),
             Row(
               children: [
                 Expanded(
-                  child: EqTextField(
-                    controller: _statename,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    hintText: 'Statename',
-                    labelText: 'Statename',
-                    onTap: () {
-                      // gotoAgentScreen(context);
-                    },
-                    onChanged: (value) {
-                      _statename.value = _statename.value.copyWith(
-                        text: value.toUpperCase(),
-                        selection:
-                            TextSelection.collapsed(offset: value.length),
-                      );
-                    },
-                  ),
+                  child: stateTextField(),
                 )
               ],
             ),
-            Padding(padding: EdgeInsets.all(5)),
             Padding(padding: EdgeInsets.all(5)),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, 
-                      // Background color
-                    ),
-                    onPressed: () {
-                      saveData();
-                    },
-                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
-                  )),
-                  SizedBox(
-                   width: 10
-                  ),
-                  Expanded(
-                    child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, // Background color
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                        Fluttertoast.showToast(
-                        msg: "CANCEL !!!",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.white,
-                        textColor: Colors.purple,
-                        fontSize: 16.0,
-                        );
-                    },
-                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
-                  ))
+                  Expanded(child: saveTextButton()),
+                  SizedBox(width: 10),
+                  Expanded(child: cancelTextButton())
                 ],
               ),
             )
           ],
         ),
       )),
+    );
+  }
+
+  EqTextField cityTextfield() {
+    return EqTextField(
+      controller: _cityname,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      autofocus: true,
+      hintText: 'City',
+      labelText: 'City',
+      onTap: () {
+        //gotoPartyScreen2(context, 'SALE PARTY', _party);
+      },
+      onChanged: (value) {
+        _cityname.value = _cityname.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  EqTextField stateTextField() {
+    return EqTextField(
+      controller: _statename,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      hintText: 'State',
+      labelText: 'State',
+      onTap: () {
+        // gotoAgentScreen(context);
+      },
+      onChanged: (value) {
+        _statename.value = _statename.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  TextButton saveTextButton() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.zero)),
+
+        textStyle: TextStyle(
+          fontSize: 25,
+          color: const Color.fromARGB(231, 255, 255, 255),
+        ), // Text style
+        backgroundColor: Colors.green,
+        // Background color
+      ),
+      onPressed: () {
+        this.saveData();
+      },
+      child: const Text(
+        'SAVE',
+        style: TextStyle(
+          fontSize: 20,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ),
+      ),
+    );
+  }
+
+  TextButton cancelTextButton() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.zero)),
+
+        textStyle: TextStyle(
+          fontSize: 25,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ), // Text style
+        backgroundColor: Colors.green, // Background color
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+          msg: "CANCEL !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
+        );
+      },
+      child: const Text(
+        'CANCEL',
+        style: TextStyle(
+          fontSize: 20,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ),
+      ),
     );
   }
 }
