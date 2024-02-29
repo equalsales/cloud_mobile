@@ -51,10 +51,10 @@ class MyApp extends StatelessWidget {
           Scaffold(
         appBar: EqAppBar(
           AppBarTitle: _title,
-            // title: Text(_title,
-            //     style: TextStyle(
-            //         fontSize: 25.0, fontWeight: FontWeight.normal))
-            ),
+          // title: Text(_title,
+          //     style: TextStyle(
+          //         fontSize: 25.0, fontWeight: FontWeight.normal))
+        ),
         body: const MyHomePage(),
       ),
     );
@@ -234,6 +234,15 @@ class _MyHomePage extends State<MyHomePage> {
                 height: 50,
                 padding: const EdgeInsets.fromLTRB(10, 6, 10, 0),
                 child: ElevatedButton(
+                  style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.lightGreen),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        // Change your radius here
+                        borderRadius: BorderRadius.circular(0),
+                      ))),
                   child: Text(
                     'Login',
                     style: TextStyle(

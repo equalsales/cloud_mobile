@@ -32,6 +32,7 @@ class CityListState extends State<city_list> {
   List _orgcitylist = [];
   List _citySelected = [];
   List _citySelected2 = [];
+  List _state = [];
   List<bool> _selected = [];
   String query = '';
 
@@ -84,7 +85,8 @@ class CityListState extends State<city_list> {
           ElevatedButton(
             onPressed: () {
               // Navigate back to first route when tapped.
-              Navigator.pop(context, [_citySelected, _citySelected2]);
+              //print([_citySelected, _citySelected2]);
+              Navigator.pop(context, [_citySelected, _citySelected2, _state]);
             },
             child: Text('Select'),
           ),
@@ -95,25 +97,16 @@ class CityListState extends State<city_list> {
               int id = this._citylist[index]['id'];
               String account = this._citylist[index]['city'];
               String city = this._citylist[index]['city'];
+              String state = this._citylist[index]['state'];
               return ListTile(
                 tileColor: _selected[index] ? Colors.blue : null,
                 title: Text(account),
                 subtitle: Text(city),
                 onTap: () {
-                  //print(account);
-                  //setState(() => _selected[i] = !_selected[i])
                   _citySelected.add(account);
                   _citySelected2.add(id);
-                  //setState(() => _selected[index] = !_selected[index]);
+                  _state.add(state);
                   setState(() => _selected[index] = !_selected[index]);
-                  //print(_selected);
-                  //showAlertDialog(context, companyid);
-                  // Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard(
-                  //   companyid: companyid,
-                  //   companyname: companyname,
-                  //   fbeg: fbeg,
-                  //   fend: fend
-                  //   )));
                 },
               );
             },

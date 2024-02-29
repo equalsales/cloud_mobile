@@ -90,7 +90,7 @@ class PartyListState extends State<party_list> {
           children: [
             ElevatedButton(
               onPressed: () {
-               Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => PartyMaster(
@@ -110,7 +110,7 @@ class PartyListState extends State<party_list> {
           ],
         ),
       );
-    } else{
+    } else {
       print("Not add");
       return Container();
     }
@@ -180,6 +180,7 @@ class PartyListState extends State<party_list> {
         onChanged: searchParty,
       );
   void searchParty(String query) {
+    print('xx');
     if (query.length >= 2) {
       final partys = _orgpartylist.where((party) {
         final titlelower = party.toString().toLowerCase();

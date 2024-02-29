@@ -16,7 +16,8 @@ import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
 
 class PartyMaster extends StatefulWidget {
-  PartyMaster({Key? mykey, companyid, companyname, fbeg, fend, id, acctype,newParty})
+  PartyMaster(
+      {Key? mykey, companyid, companyname, fbeg, fend, id, acctype, newParty})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -61,7 +62,7 @@ class _PartyMasterState extends State<PartyMaster> {
   TextEditingController _mobileno = new TextEditingController();
   TextEditingController _gstno = new TextEditingController();
   TextEditingController _dhara = new TextEditingController();
-  TextEditingController _openingbalence = new TextEditingController();
+  TextEditingController _openingBal = new TextEditingController();
   TextEditingController _pcspercentage = new TextEditingController();
   TextEditingController _tdspercentage = new TextEditingController();
   TextEditingController _rdurd = new TextEditingController();
@@ -109,21 +110,33 @@ class _PartyMasterState extends State<PartyMaster> {
                   acctype: "SALE PARTY",
                 )));
 
-    setState(() {
-      var retResult = result;
-      citylist = result;
-      result = result;
+    var retResult = result[0];
+    var retState = result[2];
+    var selCity = '';
+    var selState = '';
 
-      var selParty = '';
-      for (var ictr = 0; ictr < retResult.length; ictr++) {
-        if (ictr > 0) {
-          selParty = selParty + ',';
-        }
+    citylist = result;
+    result = result;
 
-        selParty = selParty + retResult[ictr];
+    for (var ictr = 0; ictr < retResult.length; ictr++) {
+      if (ictr > 0) {
+        selCity = selCity + ',';
       }
+      selCity = selCity + retResult[ictr];
+    }
+    print(selCity);
 
-      _city.text = selParty;
+    for (var ictr = 0; ictr < retState.length; ictr++) {
+      if (ictr > 0) {
+        selState = selState + ',';
+      }
+      selState = selState + retState[ictr];
+    }
+    print(selState);
+
+    setState(() {
+      _city.text = selCity;
+      _state.text = selState;
     });
   }
 
@@ -192,8 +205,10 @@ class _PartyMasterState extends State<PartyMaster> {
     super.initState();
     // _partyname.text = widget.xnewParty ?? _partyname.text;
     if (widget.xnewParty != null && widget.xnewParty != '') {
-      dropdownAccType = widget.xacctype;
-      _partyname.text = widget.xnewParty;
+      dropdownAccType = widget.xacctype.toString().toUpperCase();
+      _partyname.text = widget.xnewParty.toString().toUpperCase();
+
+      acctypeheadvld();
     } else {
       dropdownAccType = dropdownAccType;
     }
@@ -258,9 +273,9 @@ class _PartyMasterState extends State<PartyMaster> {
     }
     print(dropdownDrCr);
     if (dropdownDrCr == 'DR') {
-      _openingbalence.text = getValue(jsonData['opening'], 'N');
+      _openingBal.text = getValue(jsonData['opening'], 'N');
     } else {
-      _openingbalence.text = getValue(jsonData['opening'], 'N');
+      _openingBal.text = getValue(jsonData['opening'], 'N');
     }
     id = jsonData['id'].toString();
     setState(() {});
@@ -318,7 +333,7 @@ class _PartyMasterState extends State<PartyMaster> {
       var tcsper = _pcspercentage.text;
       var tdsper = _tdspercentage.text;
       var discper = _dhara.text;
-      var opbalance = _openingbalence.text;
+      var opbalance = _openingBal.text;
       var rdurd = _rdurd.text;
       var id = widget.xid;
       id = int.parse(id);
@@ -426,8 +441,8 @@ class _PartyMasterState extends State<PartyMaster> {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     autofocus: true,
-                    hintText: 'Gst No',
-                    labelText: 'Gst No',
+                    hintText: 'GSTIN',
+                    labelText: 'GST No',
                     onTap: () {
                       //gotoPartyScreen2(context, 'SALE PARTY', _party);
                     },
@@ -465,8 +480,8 @@ class _PartyMasterState extends State<PartyMaster> {
                   controller: _partyname,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
-                  hintText: 'Partyname',
-                  labelText: 'Partyname',
+                  hintText: 'Party',
+                  labelText: 'Party',
                   onTap: () {
                     // gotoPartyScreen(context, 'SALE PARTY', _partyname);
                   },
@@ -524,11 +539,11 @@ class _PartyMasterState extends State<PartyMaster> {
             Row(children: [
               Expanded(
                 child: EqTextField(
-                  controller: _openingbalence,
+                  controller: _openingBal,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
-                  hintText: 'Opening Balence',
-                  labelText: 'Opening Balence',
+                  hintText: 'Op Balance',
+                  labelText: 'Op Balance',
                   onTap: () {
                     //_selectDate(context);
                   },
@@ -538,7 +553,7 @@ class _PartyMasterState extends State<PartyMaster> {
               SizedBox(),
               Expanded(
                 child: DropdownButtonFormField(
-                    value:  dropdownDrCr,
+                    value: dropdownDrCr,
                     decoration: const InputDecoration(
                       labelText: 'Type',
                     ),
@@ -665,8 +680,8 @@ class _PartyMasterState extends State<PartyMaster> {
                     controller: _mobileno,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
-                    hintText: 'Mobile No',
-                    labelText: 'Mobile No',
+                    hintText: 'Mobile',
+                    labelText: 'Mobile',
                     onTap: () {
                       //gotoAgentScreen(context);
                     },
@@ -731,8 +746,8 @@ class _PartyMasterState extends State<PartyMaster> {
                     controller: _pcspercentage,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
-                    hintText: 'Tcs Percentage',
-                    labelText: 'Tcs Percentage',
+                    hintText: 'TCS (%)',
+                    labelText: 'TCS (%)',
                     onTap: () {
                       //gotoPartyScreen2(context, 'SALE PARTY', _party);
                     },
@@ -744,8 +759,8 @@ class _PartyMasterState extends State<PartyMaster> {
                     controller: _tdspercentage,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
-                    hintText: 'Tds Percentage',
-                    labelText: 'Tds Percentage',
+                    hintText: 'Tds (%)',
+                    labelText: 'Tds (%)',
                     onTap: () {
                       //gotoAgentScreen(context);
                     },
@@ -754,35 +769,45 @@ class _PartyMasterState extends State<PartyMaster> {
                 )
               ],
             ),
-             Padding(
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, 
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: const Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
+                      backgroundColor: Colors.green,
                       // Background color
                     ),
                     onPressed: () {
                       saveData();
                     },
-                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'SAVE',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   )),
-                  SizedBox(
-                   width: 10
-                  ),
+                  SizedBox(width: 10),
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
                       backgroundColor: Colors.green, // Background color
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-                        Fluttertoast.showToast(
+                      Fluttertoast.showToast(
                         msg: "CANCEL !!!",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
@@ -790,9 +815,15 @@ class _PartyMasterState extends State<PartyMaster> {
                         backgroundColor: Colors.white,
                         textColor: Colors.purple,
                         fontSize: 16.0,
-                        );
+                      );
                     },
-                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'CANCEL',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   ))
                 ],
               ),

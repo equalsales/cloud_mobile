@@ -37,11 +37,11 @@ class _Head_listState extends State<Head_list> {
   Future<bool> getheadlist() async {
     String clientid = globals.dbname;
     var response;
-    String uri='';
+    String uri = '';
 
-      uri = "https://www.cloud.equalsoftlink.com/api/api_getheadlist?dbname=" +
-          clientid;
-      response = await http.get(Uri.parse(uri));
+    uri = "https://www.cloud.equalsoftlink.com/api/api_accheadlist?dbname=" +
+        clientid;
+    response = await http.get(Uri.parse(uri));
 
     print(uri);
 
@@ -50,6 +50,7 @@ class _Head_listState extends State<Head_list> {
     this.setState(() {
       _headlist = jsonData['Data'];
       _orgheadlist = jsonData['Data'];
+      print(_orgheadlist);
       _selected = List.generate(jsonData['Data'].length, (i) => false);
     });
     return true;
@@ -57,7 +58,6 @@ class _Head_listState extends State<Head_list> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: EqAppBar(AppBarTitle: 'Head List'),
       body: Column(
@@ -74,7 +74,7 @@ class _Head_listState extends State<Head_list> {
               child: ListView.builder(
             itemCount: this._headlist.length,
             itemBuilder: (context, index) {
-              String head = this._headlist[index]['head'];
+              String head = this._headlist[index]['acchead'];
               return ListTile(
                 tileColor: _selected[index] ? Colors.blue : null,
                 title: Text(head),
@@ -113,9 +113,6 @@ class _Head_listState extends State<Head_list> {
       final heads = _orgheadlist.where((head) {
         final titlelower = head.toString().toLowerCase();
         final searchlower = query.toLowerCase();
-
-        //print(titlelower);
-        //print(searchlower);
         return titlelower.contains(searchlower);
       }).toList();
 

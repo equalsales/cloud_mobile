@@ -1,4 +1,3 @@
-
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
 import 'package:cloud_mobile/common/moduleview.dart';
@@ -34,15 +33,16 @@ class _AccountHeadListPageState extends State<AccountHeadList> {
     loaddetails();
   }
 
-Future<bool> loaddetails() async {
-  var companyid = widget.xcompanyid;
-  var clientid = globals.dbname;
+  Future<bool> loaddetails() async {
+    var companyid = widget.xcompanyid;
+    var clientid = globals.dbname;
     // var startdate = globals.startdate;
     // var enddate = globals.enddate;
     //print(globals.enddate);
 
     String uri = '';
-    uri ="https://www.cloud.equalsoftlink.com/api/api_accheadlist?dbname=$clientid&cno=$companyid";
+    uri =
+        "https://www.cloud.equalsoftlink.com/api/api_accheadlist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -93,7 +93,7 @@ Future<bool> loaddetails() async {
     return true;
   }
 
-void onAdd() {
+  void onAdd() {
     print('You Clicked Add..');
     Navigator.push(
         context,
@@ -172,7 +172,7 @@ void onAdd() {
                 ))).then((value) => loaddetails());
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return ModuleVIew(
       companyid: widget.xcompanyid,
@@ -181,7 +181,8 @@ void onAdd() {
       fend: widget.xfend,
       Data: this._companydetails,
       Title: 'List Of Account',
-      DataFormat: 'Account : #acchead#  PerHead : #parhead#  Index : #indx#  Active : #active#',
+      DataFormat:
+          'Account : #acchead#  PerHead : #parhead#  Index : #indx#  Active : #active#',
       onAdd: onAdd,
       onBack: onBack,
       onPDF: onPDF,
@@ -192,4 +193,3 @@ void onAdd() {
 }
 
 void doNothing(BuildContext context) {}
-

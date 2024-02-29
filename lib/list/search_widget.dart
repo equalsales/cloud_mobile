@@ -55,6 +55,13 @@ class _SearchWidgetState extends State<SearchWidget> {
         ),
         style: style,
         onChanged: widget.onChanged,
+        // onChanged: (value) {
+        //   controller.value = controller.value.copyWith(
+        //     text: value.toUpperCase(),
+        //     selection: TextSelection.collapsed(offset: value.length),
+        //   );
+        //   widget.onChanged;
+        // },
       ),
     );
   }
