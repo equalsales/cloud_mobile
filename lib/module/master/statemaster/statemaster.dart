@@ -9,13 +9,14 @@ import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
 
 class StateMaster extends StatefulWidget {
-  StateMaster({Key? mykey, companyid, companyname, fbeg, fend, id})
+  StateMaster({Key? mykey, companyid, companyname, fbeg, fend, id, onlineValue})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
     xfend = fend;
     xid = id;
+    xonlineValue = onlineValue;
   }
 
   var orderchr;
@@ -26,6 +27,7 @@ class StateMaster extends StatefulWidget {
   var xfbeg;
   var xfend;
   var xid;
+  var xonlineValue;
 
   @override
   _StateMasterState createState() => _StateMasterState();
@@ -38,18 +40,20 @@ class _StateMasterState extends State<StateMaster> {
   var partyid = 0;
   DateTime toDate = DateTime.now();
 
-  
   final _formKey = GlobalKey<FormState>();
-  
-  
+
   TextEditingController _statename = new TextEditingController();
   TextEditingController _statecode = new TextEditingController();
   TextEditingController _country = new TextEditingController();
-  
 
   @override
   void initState() {
     super.initState();
+    if (widget.xonlineValue != '') {
+      setState(() {
+        _statename.text = widget.xonlineValue.toString().toUpperCase();
+      });
+    }
     if (int.parse(widget.xid) > 0) {
       loadData();
     }
@@ -75,47 +79,40 @@ class _StateMasterState extends State<StateMaster> {
     return true;
   }
 
-  void setDefValue() {}
-
-  
-
-  @override
-  Widget build(BuildContext context) {
-
-    Future<bool> saveData() async {
-      //UnitVld();
-      String uri = '';
-      var companyid = widget.xcompanyid;
-      var clientid = globals.dbname;
-      var statename = _statename.text;
-      var statecode = _statecode.text;
-      var country = _country.text;
-      var id = widget.xid;
-      id = int.parse(id);
-      //print('In Save....');
-      uri =
-          "https://www.cloud.equalsoftlink.com/api/api_statestort?dbname=$clientid" +
-              "&state=" +
-              statename +
-              "&statecode=" +
-              statecode +
-              "&country=" +
-              country +
-              "&id=" +
-              id.toString();
-      print(uri);
-      var response = await http.post(Uri.parse(uri));
-      var jsonData = jsonDecode(response.body);
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
-      print(jsonCode);
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else if (jsonCode == '100') {
-        showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
-      } else {
-        Navigator.pop(context);
-        Fluttertoast.showToast(
+  Future<bool> saveData() async {
+    //UnitVld();
+    String uri = '';
+    var companyid = widget.xcompanyid;
+    var clientid = globals.dbname;
+    var statename = _statename.text;
+    var statecode = _statecode.text;
+    var country = _country.text;
+    var id = widget.xid;
+    id = int.parse(id);
+    //print('In Save....');
+    uri =
+        "https://www.cloud.equalsoftlink.com/api/api_statestort?dbname=$clientid" +
+            "&state=" +
+            statename +
+            "&statecode=" +
+            statecode +
+            "&country=" +
+            country +
+            "&id=" +
+            id.toString();
+    print(uri);
+    var response = await http.post(Uri.parse(uri));
+    var jsonData = jsonDecode(response.body);
+    var jsonCode = jsonData['Code'];
+    var jsonMsg = jsonData['Message'];
+    print(jsonCode);
+    if (jsonCode == '500') {
+      showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+    } else if (jsonCode == '100') {
+      showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
+    } else {
+      Navigator.pop(context);
+      Fluttertoast.showToast(
         msg: "Saved !!!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
@@ -123,21 +120,20 @@ class _StateMasterState extends State<StateMaster> {
         backgroundColor: Colors.white,
         textColor: Colors.purple,
         fontSize: 16.0,
-        );
-      }
-      return true;
+      );
     }
+    return true;
+  }
 
-    setState(() {
-    });
+  void setDefValue() {}
+
+  @override
+  Widget build(BuildContext context) {
+    setState(() {});
 
     setDefValue();
     return Scaffold(
       appBar: EqAppBar(AppBarTitle: "State Master"),
-      // floatingActionButton: FloatingActionButton(
-      //     child: Icon(Icons.done),
-      //     backgroundColor: Colors.green,
-      //     onPressed: () => {saveData()}),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -145,67 +141,16 @@ class _StateMasterState extends State<StateMaster> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(
+              children: [Expanded(child: stateTextField())],
+            ),
+            Row(
               children: [
-                Expanded(
-                  child: EqTextField(
-                    controller: _statename,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    autofocus: true,
-                    hintText: 'State name',
-                    labelText: 'State name',
-                    onTap: () {
-                      // gotoAgentScreen(context);
-                    },
-                    onChanged: (value) {
-                      _statename.value = _statename.value.copyWith(
-                        text: value.toUpperCase(),
-                        selection:
-                          TextSelection.collapsed(offset: value.length),
-                      );
-                    },
-                  ),
-                )
+                Expanded(child: statecodeTextField()),
               ],
             ),
             Row(
               children: [
-                Expanded(
-                  child: EqTextField(
-                    controller: _statecode,
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    hintText: 'State Code',
-                    labelText: 'State Code',
-                    onTap: () {
-                      //gotoPartyScreen2(context, 'SALE PARTY', _party);
-                    },
-                    onChanged: (value) {},
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: EqTextField(
-                    controller: _country,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    hintText: 'Country ',
-                    labelText: 'Country ',
-                    onTap: () {
-                      //gotoPartyScreen2(context, 'SALE PARTY', _party);
-                    },
-                    onChanged: (value) {
-                      _country.value = _country.value.copyWith(
-                        text: value.toUpperCase(),
-                        selection:
-                            TextSelection.collapsed(offset: value.length),
-                      );
-                    },
-                  ),
-                ),
+                Expanded(child: countryTextField()),
               ],
             ),
             Padding(padding: EdgeInsets.all(5)),
@@ -214,47 +159,126 @@ class _StateMasterState extends State<StateMaster> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, 
-                      // Background color
-                    ),
-                    onPressed: () {
-                      saveData();
-                    },
-                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
-                  )),
-                  SizedBox(
-                   width: 10
-                  ),
-                  Expanded(
-                    child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, // Background color
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                        Fluttertoast.showToast(
-                        msg: "CANCEL !!!",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.white,
-                        textColor: Colors.purple,
-                        fontSize: 16.0,
-                        );
-                    },
-                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
-                  ))
+                  Expanded(child: saveTextButton()),
+                  SizedBox(width: 10),
+                  Expanded(child: cancelTextButton())
                 ],
               ),
             )
           ],
         ),
       )),
+    );
+  }
+
+  EqTextField stateTextField() {
+    return EqTextField(
+      controller: _statename,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      autofocus: true,
+      hintText: 'State',
+      labelText: 'State',
+      onTap: () {
+        // gotoAgentScreen(context);
+      },
+      onChanged: (value) {
+        _statename.value = _statename.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  EqTextField statecodeTextField() {
+    return EqTextField(
+      controller: _statecode,
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.next,
+      hintText: 'State Code',
+      labelText: 'State Code',
+      onTap: () {
+        //gotoPartyScreen2(context, 'SALE PARTY', _party);
+      },
+      onChanged: (value) {},
+    );
+  }
+
+  EqTextField countryTextField() {
+    return EqTextField(
+      controller: _country,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      hintText: 'Country ',
+      labelText: 'Country ',
+      onTap: () {
+        //gotoPartyScreen2(context, 'SALE PARTY', _party);
+      },
+      onChanged: (value) {
+        _country.value = _country.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  TextButton saveTextButton() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.zero)),
+        textStyle: TextStyle(
+          fontSize: 25,
+          color: const Color.fromARGB(231, 255, 255, 255),
+        ), // Text style
+        backgroundColor: Colors.green,
+        // Background color
+      ),
+      onPressed: () {
+        saveData();
+      },
+      child: const Text(
+        'SAVE',
+        style: TextStyle(
+          fontSize: 20,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ),
+      ),
+    );
+  }
+
+  TextButton cancelTextButton() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.zero)),
+        textStyle: TextStyle(
+          fontSize: 25,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ), // Text style
+        backgroundColor: Colors.green, // Background color
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+          msg: "CANCEL !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
+        );
+      },
+      child: const Text(
+        'CANCEL',
+        style: TextStyle(
+          fontSize: 20,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ),
+      ),
     );
   }
 }
