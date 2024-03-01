@@ -142,8 +142,10 @@ class CityListState extends State<city_list> {
                     .then((result) {
                   _citySelected.add(result[0]);
                   _citySelected2.add(result[1]);
+                  _state.add(result[2]);
 
-                  Navigator.pop(context, [_citySelected, _citySelected2]);
+                  Navigator.pop(
+                      context, [_citySelected, _citySelected2, _state]);
                   ;
                 });
               },

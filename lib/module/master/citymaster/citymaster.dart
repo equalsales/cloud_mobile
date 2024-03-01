@@ -127,7 +127,7 @@ class _CityMasterState extends State<CityMaster> {
       showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
     } else {
       //Navigator.pop(context);
-      Navigator.pop(context, [cityname, jsonData['id']]);
+      Navigator.pop(context, [cityname, jsonData['id'], statename]);
       Fluttertoast.showToast(
         msg: "Saved !!!",
         toastLength: Toast.LENGTH_SHORT,

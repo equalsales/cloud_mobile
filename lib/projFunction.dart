@@ -1,3 +1,4 @@
+import 'package:cloud_mobile/list/city_list.dart';
 import 'package:cloud_mobile/list/country_list.dart';
 import 'package:cloud_mobile/list/state_list.dart';
 import 'package:cloud_mobile/module/master/citymaster/citymaster.dart';
@@ -104,5 +105,18 @@ cityMaster_Add(
       ),
     ),
   );
+  return result;
+}
+
+openCity_List(context, companyid, companyname, startdate, enddate) async {
+  var result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (_) => city_list(
+                companyid: companyid,
+                companyname: companyname,
+                fbeg: startdate,
+                fend: enddate,
+              )));
   return result;
 }

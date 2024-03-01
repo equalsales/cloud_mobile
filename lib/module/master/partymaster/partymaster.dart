@@ -10,6 +10,7 @@ import 'package:cloud_mobile/list/head_list.dart';
 import 'package:cloud_mobile/list/party_list.dart';
 import 'package:cloud_mobile/list/state_list.dart';
 import 'package:cloud_mobile/module/salebill/add_salebill.dart';
+import 'package:cloud_mobile/projFunction.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -99,16 +100,8 @@ class _PartyMasterState extends State<PartyMaster> {
   ];
 
   void gotoStationScreen(BuildContext context) async {
-    var result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => city_list(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend,
-                  acctype: "SALE PARTY",
-                )));
+    var result = await openCity_List(context, widget.xcompanyid,
+        widget.xcompanyname, widget.xfbeg, widget.xfend);
 
     var retResult = result[0];
     var retState = result[2];
@@ -817,8 +810,8 @@ class _PartyMasterState extends State<PartyMaster> {
       controller: _tdspercentage,
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.number,
-      hintText: 'Tds (%)',
-      labelText: 'Tds (%)',
+      hintText: 'TdS(%)',
+      labelText: 'TDS (%)',
       onTap: () {
         //gotoAgentScreen(context);
       },
