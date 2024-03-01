@@ -755,8 +755,8 @@ class _PartyMasterState extends State<PartyMaster> {
       controller: _pincode,
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.number,
-      hintText: 'Pin Code',
-      labelText: 'Pin Code',
+      hintText: 'Pincode',
+      labelText: 'Pincode',
       onTap: () {
         //gotoBranchScreen(context);
       },

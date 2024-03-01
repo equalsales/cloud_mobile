@@ -12,13 +12,14 @@ import '../../../common/alert.dart';
 import '../../../common/global.dart' as globals;
 
 class CityMaster extends StatefulWidget {
-  CityMaster({Key? mykey, companyid, companyname, fbeg, fend, id})
+  CityMaster({Key? mykey, companyid, companyname, fbeg, fend, id, onlineValue})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
     xfend = fend;
     xid = id;
+    xonlineValue = onlineValue;
   }
 
   var orderchr;
@@ -29,6 +30,7 @@ class CityMaster extends StatefulWidget {
   var xfbeg;
   var xfend;
   var xid;
+  var xonlineValue;
 
   @override
   _CityMasterState createState() => _CityMasterState();
@@ -44,6 +46,12 @@ class _CityMasterState extends State<CityMaster> {
   @override
   void initState() {
     super.initState();
+
+    if ((widget.xonlineValue != '') && (widget.xonlineValue != null)) {
+      setState(() {
+        _cityname.text = widget.xonlineValue.toString().toUpperCase();
+      });
+    }
     if (int.parse(widget.xid) > 0) {
       loadData();
     }
@@ -118,7 +126,8 @@ class _CityMasterState extends State<CityMaster> {
     } else if (jsonCode == '100') {
       showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
     } else {
-      Navigator.pop(context);
+      //Navigator.pop(context);
+      Navigator.pop(context, [cityname, jsonData['id']]);
       Fluttertoast.showToast(
         msg: "Saved !!!",
         toastLength: Toast.LENGTH_SHORT,

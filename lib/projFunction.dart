@@ -1,5 +1,6 @@
 import 'package:cloud_mobile/list/country_list.dart';
 import 'package:cloud_mobile/list/state_list.dart';
+import 'package:cloud_mobile/module/master/citymaster/citymaster.dart';
 import 'package:cloud_mobile/module/master/country/countrymaster.dart';
 import 'package:cloud_mobile/module/master/partymaster/partymaster.dart';
 import 'package:cloud_mobile/module/master/statemaster/statemaster.dart';
@@ -85,5 +86,23 @@ countryMaster_Add(
   );
   print('out');
   print(result);
+  return result;
+}
+
+cityMaster_Add(
+    context, companyid, companyname, startdate, enddate, cValue) async {
+  var result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => CityMaster(
+        companyid: companyid,
+        companyname: companyname,
+        fbeg: startdate,
+        fend: enddate,
+        id: '0',
+        onlineValue: cValue,
+      ),
+    ),
+  );
   return result;
 }
