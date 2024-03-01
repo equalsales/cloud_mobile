@@ -193,8 +193,8 @@ class _BookMasterState extends State<BookMaster> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   autofocus: true,
-                  hintText: 'Bookname',
-                  labelText: 'Bookname',
+                  hintText: 'Book',
+                  labelText: 'Book',
                   onTap: () {},
                   onChanged: (value) {
                     _bookname.value = _bookname.value.copyWith(
