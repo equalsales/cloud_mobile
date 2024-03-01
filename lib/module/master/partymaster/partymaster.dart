@@ -310,123 +310,119 @@ class _PartyMasterState extends State<PartyMaster> {
     return true;
   }
 
+  Future<bool> saveData() async {
+    //UnitVld();
+    String uri = '';
+    var companyid = widget.xcompanyid;
+    var clientid = globals.dbname;
+    var partyname = _partyname.text;
+    var head = _head.text;
+    var acctype = _acctype.text;
+    var address1 = _address1.text;
+    var address2 = _address2.text;
+    var address3 = _address3.text;
+    var pincode = _pincode.text;
+    var city = _city.text;
+    var gstno = _gstno.text;
+    var state = _state.text;
+    var mobileno = _mobileno.text;
+    var tcsper = _pcspercentage.text;
+    var tdsper = _tdspercentage.text;
+    var discper = _dhara.text;
+    var opbalance = _openingBal.text;
+    var rdurd = _rdurd.text;
+    var id = widget.xid;
+    id = int.parse(id);
+    //print('In Save....');
+    uri =
+        "https://www.cloud.equalsoftlink.com/api/api_partystort?dbname=$clientid" +
+            "&party=" +
+            partyname +
+            "&acchead=" +
+            head +
+            "&acctype=" +
+            dropdownAccType +
+            "&addr1=" +
+            address1 +
+            "&addr2=" +
+            address2 +
+            "&addr3=" +
+            address3 +
+            "&pincode=" +
+            pincode +
+            "&city=" +
+            city +
+            "&state=" +
+            state +
+            "&mobileno=" +
+            mobileno +
+            "&tcsper=" +
+            tcsper +
+            "&tdsper=" +
+            tdsper +
+            "&discper=" +
+            discper +
+            "&gstregno=" +
+            gstno +
+            "&rdurd=" +
+            dropdownRdurd +
+            "&type=" +
+            dropdownDrCr +
+            "&opbalance=" +
+            opbalance +
+            "&cno=" +
+            companyid +
+            "&id=" +
+            id.toString();
+    print(uri);
+    var response = await http.post(Uri.parse(uri));
+    var jsonData = jsonDecode(response.body);
+    var jsonCode = jsonData['Code'];
+    var jsonMsg = jsonData['Message'];
+    print(jsonCode);
+    if (jsonCode == '500') {
+      showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+    } else if (jsonCode == '100') {
+      showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
+    } else {
+      // Navigator.pop(context);
+      if (widget.xnewParty == '') {
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+          msg: "Saved !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
+        );
+      } else {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SalesBillAdd(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  id: '0',
+                  partyname: _partyname.text),
+            ));
+      }
+    }
+    return true;
+  }
+
   void setDefValue() {}
 
   @override
   Widget build(BuildContext context) {
-    Future<bool> saveData() async {
-      //UnitVld();
-      String uri = '';
-      var companyid = widget.xcompanyid;
-      var clientid = globals.dbname;
-      var partyname = _partyname.text;
-      var head = _head.text;
-      var acctype = _acctype.text;
-      var address1 = _address1.text;
-      var address2 = _address2.text;
-      var address3 = _address3.text;
-      var pincode = _pincode.text;
-      var city = _city.text;
-      var gstno = _gstno.text;
-      var state = _state.text;
-      var mobileno = _mobileno.text;
-      var tcsper = _pcspercentage.text;
-      var tdsper = _tdspercentage.text;
-      var discper = _dhara.text;
-      var opbalance = _openingBal.text;
-      var rdurd = _rdurd.text;
-      var id = widget.xid;
-      id = int.parse(id);
-      //print('In Save....');
-      uri =
-          "https://www.cloud.equalsoftlink.com/api/api_partystort?dbname=$clientid" +
-              "&party=" +
-              partyname +
-              "&acchead=" +
-              head +
-              "&acctype=" +
-              dropdownAccType +
-              "&addr1=" +
-              address1 +
-              "&addr2=" +
-              address2 +
-              "&addr3=" +
-              address3 +
-              "&pincode=" +
-              pincode +
-              "&city=" +
-              city +
-              "&state=" +
-              state +
-              "&mobileno=" +
-              mobileno +
-              "&tcsper=" +
-              tcsper +
-              "&tdsper=" +
-              tdsper +
-              "&discper=" +
-              discper +
-              "&gstregno=" +
-              gstno +
-              "&rdurd=" +
-              dropdownRdurd +
-              "&type=" +
-              dropdownDrCr +
-              "&opbalance=" +
-              opbalance +
-              "&cno=" +
-              companyid +
-              "&id=" +
-              id.toString();
-      print(uri);
-      var response = await http.post(Uri.parse(uri));
-      var jsonData = jsonDecode(response.body);
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
-      print(jsonCode);
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else if (jsonCode == '100') {
-        showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
-      } else {
-        // Navigator.pop(context);
-        if (widget.xnewParty == '') {
-          Navigator.pop(context);
-          Fluttertoast.showToast(
-            msg: "Saved !!!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.white,
-            textColor: Colors.purple,
-            fontSize: 16.0,
-          );
-        } else {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => SalesBillAdd(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                    id: '0',
-                    partyname: _partyname.text),
-              ));
-        }
-      }
-      return true;
-    }
-
     setState(() {});
 
     setDefValue();
     return Scaffold(
       appBar: EqAppBar(AppBarTitle: "Party Master"),
-      // floatingActionButton: FloatingActionButton(
-      //     child: Icon(Icons.done),
-      //     backgroundColor: Colors.green,
-      //     onPressed: () => {saveData()}),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -435,26 +431,7 @@ class _PartyMasterState extends State<PartyMaster> {
           children: <Widget>[
             Row(
               children: [
-                Expanded(
-                  child: EqTextField(
-                    controller: _gstno,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.text,
-                    autofocus: true,
-                    hintText: 'GSTIN',
-                    labelText: 'GST No',
-                    onTap: () {
-                      //gotoPartyScreen2(context, 'SALE PARTY', _party);
-                    },
-                    onChanged: (value) {
-                      _gstno.value = _gstno.value.copyWith(
-                        text: value.toUpperCase(),
-                        selection:
-                            TextSelection.collapsed(offset: value.length),
-                      );
-                    },
-                  ),
-                ),
+                Expanded(child: gstTextField()),
                 SizedBox(),
                 Container(
                     width: 150,
@@ -475,297 +452,55 @@ class _PartyMasterState extends State<PartyMaster> {
               ],
             ),
             Row(children: [
-              Expanded(
-                child: EqTextField(
-                  controller: _partyname,
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-                  hintText: 'Party',
-                  labelText: 'Party',
-                  onTap: () {
-                    // gotoPartyScreen(context, 'SALE PARTY', _partyname);
-                  },
-                  onChanged: (value) {
-                    _partyname.value = _partyname.value.copyWith(
-                      text: value.toUpperCase(),
-                      selection: TextSelection.collapsed(offset: value.length),
-                    );
-                  },
-                ),
-              ),
+              Expanded(child: partyTextField()),
             ]),
             Row(children: [
               Expanded(
-                child: DropdownButtonFormField(
-                    value: dropdownAccType,
-                    decoration: const InputDecoration(
-                      labelText: 'ACCTYPE',
-                    ),
-                    items: Acctype.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    icon: const Icon(Icons.arrow_drop_down_circle),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownAccType = newValue!;
-                        acctypeheadvld();
-                      });
-                    }),
+                child: acctypeDropDown(),
               )
             ]),
             Row(children: [
               Expanded(
-                child: EqTextField(
-                  controller: _head,
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-                  hintText: 'Head',
-                  labelText: 'Head',
-                  onTap: () {
-                    gotoHeadScreen(context);
-                  },
-                  onChanged: (value) {
-                    _head.value = _head.value.copyWith(
-                      text: value.toUpperCase(),
-                      selection: TextSelection.collapsed(offset: value.length),
-                    );
-                  },
-                ),
+                child: accheadTextField(),
               ),
             ]),
             Row(children: [
-              Expanded(
-                child: EqTextField(
-                  controller: _openingBal,
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.number,
-                  hintText: 'Op Balance',
-                  labelText: 'Op Balance',
-                  onTap: () {
-                    //_selectDate(context);
-                  },
-                  onChanged: (value) {},
-                ),
-              ),
+              Expanded(child: openingTextField()),
               SizedBox(),
-              Expanded(
-                child: DropdownButtonFormField(
-                    value: dropdownDrCr,
-                    decoration: const InputDecoration(
-                      labelText: 'Type',
-                    ),
-                    items: drcr.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    icon: const Icon(Icons.arrow_drop_down_circle),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownDrCr = newValue!;
-                      });
-                    }),
-              )
+              Expanded(child: typeDropDown())
             ]),
             Row(children: [
-              Expanded(
-                child: EqTextField(
-                  controller: _address1,
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-                  hintText: 'Address 1',
-                  labelText: 'Address 1',
-                  onTap: () {
-                    //_selectDate(context);
-                  },
-                  onChanged: (value) {
-                    _address1.value = _address1.value.copyWith(
-                      text: value.toUpperCase(),
-                      selection: TextSelection.collapsed(offset: value.length),
-                    );
-                  },
-                ),
-              ),
+              Expanded(child: addr1TextField()),
             ]),
             Row(children: [
-              Expanded(
-                child: EqTextField(
-                  controller: _address2,
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-                  hintText: 'Address 2',
-                  labelText: 'Address 2',
-                  onTap: () {
-                    //_selectDate(context);
-                  },
-                  onChanged: (value) {
-                    _address2.value = _address2.value.copyWith(
-                      text: value.toUpperCase(),
-                      selection: TextSelection.collapsed(offset: value.length),
-                    );
-                  },
-                ),
-              ),
+              Expanded(child: addr2TextField()),
             ]),
             Row(children: [
-              Expanded(
-                child: EqTextField(
-                  controller: _address3,
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.text,
-                  hintText: 'Address 3',
-                  labelText: 'Address 3',
-                  onTap: () {
-                    //_selectDate(context);
-                  },
-                  onChanged: (value) {
-                    _address3.value = _address3.value.copyWith(
-                      text: value.toUpperCase(),
-                      selection: TextSelection.collapsed(offset: value.length),
-                    );
-                  },
-                ),
-              ),
+              Expanded(child: addr3TextField()),
             ]),
             Row(
               children: [
-                Expanded(
-                  child: EqTextField(
-                    controller: _city,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.text,
-                    hintText: 'City',
-                    labelText: 'City',
-                    onTap: () {
-                      gotoStationScreen(context);
-                    },
-                    onChanged: (value) {
-                      _city.value = _city.value.copyWith(
-                        text: value.toUpperCase(),
-                        selection:
-                            TextSelection.collapsed(offset: value.length),
-                      );
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: EqTextField(
-                    controller: _state,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.text,
-                    hintText: 'State',
-                    labelText: 'State',
-                    onTap: () {
-                      gotoStateScreen(context);
-                    },
-                    onChanged: (value) {
-                      _state.value = _state.value.copyWith(
-                        text: value.toUpperCase(),
-                        selection:
-                            TextSelection.collapsed(offset: value.length),
-                      );
-                    },
-                  ),
-                ),
+                Expanded(child: cityTextField()),
+                Expanded(child: stateTextField()),
               ],
             ),
             Row(
               children: [
-                Expanded(
-                  child: EqTextField(
-                    controller: _mobileno,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
-                    hintText: 'Mobile',
-                    labelText: 'Mobile',
-                    onTap: () {
-                      //gotoAgentScreen(context);
-                    },
-                    onChanged: (value) {},
-                  ),
-                ),
-                Expanded(
-                  child: EqTextField(
-                    controller: _pincode,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
-                    hintText: 'Pin Code',
-                    labelText: 'Pin Code',
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
-                    onChanged: (value) {},
-                  ),
-                ),
+                Expanded(child: mobileTextField()),
+                Expanded(child: pincodeTextField()),
               ],
             ),
             Row(
               children: [
-                Expanded(
-                  child: EqTextField(
-                    controller: _dhara,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
-                    hintText: 'Dhara',
-                    labelText: 'Dhara',
-                    onTap: () {
-                      //gotoAgentScreen(context);
-                    },
-                    onChanged: (value) {},
-                  ),
-                ),
-                Expanded(
-                  child: DropdownButtonFormField(
-                      value: dropdownRdurd,
-                      decoration: const InputDecoration(
-                        labelText: 'Type',
-                      ),
-                      items: rdurd.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      icon: const Icon(Icons.arrow_drop_down_circle),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownRdurd = newValue!;
-                        });
-                      }),
-                )
+                Expanded(child: dharaTextField()),
+                Expanded(child: rdurdDropDown())
               ],
             ),
             Row(
               children: [
+                Expanded(child: tcsrateTextField()),
                 Expanded(
-                  child: EqTextField(
-                    controller: _pcspercentage,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
-                    hintText: 'TCS (%)',
-                    labelText: 'TCS (%)',
-                    onTap: () {
-                      //gotoPartyScreen2(context, 'SALE PARTY', _party);
-                    },
-                    onChanged: (value) {},
-                  ),
-                ),
-                Expanded(
-                  child: EqTextField(
-                    controller: _tdspercentage,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
-                    hintText: 'Tds (%)',
-                    labelText: 'Tds (%)',
-                    onTap: () {
-                      //gotoAgentScreen(context);
-                    },
-                    onChanged: (value) {},
-                  ),
+                  child: tdsrateTextField(),
                 )
               ],
             ),
@@ -774,63 +509,380 @@ class _PartyMasterState extends State<PartyMaster> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                      child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(
-                        fontSize: 25,
-                        color: const Color.fromARGB(231, 255, 255, 255),
-                      ), // Text style
-                      backgroundColor: Colors.green,
-                      // Background color
-                    ),
-                    onPressed: () {
-                      saveData();
-                    },
-                    child: const Text(
-                      'SAVE',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(231, 255, 255, 255),
-                      ),
-                    ),
-                  )),
+                  Expanded(child: saveTextButton()),
                   SizedBox(width: 10),
-                  Expanded(
-                      child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(
-                        fontSize: 25,
-                        color: Color.fromARGB(231, 255, 255, 255),
-                      ), // Text style
-                      backgroundColor: Colors.green, // Background color
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Fluttertoast.showToast(
-                        msg: "CANCEL !!!",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.white,
-                        textColor: Colors.purple,
-                        fontSize: 16.0,
-                      );
-                    },
-                    child: const Text(
-                      'CANCEL',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromARGB(231, 255, 255, 255),
-                      ),
-                    ),
-                  ))
+                  Expanded(child: cancelTextButton())
                 ],
               ),
             )
           ],
         ),
       )),
+    );
+  }
+
+  EqTextField gstTextField() {
+    return EqTextField(
+      controller: _gstno,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.text,
+      autofocus: true,
+      hintText: 'GSTIN',
+      labelText: 'GST No',
+      onTap: () {
+        //gotoPartyScreen2(context, 'SALE PARTY', _party);
+      },
+      onChanged: (value) {
+        _gstno.value = _gstno.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  EqTextField partyTextField() {
+    return EqTextField(
+      controller: _partyname,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.text,
+      hintText: 'Party',
+      labelText: 'Party',
+      onTap: () {
+        // gotoPartyScreen(context, 'SALE PARTY', _partyname);
+      },
+      onChanged: (value) {
+        _partyname.value = _partyname.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  DropdownButtonFormField acctypeDropDown() {
+    return DropdownButtonFormField(
+      value: dropdownAccType,
+      decoration: const InputDecoration(
+        labelText: 'ACCTYPE',
+      ),
+      items: Acctype.map((String items) {
+        return DropdownMenuItem(
+          value: items,
+          child: Text(items),
+        );
+      }).toList(),
+      icon: const Icon(Icons.arrow_drop_down_circle),
+      onChanged: (newValue) {
+        setState(() {
+          dropdownAccType = newValue!;
+          acctypeheadvld();
+        });
+      },
+      // onChanged: (String? newValue) {
+      //   setState(() {
+      //     //dropdownAccType = newValue!;
+      //     //acctypeheadvld();
+      //   });
+      // }
+    );
+  }
+
+  EqTextField accheadTextField() {
+    return EqTextField(
+      controller: _head,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.text,
+      hintText: 'Head',
+      labelText: 'Head',
+      onTap: () {
+        gotoHeadScreen(context);
+      },
+      onChanged: (value) {
+        _head.value = _head.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  EqTextField openingTextField() {
+    return EqTextField(
+      controller: _openingBal,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      hintText: 'Op Balance',
+      labelText: 'Op Balance',
+      onTap: () {
+        //_selectDate(context);
+      },
+      onChanged: (value) {},
+    );
+  }
+
+  DropdownButtonFormField typeDropDown() {
+    return DropdownButtonFormField(
+        value: dropdownDrCr,
+        decoration: const InputDecoration(
+          labelText: 'Type',
+        ),
+        items: drcr.map((String items) {
+          return DropdownMenuItem(
+            value: items,
+            child: Text(items),
+          );
+        }).toList(),
+        icon: const Icon(Icons.arrow_drop_down_circle),
+        onChanged: (newValue) {
+          setState(() {
+            dropdownDrCr = newValue!;
+          });
+        });
+  }
+
+  EqTextField addr1TextField() {
+    return EqTextField(
+      controller: _address1,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.text,
+      hintText: 'Address 1',
+      labelText: 'Address 1',
+      onTap: () {
+        //_selectDate(context);
+      },
+      onChanged: (value) {
+        _address1.value = _address1.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  EqTextField addr2TextField() {
+    return EqTextField(
+      controller: _address2,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.text,
+      hintText: 'Address 2',
+      labelText: 'Address 2',
+      onTap: () {
+        //_selectDate(context);
+      },
+      onChanged: (value) {
+        _address2.value = _address2.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  EqTextField addr3TextField() {
+    return EqTextField(
+      controller: _address3,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.text,
+      hintText: 'Address 3',
+      labelText: 'Address 3',
+      onTap: () {
+        //_selectDate(context);
+      },
+      onChanged: (value) {
+        _address3.value = _address3.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  EqTextField cityTextField() {
+    return EqTextField(
+      controller: _city,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.text,
+      hintText: 'City',
+      labelText: 'City',
+      onTap: () {
+        gotoStationScreen(context);
+      },
+      onChanged: (value) {
+        _city.value = _city.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  EqTextField stateTextField() {
+    return EqTextField(
+      controller: _state,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.text,
+      hintText: 'State',
+      labelText: 'State',
+      onTap: () {
+        gotoStateScreen(context);
+      },
+      onChanged: (value) {
+        _state.value = _state.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  EqTextField mobileTextField() {
+    return EqTextField(
+      controller: _mobileno,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      hintText: 'Mobile',
+      labelText: 'Mobile',
+      onTap: () {
+        //gotoAgentScreen(context);
+      },
+      onChanged: (value) {},
+    );
+  }
+
+  EqTextField pincodeTextField() {
+    return EqTextField(
+      controller: _pincode,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      hintText: 'Pin Code',
+      labelText: 'Pin Code',
+      onTap: () {
+        //gotoBranchScreen(context);
+      },
+      onChanged: (value) {},
+    );
+  }
+
+  EqTextField dharaTextField() {
+    return EqTextField(
+      controller: _dhara,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      hintText: 'Dhara',
+      labelText: 'Dhara',
+      onTap: () {
+        //gotoAgentScreen(context);
+      },
+      onChanged: (value) {},
+    );
+  }
+
+  DropdownButtonFormField rdurdDropDown() {
+    return DropdownButtonFormField(
+        value: dropdownRdurd,
+        decoration: const InputDecoration(
+          labelText: 'RD/URD',
+        ),
+        items: rdurd.map((String items) {
+          return DropdownMenuItem(
+            value: items,
+            child: Text(items),
+          );
+        }).toList(),
+        icon: const Icon(Icons.arrow_drop_down_circle),
+        onChanged: (newValue) {
+          setState(() {
+            dropdownRdurd = newValue!;
+          });
+        });
+  }
+
+  EqTextField tcsrateTextField() {
+    return EqTextField(
+      controller: _pcspercentage,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      hintText: 'TCS (%)',
+      labelText: 'TCS (%)',
+      onTap: () {
+        //gotoPartyScreen2(context, 'SALE PARTY', _party);
+      },
+      onChanged: (value) {},
+    );
+  }
+
+  EqTextField tdsrateTextField() {
+    return EqTextField(
+      controller: _tdspercentage,
+      textInputAction: TextInputAction.next,
+      keyboardType: TextInputType.number,
+      hintText: 'Tds (%)',
+      labelText: 'Tds (%)',
+      onTap: () {
+        //gotoAgentScreen(context);
+      },
+      onChanged: (value) {},
+    );
+  }
+
+  TextButton saveTextButton() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.zero)),
+
+        textStyle: TextStyle(
+          fontSize: 25,
+          color: const Color.fromARGB(231, 255, 255, 255),
+        ), // Text style
+        backgroundColor: Colors.green,
+        // Background color
+      ),
+      onPressed: () {
+        this.saveData();
+      },
+      child: const Text(
+        'SAVE',
+        style: TextStyle(
+          fontSize: 20,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ),
+      ),
+    );
+  }
+
+  TextButton cancelTextButton() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.zero)),
+
+        textStyle: TextStyle(
+          fontSize: 25,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ), // Text style
+        backgroundColor: Colors.green, // Background color
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+          msg: "CANCEL !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
+        );
+      },
+      child: const Text(
+        'CANCEL',
+        style: TextStyle(
+          fontSize: 20,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ),
+      ),
     );
   }
 }
