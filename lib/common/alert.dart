@@ -11,7 +11,7 @@ showAlertDialog(BuildContext context, String msg) {
 
   // Create AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Simple Alert"),
+    title: Text("Alert"),
     content: Text(msg),
     actions: [
       okButton,

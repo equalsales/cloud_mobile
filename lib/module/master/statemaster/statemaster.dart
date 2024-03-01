@@ -50,7 +50,10 @@ class _StateMasterState extends State<StateMaster> {
   @override
   void initState() {
     super.initState();
-    if (widget.xonlineValue != '') {
+
+    print(widget.xonlineValue);
+
+    if ((widget.xonlineValue != '') && (widget.xonlineValue != null)) {
       setState(() {
         _statename.text = widget.xonlineValue.toString().toUpperCase();
       });
@@ -112,7 +115,8 @@ class _StateMasterState extends State<StateMaster> {
     } else if (jsonCode == '100') {
       showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
     } else {
-      Navigator.pop(context);
+      //Navigator.pop(context);
+      Navigator.pop(context, [statename, jsonData['id']]);
       Fluttertoast.showToast(
         msg: "Saved !!!",
         toastLength: Toast.LENGTH_SHORT,
@@ -215,7 +219,12 @@ class _StateMasterState extends State<StateMaster> {
       labelText: 'Country ',
       onTap: () {
         openCountry_List(context, widget.xcompanyid, widget.xcompanyname,
-            widget.xfbeg, widget.xfend);
+                widget.xfbeg, widget.xfend)
+            .then((data) {
+          print('cccc');
+          print(data);
+          _country.text = data[0][0];
+        });
         //gotoPartyScreen2(context, 'SALE PARTY', _party);
       },
       onChanged: (value) {

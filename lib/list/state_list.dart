@@ -144,7 +144,14 @@ class StateListState extends State<state_list> {
                   ))),
               onPressed: () {
                 stateMaster_Add(context, widget.xcompanyid, widget.xcompanyname,
-                    widget.xfbeg, widget.xfend, query);
+                        widget.xfbeg, widget.xfend, query)
+                    .then((result) {
+                  _stateSelected.add(result[0]);
+                  _stateSelected2.add(result[1]);
+
+                  Navigator.pop(context, [_stateSelected, _stateSelected2]);
+                  ;
+                });
               },
               child: Text('Add'),
             ),

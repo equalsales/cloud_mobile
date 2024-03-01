@@ -103,20 +103,9 @@ class CountryListState extends State<country_list> {
                 title: Text(account),
                 subtitle: Text(country),
                 onTap: () {
-                  //print(account);
-                  //setState(() => _selected[i] = !_selected[i])
                   _countrySelected.add(account);
                   _countrySelected2.add(id);
-                  //setState(() => _selected[index] = !_selected[index]);
                   setState(() => _selected[index] = !_selected[index]);
-                  //print(_selected);
-                  //showAlertDialog(context, companyid);
-                  // Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard(
-                  //   companyid: companyid,
-                  //   companyname: companyname,
-                  //   fbeg: fbeg,
-                  //   fend: fend
-                  //   )));
                 },
               );
             },
@@ -146,7 +135,13 @@ class CountryListState extends State<country_list> {
                   ))),
               onPressed: () {
                 countryMaster_Add(context, widget.xcompanyid,
-                    widget.xcompanyname, widget.xfbeg, widget.xfend, query);
+                        widget.xcompanyname, widget.xfbeg, widget.xfend, query)
+                    .then((result) {
+                  _countrySelected.add(result[0]);
+                  _countrySelected2.add(result[1]);
+
+                  Navigator.pop(context, [_countrySelected, _countrySelected2]);
+                });
               },
               child: Text('Add'),
             ),

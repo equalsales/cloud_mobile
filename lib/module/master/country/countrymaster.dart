@@ -86,18 +86,19 @@ class _CountryMasterState extends State<CountryMaster> {
             countryname +
             "&id=" +
             id.toString();
+    print('dhruv');
     print(uri);
     var response = await http.post(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
     var jsonCode = jsonData['Code'];
     var jsonMsg = jsonData['Message'];
-    print(jsonCode);
+    print(jsonData);
     if (jsonCode == '500') {
       showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
     } else if (jsonCode == '100') {
       showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
     } else {
-      Navigator.pop(context);
+      Navigator.pop(context, [countryname, jsonData['id']]);
       Fluttertoast.showToast(
         msg: "Saved !!!",
         toastLength: Toast.LENGTH_SHORT,

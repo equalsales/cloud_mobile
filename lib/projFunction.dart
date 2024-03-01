@@ -36,8 +36,9 @@ partyMaster_Add(
   );
 }
 
-stateMaster_Add(context, companyid, companyname, startdate, enddate, cValue) {
-  Navigator.push(
+stateMaster_Add(
+    context, companyid, companyname, startdate, enddate, cValue) async {
+  var result = await Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) => StateMaster(
@@ -50,6 +51,7 @@ stateMaster_Add(context, companyid, companyname, startdate, enddate, cValue) {
       ),
     ),
   );
+  return result;
 }
 
 openCountry_List(context, companyid, companyname, startdate, enddate) async {
@@ -65,8 +67,10 @@ openCountry_List(context, companyid, companyname, startdate, enddate) async {
   return result;
 }
 
-countryMaster_Add(context, companyid, companyname, startdate, enddate, cValue) {
-  Navigator.push(
+countryMaster_Add(
+    context, companyid, companyname, startdate, enddate, cValue) async {
+  print('in');
+  var result = await Navigator.push(
     context,
     MaterialPageRoute(
       builder: (context) => CountryMaster(
@@ -79,4 +83,7 @@ countryMaster_Add(context, companyid, companyname, startdate, enddate, cValue) {
       ),
     ),
   );
+  print('out');
+  print(result);
+  return result;
 }

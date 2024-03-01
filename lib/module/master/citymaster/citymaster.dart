@@ -112,7 +112,7 @@ class _CityMasterState extends State<CityMaster> {
     var jsonData = jsonDecode(response.body);
     var jsonCode = jsonData['Code'];
     var jsonMsg = jsonData['Message'];
-    print(jsonCode);
+    print(jsonData);
     if (jsonCode == '500') {
       showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
     } else if (jsonCode == '100') {
