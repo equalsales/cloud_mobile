@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:cloud_mobile/common/moduleview.dart';
 import 'package:cloud_mobile/module/master/bankmaster/bankmaster.dart';
@@ -27,18 +26,18 @@ class BankMasterList extends StatefulWidget {
 
 class _BankMasterListPageState extends State<BankMasterList> {
   List _companydetails = [];
-  
+
   @override
   void initState() {
     super.initState();
     loaddetails();
   }
 
-Future<bool> loaddetails() async {
-  var companyid = widget.xcompanyid;
-  var clientid = globals.dbname;
-  String uri = '';
-  uri =
+  Future<bool> loaddetails() async {
+    var companyid = widget.xcompanyid;
+    var clientid = globals.dbname;
+    String uri = '';
+    uri =
         "https://www.cloud.equalsoftlink.com/api/api_banklist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
     print(uri);
@@ -90,8 +89,7 @@ Future<bool> loaddetails() async {
     return true;
   }
 
-
-void onAdd() {
+  void onAdd() {
     print('You Clicked Add..');
     Navigator.push(
         context,
@@ -170,7 +168,7 @@ void onAdd() {
                 ))).then((value) => loaddetails());
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return ModuleVIew(
       companyid: widget.xcompanyid,
@@ -190,4 +188,3 @@ void onAdd() {
 }
 
 void doNothing(BuildContext context) {}
-

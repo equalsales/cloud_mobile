@@ -98,10 +98,11 @@ class _ModuleViewPageState extends State<ModuleVIew> {
       autofocus: true,
       cursorColor: Colors.white,
       style: TextStyle(
-          color: Colors.white,
-          fontSize: 16.0,
-          fontWeight: FontWeight.bold,
-          fontFamily: 'verdana'),
+        color: Colors.white,
+        //fontSize: 16.0,
+        //fontWeight: FontWeight.bold,
+        //fontFamily: 'verdana'
+      ),
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
         enabledBorder:
@@ -111,7 +112,7 @@ class _ModuleViewPageState extends State<ModuleVIew> {
         hintText: 'Search',
         hintStyle: TextStyle(
           color: Colors.white60,
-          fontSize: 20,
+          //fontSize: 20,
         ),
       ),
     );
@@ -139,10 +140,11 @@ class _ModuleViewPageState extends State<ModuleVIew> {
               ? Text(
                   widget._Title,
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'verdana'),
+                    color: Colors.white,
+                    //fontSize: 16.0,
+                    //fontWeight: FontWeight.bold,
+                    //fontFamily: 'verdana'
+                  ),
                 )
               : _searchTextField(),
           actions: !_searchBoolean
@@ -230,9 +232,10 @@ class _ModuleViewPageState extends State<ModuleVIew> {
                         //unit,
                         _DataFormat2,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            fontFamily: 'verdana'),
+                            //fontWeight: FontWeight.bold,
+                            //fontSize: 14,
+                            //fontFamily: 'verdana'
+                            ),
                       ),
                       trailing: Icon(Icons.arrow_forward),
                       onTap: () {
