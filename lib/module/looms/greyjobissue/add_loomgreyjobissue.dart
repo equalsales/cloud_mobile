@@ -41,8 +41,8 @@ class GreyJobIssueAdd extends StatefulWidget {
   var xid;
   var serial;
   var srchr;
-  double tottaka=0;
-  double totmtrs=0;
+  double tottaka = 0;
+  double totmtrs = 0;
 
   @override
   _GreyJobIssueAddState createState() => _GreyJobIssueAddState();
@@ -54,14 +54,14 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
 
   List _branchlist = [];
   List _partylist = [];
-  
+
   List ItemDetails = [];
 
   String dropdownTrnType = 'REGULAR';
 
   var branchid = 0;
   var partyid = 0;
-  
+
   TextEditingController _branch = new TextEditingController();
   TextEditingController _type = new TextEditingController();
   TextEditingController _serial = new TextEditingController();
@@ -74,9 +74,9 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
   TextEditingController _tottaka = new TextEditingController();
   TextEditingController _totmtrs = new TextEditingController();
   TextEditingController _branchid = new TextEditingController();
-    
+
   final _formKey = GlobalKey<FormState>();
-    
+
   @override
   void initState() {
     fromDate = retconvdate(widget.xfbeg);
@@ -141,7 +141,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         "inwdetid": jsonData[iCtr]['inwdetid'].toString(),
         "inwdettkid": jsonData[iCtr]['inwdettkid'].toString(),
         "beamno": jsonData[iCtr]['beamno'].toString(),
-        "beamitem": jsonData[iCtr]['beamitem'].toString()        
+        "beamitem": jsonData[iCtr]['beamitem'].toString()
       });
     }
 
@@ -180,7 +180,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     jsonData = jsonData[0];
 
     print(jsonData);
-    print( "jatin"+ getValue(jsonData['type'], 'C'));
+    print("jatin" + getValue(jsonData['type'], 'C'));
     _branch.text = getValue(jsonData['branch'], 'C');
     _branchid.text = getValue(jsonData['branchid'], 'C');
     _type.text = getValue(jsonData['type'], 'C');
@@ -191,7 +191,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     _remarks.text = getValue(jsonData['remarks'], 'C');
     _chlnno.text = getValue(jsonData['chlnno'], 'N');
     _chlnchr.text = getValue(jsonData['chlnchr'], 'C');
-    
+
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
 
@@ -199,6 +199,33 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       dropdownTrnType = _type.text;
     });
 
+    return true;
+  }
+
+  Future<bool> fetchdjobissChallanno() async {
+    String uri = '';
+    var cno = globals.companyid;
+    var db = globals.dbname;
+    uri =
+        'https://looms.equalsoftlink.com/api/api_greyjobissChallanno?dbname=' +
+            db +
+            '&branch='+
+            _branch.text;
+    print(uri);
+    var response = await http.get(Uri.parse(uri));
+    var jsonData = jsonDecode(response.body);
+    print(jsonData);
+    jsonData = jsonData['Data'];
+    if (jsonData == null) {
+      showAlertDialog(context, 'Taka No Found...');
+      return true;
+    }
+    jsonData = jsonData[0];
+    print(jsonData);
+    setState(() {
+      _chlnno.text=jsonData['chlnno'].toString();
+    });
+    print(jsonData);
     return true;
   }
 
@@ -286,8 +313,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
 
         if (selParty != '') {
           getPartyDetails(obj.text, 0).then((value) {
-            setState(() {              
-            });
+            setState(() {});
           });
         }
       });
@@ -324,7 +350,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         _branchid.text = branchid.toString();
       });
     }
-    
+
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
       var branchid = _branchid.text;
@@ -340,7 +366,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     branch: branch,
                     partyid: partyid,
                     itemDet: ItemDetails,
-                    branchid:branchid,
+                    branchid: branchid,
                   )));
       //print('out');
       //print(result);
@@ -367,14 +393,14 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       var remarks = _remarks.text;
       var chlnno = _chlnno.text;
       var chlnchr = _chlnchr.text;
-      
+
       var id = widget.xid;
       id = int.parse(id);
 
       print('In Save....');
-      
+
       print(jsonEncode(ItemDetails));
-      
+
       uri =
           "https://looms.equalsoftlink.com/api/api_storeloomsgreyjobissue?dbname=" +
               db +
@@ -388,7 +414,11 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
               type +
               "&party=" +
               party +
-              "&srchr=" + srchr+"&serial=" + serial+"&date=" +
+              "&srchr=" +
+              srchr +
+              "&serial=" +
+              serial +
+              "&date=" +
               date +
               "&remarks=" +
               remarks +
@@ -398,19 +428,19 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
               chlnchr +
               "&id=" +
               id.toString() +
-              "&parcel=1";  
-               print(uri);
+              "&parcel=1";
+      print(uri);
 
       final headers = {
-          'Content-Type': 'application/json', // Set the appropriate content-type
-          // Add any other headers required by your API
-        };      
+        'Content-Type': 'application/json', // Set the appropriate content-type
+        // Add any other headers required by your API
+      };
       print(ItemDetails);
-      var response = await http.post(Uri.parse(uri), headers: headers, body: jsonEncode(ItemDetails));
+      var response = await http.post(Uri.parse(uri),
+          headers: headers, body: jsonEncode(ItemDetails));
 
       var jsonData = jsonDecode(response.body);
 
-      
       //print('4');
 
       var jsonCode = jsonData['Code'];
@@ -439,9 +469,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       'RETURN',
     ];
 
-    setState(() {
-      
-    });
+    setState(() {});
 
     void deleteRow(index) {
       setState(() {
@@ -453,18 +481,17 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       List<DataRow> _datarow = [];
       print(ItemDetails);
 
-      widget.tottaka=0;
-      widget.totmtrs=0;
+      widget.tottaka = 0;
+      widget.totmtrs = 0;
 
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
         double nMeters = 0;
-        if(ItemDetails[iCtr]['meters']!='')
-        {
+        if (ItemDetails[iCtr]['meters'] != '') {
           nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
-          widget.tottaka+=1;
-          widget.totmtrs+=nMeters;
+          widget.tottaka += 1;
+          widget.totmtrs += nMeters;
         }
-        
+
         print(ItemDetails[iCtr]);
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
@@ -510,8 +537,6 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       return _datarow;
     }
 
-
-
     setDefValue();
 
     return Scaffold(
@@ -519,12 +544,11 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         title: Text(
           'Grey Job Issue Challan [ ' +
               (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
-              ' ] '  +
+              ' ] ' +
               (int.parse(widget.xid) > 0
                   ? 'Serial No : ' + widget.serial.toString()
                   : ''),
-          style:
-              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
+          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -571,6 +595,8 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     icon: const Icon(Icons.arrow_drop_down_circle),
                     onChanged: (String? newValue) {
                       setState(() {
+                           fetchdjobissChallanno();
+                           print('jatin');
                         dropdownTrnType = newValue!;
                         _type.text = dropdownTrnType;
                         print(_type.text);
@@ -633,7 +659,8 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                       return null;
                     },
                   ),
-                ),Expanded(
+                ),
+                Expanded(
                   child: TextFormField(
                     textCapitalization: TextCapitalization.characters,
                     controller: _chlnchr,
@@ -683,7 +710,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
               children: [
                 Expanded(
                     child: TextFormField(
-                      enabled: false,
+                  enabled: false,
                   controller: _tottaka,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
@@ -700,7 +727,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                 )),
                 Expanded(
                     child: TextFormField(
-                      enabled: false,
+                  enabled: false,
                   controller: _totmtrs,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
@@ -721,8 +748,8 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
             ElevatedButton(
               onPressed: () => {gotoChallanItemDet(context)},
               child: Text('Add Item Details',
-                  style: TextStyle(
-                      fontSize: 15.0, fontWeight: FontWeight.bold)),
+                  style:
+                      TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
             ),
             SingleChildScrollView(
                 scrollDirection: Axis.horizontal,

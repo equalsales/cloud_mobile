@@ -201,7 +201,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
     var branch = widget.xbranchid;
     var takano = _takano.text;
     var takachr = _takachr.text;
-    
+    var cItem ='';
 
     fromdate = retconvdate(fromdate);
     todate = retconvdate(todate);
@@ -214,6 +214,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
     print('Length :' + length.toString());
     if (length > 0) {
       for (int iCtr = 0; iCtr < length; iCtr++) {
+        cItem= ItemDetails[iCtr]['itemname'].toString();
         if ((ItemDetails[iCtr]['takano'] == takano) &&
             ((ItemDetails[iCtr]['takachr'] == takachr))) {
           showAlertDialog(context, 'Taka No Already Exists...');
@@ -232,7 +233,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
         takachr +
         '&takano=' +
         takano +
-        '&branchid=('+ branch +')&getdata=Y';
+        '&branchid=('+ branch +')&getdata=Y&itemname=$cItem';
     // 'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
     //     db +
     //     '&cno=' +
