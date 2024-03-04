@@ -5,7 +5,7 @@ import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:cloud_mobile/common/alert.dart';
+//import 'package:cloud_mobile/common/alert.dart';
 
 import 'package:cloud_mobile/dashboard/sidebar.dart';
 //import 'package:myfirstapp/screens/account/ledgerview_screen.dart';
@@ -36,8 +36,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  List _companydetailsX = [];
-  List _companydetailsY = [];
+  //List _companydetailsX = [];
+  //List _companydetailsY = [];
   final List<BarChartModel> data = [];
 
   @override
@@ -78,8 +78,8 @@ class _DashboardState extends State<Dashboard> {
     // }
 
     this.setState(() {
-      _companydetailsX = jsonX;
-      _companydetailsY = jsonY;
+      //_companydetailsX = jsonX;
+      //_companydetailsY = jsonY;
     });
 
     return true;
@@ -130,8 +130,8 @@ class _DashboardState extends State<Dashboard> {
           fbeg: widget.xfbeg,
           fend: widget.xfend),
       appBar: EqAppBar(
-     
-         AppBarTitle: 'Dashboard [' + widget.xcompanyid + ']',      ),
+        AppBarTitle: 'Dashboard [' + widget.xcompanyid + ']',
+      ),
       body: Center(
         child: Container(
             width: 700,

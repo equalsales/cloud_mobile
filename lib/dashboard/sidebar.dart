@@ -1,6 +1,6 @@
 import 'package:cloud_mobile/module/master/master.dart';
-import 'package:cloud_mobile/module/purchase/purchasebilllist.dart';
-import 'package:cloud_mobile/module/salebill/add_salebill.dart';
+//import 'package:cloud_mobile/module/purchase/purchasebilllist.dart';
+//import 'package:cloud_mobile/module/salebill/add_salebill.dart';
 import 'package:flutter/material.dart';
 //import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 import 'package:cloud_mobile/module/enq/enqlist.dart';
@@ -11,7 +11,7 @@ import 'package:cloud_mobile/report/account/view_ledger.dart';
 
 //import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 
-import 'package:cloud_mobile/transactionmenu.dart';
+//import 'package:cloud_mobile/transactionmenu.dart';
 import 'package:cloud_mobile/main.dart';
 
 // For Looms

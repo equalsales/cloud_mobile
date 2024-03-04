@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import '../../../common/global.dart' as globals;
+//import 'dart:convert';
+//import 'package:http/http.dart' as http;
+//import '../../../common/global.dart' as globals;
 //import 'package:easy_search_bar/easy_search_bar.dart';
 
 class ModuleVIew extends StatefulWidget {
@@ -52,7 +52,7 @@ class ModuleVIew extends StatefulWidget {
     "Search Sample",
     style: new TextStyle(color: Colors.white),
   );
-  final TextEditingController _searchQuery = new TextEditingController();
+  //final TextEditingController _searchQuery = new TextEditingController();
 
   String _DataFormat = '';
   List _Data = [];

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import '../../../common/global.dart' as globals;
+//import 'package:flutter_slidable/flutter_slidable.dart';
+//import 'dart:convert';
+//import 'package:http/http.dart' as http;
+//import '../../../common/global.dart' as globals;
 //import 'package:easy_search_bar/easy_search_bar.dart';
 
 class EqAppBar extends AppBar {

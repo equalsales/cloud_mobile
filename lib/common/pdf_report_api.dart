@@ -143,7 +143,7 @@ class PdfReportApi {
       ];
     }).toList();
 
-    TableColumnWidth defaultColumnWidth;
+    //TableColumnWidth defaultColumnWidth;
     return Table.fromTextArray(
       headers: headers,
       data: data,

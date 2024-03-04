@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class EqTextField extends StatelessWidget {
@@ -36,8 +34,8 @@ class EqTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double ht = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    //double ht = MediaQuery.of(context).size.height;
+    //double width = MediaQuery.of(context).size.width;
 
     //xxx = this.hintText;
 
@@ -55,20 +53,24 @@ class EqTextField extends StatelessWidget {
           onChanged: onChanged,
           validator: validator,
           style: TextStyle(
-              fontFamily: 'verdana', fontSize: 16, fontWeight: FontWeight.bold),
+              //fontFamily: 'verdana', //fontSize: 16,
+              //fontWeight: FontWeight.bold
+              ),
           decoration: InputDecoration(
             //contentPadding: EdgeInsets.only(top: 16.0),
             //constraints: BoxConstraints(maxHeight: ht * 0.065, maxWidth: width),
             //filled: true,
             //fillColor: Colors.white,
             labelStyle: TextStyle(
-                fontFamily: 'verdana',
-                fontSize: 20,
-                fontWeight: FontWeight.bold),
+                //fontFamily: 'verdana',
+                //fontSize: 20,
+                //fontWeight: FontWeight.bold
+                ),
             hintStyle: TextStyle(
-                fontFamily: 'verdana',
-                fontSize: 14,
-                fontWeight: FontWeight.bold),
+                //fontFamily: 'verdana',
+                //fontSize: 14,
+                ///fontWeight: FontWeight.bold
+                ),
             hintText: hintText,
             labelText: labelText,
             prefixIcon: prefixIcon,

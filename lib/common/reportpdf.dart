@@ -2,11 +2,11 @@ import 'dart:io';
 //import 'dart:js';
 //import 'dart:js';
 import 'package:cloud_mobile/common/pdf_api.dart';
-import 'package:cloud_mobile/common/customer.dart';
-import 'package:cloud_mobile/common/utils.dart';
-import 'package:path_provider/path_provider.dart';
+//import 'package:cloud_mobile/common/customer.dart';
+//import 'package:cloud_mobile/common/utils.dart';
+//import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
+//import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 //// import 'package:google_fonts/google_fonts.dart';
 
@@ -21,7 +21,7 @@ class ReportPdf {
   var xGrp;
   var xColumns;
   var xGroupBy = 'acname';
-  var _datalist;
+  //var _datalist;
   var nLevel = 0;
 
   var ReportTitle = '';
@@ -172,7 +172,7 @@ class ReportPdf {
     }
     print(netTotal);
 
-    var nCtr = 0;
+    //var nCtr = 0;
     // Start First Grouping !!!!
     if (groupby != '') {
       var cgroup = '';
@@ -399,9 +399,9 @@ class ReportPdf {
     // }];
 
     //var groupby = ;
-    var cgroup = '';
-    var cNextGroup = '';
-    var cnextgroup = '';
+    //var cgroup = '';
+    //var cNextGroup = '';
+    //var cnextgroup = '';
 
     print(groupby);
     print(reportdata);
@@ -714,7 +714,7 @@ class ReportPdf {
 
     var dataCtr = 0;
     //print(column.length);
-    int size = column.length;
+    //int size = column.length;
     final data = items.map((item) {
       //List x = [];
       //List x = new List.filled(size, null, growable: false);
@@ -775,9 +775,4 @@ class ReportPdf {
       },*/
         );
   }
-
-
-
-  
-
 }
