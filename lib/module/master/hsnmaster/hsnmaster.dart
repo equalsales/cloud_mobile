@@ -285,24 +285,7 @@ class _HSNMasterState extends State<HSNMaster> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(children: [
-              Expanded(
-                child: EqTextField(
-                  controller: _hsn_sac,
-                  textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.numberWithOptions(
-                      signed: true, decimal: true),
-                  autofocus: true,
-                  hintText: 'HSN/SAC',
-                  labelText: 'HSN/SAC',
-                  onTap: () {},
-                  onChanged: (value) {
-                    _hsn_sac.value = _hsn_sac.value.copyWith(
-                      text: value.toUpperCase(),
-                      selection: TextSelection.collapsed(offset: value.length),
-                    );
-                  },
-                ),
-              ),
+              Expanded(child: hsnTextField()),
               Expanded(
                 child: EqTextField(
                   controller: _printname,
@@ -374,16 +357,25 @@ class _HSNMasterState extends State<HSNMaster> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, 
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: const Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
+                      backgroundColor: Colors.green,
                       // Background color
                     ),
                     onPressed: () {
-                     gotoChallanItemDet(context);
+                      gotoChallanItemDet(context);
                     },
-                    child: const Text('Gst Rate',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'Gst Rate',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   )),
                 ],
               ),
@@ -395,29 +387,39 @@ class _HSNMasterState extends State<HSNMaster> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, 
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: const Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
+                      backgroundColor: Colors.green,
                       // Background color
                     ),
                     onPressed: () {
                       saveData();
                     },
-                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'SAVE',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   )),
-                  SizedBox(
-                   width: 10
-                  ),
+                  SizedBox(width: 10),
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
                       backgroundColor: Colors.green, // Background color
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-                        Fluttertoast.showToast(
+                      Fluttertoast.showToast(
                         msg: "CANCEL !!!",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
@@ -425,9 +427,15 @@ class _HSNMasterState extends State<HSNMaster> {
                         backgroundColor: Colors.white,
                         textColor: Colors.purple,
                         fontSize: 16.0,
-                        );
+                      );
                     },
-                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'CANCEL',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   ))
                 ],
               ),
@@ -462,4 +470,26 @@ class _HSNMasterState extends State<HSNMaster> {
       )),
     );
   }
+
+  EqTextField hsnTextField() {
+    return EqTextField(
+      controller: _hsn_sac,
+      textInputAction: TextInputAction.next,
+      keyboardType:
+          TextInputType.numberWithOptions(signed: true, decimal: true),
+      autofocus: true,
+      hintText: 'HSN/SAC',
+      labelText: 'HSN/SAC',
+      onTap: () {},
+      onChanged: (value) {
+        _hsn_sac.value = _hsn_sac.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+
+  
 }
