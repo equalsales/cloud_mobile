@@ -12,13 +12,14 @@ import '../../../common/alert.dart';
 import '../../../common/global.dart' as globals;
 
 class HSNMaster extends StatefulWidget {
-  HSNMaster({Key? mykey, companyid, companyname, fbeg, fend, id})
+  HSNMaster({Key? mykey, companyid, companyname, fbeg, fend, id, onlineValue})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
     xfend = fend;
     xid = id;
+    xonlineValue = onlineValue;
   }
 
   var xcompanyid;
@@ -26,6 +27,7 @@ class HSNMaster extends StatefulWidget {
   var xfbeg;
   var xfend;
   var xid;
+  var xonlineValue;
   var orderno;
   var orderchr;
   double tottaka = 0;
@@ -69,6 +71,13 @@ class _HSNMasterState extends State<HSNMaster> {
   @override
   void initState() {
     super.initState();
+
+    if ((widget.xonlineValue != '') && (widget.xonlineValue != null)) {
+      setState(() {
+        _hsn_sac.text = widget.xonlineValue.toString().toUpperCase();
+      });
+    }
+
     if (int.parse(widget.xid) > 0) {
       loadData();
       loadDetData();
@@ -489,7 +498,4 @@ class _HSNMasterState extends State<HSNMaster> {
       },
     );
   }
-
-
-  
 }

@@ -3,6 +3,7 @@ import 'package:cloud_mobile/list/country_list.dart';
 import 'package:cloud_mobile/list/state_list.dart';
 import 'package:cloud_mobile/module/master/citymaster/citymaster.dart';
 import 'package:cloud_mobile/module/master/country/countrymaster.dart';
+import 'package:cloud_mobile/module/master/hsnmaster/hsnmaster.dart';
 import 'package:cloud_mobile/module/master/partymaster/partymaster.dart';
 import 'package:cloud_mobile/module/master/statemaster/statemaster.dart';
 import 'package:flutter/material.dart';
@@ -118,5 +119,23 @@ openCity_List(context, companyid, companyname, startdate, enddate) async {
                 fbeg: startdate,
                 fend: enddate,
               )));
+  return result;
+}
+
+hsnMaster_Add(
+    context, companyid, companyname, startdate, enddate, cValue) async {
+  var result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => HSNMaster(
+        companyid: companyid,
+        companyname: companyname,
+        fbeg: startdate,
+        fend: enddate,
+        id: '0',
+        onlineValue: cValue,
+      ),
+    ),
+  );
   return result;
 }

@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:cloud_mobile/common/select.dart';
+import 'package:cloud_mobile/projFunction.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -20,16 +21,19 @@ class HSN_list extends StatefulWidget {
   @override
   _HSN_listState createState() => _HSN_listState();
 }
+
 class _HSN_listState extends State<HSN_list> {
-  List _partylist = [];
+  List _hsnlist = [];
   List _orgpartylist = [];
-  List _partySelected = [];
+  List _hsnSelected = [];
+  List _hsnSelected2 = [];
   List<bool> _selected = [];
   String query = '';
   @override
   void initState() {
     getpartylist();
   }
+
   Future<bool> getpartylist() async {
     String clientid = globals.dbname;
     var response;
@@ -52,17 +56,20 @@ class _HSN_listState extends State<HSN_list> {
     var jsonData = jsonDecode(response.body);
     print(jsonData['Data']);
     this.setState(() {
-      _partylist = jsonData['Data'];
+      _hsnlist = jsonData['Data'];
       _orgpartylist = jsonData['Data'];
       _selected = List.generate(jsonData['Data'].length, (i) => false);
     });
     return true;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: EqAppBar(AppBarTitle:'HSNCode List',),
+      appBar: EqAppBar(
+        AppBarTitle: 'HSNCode List',
+      ),
       body: Column(
         children: <Widget>[
           buildSearch(),
@@ -70,20 +77,21 @@ class _HSN_listState extends State<HSN_list> {
             height: 20,
           ),
           Text(
-            "${_partySelected}",
+            "${_hsnSelected}",
             textAlign: TextAlign.center,
           ),
+          add(),
           SelectButton(
             buttonText: "Select",
             onPressed: () {
-              Navigator.pop(context, _partySelected);
+              Navigator.pop(context, _hsnSelected);
             },
           ),
           Expanded(
               child: ListView.builder(
-            itemCount: this._partylist.length,
+            itemCount: this._hsnlist.length,
             itemBuilder: (context, index) {
-              String account = this._partylist[index]['hsncode'];
+              String account = this._hsnlist[index]['hsncode'];
               return Padding(
                 padding:
                     const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
@@ -93,13 +101,14 @@ class _HSN_listState extends State<HSN_list> {
                   onTap: () {
                     print(account);
                     if (_selected[index]) {
-                      _partySelected.remove(account);
+                      _hsnSelected.remove(account);
                     } else {
-                      _partySelected.add(account);
+                      _hsnSelected.add(account);
                     }
+                    //_hsnSelected2.add(id);
                     setState(() => _selected[index] = !_selected[index]);
                     print(_selected);
-                    Navigator.pop(context, _partySelected);
+                    Navigator.pop(context, _hsnSelected);
                   },
                 ),
               );
@@ -109,6 +118,46 @@ class _HSN_listState extends State<HSN_list> {
       ),
     );
   }
+
+  Widget add() {
+    if (query.length >= 1) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 20),
+        child: Row(
+          children: [
+            ElevatedButton(
+              style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blueGrey),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    // Change your radius here
+                    borderRadius: BorderRadius.circular(0),
+                  ))),
+              onPressed: () {
+                hsnMaster_Add(context, widget.xcompanyid, widget.xcompanyname,
+                        widget.xfbeg, widget.xfend, query)
+                    .then((result) {
+                  _hsnSelected.add(result[0]);
+                  _hsnSelected.add(result[1]);
+                  //_state.add(result[2]);
+
+                  Navigator.pop(context, [_hsnSelected, _hsnSelected]);
+                  ;
+                });
+              },
+              child: Text('Add'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      print("Not add");
+      return Container();
+    }
+  }
+
   Widget buildSearch() => SearchWidget(
         text: query,
         hintText: 'Search',
@@ -123,7 +172,7 @@ class _HSN_listState extends State<HSN_list> {
       }).toList();
       setState(() {
         this.query = query;
-        this._partylist = partys;
+        this._hsnlist = partys;
       });
     }
   }
