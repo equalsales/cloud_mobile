@@ -150,63 +150,63 @@ class _ItemMasterState extends State<ItemMaster> {
 
   void setDefValue() {}
 
-  @override
-  Widget build(BuildContext context) {
-    Future<bool> saveData() async {
-      String uri = '';
-      var companyid = widget.xcompanyid;
-      var clientid = globals.dbname;
-      var itemname = _itemname.text;
-      var type = _itemtype.text;
-      var unit = _unit.text;
-      var salerate = _rate.text;
-      var hsncode = _HSNCode.text;
-      var id = widget.xid;
-      id = int.parse(id);
+  Future<bool> saveData() async {
+    String uri = '';
+    var companyid = widget.xcompanyid;
+    var clientid = globals.dbname;
+    var itemname = _itemname.text;
+    var type = _itemtype.text;
+    var unit = _unit.text;
+    var salerate = _rate.text;
+    var hsncode = _HSNCode.text;
+    var id = widget.xid;
+    id = int.parse(id);
 
-      print('In Save....');
-      //print(dropdownItemtype);
-      //print(dropdownUNIT);
-      uri =
-          "https://www.cloud.equalsoftlink.com/api/api_itemststort?dbname=$clientid" +
-              "&itemname=" +
-              itemname +
-              "&type=" +
-              dropdownItemtype +
-              "&salerate=" +
-              salerate +
-              "&unit=" +
-              dropdownUNIT +
-              "&hsncode=" +
-              hsncode +
-              "&id=" +
-              id.toString();
-      print(uri);
-      var response = await http.post(Uri.parse(uri));
-      var jsonData = jsonDecode(response.body);
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
+    print('In Save....');
+    //print(dropdownItemtype);
+    //print(dropdownUNIT);
+    uri =
+        "https://www.cloud.equalsoftlink.com/api/api_itemststort?dbname=$clientid" +
+            "&itemname=" +
+            itemname +
+            "&type=" +
+            dropdownItemtype +
+            "&salerate=" +
+            salerate +
+            "&unit=" +
+            dropdownUNIT +
+            "&hsncode=" +
+            hsncode +
+            "&id=" +
+            id.toString();
+    print(uri);
+    var response = await http.post(Uri.parse(uri));
+    var jsonData = jsonDecode(response.body);
+    var jsonCode = jsonData['Code'];
+    var jsonMsg = jsonData['Message'];
 
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else if (jsonCode == '100') {
-        showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
-      } else {
-        Navigator.pop(context);
-        Fluttertoast.showToast(
-          msg: "Saved !!!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.white,
-          textColor: Colors.purple,
-          fontSize: 16.0,
-        );
-      }
-
-      return true;
+    if (jsonCode == '500') {
+      showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+    } else if (jsonCode == '100') {
+      showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
+    } else {
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+        msg: "Saved !!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: Colors.purple,
+        fontSize: 16.0,
+      );
     }
 
+    return true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     setState(() {});
 
     setDefValue();
@@ -224,139 +224,183 @@ class _ItemMasterState extends State<ItemMaster> {
           children: <Widget>[
             Row(children: [
               Expanded(
-                child: EqTextField(
-                  controller: _itemname,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
-                  autofocus: true,
-                  hintText: 'Item Name',
-                  labelText: 'Item Name',
-                  onTap: () {
-                    //_selectDate(context);
-                  },
-                  onChanged: (value) {
-                    _itemname.value = _itemname.value.copyWith(
-                      text: value.toUpperCase(),
-                      selection: TextSelection.collapsed(offset: value.length),
-                    );
-                  },
-                ),
+                child: itemTextBox(),
               ),
             ]),
-            DropdownButtonFormField(
-                value: dropdownItemtype,
-                decoration: const InputDecoration(
-                    labelText: 'ItemType', hintText: "ItemType"),
-                items: Itemtype.map((String items) {
-                  return DropdownMenuItem(
-                    value: items,
-                    child: Text(items),
-                  );
-                }).toList(),
-                icon: const Icon(Icons.arrow_drop_down_circle),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    dropdownItemtype = newValue!;
-                  });
-                }),
+            itemtypeDropDown(),
             Row(
               children: [
                 Expanded(
-                  child: EqTextField(
-                    controller: _HSNCode,
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    hintText: 'HSN Code',
-                    labelText: 'HSN Code',
-                    onTap: () {
-                      gotoHSN(context, 'SALE PARTY', _HSNCode);
-                    },
-                    onChanged: (value) {},
-                  ),
+                  child: hsnTextField(),
                 ),
                 Expanded(
-                  child: DropdownButtonFormField(
-                      value: dropdownUNIT,
-                      decoration: const InputDecoration(
-                          labelText: 'UNIT', hintText: "UNIT"),
-                      items: unitDetails.map<DropdownMenuItem<String>>((items) {
-                        return DropdownMenuItem<String>(
-                          value: items['unit'],
-                          child: Text(items['unit']),
-                        );
-                      }).toList(),
-                      icon: const Icon(Icons.arrow_drop_down_circle),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownUNIT = newValue!;
-                        });
-                      }),
+                  child: unitDropDown(),
                 ),
               ],
             ),
             Row(children: [
-              Expanded(
-                child: EqTextField(
-                  controller: _rate,
-                  keyboardType: TextInputType.number,
-                  textInputAction: TextInputAction.next,
-                  hintText: 'Rate',
-                  labelText: 'Rate',
-                  onTap: () {
-                    //gotoPartyScreen2(context, 'SALE PARTY', _party);
-                  },
-                  onChanged: (value) {},
-                ),
-              ),
+              Expanded(child: rateTextField()),
             ]),
             Padding(padding: EdgeInsets.all(5)),
-             Padding(
+            Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, 
-                      // Background color
-                    ),
-                    onPressed: () {
-                      saveData();
-                    },
-                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
-                  )),
-                  SizedBox(
-                   width: 10
-                  ),
-                  Expanded(
-                    child: TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, // Background color
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                        Fluttertoast.showToast(
-                        msg: "CANCEL !!!",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.white,
-                        textColor: Colors.purple,
-                        fontSize: 16.0,
-                        );
-                    },
-                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
-                  ))
+                  Expanded(child: saveTextButton()),
+                  SizedBox(width: 10),
+                  Expanded(child: cancelTextButton())
                 ],
               ),
             )
-            
           ],
         ),
       )),
+    );
+  }
+
+  EqTextField itemTextBox() {
+    return EqTextField(
+      controller: _itemname,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      autofocus: true,
+      hintText: 'Item Name',
+      labelText: 'Item Name',
+      onTap: () {
+        //_selectDate(context);
+      },
+      onChanged: (value) {
+        _itemname.value = _itemname.value.copyWith(
+          text: value.toUpperCase(),
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      },
+    );
+  }
+
+  DropdownButtonFormField itemtypeDropDown() {
+    return DropdownButtonFormField(
+        value: dropdownItemtype,
+        decoration:
+            const InputDecoration(labelText: 'ItemType', hintText: "ItemType"),
+        items: Itemtype.map((String items) {
+          return DropdownMenuItem(
+            value: items,
+            child: Text(items),
+          );
+        }).toList(),
+        icon: const Icon(Icons.arrow_drop_down_circle),
+        onChanged: (newValue) {
+          setState(() {
+            dropdownItemtype = newValue!;
+          });
+        });
+  }
+
+  EqTextField hsnTextField() {
+    return EqTextField(
+      controller: _HSNCode,
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.next,
+      hintText: 'HSN Code',
+      labelText: 'HSN Code',
+      onTap: () {
+        gotoHSN(context, 'SALE PARTY', _HSNCode);
+      },
+      onChanged: (value) {},
+    );
+  }
+
+  DropdownButtonFormField unitDropDown() {
+    return DropdownButtonFormField(
+        value: dropdownUNIT,
+        decoration: const InputDecoration(labelText: 'UNIT', hintText: "UNIT"),
+        items: unitDetails.map<DropdownMenuItem<String>>((items) {
+          return DropdownMenuItem<String>(
+            value: items['unit'],
+            child: Text(items['unit']),
+          );
+        }).toList(),
+        icon: const Icon(Icons.arrow_drop_down_circle),
+        onChanged: (newValue) {
+          setState(() {
+            dropdownUNIT = newValue!;
+          });
+        });
+  }
+
+  EqTextField rateTextField() {
+    return EqTextField(
+      controller: _rate,
+      keyboardType: TextInputType.number,
+      textInputAction: TextInputAction.next,
+      hintText: 'Rate',
+      labelText: 'Rate',
+      onTap: () {
+        //gotoPartyScreen2(context, 'SALE PARTY', _party);
+      },
+      onChanged: (value) {},
+    );
+  }
+
+  TextButton saveTextButton() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.zero)),
+
+        textStyle: TextStyle(
+          fontSize: 25,
+          color: const Color.fromARGB(231, 255, 255, 255),
+        ), // Text style
+        backgroundColor: Colors.green,
+        // Background color
+      ),
+      onPressed: () {
+        this.saveData();
+      },
+      child: const Text(
+        'SAVE',
+        style: TextStyle(
+          fontSize: 20,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ),
+      ),
+    );
+  }
+
+  TextButton cancelTextButton() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.zero)),
+
+        textStyle: TextStyle(
+          fontSize: 25,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ), // Text style
+        backgroundColor: Colors.green, // Background color
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+          msg: "CANCEL !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
+        );
+      },
+      child: const Text(
+        'CANCEL',
+        style: TextStyle(
+          fontSize: 20,
+          color: Color.fromARGB(231, 255, 255, 255),
+        ),
+      ),
     );
   }
 }
