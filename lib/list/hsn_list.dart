@@ -92,6 +92,7 @@ class _HSN_listState extends State<HSN_list> {
             itemCount: this._hsnlist.length,
             itemBuilder: (context, index) {
               String account = this._hsnlist[index]['hsncode'];
+              String id = this._hsnlist[index]['id'];
               return Padding(
                 padding:
                     const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),
@@ -102,13 +103,15 @@ class _HSN_listState extends State<HSN_list> {
                     print(account);
                     if (_selected[index]) {
                       _hsnSelected.remove(account);
+                      _hsnSelected2.add(id);
                     } else {
                       _hsnSelected.add(account);
+                      _hsnSelected2.add(id);
                     }
                     //_hsnSelected2.add(id);
                     setState(() => _selected[index] = !_selected[index]);
                     print(_selected);
-                    Navigator.pop(context, _hsnSelected);
+                    Navigator.pop(context, [_hsnSelected, _hsnSelected2]);
                   },
                 ),
               );
