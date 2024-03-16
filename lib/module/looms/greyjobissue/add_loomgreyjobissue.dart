@@ -210,7 +210,9 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         'https://looms.equalsoftlink.com/api/api_greyjobissChallanno?dbname=' +
             db +
             '&branch='+
-            _branch.text;
+            _branch.text  +
+             '&cno='+
+            cno.toString();
     print(uri);
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
