@@ -908,6 +908,22 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                   validator: (value) {
                     return null;
                   },
+                )),
+                Expanded(
+                child: TextFormField(
+                  controller: _bookno,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.person),
+                    hintText: 'BookNo',
+                    labelText: 'BookNo',
+                  ),
+                  onTap: () {
+                    //gotoBranchScreen(context);
+                  },
+                  validator: (value) {
+                    return null;
+                  },
                 ))
               ],
             ),
