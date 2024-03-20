@@ -1,3 +1,4 @@
+import 'package:cloud_mobile/module/looms/physicalstock/loomphysicalstocklist.dart';
 import 'package:cloud_mobile/module/master/master.dart';
 //import 'package:cloud_mobile/module/purchase/purchasebilllist.dart';
 //import 'package:cloud_mobile/module/salebill/add_salebill.dart';
@@ -170,6 +171,21 @@ class SideDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (_) => LoomBeamJobIssueList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
+            ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Physical Stock Entry'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => LoomphysicalstockList(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,
