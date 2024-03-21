@@ -162,8 +162,8 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
               this._companydetails[index]['type'].toString();
           String party = this._companydetails[index]['party'].toString();
           String remarks = this._companydetails[index]['remarks'].toString();
-          String totpcs = '0';//this._companydetails[index]['totpcs'].toString();
-          String totmtrs = '0';//this._companydetails[index]['totmtrs'].toString();
+          String totpcs = this._companydetails[index]['tottaka'].toString();
+          String totmtrs = this._companydetails[index]['totmtrs'].toString();
 
           String id = this._companydetails[index]['id'].toString();
 
