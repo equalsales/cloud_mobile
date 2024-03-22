@@ -459,6 +459,7 @@ class _LoomYarnphysicalstockdetAddState extends State<LoomYarnphysicalstockdetAd
               children: [
                 Expanded(
                   child: TextFormField(
+                     enabled: false,
                     controller: _netwt,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -475,6 +476,7 @@ class _LoomYarnphysicalstockdetAddState extends State<LoomYarnphysicalstockdetAd
                 ),
                 Expanded(
                   child: TextFormField(
+                     enabled: false,
                     controller: _cops,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -495,6 +497,7 @@ class _LoomYarnphysicalstockdetAddState extends State<LoomYarnphysicalstockdetAd
               children: [
                 Expanded(
                   child: TextFormField(
+                     enabled: false,
                     controller: _cone,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -511,6 +514,7 @@ class _LoomYarnphysicalstockdetAddState extends State<LoomYarnphysicalstockdetAd
                 ),
                 Expanded(
                   child: TextFormField(
+                     enabled: false,
                     controller: _lotno,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -531,6 +535,7 @@ class _LoomYarnphysicalstockdetAddState extends State<LoomYarnphysicalstockdetAd
               children: [
                 Expanded(
                   child: TextFormField(
+                     enabled: false,
                     controller: _rate,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -547,6 +552,7 @@ class _LoomYarnphysicalstockdetAddState extends State<LoomYarnphysicalstockdetAd
                 ),
                 Expanded(
                   child: TextFormField(
+                     enabled: false,
                     controller: _unit,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -567,6 +573,7 @@ class _LoomYarnphysicalstockdetAddState extends State<LoomYarnphysicalstockdetAd
               children: [
                 Expanded(
                   child: TextFormField(
+                     enabled: false,
                     controller: _amount,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),

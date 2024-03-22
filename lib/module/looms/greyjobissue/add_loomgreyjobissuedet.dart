@@ -611,6 +611,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    enabled: false,
                     controller: _pcs,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -627,6 +628,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
+                    enabled: false,
                     controller: _meters,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
