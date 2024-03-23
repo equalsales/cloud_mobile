@@ -214,9 +214,9 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
     print('Length :' + length.toString());
     if (length > 0) {
       for (int iCtr = 0; iCtr < length; iCtr++) {
-        cItem= ItemDetails[iCtr]['itemname'].toString();
+        //cItem= ItemDetails[iCtr]['itemname'].toString();
         if ((ItemDetails[iCtr]['takano'] == takano) &&
-            ((ItemDetails[iCtr]['takachr'] == takachr))) {
+            ((ItemDetails[iCtr]['takachr'] == takachr)) ) {
           showAlertDialog(context, 'Taka No Already Exists...');
           setState(() {
             _takano.text = '0';
