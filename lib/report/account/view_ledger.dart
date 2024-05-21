@@ -567,12 +567,17 @@ class _LedgerviewState extends State<Ledgerview> {
                 gotoPartyScreen(context);
               },
             ),
-            ElevatedButton(
-              //onPressed: () => {gotoLedgerReport(context)},
-              onPressed: () => {GenerateReport(context)},
-              child: Text('Generate Report',
-                  style: TextStyle(
-                      fontSize: 22.0, fontWeight: FontWeight.normal)),
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: ElevatedButton(
+                //onPressed: () => {gotoLedgerReport(context)},
+                onPressed: () => {GenerateReport(context)},
+                child: Text('Generate Report',
+                    style: TextStyle(
+                        fontSize: 22.0, fontWeight: FontWeight.normal)),
+              ),
             ),
           ],
         ),

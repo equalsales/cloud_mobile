@@ -8,12 +8,12 @@ import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/list/search_widget.dart';
 
-import '../../../common/global.dart' as globals;
+import '../common/global.dart' as globals;
 
-class loomsalesorder_list extends StatefulWidget {
+class order_list extends StatefulWidget {
   var xcompanyid, xcompanyname, xfbeg, xfend, xpartyid;
   var Title = 'Branch List';
-  loomsalesorder_list(
+  order_list(
       {Key? mykey, companyid, companyname, fbeg, fend, partyid, caption = ''})
       : super(key: mykey) {
     xcompanyid = companyid;
@@ -24,10 +24,10 @@ class loomsalesorder_list extends StatefulWidget {
     Title = caption;
   }
   @override
-  LoomsSalesOrder_ListState createState() => LoomsSalesOrder_ListState();
+  order_ListState createState() => order_ListState();
 }
 
-class LoomsSalesOrder_ListState extends State<loomsalesorder_list> {
+class order_ListState extends State<order_list> {
   List _orderlist = [];
   List _orgorderlist = [];
   List _orderSelected = [];
@@ -47,21 +47,30 @@ class LoomsSalesOrder_ListState extends State<loomsalesorder_list> {
     var db = globals.dbname;
     var partyid = widget.xpartyid;
 
-    print(
+
+    String uri = '';
+
+     uri =
         'https://www.looms.equalsoftlink.com/api/commonapi_getsaleordpendinglist?dbname=' +
             db +
             '&partyid=' +
-            partyid.toString());
-    response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/commonapi_getsaleordpendinglist?dbname=' +
-            db +
-            '&partyid=' +
-            partyid.toString()));
+            partyid.toString();
+    
+
+    // uri =
+    //     'http://127.0.0.1:8000/api/commonapi_getsaleordpendinglist?dbname=' +
+    //         db +
+    //         '&partyid=' +
+    //         partyid.toString();
+          
+        print(partyid);
+    response = await http.get(Uri.parse(uri));
+
+    print(" getorderlist "+uri);
 
     var jsonData = jsonDecode(response.body);
 
     jsonData = jsonData['Data'];
-    //print(jsonData);
 
     this.setState(() {
       _orderlist = jsonData;
@@ -83,7 +92,7 @@ class LoomsSalesOrder_ListState extends State<loomsalesorder_list> {
       body: Column(
         children: <Widget>[
           buildSearch(),
-          Text("${_orderlist}"),
+          Text("${_orderSelected}"),
           ElevatedButton(
             onPressed: () {
               // Navigate back to first route when tapped.

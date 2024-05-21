@@ -1,20 +1,14 @@
-import 'dart:collection';
-
 import 'package:cloud_mobile/module/master/partymaster/partymaster.dart';
 import 'package:flutter/material.dart';
-
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/list/search_widget.dart';
-
 import '../common/global.dart' as globals;
 
-class party_list extends StatefulWidget {
+class partyid_list extends StatefulWidget {
   var xcompanyid, xcompanyname, xfbeg, xfend, xacctype;
   var Title = 'Party List';
-  party_list(
+  partyid_list(
       {Key? mykey, companyid, companyname, fbeg, fend, acctype, caption = ''})
       : super(key: mykey) {
     xcompanyid = companyid;
@@ -25,14 +19,14 @@ class party_list extends StatefulWidget {
     Title = caption;
   }
   @override
-  PartyListState createState() => PartyListState();
+  PartyListIdState createState() => PartyListIdState();
 }
 
-class PartyListState extends State<party_list> {
+class PartyListIdState extends State<partyid_list> {
   List _partylist = [];
   List _orgpartylist = [];
   List _partySelected = [];
-  List _partySelected2 = [];
+  List _partyIdSelected = [];
   List<bool> _selected = [];
   String query = '';
 
@@ -135,7 +129,7 @@ class PartyListState extends State<party_list> {
           ElevatedButton(
             onPressed: () {
               // Navigate back to first route when tapped.
-              Navigator.pop(context, [_partySelected, _partySelected2]);
+              Navigator.pop(context, _partySelected);
             },
             child: Text('Select'),
           ),
@@ -143,31 +137,25 @@ class PartyListState extends State<party_list> {
               child: ListView.builder(
             itemCount: this._partylist.length,
             itemBuilder: (context, index) {
-              int id = this._partylist[index]['id'];
               String account = this._partylist[index]['party'];
-              String crlimit = this._partylist[index]['crlimit'];
-              String city = this._partylist[index]['city'];
+              String aid = this._partylist[index]['id'].toString();
               return ListTile(
                 tileColor: _selected[index] ? Colors.blue : null,
                 title: Text(account),
-                subtitle: Text(city),
+                subtitle: Text('id :' + aid.toString()),
                 onTap: () {
-                  //print(account);
-                  //setState(() => _selected[i] = !_selected[i])
-                  _partySelected.add(account);
-                  // _partySelected2.add(this._partylist[index]);
-                  _partySelected2..add(this._partylist[index]);
-                  _partySelected2.add(id);
-                  //setState(() => _selected[index] = !_selected[index]);
-                  setState(() => _selected[index] = !_selected[index]);
-                  //print(_selected);
-                  //showAlertDialog(context, companyid);
-                  // Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard(
-                  //   companyid: companyid,
-                  //   companyname: companyname,
-                  //   fbeg: fbeg,
-                  //   fend: fend
-                  //   )));
+                  _partyIdSelected.add(_partylist[index]['id'].toString());
+                  _partyIdSelected.add(_partylist[index]['party']);
+                  if (_selected[index]) {
+                    _partySelected.remove(aid);
+                    _partySelected.remove(account);
+                  } else {
+                    _partySelected.add(aid);
+                    _partySelected.add(account);
+                  }
+                   setState(() => _selected[index] = !_selected[index]);
+
+                  print(_selected);
                 },
               );
             },

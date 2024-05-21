@@ -1,22 +1,21 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cloud_mobile/module/looms/takaadjustment/add_loomstakaadjustment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:convert';
-import 'package:cloud_mobile/common/PdfPreviewPagePrint.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:cloud_mobile/common/PdfPreviewPagePrint.dart';
 import '../../../common/global.dart' as globals;
-import 'package:cloud_mobile/common/alert.dart';
-import 'package:cloud_mobile/module/looms/saleschallan/add_loomsaleschallan.dart';
-import 'package:intl/intl.dart';
 
-class LoomSalesChallanList extends StatefulWidget {
+class TakaAdjustmentList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
 
-  LoomSalesChallanList({Key? mykey, companyid, companyname, fbeg, fend})
+  TakaAdjustmentList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -25,18 +24,16 @@ class LoomSalesChallanList extends StatefulWidget {
   }
 
   @override
-  _LoomSalesChallanListPageState createState() =>
-      _LoomSalesChallanListPageState();
+  _TakaAdjustmentListPageState createState() =>
+      _TakaAdjustmentListPageState();
 }
 
-class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
+class _TakaAdjustmentListPageState extends State<TakaAdjustmentList> {
   List _companydetails = [];
   List PrintFormatDetails = [];
   List PrintidDetails = [];
   var Printid = '';
   var formatid = '';
-  //TextEditingController _printid = new TextEditingController();
-  //TextEditingController _formatid = new TextEditingController();
   String dropdownPrintFormat = 'Print Format';
   @override
   void initState() {
@@ -49,12 +46,7 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
-
-
-    // uri =
-    //     "http://127.0.0.1:8000/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
-
+        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -80,11 +72,7 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
-    
-    // uri =
-    //     "http://127.0.0.1:8000/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
-
+        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -96,37 +84,6 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     return true;
   }
 
-  void execExportPDF(id) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => PdfViewerPagePrint(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend,
-                  id: id.toString(),
-                  cPW: "PDF",
-                )));
-  }
-
-  void execWhatsApp(id) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PdfViewerPagePrint(
-            companyid: widget.xcompanyid,
-            companyname: widget.xcompanyname,
-            fbeg: widget.xfbeg,
-            fend: widget.xfend,
-            id: id.toString(),
-            cPW: "WhatsApp",
-            formatid: 55,
-            printid: 49,
-          ),
-        ));
-  }
-
   Future<bool> loaddetails() async {
     var db = globals.dbname;
     var cno = globals.companyid;
@@ -135,33 +92,18 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
 
     print(globals.enddate);
 
-    DateTime date = DateFormat("dd-MM-yyyy").parse(startdate);
-    String start = DateFormat("yyyy-MM-dd").format(date);
-
-    DateTime date2 = DateFormat("dd-MM-yyyy").parse(enddate);
-    String end = DateFormat("yyyy-MM-dd").format(date2);
-
-    String uri = 'https://www.looms.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
+    String uri = 'https://www.looms.equalsoftlink.com/api/api_gettakaadjustmentlist?dbname=' +
             db +
             '&cno=' +
             cno +
             '&startdate=' +
-            start +
+            startdate +
             '&enddate=' +
-            end;
-
-    // String uri = 'http://127.0.0.1:8000/api/api_getsalechallanlist?dbname=' +
-    //     db +
-    //     '&cno=' +
-    //     cno +
-    //     '&startdate=' +
-    //     start +
-    //     '&enddate=' +
-    //     end;
+            enddate;
 
     var response = await http.get(Uri.parse(uri));
 
-    print(" loaddetails " + uri);
+    print(" loaddetails :" + uri);
 
     var jsonData = jsonDecode(response.body);
 
@@ -174,11 +116,57 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     return true;
   }
 
+  Future<bool> DeleteData(id) async {
+    var db = globals.dbname;
+    var cno = globals.companyid;
+    String uri = '';
+
+    uri =
+        "https://www.cloud.equalsoftlink.com/checkautoeditdelete/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+    var response = await http.get(Uri.parse(uri));
+    print(uri);
+    var jsonData = jsonDecode(response.body);
+    jsonData['success'];
+    print(jsonData['success']);
+    if (jsonData['success'].toString() == 'true') {
+      String uri = '';
+      uri =
+          "https://www.cloud.equalsoftlink.com/deletemoddesignAPI/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+      var response = await http.get(Uri.parse(uri));
+      print(uri);
+      var jsonData = jsonDecode(response.body);
+      jsonData['success'];
+
+      loaddetails();
+      Fluttertoast.showToast(
+        msg: "Taka Delete Successfully !!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: Colors.purple,
+        fontSize: 16.0,
+      );
+    } else {
+      loaddetails();
+      Fluttertoast.showToast(
+        msg: "Taka Entry Maid in Bill !!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: Colors.purple,
+        fontSize: 16.0,
+      );
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sales Challan  List',
+        title: Text('Taka Adjustment List',
             style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
       floatingActionButton: FloatingActionButton(
@@ -187,7 +175,7 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => LoomSalesChallanAdd(
+                  builder: (_) => TakaAdjustmentAdd(
                         companyid: widget.xcompanyid,
                         companyname: widget.xcompanyname,
                         fbeg: widget.xfbeg,
@@ -203,15 +191,10 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
           String date = this._companydetails[index]['date2'].toString();
           //date = retconvdatestr(date);
           String serial = this._companydetails[index]['serial'].toString();
-          String packingserial =
-              this._companydetails[index]['packingserial'].toString();
-          String packingtype =
-              this._companydetails[index]['packingtype'].toString();
-          String party = this._companydetails[index]['party'].toString();
+          String branch = this._companydetails[index]['branch'].toString();
+          String srchr = this._companydetails[index]['srchr'].toString();
           String remarks = this._companydetails[index]['remarks'].toString();
-          String totpcs = this._companydetails[index]['totpcs'].toString();
-          String totmtrs = this._companydetails[index]['totmtrs'].toString();
-
+          String bookno = this._companydetails[index]['bookno'].toString();
           String id = this._companydetails[index]['id'].toString();
 
           int newid = 0;
@@ -221,11 +204,6 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
             key: ValueKey(index),
             startActionPane:
                 ActionPane(motion: const BehindMotion(), children: [
-              SlidableAction(
-                  onPressed: (context) => {execWhatsApp(int.parse(id))},
-                  icon: Icons.sms_sharp,
-                  label: 'WhatsApp',
-                  backgroundColor: Color.fromARGB(226, 73, 254, 197)),
               SlidableAction(
                   onPressed: (context) => {
                         //execExportPDF(int.parse(id))
@@ -341,9 +319,9 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
                   label: 'Print',
                   backgroundColor: Color(0xFFFE4A49)),
               SlidableAction(
-                  onPressed: (context) => {},
-                  icon: Icons.edit,
-                  label: 'Edit',
+                  onPressed: (context) => DeleteData,
+                  icon: Icons.delete_forever,
+                  label: 'Delete',
                   backgroundColor: Colors.blue)
             ]),
             child: Card(
@@ -352,35 +330,33 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
               title: Text(
                   'Dt :' +
                       date +
-                      ' Packing Type : ' +
-                      packingtype +
-                      ' Packing No : ' +
-                      packingserial +
-                      ' Challan No : ' +
+                      ' Branch : ' +
+                      branch +
+                      ' Serial No : ' +
                       serial +
                       ' [ ' +
                       id +
                       ' ]' +
-                      ' Party : ' +
-                      party,
-                  style:
-                      TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
+                      ' BookNo : ' +
+                      bookno,
+                  style: TextStyle(
+                      fontFamily: 'verdana',
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.bold)),
               subtitle: Text(
                   'Remarks :' +
-                      remarks +
-                      ' Pcs : ' +
-                      totpcs +
-                      ' Meters : ' +
-                      totmtrs,
-                  style:
-                      TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
+                      remarks ,
+                  style: TextStyle(
+                      fontFamily: 'verdana',
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.bold)),
               leading: Icon(Icons.select_all),
               trailing: Icon(Icons.arrow_forward),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => LoomSalesChallanAdd(
+                        builder: (_) => TakaAdjustmentAdd(
                               companyid: widget.xcompanyid,
                               companyname: widget.xcompanyname,
                               fbeg: widget.xfbeg,
@@ -400,7 +376,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: const Text('Delete Sales Challan Entry ??'),
+      title: const Text('Delete Taka Adjustment Entry ??'),
       content: Text('Do you want to delete this entry ?'),
       actions: <Widget>[
         TextButton(
@@ -409,38 +385,37 @@ void execDelete(BuildContext context, int index, int id, String name) {
         ),
         TextButton(
           onPressed: () async {
-            var db = globals.dbname;
-            var cno = globals.companyid;
+            // var db = globals.dbname;
+            // var cno = globals.companyid;
 
-            String uri = '';
+            // var response = await http.post(Uri.parse(
+            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+            //         db +
+            //         '&cno=' +
+            //         cno +
+            //         '&id=' +
+            //         id.toString()));
 
-            uri = 'https://www.looms.equalsoftlink.com/api/api_deletecashbook?dbname=' +
-                  db +
-                  '&id=' +
-                  id.toString();
-                
-            // uri = 'http://127.0.0.1:8000/api/api_deletecashbook?dbname=' +
-            //       db +
-            //       '&id=' +
-            //       id.toString();
-            
-            print(uri);
+            // print(
+            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+            //         db +
+            //         '&id=' +
+            //         id.toString());
 
-            var response = await http.post(Uri.parse(uri));
-            var jsonData = jsonDecode(response.body);
-            var code = jsonData['Code'];
-            if (code == '200') {
-              await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => LoomSalesChallanList(
-                          companyid: globals.companyid,
-                          companyname: globals.companyname,
-                          fbeg: globals.fbeg,
-                          fend: globals.fend)));
-            } else if (code == '500') {
-              showAlertDialog(context, jsonData['Message']);
-            }
+            // var jsonData = jsonDecode(response.body);
+            // var code = jsonData['Code'];
+            // if (code == '200') {
+            //   await Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (_) => LoomGreyJobIssueList(
+            //               companyid: globals.companyid,
+            //               companyname: globals.companyname,
+            //               fbeg: globals.fbeg,
+            //               fend: globals.fend)));
+            // } else if (code == '500') {
+            //   showAlertDialog(context, jsonData['Message']);
+            // }
           },
           child: const Text('OK'),
         ),
@@ -450,5 +425,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
 
   return;
 }
+
+Future<void> sendWhatapp() async {}
 
 void doNothing(BuildContext context) {}

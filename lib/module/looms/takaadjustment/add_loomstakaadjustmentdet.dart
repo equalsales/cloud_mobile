@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:convert';
-import 'package:cloud_mobile/list/order_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:flutter/services.dart';
@@ -11,8 +10,8 @@ import '../../../common/global.dart' as globals;
 import 'package:cloud_mobile/common/bottombar.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-class LoomSalesChallanDetAdd extends StatefulWidget {
-  LoomSalesChallanDetAdd(
+class LoomTakaAdjustmentDetAdd extends StatefulWidget {
+  LoomTakaAdjustmentDetAdd(
       {Key? mykey,
       companyid,
       companyname,
@@ -22,9 +21,7 @@ class LoomSalesChallanDetAdd extends StatefulWidget {
       partyid,
       itemDet,
       id,
-      branchid,
-      ordno,
-      type})
+      branchid})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -34,15 +31,14 @@ class LoomSalesChallanDetAdd extends StatefulWidget {
     xparty = partyid;
     xid = id;
     xbranchid = branchid;
-    xordno = ordno;
     xItemDetails = itemDet;
-    xtype = type;
     //xitemDet = itemDet;
 
     print('in Item Details');
     print(xbranch);
     print(xparty);
     print(xItemDetails);
+    print(xbranchid);
   }
 
   var xcompanyid;
@@ -51,18 +47,17 @@ class LoomSalesChallanDetAdd extends StatefulWidget {
   var xfend;
   var xid;
   var xbranch;
-  var xparty;
   var xbranchid;
-  var xordno;
-  var xtype;
+  var xparty;
   List xitemDet = [];
   List xItemDetails = [];
 
   @override
-  _LoomSalesChallanDetAddState createState() => _LoomSalesChallanDetAddState();
+  _LoomTakaAdjustmentDetAddState createState() =>
+      _LoomTakaAdjustmentDetAddState();
 }
 
-class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
+class _LoomTakaAdjustmentDetAddState extends State<LoomTakaAdjustmentDetAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
@@ -71,43 +66,34 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
   TextEditingController _takachr = new TextEditingController();
   TextEditingController _takano = new TextEditingController();
   TextEditingController _ctakano = new TextEditingController();
-  TextEditingController _haste = new TextEditingController();
+  TextEditingController _itemname = new TextEditingController();
+  TextEditingController _design = new TextEditingController();
   TextEditingController _pcs = new TextEditingController();
   TextEditingController _meters = new TextEditingController();
   TextEditingController _tpmeters = new TextEditingController();
-  TextEditingController _itemname = new TextEditingController();
-  TextEditingController _design = new TextEditingController();
-  TextEditingController _hsncode = new TextEditingController();
+  TextEditingController _stdwt= new TextEditingController();
   TextEditingController _rate = new TextEditingController();
-  // TextEditingController _unit = new TextEditingController();
+  TextEditingController _unit = new TextEditingController();
   TextEditingController _amount = new TextEditingController();
   TextEditingController _machine = new TextEditingController();
   TextEditingController _inwid = new TextEditingController();
   TextEditingController _inwdetid = new TextEditingController();
   TextEditingController _inwdettkid = new TextEditingController();
-  TextEditingController _ordid = new TextEditingController();
-  TextEditingController _orddetid = new TextEditingController();
   TextEditingController _fmode = new TextEditingController();
-  TextEditingController _ordbalmtrs = new TextEditingController();
-  TextEditingController _remarks = new TextEditingController();
-  TextEditingController _duedays = new TextEditingController();
-  TextEditingController _netwt = new TextEditingController();
   TextEditingController _avgwt = new TextEditingController();
+  TextEditingController _netwt = new TextEditingController();
   TextEditingController _beamno = new TextEditingController();
   TextEditingController _beamitem = new TextEditingController();
+  TextEditingController _ordbalmtrs = new TextEditingController();
 
+
+  //var ordTaka = 0;
   double ordMeters = 0;
 
   final _formKey = GlobalKey<FormState>();
 
   List<Map<String, dynamic>> _jsonData = [];
-
-  String? dropdownUnitType;
-
-  var UnitType = [
-    'M',
-    'P',
-  ];
+  //TextEditingController _fromdatecontroller = new TextEditingController(text: 'dhaval');
 
   @override
   void initState() {
@@ -119,78 +105,69 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
     List ItemDetails = widget.xItemDetails;
     int length = ItemDetails.length;
     print('Length :' + length.toString());
-    if (length > 0) {
-      setState(() {
-        _orderno.text = ItemDetails[length - 1]['orderno'].toString();
-        _folddate.text = ItemDetails[length - 1]['folddate'].toString();
-        _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
-        _ordid.text = ItemDetails[length - 1]['ordid'].toString();
-        _orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
-        _itemname.text = ItemDetails[length - 1]['itemname'].toString();
-        _design.text = ItemDetails[length - 1]['design'].toString();
-        _hsncode.text = ItemDetails[length - 1]['hsncode'].toString();
-        dropdownUnitType = ItemDetails[length - 1]['unit'].toString();
-        _rate.text = ItemDetails[length - 1]['rate'].toString();
-        _duedays.text = ItemDetails[length - 1]['duedays'].toString();
-        _remarks.text = ItemDetails[length - 1]['remarks'].toString();
-      });
-    }
+    // if (length > 0) {
+    //   setState(() {
+    //     _orderno.text = ItemDetails[length - 1]['orderno'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['itemname'].toString();
+    //     _design.text = ItemDetails[length - 1]['design'].toString();
+    //     _unit.text = ItemDetails[length - 1]['unit'].toString();
+    //     _rate.text = ItemDetails[length - 1]['rate'].toString();
+      // });
+    // }
+
+    //_date.text = curDate.toString().split(' ')[0];
+
+    // if (int.parse(widget.xid) > 0) {
+    //   //loadData();
+    // }
   }
 
   void gotoOrderScreen(BuildContext contex) async {
-    var result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => order_list(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend,
-                  partyid: widget.xparty,
-                )));
+    // var result = await Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (_) => loomsalesorder_list(
+    //               companyid: widget.xcompanyid,
+    //               companyname: widget.xcompanyname,
+    //               fbeg: widget.xfbeg,
+    //               fend: widget.xfend,
+    //               partyid: widget.xparty,
+    //             )));
 
-    setState(() {
-      var retResult = result;
+    // setState(() {
+    //   var retResult = result;
 
-      print(retResult);
-      var _orderlist = result[1];
-      result = result[1];
-      var orderid = _orderlist[0];
+    //   print(retResult);
+    //   var _orderlist = result[1];
+    //   result = result[1];
+    //   var orderid = _orderlist[0];
 
-      print(orderid);
+    //   print(orderid);
 
-      var selOrder = '';
-      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-        if (ictr > 0) {
-          selOrder = selOrder + ',';
-        }
-        selOrder = selOrder + retResult[0][ictr];
-      }
+    //   var selOrder = '';
+    //   for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+    //     if (ictr > 0) {
+    //       selOrder = selOrder + ',';
+    //     }
+    //     selOrder = selOrder + retResult[0][ictr];
+    //   }
 
-      _orderno.text = selOrder;
+    //   _orderno.text = selOrder;
 
-      print('dhruv');
-      print(result);
-      setState(() {
-        _folddate.text = result[0]['date'];
-        _itemname.text = result[0]['itemname'];
-        _design.text = result[0]['design'];
-        // _unit.text = result[0]['unit'];
-        dropdownUnitType = result[0]['unit'];
-        _haste.text = result[0]['haste'].toString();
-        if (_haste.text == "null") {
-          _haste.text = '';
-        }
-        print(_haste.text);
-        _rate.text = result[0]['rate'];
-        _ordid.text = result[0]['ordid'].toString();
-        _orddetid.text = result[0]['orddetid'].toString();
-        ordMeters = double.parse(result[0]['balmeters'].toString());
-        _ordbalmtrs.text = result[0]['balmeters'].toString();
-        _remarks.text = result[0]['remarks'].toString();
-        _duedays.text = result[0]['duedays'].toString();
-      });
-    });
+    //   print('dhruv');
+    //   print(result);
+    //   setState(() {
+    //     _folddate.text = result[0]['date'];
+    //     _itemname.text = result[0]['itemname'];
+    //     _design.text = result[0]['design'];
+    //     _unit.text = result[0]['unit'];
+    //     _rate.text = result[0]['rate'];
+    //     _ordid.text = result[0]['ordid'].toString();
+    //     _orddetid.text = result[0]['orddetid'].toString();
+    //     ordMeters = double.parse(result[0]['balmeters'].toString());
+    //     _ordbalmtrs.text = result[0]['balmeters'].toString();
+    //   });
+    // });
   }
 
   Future<bool> fetchdetails() async {
@@ -237,19 +214,8 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
             '&branchid=(' +
             branch +
             ')&getdata=Y';
-
-    // uri =
-    //     'http://127.0.0.1:8000/api/commonapi_gettakastock2?dbname=' +
-    //         db +
-    //         '&partyfilter=N&takachr=' +
-    //         takachr +
-    //         '&takano=' +
-    //         takano +
-    //         '&branchid=(' +
-    //         branch +
-    //         ')&getdata=Y';
-
-    print(" fetchdetails  :" + uri);
+            
+    print(" fetchdetails :" +uri);
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
@@ -289,48 +255,29 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
 
                           _takachr.text = _jsonData[index]['takachr'].toString();
                           _takano.text = _jsonData[index]['takano'].toString();
-                          _folddate.text = _jsonData[index]['date'].toString();
-                          // _ordbalmtrs.text = _jsonData[index]['balmeters'].toString();
-                          _itemname.text = _jsonData[index]['itemname'].toString();
-                          _design.text = _jsonData[index]['design'].toString();
-                          _pcs.text = _jsonData[index]['pcs'].toString();
-                          _meters.text = _jsonData[index]['meters'].toString();
-                          _tpmeters.text = _jsonData[index]['tpmtrs'].toString();
-                          _hsncode.text = _jsonData[index]['hsncode'].toString();
-                          // _unit.text = _jsonData[index]['unit'].toString();
-                          setState(() {
-                            dropdownUnitType = _jsonData[index]['unit'].toString();
-                          });
-                          // _rate.text = _jsonData[index]['rate'].toString();
-                          // _amount.text = _jsonData[index]['amount'].toString();
-                          _machine.text = _jsonData[index]['machine'].toString();
-                          _inwid.text = _jsonData[index]['inwid'].toString();
-                          _inwdetid.text = _jsonData[index]['inwdetid'].toString();
-                          _inwdettkid.text = _jsonData[index]['inwdettkid'].toString();
-                          _fmode.text = _jsonData[index]['fmode'].toString();
-                          _avgwt.text = _jsonData[index]['avgwt'].toString();
-                          _netwt.text = _jsonData[index]['netwt'].toString();
-                          _beamno.text = _jsonData[index]['beamno'].toString();
-                          _beamitem.text = _jsonData[index]['beamitem'].toString();
+                          _itemname.text = jsonData[index]['itemname'].toString();
+                          _design.text = jsonData[index]['design'].toString();
+                          _pcs.text = jsonData[index]['pcs'].toString();
+                          _meters.text = jsonData[index]['meters'].toString();
+                          _tpmeters.text = jsonData[index]['tpmtrs'].toString();
+                          _stdwt.text = jsonData[index]['stdwt'].toString();
+                          _avgwt.text = jsonData[index]['avgwt'].toString();
+                          _netwt.text = jsonData[index]['netwt'].toString();
+                          _unit.text = jsonData[index]['unit'].toString();
+                          _machine.text = jsonData[index]['machine'].toString();
+                          _inwid.text = jsonData[index]['inwid'].toString();
+                          _inwdetid.text = jsonData[index]['inwdetid'].toString();
+                          _inwdettkid.text = jsonData[index]['inwdettkid'].toString();
+                          _beamno.text = jsonData[index]['beamno'].toString();
+                          _beamitem.text = jsonData[index]['beamitem'].toString();
+                          _rate.text = jsonData[index]['rate'].toString();
+                          _amount.text = jsonData[index]['amount'].toString();
+                          _fmode.text = jsonData[index]['fmode'].toString();
 
-                          double pcs = double.parse(_pcs.text);
-                          double meters = double.parse(_meters.text);
-                          // String unit = _unit.text;
-                          String unit = dropdownUnitType.toString();
-                          double rate = 0;
-                          if (_rate.text != '') {
-                            rate = double.parse(_rate.text);
-                          }
-                          double amount = 0;
-                          if ((unit == 'P') || (unit == 'T')) {
-                            amount = pcs * rate;
-                            print("amount $amount");
-                          } else {
-                            amount = meters * rate;
-                            print("=================" + _amount.text);
-                          }
-                          _amount.text = amount.toString();
-                          print(jsonData);
+                          if (_rate.text == "null" || _amount.text == "null") {
+                            _rate.text = "0.00";
+                            _amount.text = "0";
+                          } 
                           Navigator.pop(context);
                         },
                       );
@@ -344,87 +291,41 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
       );
     } else {
       setState(() {
-        _takachr.text = _jsonData[0]['takachr'].toString();
-        _takano.text = _jsonData[0]['takano'].toString();
         _itemname.text = jsonData[0]['itemname'].toString();
-        _folddate.text = jsonData[0]['date'].toString();
-        // _ordbalmtrs.text = _jsonData[0]['balmeters'].toString();
         _design.text = jsonData[0]['design'].toString();
         _pcs.text = jsonData[0]['pcs'].toString();
         _meters.text = jsonData[0]['meters'].toString();
         _tpmeters.text = jsonData[0]['tpmtrs'].toString();
-        _hsncode.text = jsonData[0]['hsncode'].toString();
-        // _unit.text = jsonData[0]['unit'].toString();
-        setState(() {
-          dropdownUnitType = jsonData[0]['unit'].toString();
-        });
-        // _rate.text = jsonData[0]['rate'].toString();
-        // _amount.text = jsonData[0]['amount'].toString();
+        _stdwt.text = jsonData[0]['stdwt'].toString();
+        _avgwt.text = jsonData[0]['avgwt'].toString();
+        _netwt.text = jsonData[0]['netwt'].toString();
+        _unit.text = jsonData[0]['unit'].toString();
         _machine.text = jsonData[0]['machine'].toString();
         _inwid.text = jsonData[0]['inwid'].toString();
         _inwdetid.text = jsonData[0]['inwdetid'].toString();
         _inwdettkid.text = jsonData[0]['inwdettkid'].toString();
-        _fmode.text = jsonData[0]['fmode'].toString();
-        _avgwt.text = jsonData[0]['avgwt'].toString();
-        _netwt.text = jsonData[0]['netwt'].toString();
         _beamno.text = jsonData[0]['beamno'].toString();
         _beamitem.text = jsonData[0]['beamitem'].toString();
+        _rate.text = jsonData[0]['rate'].toString();
+        _amount.text = jsonData[0]['amount'].toString();
+        _fmode.text = jsonData[0]['fmode'].toString();
+
+        if (_ordbalmtrs.text != '') {
+          _ordbalmtrs.text =
+              (double.parse(_ordbalmtrs.text) - double.parse(_meters.text))
+                  .toString();
+        }
+        
+        if (_rate.text == "null" || _amount.text == "null") {
+          _rate.text = "0.00";
+          _amount.text = "0";
+        } 
+        
       });
-
-      double pcs = double.parse(_pcs.text);
-      double meters = double.parse(_meters.text);
-      // String unit = _unit.text;
-      String unit = dropdownUnitType.toString();
-      double rate = 0;
-      if (_rate.text != '') {
-        rate = double.parse(_rate.text);
-      }
-      double amount = 0;
-      if (unit == 'P') {
-        amount = pcs * rate;
-        print("amount $amount");
-      } else {
-        amount = meters * rate;
-        print("=================" + _amount.text);
-      }
-      _amount.text = amount.toString();
-
+      
       print(jsonData);
     }
     return true;
-  }
-
-  void totCalUnit() {
-    double pcs = 0.0;
-    double meters = 0.0;
-    double rate = 0.0;
-    String unit = dropdownUnitType.toString();
-
-    if (_pcs.text.isNotEmpty) {
-      pcs = double.tryParse(_pcs.text) ?? 0.0;
-    }
-
-    if (_meters.text.isNotEmpty) {
-      meters = double.tryParse(_meters.text) ?? 0.0;
-    }
-
-    if (_rate.text.isNotEmpty) {
-      rate = double.tryParse(_rate.text) ?? 0.0;
-    }
-
-    double amount = 0.0;
-
-    if (unit == 'P') {
-      amount = pcs * rate;
-    } else if (unit == 'M') {
-      amount = rate * meters;
-    } else {
-      amount = meters * rate;
-    }
-
-    setState(() {
-      _amount.text = amount.toString();
-    });
   }
 
   Future<void> barcodeScan() async {
@@ -471,81 +372,79 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
+
       var takachr = _takachr.text;
       var takano = _takano.text;
       var ctakano = _ctakano.text;
-      var haste = _haste.text;
+      var itemname = _itemname.text;
+      var design = _design.text;
       var pcs = _pcs.text;
       var meters = _meters.text;
       var tpmtrs = _tpmeters.text;
-      var itemname = _itemname.text;
-      var design = _design.text;
+      var stdwt = _stdwt.text;
+      var avgwt = _avgwt.text;
+      var netwt = _netwt.text;
       var rate = _rate.text;
-      var unit = dropdownUnitType;
+      var unit = _unit.text;
       var amount = _amount.text;
       var machine = _machine.text;
       var inwid = _inwid.text;
       var inwdetid = _inwdetid.text;
       var inwdettkid = _inwdettkid.text;
       var fmode = _fmode.text;
-      var orderno = _orderno.text;
-      var ordid = _ordid.text;
-      var orddetid = _orddetid.text;
-      var ordbalmtrs = _ordbalmtrs.text;
-      var hsncode = _hsncode.text;
       var folddate = _folddate.text;
-      var remarks = _remarks.text;
-      var duedays = _duedays.text;
-      var netwt = _netwt.text;
-      var avgwt = _avgwt.text;
+      var orderno = _orderno.text;
       var beamno = _beamno.text;
       var beamitem = _beamitem.text;
-
-      print(_orderno.text);
 
       widget.xitemDet.add({
         'orderno': orderno,
         'takachr': takachr,
         'takano': takano,
-        'haste': haste,
+        'itemname': itemname,
+        'design': design,
         'pcs': pcs,
         'meters': meters,
         'tpmtrs': tpmtrs,
-        'itemname': itemname,
-        'hsncode': hsncode,
+        'stdwt': stdwt,
+        'avgwt': avgwt,
+        'netwt': netwt,
         'rate': rate,
-        'var': 0,
         'unit': unit,
-        'varper': 0,
-        'amount': amount,
-        'design': design,
+        'amount': amount,        
         'machine': machine,
-        'orditem': itemname,
-        'orddesign': design,
-        'ordmtr': ordbalmtrs,
-        'stdwt': 0,
-        'ordid': ordid,
-        'folddate': folddate,
-        'type': '',
-        'tkid': 0,
-        'tkdetid': 0,
         'fmode': fmode,
         'inwid': inwid,
         'inwdettkid': inwdettkid,
-        'cost': 0,
         'inwdetid': inwdetid,
-        'tp': '',
-        'orddetid': orddetid,
-        'ordbalmtrs': ordbalmtrs,
-        'remarks': remarks,
-        'duedays': duedays,
-        'netwt': netwt,
-        'avgwt': avgwt,
         'beamno': beamno,
-        'beamitem': beamitem,
+        'beamitem': beamitem
       });
 
       Navigator.pop(context, widget.xitemDet);
+
+      // var response = await http.post(Uri.parse(uri));
+
+      // var jsonData = jsonDecode(response.body);
+      // //print('4');
+
+      // var jsonCode = jsonData['Code'];
+      // var jsonMsg = jsonData['Message'];
+
+      // if (jsonCode == '500') {
+      //   showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+      // } else {
+      //   showAlertDialog(context, 'Saved !!!');
+      //   Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //           builder: (_) => LoomSalesChallanList(
+      //                 companyid: widget.xcompanyid,
+      //                 companyname: widget.xcompanyname,
+      //                 fbeg: widget.xfbeg,
+      //                 fend: widget.xfend,
+      //               )));
+      // }
 
       return true;
     }
@@ -560,7 +459,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Sales Challan Item Details[ ] ',
+          'Taka Adjustment Item Details[ ] ',
           style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
@@ -568,14 +467,13 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
           child: Icon(Icons.done),
           backgroundColor: Colors.green,
           onPressed: () => {
-                if (_formKey.currentState!.validate())
-                  {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Form submitted successfully')),
-                    ),
-                    saveData()
-                  },
-              }),
+            if(_formKey.currentState!.validate()){
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Form submitted successfully')),
+              ),
+              saveData()
+            }
+          }),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -585,37 +483,31 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
             Row(
               children: [
                 Expanded(
-                  child: TextFormField(
-                    controller: _orderno,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Sales Order',
-                      labelText: 'Order No',
+                  child: Visibility(
+                    visible: false,
+                    child: TextFormField(
+                      controller: _orderno,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        icon: const Icon(Icons.person),
+                        hintText: 'Select Job Order',
+                        labelText: 'Order No',
+                      ),
+                      onTap: () {
+                        gotoOrderScreen(context);
+                      },
+                      onChanged: (value) {
+                        ;
+                      },
+                      validator: (value) {
+                        return null;
+                      },
                     ),
-                    onTap: () {
-                      gotoOrderScreen(context);
-                    },
-                    onChanged: (value) {},
-                    validator: (value) {
-                      print(widget.xtype);
-                      if (widget.xtype == 'PACKING') {
-                      } else if ('Delivery' == widget.xtype ||
-                          value == '0' ||
-                          value == '') {
-                        return 'Please enter order no';
-                      }
-                      // if (value == null ||
-                      //     value.isEmpty ||
-                      //     value == "0" ||
-                      //     'Delivery' == widget.xtype) {
-                      //   return 'Please enter order no';
-                      // }
-                      return null;
-                    },
                   ),
                 ),
                 Expanded(
+                    child: Visibility(
+                  visible: false,
                   child: TextFormField(
                     controller: _folddate,
                     enabled: false,
@@ -628,21 +520,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
                       return null;
                     },
                   ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _ordbalmtrs,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Order Balance',
-                      labelText: 'Order Balance',
-                    ),
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
+                )),
               ],
             ),
             Row(
@@ -689,32 +567,14 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
               children: [
                 Padding(padding: EdgeInsets.all(2)),
                 ElevatedButton(
-                  onPressed: () => {
-                    if (_formKey.currentState!.validate())
-                      {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text('Form submitted successfully')),
-                        ),
-                        fetchdetails()
-                      },
-                  },
+                  onPressed: () => {fetchdetails()},
                   child: Text('Fetch Details',
                       style: TextStyle(
                           fontSize: 15.0, fontWeight: FontWeight.bold)),
                 ),
                 Padding(padding: EdgeInsets.all(2)),
                 ElevatedButton(
-                  onPressed: () => {
-                    if (_formKey.currentState!.validate())
-                      {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content: Text('Form submitted successfully')),
-                        ),
-                        barcodeScan()
-                      },
-                  },
+                  onPressed: () => {barcodeScan()},
                   child: Text('Scan Barcode',
                       style: TextStyle(
                           fontSize: 15.0, fontWeight: FontWeight.bold)),
@@ -763,22 +623,15 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    enabled: false,
                     controller: _pcs,
-                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Pcs / Taka',
                       labelText: 'Pcs',
                     ),
                     onTap: () {
-                      setState(() {
-                        totCalUnit();
-                      });
-                    },
-                    onChanged: (value) {
-                      setState(() {
-                        totCalUnit();
-                      });
+                      //gotoBranchScreen(context);
                     },
                     validator: (value) {
                       return null;
@@ -798,6 +651,9 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
                       //gotoBranchScreen(context);
                     },
                     validator: (value) {
+                      if(value == '' || value == 0){
+                        return "Please enter Meter";
+                      }
                       return null;
                     },
                   ),
@@ -808,8 +664,8 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    enabled: false,
                     controller: _tpmeters,
-                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'TP Mtrs',
@@ -825,12 +681,12 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    controller: _hsncode,
-                    keyboardType: TextInputType.number,
+                    enabled: false,
+                    controller: _stdwt,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'HSN Code',
-                      labelText: 'HSN Code',
+                      hintText: 'StdWt',
+                      labelText: 'StdWt',
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);
@@ -846,8 +702,46 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    controller: _rate,
                     enabled: false,
+                    controller: _avgwt,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'AvgWt',
+                      labelText: 'AvgWt',
+                    ),
+                    onTap: () {
+                      //gotoBranchScreen(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    enabled: false,
+                    controller: _netwt,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'NetWt',
+                      labelText: 'NetWt',
+                    ),
+                    onTap: () {
+                      //gotoBranchScreen(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    enabled: false,
+                    controller: _rate,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Rate',
@@ -862,51 +756,30 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
                   ),
                 ),
                 Expanded(
-                  child: DropdownButtonFormField(
-                      value: dropdownUnitType,
-                      decoration: const InputDecoration(
-                        labelText: 'Unit',
-                        hintText: "Unit",
-                        icon: const Icon(Icons.person),
-                      ),
-                      items: UnitType.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      icon: const Icon(Icons.arrow_drop_down_circle),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownUnitType = newValue!;
-                          totCalUnit();
-                        });
-                      }),
-                ),
-                // Expanded(
-                //   child: TextFormField(
-                //     controller: _unit,
-                //     decoration: const InputDecoration(
-                //       icon: const Icon(Icons.person),
-                //       hintText: 'Unit',
-                //       labelText: 'Unit',
-                //     ),
-                //     onTap: () {
-                //       //gotoBranchScreen(context);
-                //     },
-                //     validator: (value) {
-                //       return null;
-                //     },
-                //   ),
-                // )
+                  child: TextFormField(
+                    enabled: false,
+                    controller: _unit,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Unit',
+                      labelText: 'Unit',
+                    ),
+                    onTap: () {
+                      //gotoBranchScreen(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                )
               ],
             ),
             Row(
               children: [
                 Expanded(
                   child: TextFormField(
-                    controller: _amount,
                     enabled: false,
+                    controller: _amount,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Amount',
@@ -943,46 +816,8 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    controller: _netwt,
                     enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'netwt',
-                      labelText: 'netwt',
-                    ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _avgwt,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'avgwt',
-                      labelText: 'avgwt',
-                    ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
                     controller: _beamno,
-                    enabled: false,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Beam No',
@@ -1051,6 +886,10 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
                     },
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     enabled: false,
@@ -1087,6 +926,9 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
                 )
               ],
             ),
+            SizedBox(
+              height: 20,
+            )
           ],
         ),
       )),

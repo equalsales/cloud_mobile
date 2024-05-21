@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
 
@@ -71,6 +72,18 @@ getValueN(xValue) {
   return xValue;
 }
 
+
+StringToStr(_list) {
+  var partylist = '';
+  for (var ictr = 0; ictr < _list.length; ictr++) {
+    if (ictr > 0) {
+      partylist = partylist + ',';
+    }
+    partylist = partylist + _list[ictr].toString();
+  }
+  return partylist.replaceAll('/', '{{}}');
+}
+
 Future<List<dynamic>> getCityDetails(String City, int Id) async {
   String uri = '';
   var db = globals.dbname;
@@ -94,26 +107,63 @@ Future<List<dynamic>> getCityDetails(String City, int Id) async {
   return jsonData;
 }
 
-Future<List<dynamic>> getPartyDetails(String Party, int Id) async {
+List<dynamic> listdata = [];
+
+Future getPartyDetails(String Party, int Id,
+    [double crlimit = 0,
+    int? partyid,
+    dynamic context,
+    String? endDate,
+    int? cno]) async {
   String uri = '';
   var db = globals.dbname;
 
   Party = getValue(Party, 'C');
 
   Id = int.parse(getValue(Id.toString(), 'N'));
+  print(partyid);
+  double closingbal = 0;
+  if (crlimit > 0) {
+    uri =
+        'http://www.cloud.equalsoftlink.com/getpartyledbal?partyid=$partyid&acgroupid=&dbname=' +
+            db +
+            '&cno=$cno' +
+            '&todate=$endDate' +
+            '&lmulticompany=N' +
+            '&id=' +
+            Id.toString();
 
-  uri = 'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
-      db +
-      '&party=' +
-      Party.toString() +
-      '&id=' +
-      Id.toString();
-  print("123123"+uri);
-  var response = await http.get(Uri.parse(uri));
+    print(uri);
 
-  var jsonData = jsonDecode(response.body);
+    print("123123" + uri);
+    var response = await http.get(Uri.parse(uri));
 
-  jsonData = jsonData['Data'];
+    var jsonData = jsonDecode(response.body);
 
-  return jsonData;
+    jsonData = jsonData['data'];
+    print(jsonData);
+
+    closingbal = double.parse(jsonData[0]['actclosingbal'].toString());
+    print("closingbal" + closingbal.toString());
+    if (crlimit < closingbal) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(
+              "Credit limit exceed Crlimit [${crlimit}] && Pending Limit [$closingbal].",
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Ok"))
+            ],
+          );
+        },
+      );
+    }
+  }
+   return closingbal;
 }
