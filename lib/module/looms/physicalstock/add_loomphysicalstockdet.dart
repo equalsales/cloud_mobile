@@ -36,8 +36,7 @@ class LoomphysicalstockDetAdd extends StatefulWidget {
       partyid,
       itemDet,
       id,
-      branchid
-      })
+      branchid})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -69,7 +68,8 @@ class LoomphysicalstockDetAdd extends StatefulWidget {
   List xItemDetails = [];
 
   @override
-  _LoomphysicalstockDetAddState createState() => _LoomphysicalstockDetAddState();
+  _LoomphysicalstockDetAddState createState() =>
+      _LoomphysicalstockDetAddState();
 }
 
 class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
@@ -108,7 +108,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
 
   final _formKey = GlobalKey<FormState>();
 
-  var _jsonData = [];
+  List<Map<String, dynamic>> _jsonData = [];
   //TextEditingController _fromdatecontroller = new TextEditingController(text: 'dhaval');
 
   @override
@@ -201,7 +201,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
     var branch = widget.xbranchid;
     var takano = _takano.text;
     var takachr = _takachr.text;
-    var cItem ='';
+    var cItem = _itemname.text;
 
     fromdate = retconvdate(fromdate);
     todate = retconvdate(todate);
@@ -214,9 +214,10 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
     print('Length :' + length.toString());
     if (length > 0) {
       for (int iCtr = 0; iCtr < length; iCtr++) {
-        cItem= ItemDetails[iCtr]['itemname'].toString();
+        // cItem = ItemDetails[iCtr]['itemname'].toString();
         if ((ItemDetails[iCtr]['takano'] == takano) &&
-            ((ItemDetails[iCtr]['takachr'] == takachr))) {
+            ((ItemDetails[iCtr]['takachr'] == takachr)) &&
+            ((ItemDetails[iCtr]['itemname'] == takachr))) {
           showAlertDialog(context, 'Taka No Already Exists...');
           setState(() {
             _takano.text = '0';
@@ -226,80 +227,123 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
         }
       }
     }
-//commonapi_gettakastock?partyfilter=N&takano=28430&takachr=AJ&branchid=(2)&getdata=Y&dbname=admin_looms
-    uri = 'https://looms.equalsoftlink.com/api/commonapi_gettakastock2?dbname=' +
-        db +
-        '&partyfilter=N&takachr=' +
-        takachr +
-        '&takano=' +
-        takano +
-        '&branchid=('+ branch +')&getdata=Y&itemname=$cItem';
-    // 'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
-    //     db +
-    //     '&cno=' +
-    //     cno +
-    //     '&id=' +
-    //     id +
-    //     '&startdate=' +
-    //     fromdate +
-    //     '&enddate=' +
-    //     todate;
+
+    uri =
+        'https://looms.equalsoftlink.com/api/commonapi_gettakastock2?dbname=' +
+            db +
+            '&partyfilter=N&takachr=' +
+            takachr +
+            '&takano=' +
+            takano +
+            '&branchid=(' +
+            branch +
+            ')&getdata=Y&itemname=';
+
     print(uri);
+    print("hh");
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
 
-     print(jsonData);
+    print(jsonData);
     jsonData = jsonData['Data'];
     if (jsonData == null) {
       showAlertDialog(context, 'Taka No Found...');
       return true;
     }
 
-    jsonData = jsonData[0];
-    print(jsonData);
+    _jsonData = List<Map<String, dynamic>>.from(jsonData);
 
-    setState(() {
-      _itemname.text = jsonData['itemname'].toString();
-      _folddate.text = jsonData['date'].toString();
-      _design.text = jsonData['design'].toString();
-      _machine.text = jsonData['machine'].toString();
-      _pcs.text = jsonData['pcs'].toString();
-      _meters.text = jsonData['meters'].toString();
-      _tpmeters.text = jsonData['tpmtrs'].toString();
-      _unit.text = jsonData['unit'].toString();
-      _hsncode.text = jsonData['hsncode'].toString();
-      _inwid.text = jsonData['inwid'].toString();
-      _inwdetid.text = jsonData['inwdetid'].toString();
-      _inwdettkid.text = jsonData['inwdettkid'].toString();
-      _fmode.text = jsonData['fmode'].toString();
-      _weight.text = jsonData['weight'].toString();
-      _avgwt.text = jsonData['avgwt'].toString();
-      _beamno.text = jsonData['beamno'].toString();
-      _beamitem.text = jsonData['beamitem'].toString();
+    print(_jsonData);
 
-      if (_ordbalmtrs.text != '') {
-        _ordbalmtrs.text =
-            (double.parse(_ordbalmtrs.text) - double.parse(_meters.text))
-                .toString();
-      }
+    print("12121212");
 
-      double pcs = double.parse(_pcs.text);
-      double meters = double.parse(_meters.text);
-      String unit = _unit.text;
-      double rate = 0;
-      if (_rate.text != '') {
-        rate = double.parse(_rate.text);
-      }
-      double amount = 0;
-      if ((unit == 'P') || (unit == 'T')) {
-        amount = pcs * rate;
-      } else {
-        amount = meters * rate;
-      }
-      _amount.text = amount.toString();
-    });
-    print(jsonData);
+    if (1 < _jsonData.length) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: ListView.builder(
+              itemCount: _jsonData.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  value: false,
+                  subtitle: Text(_jsonData[index]['itemname'].toString()),
+                  title: Text(_jsonData[index]['meters'].toString()),
+                  onChanged: (bool? value) {
+                    print('changed');
+                    print(_jsonData[index]['itemname'].toString());
+            
+                    _takachr.text = _jsonData[index]['takachr'].toString();
+                    _takano.text = _jsonData[index]['takano'].toString();
+                    _itemname.text = _jsonData[index]['itemname'].toString();
+                    _folddate.text = _jsonData[index]['date'].toString();
+                    _design.text = _jsonData[index]['design'].toString();
+                    _machine.text = _jsonData[index]['machine'].toString();
+                    _pcs.text = _jsonData[index]['pcs'].toString();
+                    _meters.text = _jsonData[index]['meters'].toString();
+                    _tpmeters.text = _jsonData[index]['tpmtrs'].toString();
+                    _unit.text = _jsonData[index]['unit'].toString();
+                    _hsncode.text = _jsonData[index]['hsncode'].toString();
+                    _inwid.text = _jsonData[index]['inwid'].toString();
+                    _inwdetid.text = _jsonData[index]['inwdetid'].toString();
+                    _inwdettkid.text = _jsonData[index]['inwdettkid'].toString();
+                    _fmode.text = _jsonData[index]['fmode'].toString();
+                    _weight.text = _jsonData[index]['weight'].toString();
+                    _avgwt.text = _jsonData[index]['avgwt'].toString();
+                    _beamno.text = _jsonData[index]['beamno'].toString();
+                    _beamitem.text = _jsonData[index]['beamitem'].toString();
+                    Navigator.pop(context);
+                  },
+                );
+              },
+            ),
+          );
+        },
+      );
+    } else {
+      setState(() {
+        _itemname.text = jsonData[0]['itemname'].toString();
+        _folddate.text = jsonData[0]['date'].toString();
+        _design.text = jsonData[0]['design'].toString();
+        _machine.text = jsonData[0]['machine'].toString();
+        _pcs.text = jsonData[0]['pcs'].toString();
+        _meters.text = jsonData[0]['meters'].toString();
+        _tpmeters.text = jsonData[0]['tpmtrs'].toString();
+        _unit.text = jsonData[0]['unit'].toString();
+        _hsncode.text = jsonData[0]['hsncode'].toString();
+        _inwid.text = jsonData[0]['inwid'].toString();
+        _inwdetid.text = jsonData[0]['inwdetid'].toString();
+        _inwdettkid.text = jsonData['inwdettkid'].toString();
+        _fmode.text = jsonData[0]['fmode'].toString();
+        _weight.text = jsonData[0]['weight'].toString();
+        _avgwt.text = jsonData[0]['avgwt'].toString();
+        _beamno.text = jsonData[0]['beamno'].toString();
+        _beamitem.text = jsonData[0]['beamitem'].toString();
+
+        if (_ordbalmtrs.text != '') {
+          _ordbalmtrs.text =
+              (double.parse(_ordbalmtrs.text) - double.parse(_meters.text))
+                  .toString();
+        }
+
+        double pcs = double.parse(_pcs.text);
+        double meters = double.parse(_meters.text);
+        String unit = _unit.text;
+        double rate = 0;
+        if (_rate.text != '') {
+          rate = double.parse(_rate.text);
+        }
+        double amount = 0;
+        if ((unit == 'P') || (unit == 'T')) {
+          amount = pcs * rate;
+        } else {
+          amount = meters * rate;
+        }
+        _amount.text = amount.toString();
+      });
+      print(jsonData);
+    }
     return true;
   }
 
@@ -311,8 +355,8 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
       //     '#ff6666', 'Cancel', true, ScanMode.QR);
 
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#000000', 'Cancel', true, ScanMode.BARCODE);          
-      //barcodeScanRes = await BarcodeScanner.scan();      
+          '#000000', 'Cancel', true, ScanMode.BARCODE);
+      //barcodeScanRes = await BarcodeScanner.scan();
       print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
@@ -322,20 +366,16 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
       print(barcodeScanRes);
 
       //const string = barcodeScanRes;
-      final splitted = barcodeScanRes.split('-');      
+      final splitted = barcodeScanRes.split('-');
       print(splitted); // [Hello, world!];
       print(splitted.length);
       print('dhruv');
       _takachr.text = splitted[0];
-      if(splitted.length>1)
-      {
+      if (splitted.length > 1) {
         _takano.text = splitted[1];
-      }
-      else
-      {
+      } else {
         _takano.text = '0';
       }
-      
 
       fetchdetails();
       //_scanBarcode = barcodeScanRes;
@@ -445,14 +485,20 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
       appBar: AppBar(
         title: Text(
           'Physical Stock Item Details[ ] ',
-          style:
-              TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
+          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done),
           backgroundColor: Colors.green,
-          onPressed: () => {saveData()}),
+          onPressed: () => {
+            if(_formKey.currentState!.validate()){
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Form submitted successfully')),
+              ),
+              saveData()
+            }
+          }),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -462,32 +508,31 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
             Row(
               children: [
                 Expanded(
-                 child: Visibility(
-                  visible:false,
-                  child: TextFormField(
-                    controller: _orderno,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Job Order',
-                      labelText: 'Order No',
+                  child: Visibility(
+                    visible: false,
+                    child: TextFormField(
+                      controller: _orderno,
+                      autofocus: true,
+                      decoration: const InputDecoration(
+                        icon: const Icon(Icons.person),
+                        hintText: 'Select Job Order',
+                        labelText: 'Order No',
+                      ),
+                      onTap: () {
+                        gotoOrderScreen(context);
+                      },
+                      onChanged: (value) {
+                        ;
+                      },
+                      validator: (value) {
+                        return null;
+                      },
                     ),
-                    onTap: () {
-                      gotoOrderScreen(context);
-                    },
-                    onChanged: (value) {
-                      ;
-                    },
-                    validator: (value) {
-                      return null;
-                    },
                   ),
                 ),
-                ),
-                
                 Expanded(
-                  child: Visibility(
-                  visible:false,
+                    child: Visibility(
+                  visible: false,
                   child: TextFormField(
                     controller: _folddate,
                     enabled: false,
@@ -500,11 +545,10 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
                       return null;
                     },
                   ),
-                  )
-                ),
+                )),
                 Expanded(
-                   child: Visibility(
-                  visible:false,
+                    child: Visibility(
+                  visible: false,
                   child: TextFormField(
                     controller: _ordbalmtrs,
                     enabled: false,
@@ -517,8 +561,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
                       return null;
                     },
                   ),
-                   )
-                ),
+                )),
               ],
             ),
             Row(
@@ -621,7 +664,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                     enabled: false,
+                    enabled: false,
                     controller: _pcs,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -638,7 +681,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                     enabled: false,
+                    enabled: false,
                     controller: _meters,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -649,6 +692,9 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
                       //gotoBranchScreen(context);
                     },
                     validator: (value) {
+                      if(value == '' || value == 0){
+                        return "Please enter Meter";
+                      }
                       return null;
                     },
                   ),
@@ -659,7 +705,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                     enabled: false,
+                    enabled: false,
                     controller: _tpmeters,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -676,7 +722,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                     enabled: false,
+                    enabled: false,
                     controller: _hsncode,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -697,7 +743,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                     enabled: false,
+                    enabled: false,
                     controller: _rate,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -769,7 +815,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
                 )
               ],
             ),
-              Row(
+            Row(
               children: [
                 Expanded(
                   child: TextFormField(

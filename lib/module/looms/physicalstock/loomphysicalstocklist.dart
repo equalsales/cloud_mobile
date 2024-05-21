@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'dart:convert';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/PdfPreviewPagePrint.dart';
 import '../../../common/global.dart' as globals;
@@ -72,7 +72,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     return true;
   }
 
-   Future<bool> setprintformet(printformet)  async {
+  Future<bool> setprintformet(printformet) async {
     var companyid = widget.xcompanyid;
     var db = globals.dbname;
     String uri = '';
@@ -128,13 +128,58 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     return true;
   }
 
+  Future<bool> DeleteData(id) async {
+    var db = globals.dbname;
+    var cno = globals.companyid;
+    String uri = '';
+
+    uri =
+        "https://www.cloud.equalsoftlink.com/checkautoeditdelete/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+    var response = await http.get(Uri.parse(uri));
+    print(uri);
+    var jsonData = jsonDecode(response.body);
+    jsonData['success'];
+    print(jsonData['success']);
+    if (jsonData['success'].toString() == 'true') {
+      String uri = '';
+      uri =
+          "https://www.cloud.equalsoftlink.com/deletemoddesignAPI/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+      var response = await http.get(Uri.parse(uri));
+      print(uri);
+      var jsonData = jsonDecode(response.body);
+      jsonData['success'];
+
+      loaddetails();
+      Fluttertoast.showToast(
+        msg: "Bill Delete Successfully !!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: Colors.purple,
+        fontSize: 16.0,
+      );
+    } else {
+      loaddetails();
+      Fluttertoast.showToast(
+        msg: "Receipt Entry Maid in Bill !!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: Colors.purple,
+        fontSize: 16.0,
+      );
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Physical Stock List',
-            style: TextStyle(
-                fontSize: 25.0, fontWeight: FontWeight.normal)),
+            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -158,8 +203,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
           String date = this._companydetails[index]['date2'].toString();
           //date = retconvdatestr(date);
           String serial = this._companydetails[index]['serial'].toString();
-          String type =
-              this._companydetails[index]['type'].toString();
+          String type = this._companydetails[index]['type'].toString();
           String party = this._companydetails[index]['party'].toString();
           String remarks = this._companydetails[index]['remarks'].toString();
           String totpcs = this._companydetails[index]['tottaka'].toString();
@@ -208,7 +252,8 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                                           onChanged: (String? newValue) {
                                             setState(() {
                                               dropdownPrintFormat = newValue!;
-                                              setprintformet(dropdownPrintFormat);
+                                              setprintformet(
+                                                  dropdownPrintFormat);
                                             });
                                           }),
                                     )
@@ -228,19 +273,21 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                              PdfViewerPagePrint(
+                                                PdfViewerPagePrint(
                                               companyid: widget.xcompanyid,
                                               companyname: widget.xcompanyname,
                                               fbeg: widget.xfbeg,
                                               fend: widget.xfend,
                                               id: id.toString(),
                                               cPW: "PDF",
-                                              formatid: PrintidDetails[0]['formatid'],
-                                              printid: PrintidDetails[0]['printid'],
+                                              formatid: PrintidDetails[0]
+                                                  ['formatid'],
+                                              printid: PrintidDetails[0]
+                                                  ['printid'],
                                             ),
                                           ));
                                     }),
-                                    TextButton(
+                                TextButton(
                                     style: TextButton.styleFrom(
                                       textStyle: Theme.of(context)
                                           .textTheme
@@ -252,15 +299,17 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                              PdfViewerPagePrint(
+                                                PdfViewerPagePrint(
                                               companyid: widget.xcompanyid,
                                               companyname: widget.xcompanyname,
                                               fbeg: widget.xfbeg,
                                               fend: widget.xfend,
                                               id: id.toString(),
                                               cPW: "WhatsApp",
-                                              formatid: PrintidDetails[0]['formatid'],
-                                              printid: PrintidDetails[0]['printid'],
+                                              formatid: PrintidDetails[0]
+                                                  ['formatid'],
+                                              printid: PrintidDetails[0]
+                                                  ['printid'],
                                             ),
                                           ));
                                     }),
@@ -284,9 +333,9 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                   label: 'Print',
                   backgroundColor: Color(0xFFFE4A49)),
               SlidableAction(
-                  onPressed: (context) => {},
-                  icon: Icons.edit,
-                  label: 'Edit',
+                  onPressed: (context) => DeleteData,
+                  icon: Icons.delete_forever,
+                  label: 'Delete',
                   backgroundColor: Colors.blue)
             ]),
             child: Card(
@@ -304,9 +353,10 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                       ' ]' +
                       ' Party : ' +
                       party,
-                  style:
-                      TextStyle(fontFamily: 'verdana',
-                        fontSize: 10.0, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontFamily: 'verdana',
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.bold)),
               subtitle: Text(
                   'Remarks :' +
                       remarks +
@@ -314,8 +364,10 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                       totpcs +
                       ' Meters : ' +
                       totmtrs,
-                  style:
-                      TextStyle(fontFamily: 'verdana',fontSize: 10.0, fontWeight: FontWeight.bold)),
+                  style: TextStyle(
+                      fontFamily: 'verdana',
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.bold)),
               leading: Icon(Icons.select_all),
               trailing: Icon(Icons.arrow_forward),
               onTap: () {
@@ -342,7 +394,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: const Text('Delete Sales Challan Entry ??'),
+      title: const Text('Delete Physical Stock Entry ??'),
       content: Text('Do you want to delete this entry ?'),
       actions: <Widget>[
         TextButton(
@@ -392,9 +444,6 @@ void execDelete(BuildContext context, int index, int id, String name) {
   return;
 }
 
-
-Future<void> sendWhatapp() async {
-  
-}
+Future<void> sendWhatapp() async {}
 
 void doNothing(BuildContext context) {}
