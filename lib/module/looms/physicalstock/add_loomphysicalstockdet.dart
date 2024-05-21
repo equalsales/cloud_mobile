@@ -143,6 +143,36 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
     // }
   }
 
+  Future<bool> takavldData() async {
+    String uri2 = '';
+    var cno = globals.companyid;
+    var db = globals.dbname;
+    var id = widget.xid;
+    var ctakachr = _takachr.text;
+    var ctakano = _takano.text;
+
+    uri2 =
+        'https://www.looms.equalsoftlink.com/api/api_getphysicalstocktakavid?dbname=' +
+            db +
+            '&cno=' +
+            cno +
+            '&takachr=' +
+            ctakachr +
+            '&takano=' +
+            ctakano;
+    print(uri2);
+    var response1 = await http.get(Uri.parse(uri2));
+    var jsonData1 = jsonDecode(response1.body);
+    jsonData1 = jsonData1['Data'];
+
+    if (jsonData1.length > 0) {
+      showAlertDialog(context, 'Taka No all ready exit in old Entry');
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   void gotoOrderScreen(BuildContext contex) async {
     // var result = await Navigator.push(
     //     context,
@@ -154,17 +184,13 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
     //               fend: widget.xfend,
     //               partyid: widget.xparty,
     //             )));
-
     // setState(() {
     //   var retResult = result;
-
     //   print(retResult);
     //   var _orderlist = result[1];
     //   result = result[1];
     //   var orderid = _orderlist[0];
-
     //   print(orderid);
-
     //   var selOrder = '';
     //   for (var ictr = 0; ictr < retResult[0].length; ictr++) {
     //     if (ictr > 0) {
@@ -172,9 +198,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
     //     }
     //     selOrder = selOrder + retResult[0][ictr];
     //   }
-
     //   _orderno.text = selOrder;
-
     //   print('dhruv');
     //   print(result);
     //   setState(() {
@@ -193,6 +217,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
 
   Future<bool> fetchdetails() async {
     String uri = '';
+    String uri2 = '';
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
@@ -212,9 +237,9 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
     List ItemDetails = widget.xItemDetails;
     int length = ItemDetails.length;
     print('Length :' + length.toString());
+
     if (length > 0) {
       for (int iCtr = 0; iCtr < length; iCtr++) {
-        // cItem = ItemDetails[iCtr]['itemname'].toString();
         if ((ItemDetails[iCtr]['takano'] == takano) &&
             ((ItemDetails[iCtr]['takachr'] == takachr)) &&
             ((ItemDetails[iCtr]['itemname'] == takachr))) {
@@ -240,112 +265,176 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
             ')&getdata=Y&itemname=';
 
     print(uri);
-    print("hh");
-    var response = await http.get(Uri.parse(uri));
 
+    var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
 
     print(jsonData);
+
     jsonData = jsonData['Data'];
     if (jsonData == null) {
       showAlertDialog(context, 'Taka No Found...');
-      return true;
+      uri2 =
+          'https://www.looms.equalsoftlink.com/api/api_getphysicalstocktakavid?dbname=' +
+              db +
+              '&cno=' +
+              cno +
+              '&takachr=' +
+              takachr +
+              '&takano=' +
+              takano;
+      print(uri2);
+
+      var response1 = await http.get(Uri.parse(uri2));
+      var jsonData1 = jsonDecode(response1.body);
+      jsonData1 = jsonData1['Data'];
+
+      if (jsonData1.length > 0) {
+        showAlertDialog(context, 'Taka No already exists in old Entry');
+        return true;
+      } else {
+        uri =
+            'https://looms.equalsoftlink.com/api/commonapi_gettakastock2?dbname=' +
+                db +
+                '&partyfilter=N&takachr=' +
+                takachr +
+                '&takano=' +
+                takano +
+                '&branchid=(' +
+                branch +
+                ')&getdata=Y&itemname=$cItem';
+
+        print(uri);
+        response = await http.get(Uri.parse(uri));
+        jsonData = jsonDecode(response.body);
+        print(jsonData);
+
+        jsonData = jsonData['Data'];
+      }
+
+      if (jsonData == null) {
+        showAlertDialog(context, 'Taka No Found...');
+        return true;
+      }
+
+      _jsonData = List<Map<String, dynamic>>.from(jsonData);
+
+      print(_jsonData);
+
+      if (1 < _jsonData.length) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: ListView.builder(
+                itemCount: _jsonData.length,
+                itemBuilder: (context, index) {
+                  return CheckboxListTile(
+                    value: false,
+                    subtitle: Text(_jsonData[index]['itemname'].toString()),
+                    title: Text(_jsonData[index]['meters'].toString()),
+                    onChanged: (bool? value) {
+                      print('changed');
+                      print(_jsonData[index]['itemname'].toString());
+
+                      _takachr.text = _jsonData[index]['takachr'].toString();
+                      _takano.text = _jsonData[index]['takano'].toString();
+                      _itemname.text = _jsonData[index]['itemname'].toString();
+                      _folddate.text = _jsonData[index]['date'].toString();
+                      _design.text = _jsonData[index]['design'].toString();
+                      _machine.text = _jsonData[index]['machine'].toString();
+                      _pcs.text = _jsonData[index]['pcs'].toString();
+                      _meters.text = _jsonData[index]['meters'].toString();
+                      _tpmeters.text = _jsonData[index]['tpmtrs'].toString();
+                      _unit.text = _jsonData[index]['unit'].toString();
+                      _hsncode.text = _jsonData[index]['hsncode'].toString();
+                      _inwid.text = _jsonData[index]['inwid'].toString();
+                      _inwdetid.text = _jsonData[index]['inwdetid'].toString();
+                      _inwdettkid.text =
+                          _jsonData[index]['inwdettkid'].toString();
+                      _fmode.text = _jsonData[index]['fmode'].toString();
+                      _weight.text = _jsonData[index]['weight'].toString();
+                      _avgwt.text = _jsonData[index]['avgwt'].toString();
+                      _beamno.text = _jsonData[index]['beamno'].toString();
+                      _beamitem.text = _jsonData[index]['beamitem'].toString();
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
+            );
+          },
+        );
+      } else {
+        setState(() {
+          _itemname.text = jsonData[0]['itemname'].toString();
+          _folddate.text = jsonData[0]['date'].toString();
+          _design.text = jsonData[0]['design'].toString();
+          _machine.text = jsonData[0]['machine'].toString();
+          _pcs.text = jsonData[0]['pcs'].toString();
+          _meters.text = jsonData[0]['meters'].toString();
+          _tpmeters.text = jsonData[0]['tpmtrs'].toString();
+          _unit.text = jsonData[0]['unit'].toString();
+          _hsncode.text = jsonData[0]['hsncode'].toString();
+          _inwid.text = jsonData[0]['inwid'].toString();
+          _inwdetid.text = jsonData[0]['inwdetid'].toString();
+          _inwdettkid.text = jsonData[0]['inwdettkid'].toString();
+          _fmode.text = jsonData[0]['fmode'].toString();
+          _weight.text = jsonData[0]['weight'].toString();
+          _avgwt.text = jsonData[0]['avgwt'].toString();
+          _beamno.text = jsonData[0]['beamno'].toString();
+          _beamitem.text = jsonData[0]['beamitem'].toString();
+          jsonData = jsonData[0];
+        });
+
+        setState(() {
+          _itemname.text = jsonData['itemname'].toString();
+          _folddate.text = jsonData['date'].toString();
+          _design.text = jsonData['design'].toString();
+          _machine.text = jsonData['machine'].toString();
+          _pcs.text = jsonData['pcs'].toString();
+          _meters.text = jsonData['meters'].toString();
+          _tpmeters.text = jsonData['tpmtrs'].toString();
+          _unit.text = jsonData['unit'].toString();
+          _hsncode.text = jsonData['hsncode'].toString();
+          _inwid.text = jsonData['inwid'].toString();
+          _inwdetid.text = jsonData['inwdetid'].toString();
+          _inwdettkid.text = jsonData['inwdettkid'].toString();
+          _fmode.text = jsonData['fmode'].toString();
+          _weight.text = jsonData['weight'].toString();
+          _avgwt.text = jsonData['avgwt'].toString();
+          _beamno.text = jsonData['beamno'].toString();
+          _beamitem.text = jsonData['beamitem'].toString();
+
+          if (_ordbalmtrs.text != '') {
+            _ordbalmtrs.text =
+                (double.parse(_ordbalmtrs.text) - double.parse(_meters.text))
+                    .toString();
+          }
+
+          double pcs = double.parse(_pcs.text);
+          double meters = double.parse(_meters.text);
+          String unit = _unit.text;
+          double rate = 0;
+          if (_rate.text != '') {
+            rate = double.parse(_rate.text);
+          }
+          double amount = 0;
+          if ((unit == 'P') || (unit == 'T')) {
+            amount = pcs * rate;
+          } else {
+            amount = meters * rate;
+          }
+          _amount.text = amount.toString();
+        });
+
+        print(jsonData);
+        return true;
+      }
     }
-
-    _jsonData = List<Map<String, dynamic>>.from(jsonData);
-
-    print(_jsonData);
-
-    print("12121212");
-
-    if (1 < _jsonData.length) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: ListView.builder(
-              itemCount: _jsonData.length,
-              itemBuilder: (context, index) {
-                return CheckboxListTile(
-                  value: false,
-                  subtitle: Text(_jsonData[index]['itemname'].toString()),
-                  title: Text(_jsonData[index]['meters'].toString()),
-                  onChanged: (bool? value) {
-                    print('changed');
-                    print(_jsonData[index]['itemname'].toString());
-            
-                    _takachr.text = _jsonData[index]['takachr'].toString();
-                    _takano.text = _jsonData[index]['takano'].toString();
-                    _itemname.text = _jsonData[index]['itemname'].toString();
-                    _folddate.text = _jsonData[index]['date'].toString();
-                    _design.text = _jsonData[index]['design'].toString();
-                    _machine.text = _jsonData[index]['machine'].toString();
-                    _pcs.text = _jsonData[index]['pcs'].toString();
-                    _meters.text = _jsonData[index]['meters'].toString();
-                    _tpmeters.text = _jsonData[index]['tpmtrs'].toString();
-                    _unit.text = _jsonData[index]['unit'].toString();
-                    _hsncode.text = _jsonData[index]['hsncode'].toString();
-                    _inwid.text = _jsonData[index]['inwid'].toString();
-                    _inwdetid.text = _jsonData[index]['inwdetid'].toString();
-                    _inwdettkid.text = _jsonData[index]['inwdettkid'].toString();
-                    _fmode.text = _jsonData[index]['fmode'].toString();
-                    _weight.text = _jsonData[index]['weight'].toString();
-                    _avgwt.text = _jsonData[index]['avgwt'].toString();
-                    _beamno.text = _jsonData[index]['beamno'].toString();
-                    _beamitem.text = _jsonData[index]['beamitem'].toString();
-                    Navigator.pop(context);
-                  },
-                );
-              },
-            ),
-          );
-        },
-      );
-    } else {
-      setState(() {
-        _itemname.text = jsonData[0]['itemname'].toString();
-        _folddate.text = jsonData[0]['date'].toString();
-        _design.text = jsonData[0]['design'].toString();
-        _machine.text = jsonData[0]['machine'].toString();
-        _pcs.text = jsonData[0]['pcs'].toString();
-        _meters.text = jsonData[0]['meters'].toString();
-        _tpmeters.text = jsonData[0]['tpmtrs'].toString();
-        _unit.text = jsonData[0]['unit'].toString();
-        _hsncode.text = jsonData[0]['hsncode'].toString();
-        _inwid.text = jsonData[0]['inwid'].toString();
-        _inwdetid.text = jsonData[0]['inwdetid'].toString();
-        _inwdettkid.text = jsonData['inwdettkid'].toString();
-        _fmode.text = jsonData[0]['fmode'].toString();
-        _weight.text = jsonData[0]['weight'].toString();
-        _avgwt.text = jsonData[0]['avgwt'].toString();
-        _beamno.text = jsonData[0]['beamno'].toString();
-        _beamitem.text = jsonData[0]['beamitem'].toString();
-
-        if (_ordbalmtrs.text != '') {
-          _ordbalmtrs.text =
-              (double.parse(_ordbalmtrs.text) - double.parse(_meters.text))
-                  .toString();
-        }
-
-        double pcs = double.parse(_pcs.text);
-        double meters = double.parse(_meters.text);
-        String unit = _unit.text;
-        double rate = 0;
-        if (_rate.text != '') {
-          rate = double.parse(_rate.text);
-        }
-        double amount = 0;
-        if ((unit == 'P') || (unit == 'T')) {
-          amount = pcs * rate;
-        } else {
-          amount = meters * rate;
-        }
-        _amount.text = amount.toString();
-      });
-      print(jsonData);
-    }
-    return true;
+    return false;
   }
+
 
   Future<void> barcodeScan() async {
     String barcodeScanRes;
