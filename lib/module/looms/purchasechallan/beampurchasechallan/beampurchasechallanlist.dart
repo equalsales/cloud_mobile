@@ -1,20 +1,22 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cloud_mobile/module/looms/purchasechallan/beampurchasechallan/add_beampurchasechallan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/PdfPreviewPagePrint.dart';
-import '../../../common/global.dart' as globals;
-import 'package:cloud_mobile/module/looms/greyjobissue/add_loomgreyjobissue.dart';
+import 'package:http/http.dart' as http;
+import 'package:cloud_mobile/common/global.dart' as globals;
+import 'package:cloud_mobile/common/alert.dart';
+import 'package:intl/intl.dart';
 
-class LoomGreyJobIssueList extends StatefulWidget {
+class BeamPurchaseChallanList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
 
-  LoomGreyJobIssueList({Key? mykey, companyid, companyname, fbeg, fend})
+  BeamPurchaseChallanList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -23,16 +25,18 @@ class LoomGreyJobIssueList extends StatefulWidget {
   }
 
   @override
-  _LoomGreyJobIssueListPageState createState() =>
-      _LoomGreyJobIssueListPageState();
+  _BeamPurchaseChallanListPageState createState() =>
+      _BeamPurchaseChallanListPageState();
 }
 
-class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
+class _BeamPurchaseChallanListPageState extends State<BeamPurchaseChallanList> {
   List _companydetails = [];
   List PrintFormatDetails = [];
   List PrintidDetails = [];
   var Printid = '';
   var formatid = '';
+  //TextEditingController _printid = new TextEditingController();
+  //TextEditingController _formatid = new TextEditingController();
   String dropdownPrintFormat = 'Print Format';
   @override
   void initState() {
@@ -45,7 +49,8 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
+
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -66,12 +71,13 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
     return true;
   }
 
-   Future<bool> setprintformet(printformet)  async {
+  Future<bool> setprintformet(printformet) async {
     var companyid = widget.xcompanyid;
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
+   
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -83,6 +89,37 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
     return true;
   }
 
+  void execExportPDF(id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => PdfViewerPagePrint(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  id: id.toString(),
+                  cPW: "PDF",
+                )));
+  }
+
+  void execWhatsApp(id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PdfViewerPagePrint(
+            companyid: widget.xcompanyid,
+            companyname: widget.xcompanyname,
+            fbeg: widget.xfbeg,
+            fend: widget.xfend,
+            id: id.toString(),
+            cPW: "WhatsApp",
+            formatid: 55,
+            printid: 49,
+          ),
+        ));
+  }
+
   Future<bool> loaddetails() async {
     var db = globals.dbname;
     var cno = globals.companyid;
@@ -91,25 +128,24 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
 
     print(globals.enddate);
 
-    var response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuelist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&startdate=' +
-            startdate +
-            '&enddate=' +
-            enddate));
+    DateTime date = DateFormat("dd-MM-yyyy").parse(startdate);
+    String start = DateFormat("yyyy-MM-dd").format(date);
 
-    print(
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuelist?dbname=' +
+    DateTime date2 = DateFormat("dd-MM-yyyy").parse(enddate);
+    String end = DateFormat("yyyy-MM-dd").format(date2);
+
+    String uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
             db +
             '&cno=' +
             cno +
             '&startdate=' +
-            startdate +
+            start +
             '&enddate=' +
-            enddate);
+            end;
+
+    var response = await http.get(Uri.parse(uri));
+
+    print(" loaddetails " + uri);
 
     var jsonData = jsonDecode(response.body);
 
@@ -126,9 +162,8 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Grey Jobwork List',
-            style: TextStyle(
-                fontSize: 25.0, fontWeight: FontWeight.normal)),
+        title: Text('Beam Purchase Challan  List',
+            style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -136,13 +171,13 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => GreyJobIssueAdd(
+                  builder: (_) => BeamPurchaseChallanAdd(
                         companyid: widget.xcompanyid,
                         companyname: widget.xcompanyname,
                         fbeg: widget.xfbeg,
                         fend: widget.xfend,
                         id: '0',
-                      )))
+                      ))).then((value) => loaddetails())
         },
       ),
       body: Center(
@@ -152,12 +187,14 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
           String date = this._companydetails[index]['date2'].toString();
           //date = retconvdatestr(date);
           String serial = this._companydetails[index]['serial'].toString();
-          String type =
-              this._companydetails[index]['type'].toString();
+          String packingserial =
+              this._companydetails[index]['packingserial'].toString();
+          String packingtype =
+              this._companydetails[index]['packingtype'].toString();
           String party = this._companydetails[index]['party'].toString();
           String remarks = this._companydetails[index]['remarks'].toString();
-          String totpcs = '0';//this._companydetails[index]['totpcs'].toString();
-          String totmtrs = '0';//this._companydetails[index]['totmtrs'].toString();
+          String totpcs = this._companydetails[index]['totpcs'].toString();
+          String totmtrs = this._companydetails[index]['totmtrs'].toString();
 
           String id = this._companydetails[index]['id'].toString();
 
@@ -168,6 +205,11 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
             key: ValueKey(index),
             startActionPane:
                 ActionPane(motion: const BehindMotion(), children: [
+              SlidableAction(
+                  onPressed: (context) => {execWhatsApp(int.parse(id))},
+                  icon: Icons.sms_sharp,
+                  label: 'WhatsApp',
+                  backgroundColor: Color.fromARGB(226, 73, 254, 197)),
               SlidableAction(
                   onPressed: (context) => {
                         //execExportPDF(int.parse(id))
@@ -202,7 +244,8 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
                                           onChanged: (String? newValue) {
                                             setState(() {
                                               dropdownPrintFormat = newValue!;
-                                              setprintformet(dropdownPrintFormat);
+                                              setprintformet(
+                                                  dropdownPrintFormat);
                                             });
                                           }),
                                     )
@@ -222,19 +265,21 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                              PdfViewerPagePrint(
+                                                PdfViewerPagePrint(
                                               companyid: widget.xcompanyid,
                                               companyname: widget.xcompanyname,
                                               fbeg: widget.xfbeg,
                                               fend: widget.xfend,
                                               id: id.toString(),
                                               cPW: "PDF",
-                                              formatid: PrintidDetails[0]['formatid'],
-                                              printid: PrintidDetails[0]['printid'],
+                                              formatid: PrintidDetails[0]
+                                                  ['formatid'],
+                                              printid: PrintidDetails[0]
+                                                  ['printid'],
                                             ),
                                           ));
                                     }),
-                                    TextButton(
+                                TextButton(
                                     style: TextButton.styleFrom(
                                       textStyle: Theme.of(context)
                                           .textTheme
@@ -246,15 +291,17 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                              PdfViewerPagePrint(
+                                                PdfViewerPagePrint(
                                               companyid: widget.xcompanyid,
                                               companyname: widget.xcompanyname,
                                               fbeg: widget.xfbeg,
                                               fend: widget.xfend,
                                               id: id.toString(),
                                               cPW: "WhatsApp",
-                                              formatid: PrintidDetails[0]['formatid'],
-                                              printid: PrintidDetails[0]['printid'],
+                                              formatid: PrintidDetails[0]
+                                                  ['formatid'],
+                                              printid: PrintidDetails[0]
+                                                  ['printid'],
                                             ),
                                           ));
                                     }),
@@ -289,9 +336,11 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
               title: Text(
                   'Dt :' +
                       date +
-                      ' Type : ' +
-                      type +
-                      ' Serial No : ' +
+                      ' Packing Type : ' +
+                      packingtype +
+                      ' Packing No : ' +
+                      packingserial +
+                      ' Challan No : ' +
                       serial +
                       ' [ ' +
                       id +
@@ -299,8 +348,7 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
                       ' Party : ' +
                       party,
                   style:
-                      TextStyle(fontFamily: 'verdana',
-                        fontSize: 10.0, fontWeight: FontWeight.bold)),
+                      TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
               subtitle: Text(
                   'Remarks :' +
                       remarks +
@@ -309,20 +357,20 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
                       ' Meters : ' +
                       totmtrs,
                   style:
-                      TextStyle(fontFamily: 'verdana',fontSize: 10.0, fontWeight: FontWeight.bold)),
+                      TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
               leading: Icon(Icons.select_all),
               trailing: Icon(Icons.arrow_forward),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => GreyJobIssueAdd(
+                        builder: (_) => BeamPurchaseChallanAdd(
                               companyid: widget.xcompanyid,
                               companyname: widget.xcompanyname,
                               fbeg: widget.xfbeg,
                               fend: widget.xfend,
                               id: id,
-                            )));
+                            ))).then((value) => loaddetails());
               },
             ))),
           );
@@ -336,7 +384,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: const Text('Delete Sales Challan Entry ??'),
+      title: const Text('Delete Beam Purchase Challan Entry ??'),
       content: Text('Do you want to delete this entry ?'),
       actions: <Widget>[
         TextButton(
@@ -345,37 +393,33 @@ void execDelete(BuildContext context, int index, int id, String name) {
         ),
         TextButton(
           onPressed: () async {
-            // var db = globals.dbname;
-            // var cno = globals.companyid;
+            var db = globals.dbname;
+            var cno = globals.companyid;
 
-            // var response = await http.post(Uri.parse(
-            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
-            //         db +
-            //         '&cno=' +
-            //         cno +
-            //         '&id=' +
-            //         id.toString()));
+            String uri = '';
 
-            // print(
-            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
-            //         db +
-            //         '&id=' +
-            //         id.toString());
+            uri = '${globals.cdomain}/api/api_deletecashbook?dbname=' +
+                  db +
+                  '&id=' +
+                  id.toString();
+            
+            print(uri);
 
-            // var jsonData = jsonDecode(response.body);
-            // var code = jsonData['Code'];
-            // if (code == '200') {
-            //   await Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (_) => LoomGreyJobIssueList(
-            //               companyid: globals.companyid,
-            //               companyname: globals.companyname,
-            //               fbeg: globals.fbeg,
-            //               fend: globals.fend)));
-            // } else if (code == '500') {
-            //   showAlertDialog(context, jsonData['Message']);
-            // }
+            var response = await http.post(Uri.parse(uri));
+            var jsonData = jsonDecode(response.body);
+            var code = jsonData['Code'];
+            if (code == '200') {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => BeamPurchaseChallanList(
+                          companyid: globals.companyid,
+                          companyname: globals.companyname,
+                          fbeg: globals.fbeg,
+                          fend: globals.fend)));
+            } else if (code == '500') {
+              showAlertDialog(context, jsonData['Message']);
+            }
           },
           child: const Text('OK'),
         ),
@@ -384,11 +428,6 @@ void execDelete(BuildContext context, int index, int id, String name) {
   );
 
   return;
-}
-
-
-Future<void> sendWhatapp() async {
-  
 }
 
 void doNothing(BuildContext context) {}

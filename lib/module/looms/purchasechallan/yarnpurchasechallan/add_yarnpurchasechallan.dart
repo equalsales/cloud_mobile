@@ -1,18 +1,19 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
-import 'package:cloud_mobile/module/looms/greyjobissue/loomgreyjobissuelist.dart';
+import 'package:cloud_mobile/module/looms/purchasechallan/yarnpurchasechallan/add_yarnpurchasechallandet.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/list/party_list.dart';
-import '../../../common/global.dart' as globals;
 import 'package:cloud_mobile/list/branch_list.dart';
 import 'package:cloud_mobile/common/bottombar.dart';
-import 'package:cloud_mobile/module/looms/greyjobissue/add_loomgreyjobissuedet.dart';
+import 'package:intl/intl.dart';
+import 'package:cloud_mobile/common/global.dart' as globals;
 
-class GreyJobIssueAdd extends StatefulWidget {
-  GreyJobIssueAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
+class YarnPurchaseChallanAdd extends StatefulWidget {
+  YarnPurchaseChallanAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -32,39 +33,57 @@ class GreyJobIssueAdd extends StatefulWidget {
   double totmtrs = 0;
 
   @override
-  _GreyJobIssueAddState createState() => _GreyJobIssueAddState();
+  _YarnPurchaseChallanAddState createState() => _YarnPurchaseChallanAddState();
 }
 
-class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
+class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
   List _branchlist = [];
   List _partylist = [];
+  List _delpartylist = [];
+  List _booklist = [];
+  List _agentlist = [];
+  List _hastelist = [];
+  List _transportlist = [];
+  List _stationlist = [];
 
   List ItemDetails = [];
 
-  String dropdownTrnType = 'REGULAR';
-
-  bool isButtonActive = true;
-
   var branchid = 0;
-  var partyid = 0;
-
-  TextEditingController _branch = new TextEditingController();
-  TextEditingController _type = new TextEditingController();
+  int? partyid;
+  var bookid = 0;
+  TextEditingController _packingsrchr = new TextEditingController();
+  TextEditingController _packingserial = new TextEditingController();
   TextEditingController _serial = new TextEditingController();
   TextEditingController _srchr = new TextEditingController();
-  TextEditingController _chlnno = new TextEditingController();
-  TextEditingController _chlnchr = new TextEditingController();
+  TextEditingController _branch = new TextEditingController();
+  TextEditingController _branchid = new TextEditingController();
+  TextEditingController _book = new TextEditingController();
   TextEditingController _date = new TextEditingController();
   TextEditingController _party = new TextEditingController();
+  TextEditingController _chlnno = new TextEditingController();
+  TextEditingController _chlndt = new TextEditingController();
   TextEditingController _remarks = new TextEditingController();
   TextEditingController _tottaka = new TextEditingController();
   TextEditingController _totmtrs = new TextEditingController();
-  TextEditingController _branchid = new TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+  TextEditingController _gstregno = new TextEditingController();
+  var _jsonData = [];
+
+  bool isButtonActive = true;
+
+  var crlimit = 0.0;
+  dynamic clobl = 0;
+
+  String? dropdownTrnType;
+
+  var items = [
+    'RD',
+    'URD',
+  ];
 
   @override
   void initState() {
@@ -72,11 +91,14 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     toDate = retconvdate(widget.xfend);
 
     var curDate = getsystemdate();
-    _date.text = curDate.toString().split(' ')[0];
+    _date.text = DateFormat("dd-MM-yyyy").format(curDate);
+    _chlndt.text = DateFormat("dd-MM-yyyy").format(curDate);
+
+    _book.text = 'SALES A/C';
+    // dropdownTrnType = 'PACKING';
 
     if (int.parse(widget.xid) > 0) {
       loadData();
-
       loadDetData();
     }
   }
@@ -87,14 +109,15 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     var db = globals.dbname;
     var id = widget.xid;
 
-    uri =
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuedetlist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&id=' +
-            id;
-    print(uri);
+
+    uri = '${globals.cdomain}/api/api_getsalechallandetlist?dbname=' +
+        db +
+        '&cno=' +
+        cno +
+        '&id=' +
+        id;
+
+    print(" loadDetData :" + uri);
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
@@ -110,29 +133,39 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       ItemDet.add({
         "controlid": jsonData[iCtr]['controlid'].toString(),
         "id": jsonData[iCtr]['id'].toString(),
-        "orderno": jsonData[iCtr]['ordno'].toString(),
+        "orderno": jsonData[iCtr]['orderno'].toString(),
         "takano": jsonData[iCtr]['takano'].toString(),
         "takachr": jsonData[iCtr]['takachr'].toString(),
-        "pcs": jsonData[iCtr]['pcs'].toString(),
-        "meters": jsonData[iCtr]['meters'].toString(),
-        "weight": jsonData[iCtr]['weight'].toString(),
-        "avgwt": jsonData[iCtr]['avgwt'].toString(),
-        "tpmtrs": jsonData[iCtr]['tpmtrs'].toString(),
         "itemname": jsonData[iCtr]['itemname'].toString(),
-        "unit": jsonData[iCtr]['unit'].toString(),
+        "hsncode": jsonData[iCtr]['hsncode'].toString(),
+        "grade": jsonData[iCtr]['grade'].toString(),
+        "lotno": jsonData[iCtr]['lotno'].toString(),
+        "cops": jsonData[iCtr]['cops'].toString(),
+        "totcrtn": jsonData[iCtr]['totcrtn'].toString(),
+        "actnetwt": jsonData[iCtr]['actnetwt'].toString(),
+        "netwt": jsonData[iCtr]['netwt'].toString(),
+        "cone": jsonData[iCtr]['cone'].toString(),
         "rate": jsonData[iCtr]['rate'].toString(),
+        "unit": jsonData[iCtr]['unit'].toString(),
         "amount": jsonData[iCtr]['amount'].toString(),
-        "design": jsonData[iCtr]['design'].toString(),
-        "machine": jsonData[iCtr]['machine'].toString(),
-        "ordid": jsonData[iCtr]['ordid'].toString(),
         "fmode": jsonData[iCtr]['fmode'].toString(),
-        "inwid": jsonData[iCtr]['inwid'].toString(),
-        "inwdetid": jsonData[iCtr]['inwdetid'].toString(),
-        "inwdettkid": jsonData[iCtr]['inwdettkid'].toString(),
-        "beamno": jsonData[iCtr]['beamno'].toString(),
-        "beamitem": jsonData[iCtr]['beamitem'].toString()
+        "ordid": jsonData[iCtr]['ordid'].toString(),
+        "orddetid": jsonData[iCtr]['orddetid'].toString(),
+        "discrate": jsonData[iCtr]['discrate'].toString(),
+        "discamt": jsonData[iCtr]['discamt'].toString(),
+        "addamt": jsonData[iCtr]['addamt'].toString(),
+        "taxablevalue": jsonData[iCtr]['taxablevalue'].toString(),
+        "sgstrate": jsonData[iCtr]['sgstrate'].toString(),
+        "sgstamt": jsonData[iCtr]['sgstamt'].toString(),
+        "cgstrate": jsonData[iCtr]['cgstrate'].toString(),
+        "cgstamt": jsonData[iCtr]['cgstamt'].toString(),
+        "igstrate": jsonData[iCtr]['igstrate'].toString(),
+        "igstamt": jsonData[iCtr]['igstamt'].toString(),
+        "finalamt": jsonData[iCtr]['finalamt'].toString(),
       });
     }
+
+    print("jsonData[iCtr]['ordno'].toString()" + jsonData[0]['orderno'].toString());
 
     setState(() {
       ItemDetails = ItemDet;
@@ -149,18 +182,25 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     var fromdate = widget.xfbeg;
     var todate = widget.xfend;
 
-    uri =
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuelist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&id=' +
-            id +
-            '&startdate=' +
-            fromdate +
-            '&enddate=' +
-            todate;
-    print(uri);
+    DateTime date = DateFormat("dd-MM-yyyy").parse(fromdate);
+    String start = DateFormat("yyyy-MM-dd").format(date);
+
+    DateTime date2 = DateFormat("dd-MM-yyyy").parse(todate);
+    String end = DateFormat("yyyy-MM-dd").format(date2);
+
+
+    uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
+        db +
+        '&cno=' +
+        cno +
+        '&id=' +
+        id +
+        '&startdate=' +
+        start +
+        '&enddate=' +
+        end;
+
+    print(" loadData :" + uri);
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
@@ -169,75 +209,52 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     jsonData = jsonData[0];
 
     print(jsonData);
-    print("jatin" + getValue(jsonData['type'], 'C'));
+
     _branch.text = getValue(jsonData['branch'], 'C');
-    _branchid.text = getValue(jsonData['branchid'], 'C');
-    _type.text = getValue(jsonData['type'], 'C');
-    _serial.text = getValue(jsonData['serial'], 'C');
-    _srchr.text = getValue(jsonData['srchr'], 'C');
-    _date.text = getValue(jsonData['date'], 'C');
+    _book.text = getValue(jsonData['book'], 'C');
+    String inputDateString = getValue(jsonData['date'], 'C');
+    List<String> parts = inputDateString.split(' ')[0].split('-');
+    String formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}";
+    _date.text = formattedDate.toString();
     _party.text = getValue(jsonData['party'], 'C');
+    partyid = jsonData['partyid'];
+    _chlnno.text = getValue(jsonData['challanno'], 'C');
+    _chlndt.text = getValue(jsonData['challandt'], 'C');
+    dropdownTrnType = getValue(jsonData['rdurd'], 'C');
     _remarks.text = getValue(jsonData['remarks'], 'C');
-    _chlnno.text = getValue(jsonData['chlnno'], 'N');
-    _chlnchr.text = getValue(jsonData['chlnchr'], 'C');
+    _branchid.text = getValue(jsonData['branchid'], 'C');
 
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
 
-    setState(() {
-      dropdownTrnType = _type.text;
-    });
-
-    return true;
-  }
-
-  Future<bool> fetchdjobissChallanno() async {
-    String uri = '';
-    var cno = globals.companyid;
-    var db = globals.dbname;
-    uri =
-        'https://looms.equalsoftlink.com/api/api_greyjobissChallanno?dbname=' +
-            db +
-            '&branch='+
-            _branch.text  +
-             '&cno='+
-            cno.toString();
-    print(uri);
-    var response = await http.get(Uri.parse(uri));
-    var jsonData = jsonDecode(response.body);
-    print(jsonData);
-    jsonData = jsonData['Data'];
-    if (jsonData == null) {
-      showAlertDialog(context, 'Taka No Found...');
-      return true;
-    }
-    jsonData = jsonData[0];
-    print(jsonData);
-    setState(() {
-      _chlnno.text=jsonData['chlnno'].toString();
-    });
-    print(jsonData);
     return true;
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    if (_date.text != '') {
-      fromDate = retconvdate(_date.text, 'yyyy-mm-dd');
-      //print(fromDate);
-    }
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: fromDate,
+        initialDate: getsystemdate(),
         firstDate: DateTime(2015),
         lastDate: DateTime(2101));
     if (picked != null && picked != fromDate)
       setState(() {
         fromDate = picked;
-        _date.text = picked.toString().split(' ')[0];
+        _date.text = DateFormat("dd-MM-yyyy").format(picked);
       });
   }
 
-  void setDefValue() {}
+  Future<void> _selectDate2(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: getsystemdate(),
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != fromDate)
+      setState(() {
+        fromDate = picked;
+        _chlndt.text = DateFormat("dd-MM-yyyy").format(picked);
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -268,6 +285,8 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         }
 
         obj.text = selParty;
+        print("121212111111111111111");
+        print(obj.text);
       });
     }
 
@@ -284,30 +303,40 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     acctype: acctype,
                   )));
 
-      setState(() {
-        var retResult = result;
-        _partylist = result[1];
-        result = result[1];
+      if (result != null) {
+        setState(() {
+          var retResult = result;
+          _partylist = result[1];
+          result = result[1];
 
-        partyid = _partylist[0];
-        print(partyid);
-
-        var selParty = '';
-        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-          if (ictr > 0) {
-            selParty = selParty + ',';
+          var selParty = '';
+          for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+            if (ictr > 0) {
+              selParty = selParty + ',';
+            }
+            selParty = selParty + retResult[0][ictr];
           }
-          selParty = selParty + retResult[0][ictr];
-        }
 
-        obj.text = selParty;
+          obj.text = selParty;
 
-        if (selParty != '') {
-          getPartyDetails(obj.text, 0).then((value) {
-            setState(() {});
-          });
-        }
-      });
+          crlimit = double.parse(result[0]['crlimit'].toString());
+          partyid = int.parse(result[0]['id'].toString());
+          var endDate = retconvdate(widget.xfend).toString();
+          var cno = int.parse(globals.companyid.toString());
+
+          if (selParty != '') {
+            getPartyDetails(
+                    obj.text, 0, crlimit, partyid, context, endDate, cno)
+                .then((value) {
+              setState(() {
+                clobl = value;
+                print("chirag");
+                print(clobl);
+              });
+            });
+          }
+        });
+      }
     }
 
     void gotoBranchScreen(BuildContext contex) async {
@@ -336,54 +365,54 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
           }
           selBranch = selBranch + retResult[0][ictr];
         }
-
-        _branch.text = selBranch;
         _branchid.text = branchid.toString();
+        _branch.text = selBranch;
       });
     }
 
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
       var branchid = _branchid.text;
+      var type = dropdownTrnType;
+      print("type : $type");
       print('in');
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => LoomGreyJobIssueDetAdd(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                    branch: branch,
-                    partyid: partyid,
-                    itemDet: ItemDetails,
-                    branchid: branchid,
-                  )));
-      //print('out');
-      //print(result);
-      //print(result[0]['takachr']);
+              builder: (_) => YarnPurchaseChallanDetAdd(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  branch: branch,
+                  partyid: partyid,
+                  itemDet: ItemDetails,
+                  branchid: branchid,
+                  type: type)));
       setState(() {
         ItemDetails.add(result[0]);
-        //ItemDetails = ItemDetails[0];
+        _remarks.text = result[0]['remarks'];
         print(ItemDetails);
       });
     }
 
     Future<bool> saveData() async {
       String uri = '';
+      var packingsrchr = _packingsrchr.text;
+      var packingserial = _packingserial.text;
+      var serial = _serial.text;
+      var srchr = _srchr.text;
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
-
-      var type = _type.text;
-      var serial = _serial.text;
-      var srchr = _srchr.text;
+      var book = _book.text;
       var branch = _branch.text;
       var date = _date.text;
       var party = _party.text;
+      var challanno = _chlnno.text;
+      var challandt = _chlndt.text;
+      var rdurd = dropdownTrnType;
       var remarks = _remarks.text;
-      var chlnno = _chlnno.text;
-      var chlnchr = _chlnchr.text;
 
       var id = widget.xid;
       id = int.parse(id);
@@ -392,8 +421,13 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
 
       print(jsonEncode(ItemDetails));
 
+      DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
+      String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
+
+      party = party.replaceAll('&', '_');
+
       uri =
-          "https://looms.equalsoftlink.com/api/api_storeloomsgreyjobissue?dbname=" +
+          "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
               db +
               "&company=&cno=" +
               cno +
@@ -401,37 +435,42 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
               username +
               "&branch=" +
               branch +
-              "&type=" +
-              type +
+              "&packingtype=" +
               "&party=" +
               party +
+              "&book=" +
+              book +
+               "&haste=" +
+              "&transport=" +
+              "&station=" +
+              "&packingsrchr=" +
+              packingsrchr +
+              "&packingserial=" +
+              packingserial +
+              "&bookno=" +
               "&srchr=" +
               srchr +
               "&serial=" +
               serial +
               "&date=" +
-              date +
+              newDate +
               "&remarks=" +
               remarks +
-              "&chlnno=" +
-              chlnno +
-              "&chlnchr=" +
-              chlnchr +
+              "&duedays=" +
               "&id=" +
               id.toString() +
               "&parcel=1";
-      print(uri);
+      print("/////////////////////////////////////////////" + uri);
 
       final headers = {
         'Content-Type': 'application/json', // Set the appropriate content-type
         // Add any other headers required by your API
       };
-      print(ItemDetails);
+
       var response = await http.post(Uri.parse(uri),
           headers: headers, body: jsonEncode(ItemDetails));
 
       var jsonData = jsonDecode(response.body);
-
       //print('4');
 
       var jsonCode = jsonData['Code'];
@@ -440,16 +479,20 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       if (jsonCode == '500') {
         showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
       } else {
-        showAlertDialog(context, 'Saved !!!');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => LoomGreyJobIssueList(
-                      companyid: widget.xcompanyid,
-                      companyname: widget.xcompanyname,
-                      fbeg: widget.xfbeg,
-                      fend: widget.xfend,
-                    )));
+        // var url = '${globals.cdomain}/printsaleorderdf/' +
+        //     id.toString() +
+        //     '?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
+
+        Fluttertoast.showToast(
+          msg: "Saved !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
+        );
+        Navigator.pop(context);
       }
       return true;
     }
@@ -465,14 +508,6 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       });
     }
 
-    var items = [
-      '',
-      'REGULAR',
-      'RETURN',
-    ];
-
-    setState(() {});
-
     void deleteRow(index) {
       setState(() {
         ItemDetails.removeAt(index);
@@ -487,14 +522,28 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       widget.totmtrs = 0;
 
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
+
         double nMeters = 0;
         if (ItemDetails[iCtr]['meters'] != '') {
           nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
-          widget.tottaka += 1;
+          widget.tottaka += 1;          
           widget.totmtrs += nMeters;
         }
+        print(nMeters);
 
-        print(ItemDetails[iCtr]);
+        var tot;
+        var ordmtr = ItemDetails[iCtr]['ordmtr'].toString();
+        var ordmtrAsDouble = double.tryParse(ordmtr);
+
+        if (ordmtrAsDouble != null) {
+          tot = ordmtrAsDouble - nMeters;
+          print(tot);
+          ItemDetails[iCtr]['ordbalmtrs'] = tot.toString(); 
+          print(ItemDetails[iCtr]['ordbalmtrs']);
+        } else {
+          print('Error: Invalid format for ordmtr');
+        }
+
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
             onPressed: () => {deleteRow(iCtr)},
@@ -506,28 +555,33 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
             label: Text('',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
           )),
-          DataCell(Text(ItemDetails[iCtr]['takachr'] +
-              '-' +
-              ItemDetails[iCtr]['takano'])),
-          DataCell(Text(ItemDetails[iCtr]['pcs'])),
-          DataCell(Text(ItemDetails[iCtr]['meters'])),
-          DataCell(Text(ItemDetails[iCtr]['tpmtrs'])),
-          DataCell(Text(ItemDetails[iCtr]['itemname'])),
-          DataCell(Text(ItemDetails[iCtr]['design'])),
-          DataCell(Text(ItemDetails[iCtr]['unit'])),
-          DataCell(Text(ItemDetails[iCtr]['rate'])),
-          DataCell(Text(ItemDetails[iCtr]['amount'])),
-          DataCell(Text(ItemDetails[iCtr]['inwid'])),
-          DataCell(Text(ItemDetails[iCtr]['inwdetid'])),
-          DataCell(Text(ItemDetails[iCtr]['inwdettkid'])),
-          DataCell(Text(ItemDetails[iCtr]['fmode'])),
+          DataCell(Text(ItemDetails[iCtr]['itemname'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['hsncode'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['grade'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['lotno'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['cops'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['totcrtn'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['rate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['actnetwt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['netwt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['cone'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['rate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['unit'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['amount'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['fmode'].toString())),
           DataCell(Text(ItemDetails[iCtr]['ordid'].toString())),
           DataCell(Text(ItemDetails[iCtr]['orddetid'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['machine'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['weight'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['avgwt'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['beamno'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['beamitem'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['discrate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['discamt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['addamt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['taxablevalue'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['sgstrate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['sgstamt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['cgstrate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['cgstamt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['igstrate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['igstamt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['finalamt'].toString())),
         ]));
       }
 
@@ -539,25 +593,38 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       return _datarow;
     }
 
-    setDefValue();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Grey Job Issue Challan [ ' +
+          'Yarn Purchase Challan [ ' +
               (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
               ' ] ' +
               (int.parse(widget.xid) > 0
-                  ? 'Serial No : ' + widget.serial.toString()
+                  ? 'Challan No : ' + widget.serial.toString()
                   : ''),
           style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.done),
-          enableFeedback: isButtonActive,
-          backgroundColor: Colors.green,
-          onPressed: isButtonActive ? () => _handleSaveData() : null
+        child: Icon(Icons.done),
+        backgroundColor: Colors.green,
+        enableFeedback: isButtonActive,
+        onPressed: isButtonActive
+            ? () {
+                if (crlimit < clobl) {
+                  Fluttertoast.showToast(
+                      msg: "CrLimit limit exceed!!!.",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 3,
+                      backgroundColor: Colors.white,
+                      textColor: Colors.purple,
+                      fontSize: 16.0);
+                } else {
+                  _handleSaveData();
+                }
+              }
+            : null,
       ),
       body: SingleChildScrollView(
           child: Form(
@@ -565,6 +632,38 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     int.parse(widget.xid) > 0
+            //         ? Expanded(
+            //             child: Center(
+            //                 child: Text(
+            //             'Challan No : ' + widget.serial.toString(),
+            //             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            //           )))
+            //         : Container(),
+            //     Container(
+            //       width: 300,
+            //       child: TextFormField(
+            //         textAlign: TextAlign.center,
+            //         controller: _date,
+            //         decoration: const InputDecoration(
+            //           icon: const Icon(Icons.person),
+            //           hintText: 'Date',
+            //           labelText: 'Date',
+            //         ),
+            //         onTap: () {
+            //           _selectDate(context);
+            //         },
+            //         validator: (value) {
+            //           return null;
+            //         },
+            //       ),
+            //     ),
+            //     SizedBox(width: 20,)
+            //   ],
+            // ),
             Row(children: [
               Expanded(
                 child: TextFormField(
@@ -583,30 +682,6 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                   },
                 ),
               ),
-              Expanded(
-                child: DropdownButtonFormField(
-                    value: dropdownTrnType,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      labelText: 'Type',
-                    ),
-                    items: items.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    icon: const Icon(Icons.arrow_drop_down_circle),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                           fetchdjobissChallanno();
-                           print('jatin');
-                        dropdownTrnType = newValue!;
-                        _type.text = dropdownTrnType;
-                        print(_type.text);
-                      });
-                    }),
-              )
             ]),
             TextFormField(
               controller: _date,
@@ -626,39 +701,15 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    controller: _party,
+                    controller: _book,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Select Party',
-                      labelText: 'Party',
+                      hintText: 'Select Book',
+                      labelText: 'Book',
                     ),
                     onTap: () {
-                      gotoPartyScreen2(context, 'JOBWORK PARTY', _party);
+                      gotoPartyScreen(context, 'SALE BOOK', _book);
                     },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: _chlnno,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Challan No',
-                      labelText: 'Chln No',
-                    ),
-                    onChanged: (value) {
-                      // _remarks.value = TextEditingValue(
-                      //     text: value.toUpperCase(),
-                      //     selection: _remarks.selection);
-                    },
-                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -666,19 +717,15 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    textCapitalization: TextCapitalization.characters,
-                    controller: _chlnchr,
+                    controller: _party,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Challan Chr',
-                      labelText: 'Chln Chr',
+                      hintText: 'Select Party',
+                      labelText: 'Party',
                     ),
-                    onChanged: (value) {
-                      _chlnchr.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _chlnchr.selection);
+                    onTap: () {
+                      gotoPartyScreen2(context, 'SALE PARTY', _party);
                     },
-                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -688,6 +735,66 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
             ),
             Row(
               children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _chlnno,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Challan No',
+                      labelText: 'Challan No',
+                    ),
+                    onTap: () {
+                     
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _chlndt,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Challan Date',
+                      labelText: 'Challan Date',
+                    ),
+                    onTap: () {
+                      _selectDate2(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField(
+                    value: dropdownTrnType,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      labelText: 'RD/URD',
+                      hintText: 'RD/URD'
+                    ),
+                    items: items.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    icon: const Icon(Icons.arrow_drop_down_circle),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        dropdownTrnType = newValue!;
+                        print(dropdownTrnType);
+                      });
+                    }
+                  ),
+                ),
                 Expanded(
                   child: TextFormField(
                     textCapitalization: TextCapitalization.characters,
@@ -750,7 +857,25 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
             ),
             Padding(padding: EdgeInsets.all(5)),
             ElevatedButton(
-              onPressed: () => {gotoChallanItemDet(context)},
+              onPressed: () {
+                print("clobl");
+                print(clobl);
+                print("crlimit");
+                print(crlimit);
+                if (crlimit < clobl) {
+                  Fluttertoast.showToast(
+                    msg: "Crlimit exceed!!!.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 3,
+                    backgroundColor: Colors.white,
+                    textColor: Colors.purple,
+                    fontSize: 16.0,
+                  );
+                } else {
+                  gotoChallanItemDet(context);
+                }
+              },
               child: Text('Add Item Details',
                   style:
                       TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
@@ -762,40 +887,40 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     label: Text("Action"),
                   ),
                   DataColumn(
-                    label: Text("Taka No"),
-                  ),
-                  DataColumn(
-                    label: Text("Pcs"),
-                  ),
-                  DataColumn(
-                    label: Text("Meters"),
-                  ),
-                  DataColumn(
-                    label: Text("TP Mtrs"),
-                  ),
-                  DataColumn(
                     label: Text("Item Name"),
                   ),
                   DataColumn(
-                    label: Text("Design No"),
+                    label: Text("HSN Code"),
                   ),
                   DataColumn(
-                    label: Text("Unit"),
+                    label: Text("Grade"),
+                  ),
+                  DataColumn(
+                    label: Text("Lotno"),
+                  ),
+                  DataColumn(
+                    label: Text("Cops"),
+                  ),
+                  DataColumn(
+                    label: Text("Totcrtn"),
+                  ),
+                  DataColumn(
+                    label: Text("Actnetwt"),
+                  ),
+                  DataColumn(
+                    label: Text("Netwt"),
+                  ),
+                  DataColumn(
+                    label: Text("Cone"),
                   ),
                   DataColumn(
                     label: Text("Rate"),
                   ),
                   DataColumn(
+                    label: Text("Unit"),
+                  ),
+                  DataColumn(
                     label: Text("Amount"),
-                  ),
-                  DataColumn(
-                    label: Text("InwId"),
-                  ),
-                  DataColumn(
-                    label: Text("InwDetId"),
-                  ),
-                  DataColumn(
-                    label: Text("InwDetTkId"),
                   ),
                   DataColumn(
                     label: Text("FMode"),
@@ -807,19 +932,37 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     label: Text("OrdDetId"),
                   ),
                   DataColumn(
-                    label: Text("machine"),
+                    label: Text("DiscRate"),
                   ),
                   DataColumn(
-                    label: Text("weight"),
+                    label: Text("DiscAmt"),
                   ),
                   DataColumn(
-                    label: Text("avgwt"),
+                    label: Text("AddAmt"),
                   ),
                   DataColumn(
-                    label: Text("beamno"),
+                    label: Text("TaxableValue"),
                   ),
                   DataColumn(
-                    label: Text("beamitem"),
+                    label: Text("SGST Rate"),
+                  ),
+                  DataColumn(
+                    label: Text("SGST Amt"),
+                  ),
+                  DataColumn(
+                    label: Text("CGST Rate"),
+                  ),
+                  DataColumn(
+                    label: Text("CGST Amt"),
+                  ),
+                  DataColumn(
+                    label: Text("IGST Rate"),
+                  ),
+                  DataColumn(
+                    label: Text("IGST Amt"),
+                  ),
+                  DataColumn(
+                    label: Text("FinalAmt"),
                   ),
                 ], rows: _createRows())),
           ],
