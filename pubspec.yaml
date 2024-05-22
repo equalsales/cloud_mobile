@@ -56,7 +56,6 @@ dependencies:
   # barcode_scan: ^3.0.1
   flutter_pdfview: ^1.2.7
   vs_scrollbar: ^1.0.0
-  syncfusion_flutter_datagrid: ^25.2.4
 
 dev_dependencies:
   flutter_test:

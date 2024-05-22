@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/global.dart' as globals;
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:vs_scrollbar/vs_scrollbar.dart';
 
 class ShowdfReport extends StatefulWidget {
@@ -259,42 +258,6 @@ class _ShowdfReportPageState extends State<ShowdfReport> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        // Row(
-                        //     children: [
-                        //       for (int i = 0; i < colInfo.length; i++) ...[
-                        //         if (colInfo[i]['visible'].toString() ==
-                        //             'true') ...[
-                        //           Container(
-                        //             margin: EdgeInsets.all(6.0),
-                        //             padding: EdgeInsets.all(3.0),
-                        //             width:double.parse(colInfo[i]['width']) * 10,
-                        //             decoration: BoxDecoration(
-                        //                 borderRadius: BorderRadius.circular(8),
-                        //                 color: Colors.yellow),
-                        //             child: SfDataGrid(
-                        //               source: colInfo[i],
-                        //               columns: [
-                        //                 GridColumn(
-                        //                   columnName: colInfo[i]['heading'], 
-                        //                   label: Text(colInfo[i]['heading'],
-                        //                       textAlign:
-                        //                           (colInfo[i]['align'] == 'r'
-                        //                               ? TextAlign.right
-                        //                               : TextAlign.left),
-                        //                       style: TextStyle(
-                        //                           fontSize: 12.0,
-                        //                           fontWeight: FontWeight.bold)),
-                        //                 )
-                        //               ],
-
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ],
-                        //     ],
-                        //   ),
-
-
                         Row(
                           children: [
                             for (int i = 0; i < colInfo.length; i++) ...[
