@@ -3,6 +3,7 @@ import 'package:cloud_mobile/module/looms/physicalstock/loomphysicalstocklist.da
 import 'package:cloud_mobile/module/looms/purchasechallan/purchasemenu.dart';
 import 'package:cloud_mobile/module/looms/stockreport/stockreportmenu.dart';
 import 'package:cloud_mobile/module/looms/takaadjustment/loomstakaadjustmentlist.dart';
+import 'package:cloud_mobile/module/looms/takaproduction/takaproductionlist.dart';
 import 'package:cloud_mobile/module/looms/yarnphysicalstock/loomyarnphysicalstocklist.dart';
 import 'package:cloud_mobile/module/master/master.dart';
 //import 'package:cloud_mobile/module/purchase/purchasebilllist.dart';
@@ -138,21 +139,21 @@ class SideDrawer extends StatelessWidget {
                           )))
             },
           ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Purchase Challan'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => LoomPurchaseChallanMenu(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.shopping_cart),
+          //   title: Text('Purchase Challan'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (_) => LoomPurchaseChallanMenu(
+          //                   companyid: xcompanyid,
+          //                   companyname: xcompanyname,
+          //                   fbeg: xfbeg,
+          //                   fend: xfend,
+          //                 )))
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Grey Job Issue'),
@@ -221,6 +222,21 @@ class SideDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (_) => TakaAdjustmentList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Taka Production'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => TakaProductionList(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,
