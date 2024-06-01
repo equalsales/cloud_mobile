@@ -108,6 +108,7 @@ class order_ListState extends State<order_list> {
               String orderno = this._orderlist[index]['orderno'].toString();
               String date = this._orderlist[index]['date'];
               String itemname = this._orderlist[index]['itemname'];
+              String salesman = this._orderlist[index]['salesman'].toString();
               String design = this._orderlist[index]['design'];
               String meters = this._orderlist[index]['balmeters'].toString();
               String taka = this._orderlist[index]['baltaka'].toString();
@@ -120,7 +121,9 @@ class order_ListState extends State<order_list> {
                     ' Dt : ' +
                     date +
                     ' Item Name : ' +
-                    itemname),
+                    itemname +
+                    ' Salesman : ' +
+                    salesman),
                 subtitle: Text('Pending Mts : ' +
                     meters +
                     ' Pending Taka :' +

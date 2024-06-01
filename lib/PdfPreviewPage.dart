@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class PdfPreviewPage extends StatelessWidget {
   var xcompanyid;
@@ -55,9 +56,9 @@ class PdfPreviewPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('PDF Preview'),
       ),
-      // body: PDFView(
-      //   build: (context) => makePdf(),
-      // ),
+      body: PdfPreview(
+        build: (context) => makePdf(),
+      ),
     );
   }
 

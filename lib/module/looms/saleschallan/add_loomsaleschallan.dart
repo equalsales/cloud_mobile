@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
+import 'package:cloud_mobile/list/salesman_list.dart';
 import 'package:cloud_mobile/module/looms/saleschallan/add_loomsaleschallandet.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
@@ -75,6 +76,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
   TextEditingController _agent = new TextEditingController();
   TextEditingController _delparty = new TextEditingController();
   TextEditingController _haste = new TextEditingController();
+  TextEditingController _salesman = new TextEditingController();
   TextEditingController _transport = new TextEditingController();
   TextEditingController _remarks = new TextEditingController();
   TextEditingController _parcel = new TextEditingController();
@@ -268,6 +270,8 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     _haste.text = getValue(jsonData['haste'], 'C');
     print("22222222222222222222222222");
     print(_haste.text);
+    _salesman.text = getValue(jsonData['salesman'], 'C');
+    print(_salesman.text);
     _transport.text = getValue(jsonData['transport'], 'C');
     _remarks.text = getValue(jsonData['remarks'], 'C');
     _parcel.text = getValue(jsonData['parcel'], 'C');
@@ -444,6 +448,31 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       });
     }
 
+    void gotoSalesmanScreen(BuildContext contex) async {
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => salesman_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend)));
+
+      setState(() {
+        var retResult = result;
+
+        var selSalesman = '';
+        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+          if (ictr > 0) {
+            selSalesman = selSalesman + ',';
+          }
+          selSalesman = selSalesman + retResult[0][ictr];
+        }
+
+        _salesman.text = selSalesman;
+      });
+    }
+
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
       var branchid = _branchid.text;
@@ -493,6 +522,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       var agent = _agent.text;
       var delparty = _delparty.text;
       var haste = _haste.text;
+      var salesman = _salesman.text;
       var transport = _transport.text;
       var remarks = _remarks.text;
       var parcel = 0;
@@ -531,6 +561,8 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
               book +
               "&haste=" +
               haste +
+              '&salesman=' +
+              salesman +
               "&transport=" +
               transport +
               "&station=" +
@@ -714,6 +746,16 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
           } else {
             _haste.text = '';
             print(_haste.text);
+          }
+        }
+
+        if (_salesman.text == '') {
+          if (ItemDetails[iCtr]['salesman'] != null) {
+            _salesman.text = ItemDetails[iCtr]['salesman'].toString();
+            print(_salesman.text);
+          } else {
+            _salesman.text = '';
+            print(_salesman.text);
           }
         }
 
@@ -1004,22 +1046,22 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
             ),
             Row(
               children: [
-                // Expanded(
-                //   child: TextFormField(
-                //     controller: _station,
-                //     decoration: const InputDecoration(
-                //       icon: const Icon(Icons.person),
-                //       hintText: 'Select Station',
-                //       labelText: 'Station',
-                //     ),
-                //     onTap: () {
-                //       gotoCityScreen(context);
-                //     },
-                //     validator: (value) {
-                //       return null;
-                //     },
-                //   ),
-                // ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _salesman,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Select Salesman',
+                      labelText: 'Salesman',
+                    ),
+                    onTap: () {
+                      gotoSalesmanScreen(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
                 Expanded(
                   child: TextFormField(
                     textCapitalization: TextCapitalization.characters,

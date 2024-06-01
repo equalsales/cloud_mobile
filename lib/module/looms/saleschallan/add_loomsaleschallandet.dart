@@ -72,6 +72,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
   TextEditingController _takano = new TextEditingController();
   TextEditingController _ctakano = new TextEditingController();
   TextEditingController _haste = new TextEditingController();
+  TextEditingController _salesman = new TextEditingController();
   TextEditingController _pcs = new TextEditingController();
   TextEditingController _meters = new TextEditingController();
   TextEditingController _tpmeters = new TextEditingController();
@@ -175,11 +176,14 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         _folddate.text = result[0]['date'];
         _itemname.text = result[0]['itemname'];
         _design.text = result[0]['design'];
-        // _unit.text = result[0]['unit'];
         dropdownUnitType = result[0]['unit'];
         _haste.text = result[0]['haste'].toString();
         if (_haste.text == "null") {
           _haste.text = '';
+        }
+        _salesman.text = result[0]['salesman'].toString();
+        if (_salesman.text == "null") {
+          _salesman.text = '';
         }
         print(_haste.text);
         _rate.text = result[0]['rate'];
@@ -475,6 +479,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
       var takano = _takano.text;
       var ctakano = _ctakano.text;
       var haste = _haste.text;
+      var salesman = _salesman.text;
       var pcs = _pcs.text;
       var meters = _meters.text;
       var tpmtrs = _tpmeters.text;
@@ -508,6 +513,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         'takachr': takachr,
         'takano': takano,
         'haste': haste,
+        'salesman': salesman,
         'pcs': pcs,
         'meters': meters,
         'tpmtrs': tpmtrs,
