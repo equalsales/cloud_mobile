@@ -739,25 +739,14 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         }
 
         
-        if (_haste.text == '') {
           if (ItemDetails[iCtr]['haste'] != null) {
             _haste.text = ItemDetails[iCtr]['haste'].toString();
-            print(_haste.text);
-          } else {
-            _haste.text = '';
-            print(_haste.text);
           }
-        }
-
-        if (_salesman.text == '') {
+          
           if (ItemDetails[iCtr]['salesman'] != null) {
             _salesman.text = ItemDetails[iCtr]['salesman'].toString();
-            print(_salesman.text);
-          } else {
-            _salesman.text = '';
-            print(_salesman.text);
           }
-        }
+
 
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(

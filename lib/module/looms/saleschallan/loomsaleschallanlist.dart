@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:convert';
@@ -262,6 +264,9 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
                                               dropdownPrintFormat = newValue!;
                                               setprintformet(
                                                   dropdownPrintFormat);
+                                              Timer(Duration(seconds: 2), () {
+                                                CircularProgressIndicator();
+                                              });
                                             });
                                           }),
                                     )
@@ -277,23 +282,26 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
                                     ),
                                     child: Text('PDF'),
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                PdfViewerPagePrint(
-                                              companyid: widget.xcompanyid,
-                                              companyname: widget.xcompanyname,
-                                              fbeg: widget.xfbeg,
-                                              fend: widget.xfend,
-                                              id: id.toString(),
-                                              cPW: "PDF",
-                                              formatid: PrintidDetails[0]
-                                                  ['formatid'],
-                                              printid: PrintidDetails[0]
-                                                  ['printid'],
-                                            ),
-                                          ));
+                                      if(PrintidDetails.isNotEmpty){
+                                        Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              PdfViewerPagePrint(
+                                            companyid: widget.xcompanyid,
+                                            companyname:
+                                                widget.xcompanyname,
+                                            fbeg: widget.xfbeg,
+                                            fend: widget.xfend,
+                                            id: id.toString(),
+                                            cPW: "PDF",
+                                            formatid: PrintidDetails[0]
+                                                ['formatid'],
+                                            printid: PrintidDetails[0]
+                                                ['printid'],
+                                          ),
+                                        ));
+                                      }
                                     }),
                                 TextButton(
                                     style: TextButton.styleFrom(

@@ -109,6 +109,9 @@ class order_ListState extends State<order_list> {
               String date = this._orderlist[index]['date'];
               String itemname = this._orderlist[index]['itemname'];
               String salesman = this._orderlist[index]['salesman'].toString();
+              if(salesman == 'null'){
+                salesman = '';
+              }
               String design = this._orderlist[index]['design'];
               String meters = this._orderlist[index]['balmeters'].toString();
               String taka = this._orderlist[index]['baltaka'].toString();
