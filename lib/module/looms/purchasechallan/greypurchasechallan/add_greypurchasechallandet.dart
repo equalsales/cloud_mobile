@@ -364,7 +364,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
       var fmode = _fmode.text;
       var foldmtrs = _foldmtrs.text;
       var shtmtrs = _shtmtrs.text;
-      var shtrate = _shtrate.text;
+      var shtprc = _shtrate.text;
       var ordid = _ordid.text;
       var orddetid = _orddetid.text;
       var discrate = _discrate.text;
@@ -399,10 +399,10 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
         'fmode': fmode,
         'foldmtrs': foldmtrs,
         'shtmtrs': shtmtrs,
-        'shtrate': shtrate,
+        'shtprc': shtprc,
         'ordid': ordid,
         'orddetid': orddetid,
-        'discrate': discrate,
+        'discper': discrate,
         'discamt': discamt,
         'addamt': addamt,
         'texavalue': texavalue,

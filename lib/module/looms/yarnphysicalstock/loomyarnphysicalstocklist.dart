@@ -1,3 +1,4 @@
+import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/module/looms/yarnphysicalstock/add_loomyarnphysicalstock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -86,8 +87,8 @@ class _LoomyarnphysicalstockListPageState extends State<Loomyarnphysicalstocklis
   Future<bool> loaddetails() async {
     var db = globals.dbname;
     var cno = globals.companyid;
-    var startdate = globals.fbeg;
-    var enddate = globals.fend;
+    var startdate = retconvdate(globals.startdate).toString();
+    var enddate = retconvdate(globals.enddate).toString();
 
     print(globals.enddate);
 

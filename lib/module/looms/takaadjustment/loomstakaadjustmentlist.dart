@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/module/looms/takaadjustment/add_loomstakaadjustment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -87,8 +88,8 @@ class _TakaAdjustmentListPageState extends State<TakaAdjustmentList> {
   Future<bool> loaddetails() async {
     var db = globals.dbname;
     var cno = globals.companyid;
-    var startdate = globals.fbeg;
-    var enddate = globals.fend;
+    var startdate = retconvdate(globals.startdate).toString();
+    var enddate = retconvdate(globals.enddate).toString();
 
     print(globals.enddate);
 

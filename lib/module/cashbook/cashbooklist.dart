@@ -42,8 +42,8 @@ class _CashBookListPageState extends State<CashBookList> {
   Future<bool> loaddetails() async {
     var db = globals.dbname;
     var cno = globals.companyid;
-    var startdate = globals.fbeg;
-    var enddate = globals.fend;
+    var startdate = retconvdate(globals.startdate).toString();
+    var enddate = retconvdate(globals.enddate).toString();
 
     var response = await http.get(Uri.parse(
         'https://www.cloud.equalsoftlink.com/api/api_getcashbooklist?dbname=' +

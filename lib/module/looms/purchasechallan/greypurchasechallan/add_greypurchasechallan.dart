@@ -54,8 +54,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
   var branchid = 0;
   int? partyid;
   var bookid = 0;
-  TextEditingController _packingsrchr = new TextEditingController();
-  TextEditingController _packingserial = new TextEditingController();
   TextEditingController _serial = new TextEditingController();
   TextEditingController _srchr = new TextEditingController();
   TextEditingController _branch = new TextEditingController();
@@ -71,8 +69,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
   TextEditingController _totmtrs = new TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _gstregno = new TextEditingController();
-  var _jsonData = [];
 
   bool isButtonActive = true;
 
@@ -94,7 +90,7 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
     _date.text = DateFormat("dd-MM-yyyy").format(curDate);
     _chlndt.text = DateFormat("dd-MM-yyyy").format(curDate);
 
-    _book.text = 'SALES A/C';
+    _book.text = 'PURCHASE A/C';
 
     if (int.parse(widget.xid) > 0) {
       loadData();
@@ -109,12 +105,12 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
     var id = widget.xid;
 
 
-    uri = '${globals.cdomain}/api/api_getsalechallandetlist?dbname=' +
-        db +
-        '&cno=' +
+    uri = '${globals.cdomain}/api/api_getgreypurchallandetlist?cno=' +
         cno +
         '&id=' +
-        id;
+        id +
+        '&dbname=' +
+        db;
 
     print(" loadDetData :" + uri);
     var response = await http.get(Uri.parse(uri));
@@ -132,9 +128,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
       ItemDet.add({
         "controlid": jsonData[iCtr]['controlid'].toString(),
         "id": jsonData[iCtr]['id'].toString(),
-        "orderno": jsonData[iCtr]['orderno'].toString(),
-        "takano": jsonData[iCtr]['takano'].toString(),
-        "takachr": jsonData[iCtr]['takachr'].toString(),
         "itemname": jsonData[iCtr]['itemname'].toString(),
         "design": jsonData[iCtr]['design'].toString(),
         "pcs": jsonData[iCtr]['pcs'].toString(),
@@ -147,10 +140,10 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
         "fmode": jsonData[iCtr]['fmode'].toString(),
         "foldmtrs": jsonData[iCtr]['foldmtrs'].toString(),
         "shtmtrs": jsonData[iCtr]['shtmtrs'].toString(),
-        "shtrate": jsonData[iCtr]['shtrate'].toString(),
-        "ordid": jsonData[iCtr]['ordid'].toString(),
-        "orddetid": jsonData[iCtr]['orddetid'].toString(),
-        "discrate": jsonData[iCtr]['discrate'].toString(),
+        "shtprc": jsonData[iCtr]['shtprc'].toString(),
+        // "ordid": jsonData[iCtr]['ordid'].toString(),
+        // "orddetid": jsonData[iCtr]['orddetid'].toString(),
+        "discper": jsonData[iCtr]['discper'].toString(),
         "discamt": jsonData[iCtr]['discamt'].toString(),
         "addamt": jsonData[iCtr]['addamt'].toString(),
         "taxablevalue": jsonData[iCtr]['taxablevalue'].toString(),
@@ -163,9 +156,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
         "finalamt": jsonData[iCtr]['finalamt'].toString(),
       });
     }
-
-    print("jsonData[iCtr]['ordno'].toString()" + jsonData[0]['orderno'].toString());
-
     setState(() {
       ItemDetails = ItemDet;
     });
@@ -188,16 +178,16 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
     String end = DateFormat("yyyy-MM-dd").format(date2);
 
 
-    uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
-        db +
-        '&cno=' +
+    uri = '${globals.cdomain}/api/api_getgreyurchallanlist?cno=' +
         cno +
-        '&id=' +
-        id +
         '&startdate=' +
         start +
         '&enddate=' +
-        end;
+        end +
+        '&dbname=' +
+        db +
+        '&id=' +
+        id.toString();
 
     print(" loadData :" + uri);
     var response = await http.get(Uri.parse(uri));
@@ -209,25 +199,33 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
 
     print(jsonData);
 
-    _branch.text = getValue(jsonData['branch'], 'C');
-    _book.text = getValue(jsonData['book'], 'C');
-    String inputDateString = getValue(jsonData['date'], 'C');
-    List<String> parts = inputDateString.split(' ')[0].split('-');
-    String formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}";
-    _date.text = formattedDate.toString();
-    _party.text = getValue(jsonData['party'], 'C');
-    partyid = jsonData['partyid'];
-    _agent.text = getValue(jsonData['agent'], 'C');
-    _chlnno.text = getValue(jsonData['chlnno'], 'N');
-    _chlndt.text = getValue(jsonData['chlndt'], 'C');
-    _agent.text = getValue(jsonData['agent'], 'C');
-    dropdownTrnType = getValue(jsonData['rdurd'], 'C');
-    _remarks.text = getValue(jsonData['remarks'], 'C');
-    _branchid.text = getValue(jsonData['branchid'], 'C');
+    _branch.text = jsonData['branch'].toString();
+    _book.text = jsonData['book'].toString();
+    // String inputDateString = jsonData['date'];
+    // List<String> parts = inputDateString.split(' ')[0].split('-');
+    // String formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}";
+    _date.text = jsonData['date2'].toString();
+    _party.text = jsonData['party'].toString();
+    _agent.text = jsonData['agent'].toString();
+    _chlnno.text = jsonData['chlnno'].toString();
+    _chlndt.text = jsonData['chlndt'].toString();
+    _agent.text = jsonData['agent'].toString();
+    if(_agent.text == 'null'){
+      _agent.text = '';
+    }
+    dropdownTrnType = jsonData['rdurd'].toString();
+    if (dropdownTrnType == '') {
+      dropdownTrnType = 'RD';
+    }
+    if (dropdownTrnType == 'null') {
+      dropdownTrnType = 'RD';
+    }
+    _remarks.text = jsonData['remarks'].toString();
+    _branchid.text = jsonData['branchid'].toString();
 
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
-
+    setState(() {});
     return true;
   }
 
@@ -404,8 +402,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
-      var packingsrchr = _packingsrchr.text;
-      var packingserial = _packingserial.text;
       var serial = _serial.text;
       var srchr = _srchr.text;
       var book = _book.text;
@@ -427,43 +423,52 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
 
       DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
       String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
+      DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(chlndt);
+      String newchlndt = DateFormat("yyyy-MM-dd").format(parsedDate2);
 
       party = party.replaceAll('&', '_');
 
       uri =
-          "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
-              db +
-              "&company=&cno=" +
-              cno +
-              "&user=" +
-              username +
-              "&branch=" +
-              branch +
-              "&packingtype=" +
-              "&party=" +
-              party +
-              "&book=" +
-              book +
-              "&haste=" +
-              "&transport=" +
-              "&station=" +
-              "&packingsrchr=" +
-              packingsrchr +
-              "&packingserial=" +
-              packingserial +
-              "&bookno=" +
-              "&srchr=" +
-              srchr +
-              "&serial=" +
-              serial +
-              "&date=" +
-              newDate +
-              "&remarks=" +
-              remarks +
-              "&duedays=" +
-              "&id=" +
-              id.toString() +
-              "&parcel=1";
+          uri = "${globals.cdomain}/api/api_storegreypurchallan?dbname=" +
+          db +
+          "&company=&cno=" +
+          cno +
+          "&user=" +
+          username +
+          "&branch=" +
+          branch +
+          "&packingtype=" +
+          "&party=" +
+          party +
+          '&agent=' +
+          agent +
+          "&book=" +
+          book +
+          '&chlndt=' +
+          newchlndt +
+          '&chlnno=' +
+          chlnno +
+          '&rdurd=' +
+          rdurd.toString() +
+          "&haste=" +
+          '&salesman=' +
+          "&transport=" +
+          "&station=" +
+          "&packingsrchr=" +
+          "&packingserial=" +
+          "&bookno=" +
+          "&srchr=" +
+          srchr +
+          "&serial=" +
+          serial +
+          "&date=" +
+          newDate +
+          "&remarks=" +
+          remarks +
+          "&duedays=" +
+          "&id=" +
+          id.toString() +
+          "&parcel=1";
 
       print("/////////////////////////////////////////////" + uri);
 
@@ -561,9 +566,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
             label: Text('',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
           )),
-          DataCell(Text(ItemDetails[iCtr]['takachr'] +
-              '-' +
-              ItemDetails[iCtr]['takano'])),
           DataCell(Text(ItemDetails[iCtr]['itemname'].toString())),
           DataCell(Text(ItemDetails[iCtr]['design'].toString())),
           DataCell(Text(ItemDetails[iCtr]['pcs'].toString())),
@@ -576,10 +578,8 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
           DataCell(Text(ItemDetails[iCtr]['fmode'].toString())),
           DataCell(Text(ItemDetails[iCtr]['foldmtrs'].toString())),
           DataCell(Text(ItemDetails[iCtr]['shtmtrs'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['shtrate'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['ordid'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['orddetid'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['discrate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['shtprc'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['discper'].toString())),
           DataCell(Text(ItemDetails[iCtr]['discamt'].toString())),
           DataCell(Text(ItemDetails[iCtr]['addamt'].toString())),
           DataCell(Text(ItemDetails[iCtr]['texavalue'].toString())),
@@ -592,15 +592,12 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
           DataCell(Text(ItemDetails[iCtr]['finalamt'].toString())),
         ]));
       }
-
       setState(() {
         _tottaka.text = widget.tottaka.toString();
         _totmtrs.text = widget.totmtrs.toString();
       });
-
       return _datarow;
     }
-
 
     return Scaffold(
       appBar: AppBar(
@@ -951,12 +948,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                   ),
                   DataColumn(
                     label: Text("ShtRate"),
-                  ),
-                  DataColumn(
-                    label: Text("OrdId"),
-                  ),
-                  DataColumn(
-                    label: Text("OrdDetId"),
                   ),
                   DataColumn(
                     label: Text("DiscRate"),

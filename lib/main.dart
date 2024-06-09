@@ -117,7 +117,7 @@ class _MyHomePage extends State<MyHomePage> {
     globals.username = _username;
 
     var url = Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_authuser?dbname=' +
+        '${globals.cdomain2}/api/api_authuser?dbname=' +
             _db +
             '&username=' +
             _username +

@@ -91,8 +91,8 @@ class _LoomBeamJobIssueListPageState extends State<LoomBeamJobIssueList> {
   Future<bool> loaddetails() async {
     var db = globals.dbname;
     var cno = globals.companyid;
-    var startdate = globals.fbeg;
-    var enddate = globals.fend;
+    var startdate = retconvdate(globals.startdate).toString();
+    var enddate = retconvdate(globals.enddate).toString();
 
     print(globals.enddate);
 

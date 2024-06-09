@@ -37,7 +37,7 @@ class _YearSelectionPageState extends State<YearSelection> {
   Future<bool> companydetails(_user, _pwd) async {
     var db = globals.dbname;
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_getcompanylist?dbname=' +
+        '${globals.cdomain2}/api/api_getcompanylist?dbname=' +
             db +
             '&username=' +
             widget.xuser +
@@ -103,16 +103,13 @@ class _YearSelectionPageState extends State<YearSelection> {
         itemBuilder: (context, index) {
           print(this._companydetails[index]);
           String companyname = this._companydetails[index]['company'];
-          String companyid =
-              this._companydetails[index]['companyid'].toString();
-          String yearid = this._companydetails[index]['startdate'].toString() +
-              ' - ' +
-              this._companydetails[index]['enddate'].toString();
+          String companyid = this._companydetails[index]['companyid'].toString();
+          String yearid = this._companydetails[index]['startdate'].toString() + ' - ' + this._companydetails[index]['enddate'].toString();
           String fbeg = this._companydetails[index]['startdate'];
           String fend = this._companydetails[index]['enddate'];
-          String startdate =
-              this._companydetails[index]['startdate'].toString();
+          String startdate = this._companydetails[index]['startdate'].toString();
           String enddate = this._companydetails[index]['enddate'].toString();
+          String companystate = this._companydetails[index]['state'];
           return Card(
               child: Center(
                   child: ListTile(
@@ -133,7 +130,7 @@ class _YearSelectionPageState extends State<YearSelection> {
               globals.fend = fend;
               globals.startdate = startdate;
               globals.enddate = enddate;
-
+              globals.companystate = companystate;
               Navigator.push(
                   context,
                   MaterialPageRoute(

@@ -133,7 +133,7 @@ class _GreyPurchaseChallanListPageState extends State<GreyPurchaseChallanList> {
     DateTime date2 = DateFormat("dd-MM-yyyy").parse(enddate);
     String end = DateFormat("yyyy-MM-dd").format(date2);
 
-    String uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
+    String uri = '${globals.cdomain}/api/api_getgreyurchallanlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -183,19 +183,16 @@ class _GreyPurchaseChallanListPageState extends State<GreyPurchaseChallanList> {
           child: ListView.builder(
         itemCount: this._companydetails.length,
         itemBuilder: (context, index) {
-          String date = this._companydetails[index]['date2'].toString();
-          //date = retconvdatestr(date);
-          String serial = this._companydetails[index]['serial'].toString();
-          String packingserial =
-              this._companydetails[index]['packingserial'].toString();
-          String packingtype =
-              this._companydetails[index]['packingtype'].toString();
-          String party = this._companydetails[index]['party'].toString();
-          String remarks = this._companydetails[index]['remarks'].toString();
-          String totpcs = this._companydetails[index]['totpcs'].toString();
-          String totmtrs = this._companydetails[index]['totmtrs'].toString();
-
           String id = this._companydetails[index]['id'].toString();
+          String date = this._companydetails[index]['date2'].toString();
+          String serial = this._companydetails[index]['serial'].toString();
+          String srchr = this._companydetails[index]['srchr'].toString();
+          String branch = this._companydetails[index]['branch'].toString();
+          String party = this._companydetails[index]['party'].toString();
+          String chlnno = this._companydetails[index]['chlnno'].toString();
+          String rdurd = this._companydetails[index]['rdurd'].toString();
+          String remarks = this._companydetails[index]['remarks'].toString();
+          String agent = this._companydetails[index]['agent'].toString();
 
           int newid = 0;
           newid = int.parse(id);
@@ -333,28 +330,29 @@ class _GreyPurchaseChallanListPageState extends State<GreyPurchaseChallanList> {
                 child: Center(
                     child: ListTile(
               title: Text(
-                  'Dt :' +
+                  'Date : ' +
                       date +
-                      ' Packing Type : ' +
-                      packingtype +
-                      ' Packing No : ' +
-                      packingserial +
-                      ' Challan No : ' +
+                      '  Serial : ' +
                       serial +
-                      ' [ ' +
+                      '  Id : ' +
                       id +
-                      ' ]' +
-                      ' Party : ' +
+                      '  Branch : ' +
+                      branch +
+                      '  Party ' +
                       party,
                   style:
                       TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
               subtitle: Text(
-                  'Remarks :' +
+                  'Remarks : ' +
                       remarks +
-                      ' Pcs : ' +
-                      totpcs +
-                      ' Meters : ' +
-                      totmtrs,
+                      '  RdUrd : ' +
+                      rdurd +
+                      '  Challan No. : ' +
+                      chlnno +
+                      '  SrChr : ' +
+                      srchr +
+                      ' Agent : ' +
+                      agent,
                   style:
                       TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
               leading: Icon(Icons.select_all),

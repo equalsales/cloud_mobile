@@ -134,6 +134,8 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         _rate.text = ItemDetails[length - 1]['rate'].toString();
         _duedays.text = ItemDetails[length - 1]['duedays'].toString();
         _remarks.text = ItemDetails[length - 1]['remarks'].toString();
+        _haste.text = ItemDetails[length - 1]['haste'].toString();
+        _salesman.text = ItemDetails[length - 1]['salesman'].toString();
       });
     }
   }
@@ -232,7 +234,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
     }
 
     uri =
-        'https://looms.equalsoftlink.com/api/commonapi_gettakastock2?dbname=' +
+        '${globals.cdomain}/api/commonapi_gettakastock2?dbname=' +
             db +
             '&partyfilter=N&takachr=' +
             takachr +

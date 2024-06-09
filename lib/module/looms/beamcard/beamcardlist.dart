@@ -1,26 +1,23 @@
-import 'package:cloud_mobile/function.dart';
-import 'package:cloud_mobile/module/looms/physicalstock/add_loomphysicalstock.dart';
+// ignore_for_file: must_be_immutable
+
+import 'package:cloud_mobile/module/looms/beamcard/add_beamcard.dart';
+import 'package:cloud_mobile/module/looms/purchasechallan/beampurchasechallan/add_beampurchasechallan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
 import 'dart:convert';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/PdfPreviewPagePrint.dart';
-import '../../../common/global.dart' as globals;
+import 'package:http/http.dart' as http;
+import 'package:cloud_mobile/common/global.dart' as globals;
 import 'package:cloud_mobile/common/alert.dart';
+import 'package:intl/intl.dart';
 
-//// import 'package:google_fonts/google_fonts.dart';
-
-import 'package:cloud_mobile/module/looms/greyjobissue/add_loomgreyjobissue.dart';
-
-class LoomphysicalstockList extends StatefulWidget {
+class LoomBeamCardList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
 
-  LoomphysicalstockList({Key? mykey, companyid, companyname, fbeg, fend})
+  LoomBeamCardList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -29,16 +26,17 @@ class LoomphysicalstockList extends StatefulWidget {
   }
 
   @override
-  _LoomphysicalstockListPageState createState() =>
-      _LoomphysicalstockListPageState();
+  _LoomBeamCardListPageState createState() => _LoomBeamCardListPageState();
 }
 
-class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
+class _LoomBeamCardListPageState extends State<LoomBeamCardList> {
   List _companydetails = [];
   List PrintFormatDetails = [];
   List PrintidDetails = [];
   var Printid = '';
   var formatid = '';
+  //TextEditingController _printid = new TextEditingController();
+  //TextEditingController _formatid = new TextEditingController();
   String dropdownPrintFormat = 'Print Format';
   @override
   void initState() {
@@ -51,7 +49,8 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
+
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -77,7 +76,8 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
+   
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -89,33 +89,64 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     return true;
   }
 
+  void execExportPDF(id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => PdfViewerPagePrint(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  id: id.toString(),
+                  cPW: "PDF",
+                )));
+  }
+
+  void execWhatsApp(id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PdfViewerPagePrint(
+            companyid: widget.xcompanyid,
+            companyname: widget.xcompanyname,
+            fbeg: widget.xfbeg,
+            fend: widget.xfend,
+            id: id.toString(),
+            cPW: "WhatsApp",
+            formatid: 55,
+            printid: 49,
+          ),
+        ));
+  }
+
   Future<bool> loaddetails() async {
     var db = globals.dbname;
     var cno = globals.companyid;
-    var startdate = retconvdate(globals.startdate).toString();
-    var enddate = retconvdate(globals.enddate).toString();
+    var startdate = globals.fbeg;
+    var enddate = globals.fend;
 
     print(globals.enddate);
 
-    var response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/api_getphysicalstocklist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&startdate=' +
-            startdate +
-            '&enddate=' +
-            enddate));
+    DateTime date = DateFormat("dd-MM-yyyy").parse(startdate);
+    String start = DateFormat("yyyy-MM-dd").format(date);
 
-    print(
-        'https://www.looms.equalsoftlink.com/api/api_getphysicalstocklist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&startdate=' +
-            startdate +
-            '&enddate=' +
-            enddate);
+    DateTime date2 = DateFormat("dd-MM-yyyy").parse(enddate);
+    String end = DateFormat("yyyy-MM-dd").format(date2);
+
+    String uri = '${globals.cdomain}/api/api_getbeampurchallanlist?cno=' +
+                  cno +
+                  '&startdate=' +
+                  start +
+                  '&enddate=' +
+                  end +
+                  '&dbname=' +
+                  db;
+
+
+    var response = await http.get(Uri.parse(uri));
+
+    print(" loaddetails " + uri);
 
     var jsonData = jsonDecode(response.body);
 
@@ -128,57 +159,11 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     return true;
   }
 
-  Future<bool> DeleteData(id) async {
-    var db = globals.dbname;
-    var cno = globals.companyid;
-    String uri = '';
-
-    uri =
-        "https://www.cloud.equalsoftlink.com/checkautoeditdelete/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
-    var response = await http.get(Uri.parse(uri));
-    print(uri);
-    var jsonData = jsonDecode(response.body);
-    jsonData['success'];
-    print(jsonData['success']);
-    if (jsonData['success'].toString() == 'true') {
-      String uri = '';
-      uri =
-          "https://www.cloud.equalsoftlink.com/deletemoddesignAPI/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
-      var response = await http.get(Uri.parse(uri));
-      print(uri);
-      var jsonData = jsonDecode(response.body);
-      jsonData['success'];
-
-      loaddetails();
-      Fluttertoast.showToast(
-        msg: "Bill Delete Successfully !!!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.white,
-        textColor: Colors.purple,
-        fontSize: 16.0,
-      );
-    } else {
-      loaddetails();
-      Fluttertoast.showToast(
-        msg: "Receipt Entry Maid in Bill !!!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.white,
-        textColor: Colors.purple,
-        fontSize: 16.0,
-      );
-    }
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Physical Stock List',
+        title: Text('Beam Card List',
             style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
       floatingActionButton: FloatingActionButton(
@@ -187,29 +172,28 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => physicalstockAdd(
+                  builder: (_) => BeamCardAdd(
                         companyid: widget.xcompanyid,
                         companyname: widget.xcompanyname,
                         fbeg: widget.xfbeg,
                         fend: widget.xfend,
                         id: '0',
-                      )))
+                      ))).then((value) => loaddetails())
         },
       ),
       body: Center(
           child: ListView.builder(
         itemCount: this._companydetails.length,
         itemBuilder: (context, index) {
-          String date = this._companydetails[index]['date2'].toString();
-          //date = retconvdatestr(date);
-          String serial = this._companydetails[index]['serial'].toString();
-          String type = this._companydetails[index]['type'].toString();
-          String party = this._companydetails[index]['party'].toString();
-          String remarks = this._companydetails[index]['remarks'].toString();
-          String totpcs = this._companydetails[index]['tottaka'].toString();
-          String totmtrs = this._companydetails[index]['totmtrs'].toString();
-
           String id = this._companydetails[index]['id'].toString();
+          String date = this._companydetails[index]['date2'].toString();
+          String serial = this._companydetails[index]['serial'].toString();
+          String srchr = this._companydetails[index]['srchr'].toString();
+          String branch = this._companydetails[index]['branch'].toString();
+          String party = this._companydetails[index]['party'].toString();
+          String chlnno = this._companydetails[index]['chlnno'].toString();
+          String rdurd = this._companydetails[index]['rdurd'].toString();
+          String remarks = this._companydetails[index]['remarks'].toString();
 
           int newid = 0;
           newid = int.parse(id);
@@ -218,6 +202,11 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
             key: ValueKey(index),
             startActionPane:
                 ActionPane(motion: const BehindMotion(), children: [
+              SlidableAction(
+                  onPressed: (context) => {execWhatsApp(int.parse(id))},
+                  icon: Icons.sms_sharp,
+                  label: 'WhatsApp',
+                  backgroundColor: Color.fromARGB(226, 73, 254, 197)),
               SlidableAction(
                   onPressed: (context) => {
                         //execExportPDF(int.parse(id))
@@ -333,54 +322,50 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                   label: 'Print',
                   backgroundColor: Color(0xFFFE4A49)),
               SlidableAction(
-                  onPressed: (context) => DeleteData,
-                  icon: Icons.delete_forever,
-                  label: 'Delete',
+                  onPressed: (context) => {},
+                  icon: Icons.edit,
+                  label: 'Edit',
                   backgroundColor: Colors.blue)
             ]),
             child: Card(
                 child: Center(
                     child: ListTile(
               title: Text(
-                  'Dt :' +
+                      'Date : ' +
                       date +
-                      ' Type : ' +
-                      type +
-                      ' Serial No : ' +
+                      '  Serial : ' +
                       serial +
-                      ' [ ' +
+                      '  Id : ' +
                       id +
-                      ' ]' +
-                      ' Party : ' +
+                      '  Branch : ' +
+                      branch +
+                      '  Party ' +
                       party,
-                  style: TextStyle(
-                      fontFamily: 'verdana',
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.bold)),
+                  style:
+                      TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
               subtitle: Text(
-                  'Remarks :' +
+                      'Remarks : ' +
                       remarks +
-                      ' Pcs : ' +
-                      totpcs +
-                      ' Meters : ' +
-                      totmtrs,
-                  style: TextStyle(
-                      fontFamily: 'verdana',
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.bold)),
+                      '  RdUrd : ' +
+                      rdurd +
+                      '  Challan No. : ' +
+                      chlnno +
+                      '  SrChr : ' +
+                      srchr,
+              style:TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
               leading: Icon(Icons.select_all),
               trailing: Icon(Icons.arrow_forward),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => physicalstockAdd(
+                        builder: (_) => BeamCardAdd(
                               companyid: widget.xcompanyid,
                               companyname: widget.xcompanyname,
                               fbeg: widget.xfbeg,
                               fend: widget.xfend,
                               id: id,
-                            )));
+                            ))).then((value) => loaddetails());
               },
             ))),
           );
@@ -394,7 +379,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
   showDialog<String>(
     context: context,
     builder: (BuildContext context) => AlertDialog(
-      title: const Text('Delete Physical Stock Entry ??'),
+      title: const Text('Delete Beam Card Entry ??'),
       content: Text('Do you want to delete this entry ?'),
       actions: <Widget>[
         TextButton(
@@ -403,37 +388,33 @@ void execDelete(BuildContext context, int index, int id, String name) {
         ),
         TextButton(
           onPressed: () async {
-            // var db = globals.dbname;
-            // var cno = globals.companyid;
+            var db = globals.dbname;
+            var cno = globals.companyid;
 
-            // var response = await http.post(Uri.parse(
-            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
-            //         db +
-            //         '&cno=' +
-            //         cno +
-            //         '&id=' +
-            //         id.toString()));
+            String uri = '';
 
-            // print(
-            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
-            //         db +
-            //         '&id=' +
-            //         id.toString());
+            uri = '${globals.cdomain}/api/api_deletecashbook?dbname=' +
+                  db +
+                  '&id=' +
+                  id.toString();
+            
+            print(uri);
 
-            // var jsonData = jsonDecode(response.body);
-            // var code = jsonData['Code'];
-            // if (code == '200') {
-            //   await Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //           builder: (_) => LoomGreyJobIssueList(
-            //               companyid: globals.companyid,
-            //               companyname: globals.companyname,
-            //               fbeg: globals.fbeg,
-            //               fend: globals.fend)));
-            // } else if (code == '500') {
-            //   showAlertDialog(context, jsonData['Message']);
-            // }
+            var response = await http.post(Uri.parse(uri));
+            var jsonData = jsonDecode(response.body);
+            var code = jsonData['Code'];
+            if (code == '200') {
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => LoomBeamCardList(
+                          companyid: globals.companyid,
+                          companyname: globals.companyname,
+                          fbeg: globals.fbeg,
+                          fend: globals.fend)));
+            } else if (code == '500') {
+              showAlertDialog(context, jsonData['Message']);
+            }
           },
           child: const Text('OK'),
         ),
@@ -443,7 +424,5 @@ void execDelete(BuildContext context, int index, int id, String name) {
 
   return;
 }
-
-Future<void> sendWhatapp() async {}
 
 void doNothing(BuildContext context) {}

@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
+import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_mobile/module/looms/purchasechallan/beampurchasechallan/add_beampurchasechallandet.dart';
-import 'package:cloud_mobile/module/looms/saleschallan/add_loomsaleschallandet.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/list/party_list.dart';
 import 'package:cloud_mobile/common/global.dart' as globals;
-import 'package:cloud_mobile/list/city_list.dart';
 import 'package:cloud_mobile/list/branch_list.dart';
 import 'package:cloud_mobile/common/bottombar.dart';
 import 'package:intl/intl.dart';
@@ -43,23 +42,12 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
   DateTime toDate = DateTime.now();
 
   List _branchlist = [];
-  List _partylist = [];
-  List _delpartylist = [];
-  List _booklist = [];
-  List _agentlist = [];
-  List _hastelist = [];
-  List _transportlist = [];
-  List _stationlist = [];
-
+  var _partylist = [];
   List ItemDetails = [];
-
-  String? dropdownTrnType;
 
   var branchid = 0;
   int? partyid;
   var bookid = 0;
-  TextEditingController _packingsrchr = new TextEditingController();
-  TextEditingController _packingserial = new TextEditingController();
   TextEditingController _serial = new TextEditingController();
   TextEditingController _srchr = new TextEditingController();
   TextEditingController _branch = new TextEditingController();
@@ -67,21 +55,21 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
   TextEditingController _book = new TextEditingController();
   TextEditingController _date = new TextEditingController();
   TextEditingController _party = new TextEditingController();
-  TextEditingController _agent = new TextEditingController();
   TextEditingController _chlnno = new TextEditingController();
   TextEditingController _chlndt = new TextEditingController();
   TextEditingController _remarks = new TextEditingController();
-  TextEditingController _tottaka = new TextEditingController();
-  TextEditingController _totmtrs = new TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _gstregno = new TextEditingController();
-  var _jsonData = [];
+  var partystate = '';
+  var party = '';
+  var partyacctype = 'PURCHASE PARTY';
 
   bool isButtonActive = true;
 
   var crlimit = 0.0;
   dynamic clobl = 0;
+
+  String? dropdownTrnType;
 
   var items = [
     'RD',
@@ -90,6 +78,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -97,8 +86,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
     _date.text = DateFormat("dd-MM-yyyy").format(curDate);
     _chlndt.text = DateFormat("dd-MM-yyyy").format(curDate);
 
-    _book.text = 'SALES A/C';
-    // dropdownTrnType = 'PACKING';
+    _book.text = 'PURCHASE A/C';
 
     if (int.parse(widget.xid) > 0) {
       loadData();
@@ -111,34 +99,29 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
+    var partyid = '';
 
-
-    uri = '${globals.cdomain}/api/api_getsalechallandetlist?dbname=' +
-        db +
-        '&cno=' +
+    uri = '${globals.cdomain}/api/api_getbeampurchallandetlist?cno=' +
         cno +
         '&id=' +
-        id;
+        id +
+        '&dbname=' +
+        db;
 
     print(" loadDetData :" + uri);
     var response = await http.get(Uri.parse(uri));
 
-    var jsonData = jsonDecode(response.body);
+    var Data = jsonDecode(response.body);
 
-    jsonData = jsonData['Data'];
-    //jsonData = jsonData[0];
+    var jsonData = Data['Data'];
 
     print(jsonData);
     List ItemDet = [];
     ItemDetails = [];
-
     for (var iCtr = 0; iCtr < jsonData.length; iCtr++) {
       ItemDet.add({
         "controlid": jsonData[iCtr]['controlid'].toString(),
         "id": jsonData[iCtr]['id'].toString(),
-        "orderno": jsonData[iCtr]['orderno'].toString(),
-        "takano": jsonData[iCtr]['takano'].toString(),
-        "takachr": jsonData[iCtr]['takachr'].toString(),
         "itemname": jsonData[iCtr]['itemname'].toString(),
         "hsncode": jsonData[iCtr]['hsncode'].toString(),
         "beamchr": jsonData[iCtr]['beamchr'].toString(),
@@ -150,8 +133,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
         "unit": jsonData[iCtr]['unit'].toString(),
         "amount": jsonData[iCtr]['amount'].toString(),
         "fmode": jsonData[iCtr]['fmode'].toString(),
-        "bchlndetid": jsonData[iCtr]['bchlndetid'].toString(),
-        "discrate": jsonData[iCtr]['discrate'].toString(),
+        "discper": jsonData[iCtr]['discper'].toString(),
         "discamt": jsonData[iCtr]['discamt'].toString(),
         "addamt": jsonData[iCtr]['addamt'].toString(),
         "taxablevalue": jsonData[iCtr]['taxablevalue'].toString(),
@@ -164,18 +146,15 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
         "finalamt": jsonData[iCtr]['finalamt'].toString(),
       });
     }
-
-    print("jsonData[iCtr]['ordno'].toString()" + jsonData[0]['orderno'].toString());
-
     setState(() {
       ItemDetails = ItemDet;
     });
-
     return true;
   }
 
   Future<bool> loadData() async {
     String uri = '';
+    String uri2 = '';
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
@@ -188,17 +167,16 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
     DateTime date2 = DateFormat("dd-MM-yyyy").parse(todate);
     String end = DateFormat("yyyy-MM-dd").format(date2);
 
-
-    uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
-        db +
-        '&cno=' +
+    uri = '${globals.cdomain}/api/api_getbeampurchallanlist?cno=' +
         cno +
-        '&id=' +
-        id +
         '&startdate=' +
         start +
         '&enddate=' +
-        end;
+        end +
+        '&dbname=' +
+        db +
+        '&id=' +
+        id.toString();
 
     print(" loadData :" + uri);
     var response = await http.get(Uri.parse(uri));
@@ -209,28 +187,47 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
     jsonData = jsonData[0];
 
     print(jsonData);
-
-    _branch.text = getValue(jsonData['branch'], 'C');
-    _packingsrchr.text = getValue(jsonData['packingsrchr'], 'C');
-    _packingserial.text = getValue(jsonData['packingserial'], 'C');
-    _serial.text = getValue(jsonData['serial'], 'C');
-    _srchr.text = getValue(jsonData['srchr'], 'C');
-    _book.text = getValue(jsonData['book'], 'C');
-    String inputDateString = getValue(jsonData['date'], 'C');
-    List<String> parts = inputDateString.split(' ')[0].split('-');
-    String formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}";
-    _date.text = formattedDate.toString();
-    _party.text = getValue(jsonData['party'], 'C');
-    partyid = jsonData['partyid'];
-    _chlndt.text = getValue(jsonData['chlndt'], 'C');
-    _chlnno.text = getValue(jsonData['chlnno'], 'C');
-    dropdownTrnType = getValue(jsonData['rdurd'], 'C');
-    _remarks.text = getValue(jsonData['remarks'], 'C');
-    _branchid.text = getValue(jsonData['branchid'], 'C');
+    // String inputDateString = jsonData['date2'];
+    // List<String> parts = inputDateString.split(' ')[0].split('-');
+    // String formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}";
+    _date.text = jsonData['date2'];
+    _branch.text = jsonData['branch'];
+    _serial.text = jsonData['serial'];
+    _srchr.text = jsonData['srchr'];
+    _book.text = jsonData['book'];
+    _party.text = jsonData['party'];
+    // partystate = jsonData['station'];
+    _chlndt.text = jsonData['chlndt'];
+    _chlnno.text = jsonData['chlnno'];
+    dropdownTrnType = jsonData['rdurd'].toString();
+    if (dropdownTrnType == '') {
+      dropdownTrnType = 'RD';
+    }
+    if (dropdownTrnType == 'null') {
+      dropdownTrnType = 'RD';
+    }
+    _remarks.text = jsonData['remarks'];
 
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
 
+    party = _party.text;
+
+    uri2 = '${globals.cdomain}/api/api_getpartylist?dbname=' +
+        db +
+        '&id=' +
+        '&acctype=' +
+        partyacctype + 
+        '&party=' +
+        party;
+    print(" api_getpartylist :" + uri2);
+    var response2 = await http.get(Uri.parse(uri2));
+    var Data2 = jsonDecode(response2.body);
+    var jsonData2 = Data2['Data'];
+    partystate = jsonData2[0]['state'];
+    print("  partystate :" + partystate);
+
+    setState(() {});
     return true;
   }
 
@@ -292,8 +289,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
       });
     }
 
-    void gotoPartyScreen2(
-        BuildContext context, acctype, TextEditingController obj) async {
+    void gotoPartyScreen2(BuildContext context) async {
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -302,7 +298,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                     companyname: widget.xcompanyname,
                     fbeg: widget.xfbeg,
                     fend: widget.xfend,
-                    acctype: acctype,
+                    acctype: partyacctype,
                   )));
 
       if (result != null) {
@@ -318,25 +314,27 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
             }
             selParty = selParty + retResult[0][ictr];
           }
+          _party.text = selParty;
 
-          obj.text = selParty;
-
-          crlimit = double.parse(result[0]['crlimit'].toString());
-          partyid = int.parse(result[0]['id'].toString());
-          _agent.text = result[0]['agent'].toString();
+          partystate = result[0]['state'].toString();
+          print("11111111" + partystate);
+          setState(() {
+            dropdownTrnType = result[0]['rdurd'].toString();
+            print("%%%%%%%%%%%%" + dropdownTrnType.toString());
+            if (dropdownTrnType == '') {
+              dropdownTrnType = 'RD';
+            }
+            if (dropdownTrnType == 'null') {
+              dropdownTrnType = 'RD';
+            }
+          });
           var endDate = retconvdate(widget.xfend).toString();
           var cno = int.parse(globals.companyid.toString());
 
           if (selParty != '') {
             getPartyDetails(
-                    obj.text, 0, crlimit, partyid, context, endDate, cno)
-                .then((value) {
-              setState(() {
-                clobl = value;
-                print("chirag");
-                print(clobl);
-              });
-            });
+                    _party.text, 0, crlimit, partyid, context, endDate, cno)
+                .then((value) {});
           }
         });
       }
@@ -374,28 +372,20 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
     }
 
     void gotoChallanItemDet(BuildContext contex) async {
-      var branch = _branch.text;
-      var branchid = _branchid.text;
-      var type = dropdownTrnType;
-      print("type : $type");
-      print('in');
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
               builder: (_) => BeamPurchaseChallanDetAdd(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend,
-                  branch: branch,
-                  partyid: partyid,
-                  itemDet: ItemDetails,
-                  branchid: branchid,
-                  type: type)));
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                    partystate: partystate,
+                    itemDet: ItemDetails,
+                  )));
       setState(() {
         ItemDetails.add(result[0]);
         _remarks.text = result[0]['remarks'];
-        // ItemDetails = ItemDetails[0];
         print(ItemDetails);
       });
     }
@@ -405,8 +395,6 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
-      var packingsrchr = _packingsrchr.text;
-      var packingserial = _packingserial.text;
       var serial = _serial.text;
       var srchr = _srchr.text;
       var book = _book.text;
@@ -427,43 +415,49 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
 
       DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
       String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
+      DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(chlndt);
+      String newchlndt = DateFormat("yyyy-MM-dd").format(parsedDate2);
 
       party = party.replaceAll('&', '_');
 
-      uri =
-          "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
-              db +
-              "&company=&cno=" +
-              cno +
-              "&user=" +
-              username +
-              "&branch=" +
-              branch +
-              "&packingtype=" +
-              "&party=" +
-              party +
-              "&book=" +
-              book +
-              "&haste=" +
-              "&transport=" +
-              "&station=" +
-              "&packingsrchr=" +
-              packingsrchr +
-              "&packingserial=" +
-              packingserial +
-              "&bookno=" +
-              "&srchr=" +
-              srchr +
-              "&serial=" +
-              serial +
-              "&date=" +
-              newDate +
-              "&remarks=" +
-              remarks +
-              "&duedays=" +
-              "&id=" +
-              id.toString() +
-              "&parcel=1";
+      uri = "${globals.cdomain}/api/api_storebeampurchallan?dbname=" +
+          db +
+          "&company=&cno=" +
+          cno +
+          "&user=" +
+          username +
+          "&branch=" +
+          branch +
+          "&packingtype=" +
+          "&party=" +
+          party +
+          "&book=" +
+          book +
+          '&chlndt=' +
+          newchlndt +
+          '&chlnno=' +
+          chlnno +
+          '&rdurd=' +
+          rdurd.toString() +
+          "&haste=" +
+          '&salesman=' +
+          "&transport=" +
+          "&station=" +
+          "&packingsrchr=" +
+          "&packingserial=" +
+          "&bookno=" +
+          "&srchr=" +
+          srchr +
+          "&serial=" +
+          serial +
+          "&date=" +
+          newDate +
+          "&remarks=" +
+          remarks +
+          "&duedays=" +
+          "&id=" +
+          id.toString() +
+          "&parcel=1";
 
       print("/////////////////////////////////////////////" + uri);
 
@@ -483,10 +477,6 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
       if (jsonCode == '500') {
         showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
       } else {
-        // var url = '${globals.cdomain}/printsaleorderdf/' +
-        //     id.toString() +
-        //     '?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
-
         Fluttertoast.showToast(
           msg: "Saved !!!",
           toastLength: Toast.LENGTH_SHORT,
@@ -503,7 +493,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
 
     Future<void> _handleSaveData() async {
       setState(() {
-        isButtonActive = false; // Disable the button
+        isButtonActive = false;
       });
 
       bool success = await saveData();
@@ -521,33 +511,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
     List<DataRow> _createRows() {
       List<DataRow> _datarow = [];
       print(ItemDetails);
-
-      widget.tottaka = 0;
-      widget.totmtrs = 0;
-
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
-
-        double nMeters = 0;
-        if (ItemDetails[iCtr]['meters'] != '') {
-          nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
-          widget.tottaka += 1;          
-          widget.totmtrs += nMeters;
-        }
-        print(nMeters);
-
-        var tot;
-        var ordmtr = ItemDetails[iCtr]['ordmtr'].toString();
-        var ordmtrAsDouble = double.tryParse(ordmtr);
-
-        if (ordmtrAsDouble != null) {
-          tot = ordmtrAsDouble - nMeters;
-          print(tot);
-          ItemDetails[iCtr]['ordbalmtrs'] = tot.toString(); 
-          print(ItemDetails[iCtr]['ordbalmtrs']);
-        } else {
-          print('Error: Invalid format for ordmtr');
-        }
-
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
             onPressed: () => {deleteRow(iCtr)},
@@ -570,11 +534,10 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
           DataCell(Text(ItemDetails[iCtr]['unit'].toString())),
           DataCell(Text(ItemDetails[iCtr]['amount'].toString())),
           DataCell(Text(ItemDetails[iCtr]['fmode'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['bchlndetid'])),
-          DataCell(Text(ItemDetails[iCtr]['discrate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['discper'].toString())),
           DataCell(Text(ItemDetails[iCtr]['discamt'].toString())),
           DataCell(Text(ItemDetails[iCtr]['addamt'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['texavalue'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['taxablevalue'].toString())),
           DataCell(Text(ItemDetails[iCtr]['sgstrate'].toString())),
           DataCell(Text(ItemDetails[iCtr]['sgstamt'].toString())),
           DataCell(Text(ItemDetails[iCtr]['cgstrate'].toString())),
@@ -584,12 +547,11 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
           DataCell(Text(ItemDetails[iCtr]['finalamt'].toString())),
         ]));
       }
-
-      setState(() {
-        _tottaka.text = widget.tottaka.toString();
-        _totmtrs.text = widget.totmtrs.toString();
-      });
-
+      // setState(() {
+      //   Timer(Duration(milliseconds: 10), () {
+      //     _createRows();
+      //   });
+      // });
       return _datarow;
     }
 
@@ -611,18 +573,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
         enableFeedback: isButtonActive,
         onPressed: isButtonActive
             ? () {
-                if (crlimit < clobl) {
-                  Fluttertoast.showToast(
-                      msg: "CrLimit limit exceed!!!.",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 3,
-                      backgroundColor: Colors.white,
-                      textColor: Colors.purple,
-                      fontSize: 16.0);
-                } else {
-                  _handleSaveData();
-                }
+                _handleSaveData();
               }
             : null,
       ),
@@ -708,7 +659,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                       labelText: 'Book',
                     ),
                     onTap: () {
-                      gotoPartyScreen(context, 'SALE BOOK', _book);
+                      gotoPartyScreen(context, 'PURCHASE BOOK', _book);
                     },
                     validator: (value) {
                       return null;
@@ -724,7 +675,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                       labelText: 'Party',
                     ),
                     onTap: () {
-                      gotoPartyScreen2(context, 'SALE PARTY', _party);
+                      gotoPartyScreen2(context);
                     },
                     validator: (value) {
                       return null;
@@ -813,60 +764,10 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                 )
               ],
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                  enabled: false,
-                  controller: _tottaka,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Total Taka',
-                    labelText: 'Total Taka',
-                  ),
-                  onTap: () {},
-                  validator: (value) {
-                    return null;
-                  },
-                )),
-                Expanded(
-                  child: TextFormField(
-                  enabled: false,
-                  controller: _totmtrs,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Total Meters',
-                    labelText: 'Total Meters',
-                  ),
-                  onTap: () {},
-                  validator: (value) {
-                    return null;
-                  },
-                ))
-              ],
-            ),
             Padding(padding: EdgeInsets.all(5)),
             ElevatedButton(
               onPressed: () {
-                print("clobl");
-                print(clobl);
-                print("crlimit");
-                print(crlimit);
-                if (crlimit < clobl) {
-                  Fluttertoast.showToast(
-                    msg: "Crlimit exceed!!!.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 3,
-                    backgroundColor: Colors.white,
-                    textColor: Colors.purple,
-                    fontSize: 16.0,
-                  );
-                } else {
-                  gotoChallanItemDet(context);
-                }
+                gotoChallanItemDet(context);
               },
               child: Text('Add Item Details',
                   style:
@@ -910,9 +811,6 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                   ),
                   DataColumn(
                     label: Text("Fmode"),
-                  ),
-                  DataColumn(
-                    label: Text("Bchlndetid"),
                   ),
                   DataColumn(
                     label: Text("DiscRate"),

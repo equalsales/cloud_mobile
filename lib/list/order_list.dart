@@ -51,7 +51,7 @@ class order_ListState extends State<order_list> {
     String uri = '';
 
      uri =
-        'https://www.looms.equalsoftlink.com/api/commonapi_getsaleordpendinglist?dbname=' +
+        '${globals.cdomain}/api/commonapi_getsaleordpendinglist?dbname=' +
             db +
             '&partyid=' +
             partyid.toString();

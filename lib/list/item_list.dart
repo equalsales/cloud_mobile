@@ -52,10 +52,10 @@ class itemListState extends State<item_list> {
     var db = globals.dbname;
 
     print(
-        'https://www.looms.equalsoftlink.com/api/commonapi_getitemlist?dbname=' +
+        '${globals.cdomain}/api/commonapi_getitemlist?dbname=' +
             db);
     response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/commonapi_getitemlist?dbname=' +
+        '${globals.cdomain}/api/commonapi_getitemlist?dbname=' +
             db));
 
     var jsonData = jsonDecode(response.body);
@@ -96,34 +96,20 @@ class itemListState extends State<item_list> {
             itemCount: this._itemlist.length,
             itemBuilder: (context, index) {
               int id = this._itemlist[index]['id'];
-              String account = this._itemlist[index]['itemname'];
               String item = this._itemlist[index]['itemname'];
               return ListTile(
                 tileColor: _selected[index] ? Colors.blue : null,
-                title: Text(account),
-                subtitle: Text(item),
+                title: Text(item),
                 onTap: () {
-                  //print(account);
-                  //setState(() => _selected[i] = !_selected[i])
-                  _itemSelected.add(account);
-                  _itemSelected2.add(id);
-                  //setState(() => _selected[index] = !_selected[index]);
+                  _itemSelected.add(item);
+                  _itemSelected2.add(this._itemlist[index]); 
                   setState(() => _selected[index] = !_selected[index]);
-                  //print(_selected);
-                  //showAlertDialog(context, companyid);
-                  // Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard(
-                  //   companyid: companyid,
-                  //   companyname: companyname,
-                  //   fbeg: fbeg,
-                  //   fend: fend
-                  //   )));
+                  print("12313213131313231313" + this._itemlist[index].toString());
                 },
               );
             },
           ))
         ],
-
-        //child: JobsListView()
       ),
     );
   }

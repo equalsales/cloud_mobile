@@ -51,7 +51,7 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
 
 
     // uri =
@@ -82,7 +82,7 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
     
     // uri =
     //     "http://127.0.0.1:8000/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
@@ -143,7 +143,7 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     DateTime date2 = DateFormat("dd-MM-yyyy").parse(enddate);
     String end = DateFormat("yyyy-MM-dd").format(date2);
 
-    String uri = 'https://www.looms.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
+    String uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
             db +
             '&cno=' +
             cno +

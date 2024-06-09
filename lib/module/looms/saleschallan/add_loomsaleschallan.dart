@@ -119,7 +119,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     var id = widget.xid;
 
 
-    uri = 'https://www.looms.equalsoftlink.com/api/api_getsalechallandetlist?dbname=' +
+    uri = '${globals.cdomain}/api/api_getsalechallandetlist?dbname=' +
         db +
         '&cno=' +
         cno +
@@ -215,7 +215,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     String end = DateFormat("yyyy-MM-dd").format(date2);
 
 
-    uri = 'https://www.looms.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
+    uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
         db +
         '&cno=' +
         cno +
@@ -545,7 +545,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       party = party.replaceAll('&', '_');
 
       uri =
-          "https://looms.equalsoftlink.com/api/api_storeloomssalechln?dbname=" +
+          "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
               db +
               "&company=&cno=" +
               cno +

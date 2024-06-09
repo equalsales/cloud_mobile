@@ -1,3 +1,4 @@
+import 'package:cloud_mobile/module/looms/beamcard/beamcardlist.dart';
 import 'package:cloud_mobile/module/looms/customreport/customreportmenu.dart';
 import 'package:cloud_mobile/module/looms/physicalstock/loomphysicalstocklist.dart';
 import 'package:cloud_mobile/module/looms/purchasechallan/purchasemenu.dart';
@@ -156,6 +157,21 @@ class SideDrawer extends StatelessWidget {
           // ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
+            title: Text('Beam Card'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => LoomBeamCardList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
             title: Text('Grey Job Issue'),
             onTap: () => {
               Navigator.push(
@@ -229,21 +245,21 @@ class SideDrawer extends StatelessWidget {
                           )))
             },
           ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Taka Production'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => TakaProductionList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.shopping_cart),
+          //   title: Text('Taka Production'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (_) => TakaProductionList(
+          //                   companyid: xcompanyid,
+          //                   companyname: xcompanyname,
+          //                   fbeg: xfbeg,
+          //                   fend: xfend,
+          //                 )))
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Yarn Physical Stock Entry'),
