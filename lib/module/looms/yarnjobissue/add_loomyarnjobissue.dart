@@ -244,6 +244,8 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         _partylist = result[1];
         result = result[1];
 
+        print(retResult);
+
         var selParty = '';
         for (var ictr = 0; ictr < retResult[0].length; ictr++) {
           if (ictr > 0) {
@@ -274,7 +276,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         _partylist = result[1];
         result = result[1];
 
-        partyid = _partylist[0];
+        partyid = _partylist[0]['id'];
         print(partyid);
 
         var selParty = '';
@@ -413,10 +415,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       });
     }
 
-   
-
-
-     Future<bool> saveData() async {
+    Future<bool> saveData() async {
       String uri = '';
       var cno = globals.companyid;
       var db = globals.dbname;
@@ -436,11 +435,9 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       id = int.parse(id);
 
       print('In Save....');
-      
+
       print(jsonEncode(ItemDetails));
       //return true;
-
-      
 
       uri =
           "https://looms.equalsoftlink.com/api/api_storeloomsyarnissuechln?dbname=" +
@@ -455,23 +452,32 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
               party +
               "&item=" +
               citem +
-              "&machine=" + cmachine + "&creelno="+ creelno+"&chlnno=" +
+              "&machine=" +
+              cmachine +
+              "&creelno=" +
+              creelno +
+              "&chlnno=" +
               chlnno +
-              "&srchr=" + srchr+"&serial=" + serial+"&date=" +
+              "&srchr=" +
+              srchr +
+              "&serial=" +
+              serial +
+              "&date=" +
               date +
               "&remarks=" +
               remarks +
               "&id=" +
               id.toString();
-                   
+
       print(uri);
 
       final headers = {
-          'Content-Type': 'application/json', // Set the appropriate content-type
-          // Add any other headers required by your API
-        };      
+        'Content-Type': 'application/json', // Set the appropriate content-type
+        // Add any other headers required by your API
+      };
 
-      var response = await http.post(Uri.parse(uri), headers: headers, body: jsonEncode(ItemDetails));
+      var response = await http.post(Uri.parse(uri),
+          headers: headers, body: jsonEncode(ItemDetails));
       var jsonData = jsonDecode(response.body);
 
       //print('4');
@@ -501,6 +507,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         ItemDetails.removeAt(index);
       });
     }
+
     List<DataRow> _createRows() {
       List<DataRow> _datarow = [];
       print(ItemDetails);

@@ -25,7 +25,7 @@ void alert(context, _title, _msg) {
       DialogButton(
         child: Text(
           "COOL",
-          style: TextStyle(color: Colors.white, fontSize: 20),
+          style: TextStyle(color: Colors.white, fontSize: 20),       
         ),
         onPressed: () => Navigator.pop(context),
         width: 120,

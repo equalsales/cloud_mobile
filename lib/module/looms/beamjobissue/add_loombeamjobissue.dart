@@ -261,7 +261,7 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
         _partylist = result[1];
         result = result[1];
 
-        partyid = _partylist[0];
+        partyid = _partylist[0]['id'];
         print(partyid);
 
         var selParty = '';

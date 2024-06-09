@@ -198,9 +198,9 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     uri =
         'https://looms.equalsoftlink.com/api/api_greyjobissChallanno?dbname=' +
             db +
-            '&branch='+
-            _branch.text  +
-             '&cno='+
+            '&branch=' +
+            _branch.text +
+            '&cno=' +
             cno.toString();
     print(uri);
     var response = await http.get(Uri.parse(uri));
@@ -214,7 +214,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     jsonData = jsonData[0];
     print(jsonData);
     setState(() {
-      _chlnno.text=jsonData['chlnno'].toString();
+      _chlnno.text = jsonData['chlnno'].toString();
     });
     print(jsonData);
     return true;
@@ -288,9 +288,11 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         var retResult = result;
         _partylist = result[1];
         result = result[1];
-
-        partyid = _partylist[0];
+        print('hi');
+        print(_partylist);
+        partyid = _partylist[0]['id'];
         print(partyid);
+        print(retResult[0]);
 
         var selParty = '';
         for (var ictr = 0; ictr < retResult[0].length; ictr++) {
@@ -557,8 +559,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
           child: Icon(Icons.done),
           enableFeedback: isButtonActive,
           backgroundColor: Colors.green,
-          onPressed: isButtonActive ? () => _handleSaveData() : null
-      ),
+          onPressed: isButtonActive ? () => _handleSaveData() : null),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -599,8 +600,8 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     icon: const Icon(Icons.arrow_drop_down_circle),
                     onChanged: (String? newValue) {
                       setState(() {
-                           fetchdjobissChallanno();
-                           print('jatin');
+                        fetchdjobissChallanno();
+                        print('jatin');
                         dropdownTrnType = newValue!;
                         _type.text = dropdownTrnType;
                         print(_type.text);
