@@ -1,11 +1,12 @@
 // ignore_for_file: must_be_immutable
 import 'dart:async';
+import 'dart:convert';
 import 'package:cloud_mobile/list/item_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/alert.dart';
-import 'package:cloud_mobile/list/party_list.dart';
 import 'package:cloud_mobile/common/global.dart' as globals;
 import 'package:cloud_mobile/list/branch_list.dart';
 import 'package:cloud_mobile/common/bottombar.dart';
@@ -101,6 +102,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
   TextEditingController _balmeters = new TextEditingController();
   TextEditingController _baltaka = new TextEditingController();
   TextEditingController _droppingdate = new TextEditingController();
+  TextEditingController _masterbeam = new TextEditingController();
   TextEditingController _recserial = new TextEditingController();
   TextEditingController _recpartyid = new TextEditingController();
   TextEditingController _rectype = new TextEditingController();
@@ -306,7 +308,6 @@ class _BeamCardAddState extends State<BeamCardAdd> {
 
   @override
   Widget build(BuildContext context) {
-
     void gotoItemnameScreen(BuildContext context) async {
       var result = await Navigator.push(
           context,
@@ -464,104 +465,144 @@ class _BeamCardAddState extends State<BeamCardAdd> {
       });
     }
 
-    // Future<bool> saveData() async {
-    //   String uri = '';
-    //   var cno = globals.companyid;
-    //   var db = globals.dbname;
-    //   var username = globals.username;
-    //   var serial = _serial.text;
-    //   var srchr = _srchr.text;
-    //   var book = _book.text;
-    //   var branch = _branch.text;
-    //   var date = _date.text;
-    //   var party = _party.text;
-    //   var chlndt = _chlndt.text;
-    //   var chlnno = _chlnno.text;
-    //   var rdurd = dropdownTrnType;
-    //   var remarks = _remarks.text;
-    //   var id = widget.xid;
-    //   id = int.parse(id);
-    //   print('In Save....');
-    //   print(jsonEncode(ItemDetails));
-    //   DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
-    //   String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
-    //   DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(chlndt);
-    //   String newchlndt = DateFormat("yyyy-MM-dd").format(parsedDate2);
-    //   party = party.replaceAll('&', '_');
-    //   uri = "${globals.cdomain}/api/api_storebeampurchallan?dbname=" +
-    //       db +
-    //       "&company=&cno=" +
-    //       cno +
-    //       "&user=" +
-    //       username +
-    //       "&branch=" +
-    //       branch +
-    //       "&packingtype=" +
-    //       "&party=" +
-    //       party +
-    //       "&book=" +
-    //       book +
-    //       '&chlndt=' +
-    //       newchlndt +
-    //       '&chlnno=' +
-    //       chlnno +
-    //       '&rdurd=' +
-    //       rdurd.toString() +
-    //       "&haste=" +
-    //       '&salesman=' +
-    //       "&transport=" +
-    //       "&station=" +
-    //       "&packingsrchr=" +
-    //       "&packingserial=" +
-    //       "&bookno=" +
-    //       "&srchr=" +
-    //       srchr +
-    //       "&serial=" +
-    //       serial +
-    //       "&date=" +
-    //       newDate +
-    //       "&remarks=" +
-    //       remarks +
-    //       "&duedays=" +
-    //       "&id=" +
-    //       id.toString() +
-    //       "&parcel=1";
-    //   print("/////////////////////////////////////////////" + uri);
-    //   final headers = {
-    //     'Content-Type': 'application/json', // Set the appropriate content-type
-    //   };
-    //   var response = await http.post(Uri.parse(uri),
-    //       headers: headers, body: jsonEncode(ItemDetails));
-    //   var jsonData = jsonDecode(response.body);
-    //   //print('4');
-    //   var jsonCode = jsonData['Code'];
-    //   var jsonMsg = jsonData['Message'];
-    //   if (jsonCode == '500') {
-    //     showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-    //   } else {
-    //     Fluttertoast.showToast(
-    //       msg: "Saved !!!",
-    //       toastLength: Toast.LENGTH_SHORT,
-    //       gravity: ToastGravity.BOTTOM,
-    //       timeInSecForIosWeb: 1,
-    //       backgroundColor: Colors.white,
-    //       textColor: Colors.purple,
-    //       fontSize: 16.0,
-    //     );
-    //     Navigator.pop(context);
-    //   }
-    //   return true;
-    // }
+    Future<bool> saveData() async {
+      String uri = '';
+      var cno = globals.companyid;
+      var db = globals.dbname;
+      var username = globals.username;
+      var serial = _serial.text;
+      var srchr = _srchr.text;
+      var branch = _branch.text;
+      var beamchr = _beamchr.text;
+      var beamno = _beamno.text;
+      var itemname = _itemname.text;
+      var warpdate = _warpdate.text;
+      var pipeno = _pipeno.text;
+      var denier1 = _denier1.text;
+      var denier2 = _denier2.text;
+      var denier3 = _denier3.text;
+      var length = _length.text;
+      var ends = _ends.text;
+      var oliweight = _oliweight.text;
+      var reed = _reed.text;
+      var beamweight = _beamweight.text;
+      var metersonbeam = _metersonbeam.text;
+      var metertaka = _metertaka.text;
+      var machineno = _machineno.text;
+      var shortage = _shortage.text;
+      var estimale = _estimale.text;
+      var estimale2 = _estimale2.text;
+      var topmidlow = dropdownTopMidLow;
+      var per = dropdownPer;
+      var warpwttaka = _warpwttaka.text;
+      var weftdenier1 = _weftdenier1.text;
+      var weftdenier2 = _weftdenier2.text;
+      var width = _width.text;
+      var pick = _pick.text;
+      var weftweight = _weftweight.text;
+      var jogname = _jogname.text;
+      var jograte = _jograte.text;
+      var jogamount = _jogamount.text;
+      var jogdate = _jogdate.text;
+      var droppingname = _droppingname.text;
+      var droppingrate = _droppingrate.text;
+      var droppingamount = _droppingamount.text;
+      var beammakeer = _beammakeer.text;
+      var beamspreader = _beamspreader.text;
+      var spreaderrate = _spreaderrate.text;
+      var makerrate = _makerrate.text;
+      var remarks = _remarks.text;
+      var nooftaka = _nooftaka.text;
+      var installdate = _installdate.text;
+      var onemeterswt = _1meterswt.text;
+      var weftmeters = _weftmeters.text;
+      var spreaderdate = _spreaderdate.text;
+      var weighttaka = _weighttaka.text;
+      var producemeters = _producemeters.text;
+      var producewt = _producewt.text;
+      var weight100meters = _weight100meters.text;
+      var completiondate = _completiondate.text;
+      var shrinkage = _shrinkage.text;
+      var balmeters = _balmeters.text;
+      var baltaka = _baltaka.text;
+      var droppingdate = _droppingdate.text;
+      var masterbeam = _masterbeam.text;
+      var recserial = _recserial.text;
+      var recpartyid = _recpartyid.text;
+      var rectype = _rectype.text;
 
-    // Future<void> _handleSaveData() async {
-    //   setState(() {
-    //     isButtonActive = false;
-    //   });
-    //   bool success = await saveData();
-    //   setState(() {
-    //     isButtonActive = success;
-    //   });
-    // }
+      var id = widget.xid;
+      id = int.parse(id);
+
+      DateTime parsedDate1 = DateFormat("dd-MM-yyyy").parse(warpdate);
+      String newwarpdate = DateFormat("yyyy-MM-dd").format(parsedDate1);
+      DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(jogdate);
+      String newjogdate = DateFormat("yyyy-MM-dd").format(parsedDate2);
+      DateTime parsedDate3 = DateFormat("dd-MM-yyyy").parse(installdate);
+      String newinstalldate = DateFormat("yyyy-MM-dd").format(parsedDate3);
+      DateTime parsedDate4 = DateFormat("dd-MM-yyyy").parse(spreaderdate);
+      String newspreaderdate = DateFormat("yyyy-MM-dd").format(parsedDate4);
+      DateTime parsedDate5 = DateFormat("dd-MM-yyyy").parse(completiondate);
+      String newcompletiondate = DateFormat("yyyy-MM-dd").format(parsedDate5);
+      DateTime parsedDate6 = DateFormat("dd-MM-yyyy").parse(droppingdate);
+      String newdroppingdate = DateFormat("yyyy-MM-dd").format(parsedDate6);
+    
+    
+      uri = "${globals.cdomain}/api/api_storebeampurchallan?dbname=" +
+          db + "&company=&cno=" + cno + "&user=" + username + "&srchr=" + srchr + "&serial=" + serial + 
+          "&branch=" + branch + "&beamchr=" +beamchr + "&beamno=" + beamno + "&itemname=" + itemname +
+          '&warpdate=' + newwarpdate + '&pipeno=' + pipeno + '&denier1=' + denier1 + '&denier2=' + denier2 +
+          '&denier3=' + denier3 + "&length=" + length + '&ends=' + ends + "&oliweight=" + oliweight +
+          "&reed=" + reed + "&beamweight=" + beamweight + "&metersonbeam=" + metersonbeam + "&metertaka=" + metertaka +
+          "&machineno=" + machineno + "&shortage=" + shortage + "&estimale=" + estimale + "&estimale2=" + estimale2 + 
+          "&topmidlow=" + topmidlow.toString() + "&per=" + per.toString() + "&warpwttaka=" + warpwttaka + "&weftdenier1=" + weftdenier1 + 
+          "&weftdenier2=" + weftdenier2 + "&width=" + width + "&pick=" + pick + "&weftweight=" + weftweight +
+          "&jogname=" + jogname + "&jograte=" + jograte + "&jogamount=" + jogamount + "&newjogdate=" + newjogdate +
+          "&droppingname=" + droppingname + "&droppingrate=" + droppingrate + "&droppingamount=" + droppingamount +
+          "&beammakeer=" + beammakeer + "&beamspreader=" + beamspreader + "&spreaderrate=" + spreaderrate +
+          "&makerrate=" + makerrate + "&remarks=" + remarks + "&nooftaka=" + nooftaka + "&newinstalldate=" + newinstalldate +
+          "&onemeterswt=" + onemeterswt + "&weftmeters=" + weftmeters + "&newspreaderdate=" + newspreaderdate +
+          "&weighttaka=" + weighttaka + "&producemeters=" + producemeters + "&producewt=" + producewt +
+          "&weight100meters=" + weight100meters + "&newcompletiondate=" + newcompletiondate + "&shrinkage=" + shrinkage +
+          "&balmeters=" + balmeters + "&baltaka=" + baltaka + "&newdroppingdate=" + newdroppingdate +
+          "&masterbeam=" + masterbeam + "&recserial=" + recserial + "&recpartyid=" +recpartyid +
+          "&rectype=" + rectype + "&id=" + id.toString();
+
+      print(" saveData : " + uri);
+      final headers = {
+        'Content-Type': 'application/json',
+      };
+      var response = await http.post(Uri.parse(uri),
+          headers: headers, body: jsonEncode(ItemDetails));
+      var jsonData = jsonDecode(response.body);
+      var jsonCode = jsonData['Code'];
+      var jsonMsg = jsonData['Message'];
+      if (jsonCode == '500') {
+        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+      } else {
+        Fluttertoast.showToast(
+          msg: "Saved !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
+        );
+        Navigator.pop(context);
+      }
+      return true;
+    }
+
+    Future<void> _handleSaveData() async {
+      setState(() {
+        isButtonActive = false;
+      });
+      bool success = await saveData();
+      setState(() {
+        isButtonActive = success;
+      });
+    } 
 
     return Scaffold(
       appBar: AppBar(
@@ -575,16 +616,16 @@ class _BeamCardAddState extends State<BeamCardAdd> {
           style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   child: Icon(Icons.done),
-      //   backgroundColor: Colors.green,
-      //   enableFeedback: isButtonActive,
-      //   onPressed: isButtonActive
-      //       ? () {
-      //           _handleSaveData();
-      //         }
-      //       : null,
-      // ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.done),
+        backgroundColor: Colors.green,
+        enableFeedback: isButtonActive,
+        onPressed: isButtonActive
+            ? () {
+                _handleSaveData();
+              }
+            : null,
+      ),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -1683,7 +1724,9 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                 )
               ],
             ),
-            Padding(padding: EdgeInsets.all(5)),
+            SizedBox(
+              height: 20,
+            )
           ],
         ),
       )),

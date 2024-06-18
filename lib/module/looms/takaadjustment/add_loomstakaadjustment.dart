@@ -146,8 +146,8 @@ class _TakaAdjustmentAddState extends State<TakaAdjustmentAdd> {
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
-    var fromdate = widget.xfbeg;
-    var todate = widget.xfend;
+    var fromdate = retconvdate(widget.xfbeg).toString();
+    var todate = retconvdate(widget.xfend).toString();
 
     uri =
         'https://www.looms.equalsoftlink.com/api/api_gettakaadjustmentlist?dbname=' +

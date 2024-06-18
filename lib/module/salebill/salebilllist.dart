@@ -1,4 +1,5 @@
 import 'package:cloud_mobile/common/moduleview.dart';
+import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/module/salebill/add_salebill.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -28,8 +29,8 @@ class _SalesBillListPageState extends State<SalesBillList> {
   Future<bool> loaddetails() async {
     var companyid = widget.xcompanyid;
     var clientid = globals.dbname;
-    var startdate = globals.startdate;
-    var enddate = globals.enddate;
+    var startdate = retconvdate(globals.startdate).toString();
+    var enddate = retconvdate(globals.enddate).toString();
     String uri = '';
     uri =
         "https://www.cloud.equalsoftlink.com/api/api_getsalebilllist?dbname=$clientid&cno=$companyid&startdate=${startdate.toString()}&enddate=${enddate.toString()}";

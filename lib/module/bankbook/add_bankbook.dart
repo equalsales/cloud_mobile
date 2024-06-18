@@ -83,8 +83,8 @@ class _BankBookAddState extends State<BankBookAdd> {
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
-    var fromdate = widget.xfbeg;
-    var todate = widget.xfend;
+    var fromdate = retconvdate(widget.xfbeg).toString();
+    var todate = retconvdate(widget.xfend).toString();
 
     uri =
         'https://www.cloud.equalsoftlink.com/api/api_getbankbooklist?dbname=' +
@@ -106,7 +106,10 @@ class _BankBookAddState extends State<BankBookAdd> {
     jsonData = jsonData[0];
 
     _bank.text = getValue(jsonData['book'], 'C');
-    _date.text = getValue(jsonData['date'], 'C');
+    String inputDateString = getValue(jsonData['date'], 'C');
+    List<String> parts = inputDateString.split(' ')[0].split('-');
+    String formattedDate = "${parts[0]}-${parts[1]}-${parts[2]}";
+    _date.text = getValue(formattedDate, 'C');
     _trntype.text = getValue(jsonData['trntype'], 'C');
     _party.text = getValue(jsonData['party'], 'C');
     _cheque.text = getValue(jsonData['cheque'], 'C');

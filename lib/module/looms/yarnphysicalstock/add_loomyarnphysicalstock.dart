@@ -145,8 +145,8 @@ class _YarnphysicalstockAddState extends State<YarnphysicalstockAdd> {
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
-    var fromdate = widget.xfbeg;
-    var todate = widget.xfend;
+    var fromdate = retconvdate(widget.xfbeg).toString();
+    var todate = retconvdate(widget.xfend).toString();
 
     uri =
         'https://www.looms.equalsoftlink.com/api/api_getyarnphysicalstocklist?dbname=' +
@@ -172,7 +172,10 @@ class _YarnphysicalstockAddState extends State<YarnphysicalstockAdd> {
     _branch.text = getValue(jsonData['branch'], 'C');
     _serial.text = getValue(jsonData['serial'], 'C');
     _srchr.text = getValue(jsonData['srchr'], 'C');
-    _date.text = getValue(jsonData['date'], 'C');
+    String inputDateString = getValue(jsonData['date'], 'C');
+    List<String> parts = inputDateString.split(' ')[0].split('-');
+    String formattedDate = "${parts[0]}-${parts[1]}-${parts[2]}";
+    _date.text = getValue(formattedDate, 'C');
     _party.text = getValue(jsonData['party'], 'C');
     _remarks.text = getValue(jsonData['remarks'], 'C');
     _chlnno.text = getValue(jsonData['chlnno'], 'N');
