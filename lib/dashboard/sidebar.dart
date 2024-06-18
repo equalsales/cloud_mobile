@@ -157,7 +157,7 @@ class SideDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
-            title: Text('Beam Card chhhhh'),
+            title: Text('Beam Card'),
             onTap: () => {
               Navigator.push(
                   context,
