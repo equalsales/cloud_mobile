@@ -284,7 +284,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
         }
 
         obj.text = selParty;
-        print("121212111111111111111");
         print(obj.text);
       });
     }

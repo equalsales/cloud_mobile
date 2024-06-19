@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
+import 'package:cloud_mobile/list/party_list.dart';
 import 'package:cloud_mobile/module/looms/machinecard/add_loomsmachinecarddet.dart';
-import 'package:cloud_mobile/module/looms/takaadjustment/add_loomstakaadjustmentdet.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -48,8 +48,6 @@ class _MachinecardAddState extends State<MachinecardAdd> {
 
   bool isButtonActive = true;
 
-  String dropdownTrnType = 'REGULAR';
-
   var branchid = 0;
   var partyid = 0;
 
@@ -66,6 +64,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -91,6 +90,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
             cno +
             '&id=' +
             id;
+
     print(" loadDetData : " +uri);
     var response = await http.get(Uri.parse(uri));
 
@@ -103,39 +103,32 @@ class _MachinecardAddState extends State<MachinecardAdd> {
     List ItemDet = [];
     ItemDetails = [];
 
-
     for (var iCtr = 0; iCtr < jsonData.length; iCtr++) {
       ItemDet.add({
         "controlid": jsonData[iCtr]['controlid'].toString(),
         "id": jsonData[iCtr]['id'].toString(),
-        "takano": jsonData[iCtr]['takano'].toString(),
-        "takachr": jsonData[iCtr]['takachr'].toString(),
-        "itemname": jsonData[iCtr]['itemname'].toString(),
-        "design": jsonData[iCtr]['design'].toString(),
-        "pcs": jsonData[iCtr]['pcs'].toString(),
-        "meters": jsonData[iCtr]['meters'].toString(),
-        "tpmtrs": jsonData[iCtr]['tpmtrs'].toString(),
-        "rate": jsonData[iCtr]['rate'].toString(),
-        "amount": jsonData[iCtr]['amount'].toString(),
-        "unit": jsonData[iCtr]['unit'].toString(),
-        "itename": jsonData[iCtr]['itemname'].toString(),
         "machine": jsonData[iCtr]['machine'].toString(),
-        "inwid": jsonData[iCtr]['inwid'].toString(),
-        "inwdetid": jsonData[iCtr]['inwdetid'].toString(),
-        "inwdettkid": jsonData[iCtr]['inwdettkid'].toString(),
-        "fmode": jsonData[iCtr]['fmode'].toString(),
-        "avgwt": jsonData[iCtr]['avgwt'].toString(),
-        "stdwt": jsonData[iCtr]['stdwt'].toString(),
-        "netwt": jsonData[iCtr]['netwt'].toString(),
-        "beamno": jsonData[iCtr]['beamno'].toString(),
-        "beamitem": jsonData[iCtr]['beamitem'].toString(),
+        "rpm": jsonData[iCtr]['rpm'].toString(),
+        "dsmeters": jsonData[iCtr]['dsmeters'].toString(),
+        "dsefficiency": jsonData[iCtr]['dsefficiency'].toString(),
+        "dsname": jsonData[iCtr]['dsname'].toString(),
+        "nsmeters": jsonData[iCtr]['nsmeters'].toString(),
+        "nefficiency": jsonData[iCtr]['nefficiency'].toString(),
+        "nsname": jsonData[iCtr]['nsname'].toString(),
+        "totmeters": jsonData[iCtr]['totmeters'].toString(),
+        "warplength": jsonData[iCtr]['warplength'].toString(),
+        "netoutmeterswt": jsonData[iCtr]['netoutmeterswt'].toString(),
+        "remainmeters": jsonData[iCtr]['remainmeters'].toString(),
+        "ends": jsonData[iCtr]['ends'].toString(),
+        "reed": jsonData[iCtr]['reed'].toString(),
+        "pick": jsonData[iCtr]['pick'].toString(),
+        "itemname": jsonData[iCtr]['itemname'].toString(),
+        "remarks": jsonData[iCtr]['remarks'].toString(),
       });
     }
-
     setState(() {
       ItemDetails = ItemDet;
     });
-
     return true;
   }
 
@@ -225,6 +218,33 @@ class _MachinecardAddState extends State<MachinecardAdd> {
       });
     }
 
+    void gotoPartyScreen(BuildContext context) async {
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => party_list(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                    acctype: 'SALE PARTY',
+                  )));
+
+      if (result != null) {
+        setState(() {
+          var retResult = result;
+          var selParty = '';
+          for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+            if (ictr > 0) {
+              selParty = selParty + ',';
+            }
+            selParty = selParty + retResult[0][ictr];
+          }
+          _party.text = selParty;
+        });
+      }
+    }
+    
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
       print('in');
@@ -238,12 +258,8 @@ class _MachinecardAddState extends State<MachinecardAdd> {
                     fend: widget.xfend,
                     itemDet: ItemDetails,
                   )));
-      //print('out');
-      //print(result);
-      //print(result[0]['takachr']);
       setState(() {
         ItemDetails.add(result[0]);
-        //ItemDetails = ItemDetails[0];
         print(ItemDetails);
       });
     }
@@ -340,7 +356,6 @@ class _MachinecardAddState extends State<MachinecardAdd> {
       });
     }
 
-
     void deleteRow(index) {
       setState(() {
         ItemDetails.removeAt(index);
@@ -375,25 +390,22 @@ class _MachinecardAddState extends State<MachinecardAdd> {
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
           )),
           DataCell(Text(ItemDetails[iCtr]['machine'])),
-          DataCell(Text(ItemDetails[iCtr]['takano'])),
-          DataCell(Text(ItemDetails[iCtr]['pcs'])),
-          DataCell(Text(ItemDetails[iCtr]['meters'])),
-          DataCell(Text(ItemDetails[iCtr]['tpmtrs'])),
-          DataCell(Text(ItemDetails[iCtr]['avgwt'])),
-          DataCell(Text(ItemDetails[iCtr]['netwt'])),
+          DataCell(Text(ItemDetails[iCtr]['rpm'])),
+          DataCell(Text(ItemDetails[iCtr]['dsmeters'])),
+          DataCell(Text(ItemDetails[iCtr]['dsefficiency'])),
+          DataCell(Text(ItemDetails[iCtr]['dsname'])),
+          DataCell(Text(ItemDetails[iCtr]['nsmeters'])),
+          DataCell(Text(ItemDetails[iCtr]['nefficiency'])),
+          DataCell(Text(ItemDetails[iCtr]['nsname'])),
+          DataCell(Text(ItemDetails[iCtr]['totmeters'])),
+          DataCell(Text(ItemDetails[iCtr]['warplength'])),
+          DataCell(Text(ItemDetails[iCtr]['netoutmeterswt'])),
+          DataCell(Text(ItemDetails[iCtr]['remainmeters'])),
+          DataCell(Text(ItemDetails[iCtr]['ends'])),
+          DataCell(Text(ItemDetails[iCtr]['reed'])),
+          DataCell(Text(ItemDetails[iCtr]['pick'])),
           DataCell(Text(ItemDetails[iCtr]['itemname'])),
-          DataCell(Text(ItemDetails[iCtr]['rate'])),
-          DataCell(Text(ItemDetails[iCtr]['unit'])),
-          DataCell(Text(ItemDetails[iCtr]['amount'])),
-          DataCell(Text(ItemDetails[iCtr]['design'])),
-          DataCell(Text(ItemDetails[iCtr]['machine'])),
-          DataCell(Text(ItemDetails[iCtr]['stdwt'])),
-          DataCell(Text(ItemDetails[iCtr]['inwid'])),
-          DataCell(Text(ItemDetails[iCtr]['inwdetid'])),
-          DataCell(Text(ItemDetails[iCtr]['inwdettkid'])),
-          DataCell(Text(ItemDetails[iCtr]['beamitem'])),
-          DataCell(Text(ItemDetails[iCtr]['beamno'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['fmode'])),
+          DataCell(Text(ItemDetails[iCtr]['remarks'])),
         ]));
       }
       setState(() {});
@@ -505,7 +517,9 @@ class _MachinecardAddState extends State<MachinecardAdd> {
                       hintText: 'Select Party',
                       labelText: 'Party',
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      gotoPartyScreen(context);
+                    },
                     validator: (value) {
                       return null;
                     },

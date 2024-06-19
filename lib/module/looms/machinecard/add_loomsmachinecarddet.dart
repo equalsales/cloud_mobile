@@ -1,14 +1,11 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:convert';
+import 'package:cloud_mobile/list/item_list.dart';
+import 'package:cloud_mobile/list/machine_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:cloud_mobile/common/alert.dart';
 import '../../../common/global.dart' as globals;
 import 'package:cloud_mobile/common/bottombar.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class LoomMachinecardDetAdd extends StatefulWidget {
   LoomMachinecardDetAdd(
@@ -37,8 +34,7 @@ class LoomMachinecardDetAdd extends StatefulWidget {
   List xItemDetails = [];
 
   @override
-  _LoomMachinecardDetAddState createState() =>
-      _LoomMachinecardDetAddState();
+  _LoomMachinecardDetAddState createState() => _LoomMachinecardDetAddState();
 }
 
 class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
@@ -63,16 +59,14 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
   TextEditingController _itemname = new TextEditingController();
   TextEditingController _remarks = new TextEditingController();
   
-  //var ordTaka = 0;
   double ordMeters = 0;
 
   final _formKey = GlobalKey<FormState>();
 
-  List<Map<String, dynamic>> _jsonData = [];
-  //TextEditingController _fromdatecontroller = new TextEditingController(text: 'dhaval');
-
+  
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -96,6 +90,56 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
     // if (int.parse(widget.xid) > 0) {
     //   //loadData();
     // }
+  }
+
+  void gotoItemnameScreen(BuildContext context) async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => item_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                )));
+    setState(() {
+      var retResult = result;
+      var newResult = result[1];
+      var selItemname = '';
+      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+        if (ictr > 0) {
+          selItemname = selItemname + ',';
+        }
+        selItemname = selItemname + retResult[0][ictr];
+      }
+      setState(() {
+        _itemname.text = newResult[0]['itemname'].toString();
+      });
+    });
+  }
+  
+  void gotoMachineScreen(BuildContext contex) async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => machine_list(
+                companyid: widget.xcompanyid,
+                companyname: widget.xcompanyname,
+                fbeg: widget.xfbeg,
+                fend: widget.xfend)));
+
+    setState(() {
+      var retResult = result;
+      
+      var selMachine = '';
+      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+        if (ictr > 0) {
+          selMachine = selMachine + ',';
+        }
+        selMachine = selMachine + retResult[0][ictr];
+      }
+      _machine.text = selMachine;
+    });
   }
 
 
@@ -144,35 +188,9 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
         'itemname': itemname,
         'remarks': remarks,
       });
-
       Navigator.pop(context, widget.xitemDet);
-
-      // var response = await http.post(Uri.parse(uri));
-
-      // var jsonData = jsonDecode(response.body);
-      // //print('4');
-
-      // var jsonCode = jsonData['Code'];
-      // var jsonMsg = jsonData['Message'];
-
-      // if (jsonCode == '500') {
-      //   showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      // } else {
-      //   showAlertDialog(context, 'Saved !!!');
-      //   Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //           builder: (_) => LoomSalesChallanList(
-      //                 companyid: widget.xcompanyid,
-      //                 companyname: widget.xcompanyname,
-      //                 fbeg: widget.xfbeg,
-      //                 fend: widget.xfend,
-      //               )));
-      // }
-
       return true;
     }
-
 
     return Scaffold(
       appBar: AppBar(
@@ -212,33 +230,31 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       labelText: 'Machine',
                     ),
                     onTap: () {
-                    },
-                    onChanged: (value) {
-                      ;
+                      gotoMachineScreen(context);
                     },
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
-                Expanded(
-                    child: TextFormField(
-                      controller: _rpm,
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
-                        icon: const Icon(Icons.person),
-                        hintText: 'Rpm',
-                        labelText: 'Rpm',
-                      ),
-                      validator: (value) {
-                        return null;
-                      },
-                    )),
               ],
             ),
             Row(
               children: [
+                Expanded(
+                  child: TextFormField(
+                  controller: _rpm,
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.person),
+                    hintText: 'Rpm',
+                    labelText: 'Rpm',
+                  ),
+                  validator: (value) {
+                    return null;
+                  },
+                )),
                 Expanded(
                   child: TextFormField(
                     controller: _dsmeters,
@@ -250,16 +266,15 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Dsmeters',
                       labelText: 'Dsmeters',
                     ),
-                    onChanged: (value) {
-                      _dsmeters.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _dsmeters.selection);
-                    },
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     controller: _dsefficiency,
@@ -270,18 +285,12 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Dsefficiency',
                       labelText: 'Dsefficiency',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
-              ],
-            ),
-            Row(
-              children: [
                 Expanded(
                   child: TextFormField(              
                     controller: _dsname,
@@ -292,14 +301,16 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Dsname',
                       labelText: 'Dsname',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     controller: _nsmeters,
@@ -310,18 +321,12 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Nsmeters',
                       labelText: 'Nsmeters',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: TextFormField(
                     controller: _nefficiency,
@@ -332,14 +337,16 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Nsefficiency',
                       labelText: 'Nsefficiency',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     controller: _nsname,
@@ -350,21 +357,9 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Nsname',
                       labelText: 'Nsname',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
-                    validator: (value) {
-                      if(value == '' || value == 0){
-                        return "Please enter Meter";
-                      }
-                      return null;
-                    },
+                    onTap: () {},
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: TextFormField(
                     controller: _totmeters,
@@ -375,14 +370,16 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Totmeters',
                       labelText: 'Totmeters',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     controller: _warplength,
@@ -393,18 +390,12 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Warplength',
                       labelText: 'Warplength',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: TextFormField(
                     controller: _outmeters,
@@ -415,14 +406,16 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Outmeters',
                       labelText: 'Outmeters',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     controller: _remainmeters,
@@ -433,18 +426,12 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Remainmeters',
                       labelText: 'Remainmeters',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
-              ],
-            ),
-            Row(
-              children: [
                 Expanded(
                   child: TextFormField(
                     controller: _ends,
@@ -455,14 +442,16 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Ends',
                       labelText: 'Ends',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     controller: _reed,
@@ -473,18 +462,12 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Reed',
                       labelText: 'Reed',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: TextFormField(
                     controller: _pick,
@@ -495,14 +478,16 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Pick',
                       labelText: 'Pick',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     controller: _itemname,
@@ -514,17 +499,13 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       labelText: 'Itemname',
                     ),
                     onTap: () {
-                      //gotoBranchScreen(context);
+                      gotoItemnameScreen(context);
                     },
                     validator: (value) {
                       return null;
                     },
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: TextFormField(
                     controller: _remarks,
@@ -535,9 +516,7 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Remarks',
                       labelText: 'Remarks',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },

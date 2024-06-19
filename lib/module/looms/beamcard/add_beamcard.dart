@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_mobile/list/item_list.dart';
+import 'package:cloud_mobile/list/machine_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -412,29 +413,27 @@ class _BeamCardAddState extends State<BeamCardAdd> {
       });
     }
 
-    void gotoMachinenoScreen(BuildContext context) async {
+    void gotoMachinenoScreen(BuildContext contex) async {
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => item_list(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                  )));
+              builder: (_) => machine_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend)));
+
       setState(() {
         var retResult = result;
-        var newResult = result[1];
-        var selMachineno = '';
+
+        var selMachine = '';
         for (var ictr = 0; ictr < retResult[0].length; ictr++) {
           if (ictr > 0) {
-            selMachineno = selMachineno + ',';
+            selMachine = selMachine + ',';
           }
-          selMachineno = selMachineno + retResult[0][ictr];
+          selMachine = selMachine + retResult[0][ictr];
         }
-        setState(() {
-          _machineno.text = newResult[0]['itemname'].toString();
-        });
+        _machineno.text = selMachine;
       });
     }
 
