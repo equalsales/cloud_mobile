@@ -313,8 +313,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
       print(" SaveData " + uri);
 
       final headers = {
-        'Content-Type': 'application/json', // Set the appropriate content-type
-        // Add any other headers required by your API
+        'Content-Type': 'application/json',
       };
       print(ItemDetails);
       var response = await http.post(Uri.parse(uri),
@@ -370,13 +369,6 @@ class _MachinecardAddState extends State<MachinecardAdd> {
       widget.totmtrs = 0;
 
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
-        double nMeters = 0;
-        if (ItemDetails[iCtr]['meters'] != '') {
-          nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
-          widget.tottaka += 1;
-          widget.totmtrs += nMeters;
-        }
-
         print(ItemDetails[iCtr]);
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
@@ -389,23 +381,23 @@ class _MachinecardAddState extends State<MachinecardAdd> {
             label: Text('',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
           )),
-          DataCell(Text(ItemDetails[iCtr]['machine'])),
-          DataCell(Text(ItemDetails[iCtr]['rpm'])),
-          DataCell(Text(ItemDetails[iCtr]['dsmeters'])),
-          DataCell(Text(ItemDetails[iCtr]['dsefficiency'])),
-          DataCell(Text(ItemDetails[iCtr]['dsname'])),
-          DataCell(Text(ItemDetails[iCtr]['nsmeters'])),
-          DataCell(Text(ItemDetails[iCtr]['nefficiency'])),
-          DataCell(Text(ItemDetails[iCtr]['nsname'])),
-          DataCell(Text(ItemDetails[iCtr]['totmeters'])),
-          DataCell(Text(ItemDetails[iCtr]['warplength'])),
-          DataCell(Text(ItemDetails[iCtr]['netoutmeterswt'])),
-          DataCell(Text(ItemDetails[iCtr]['remainmeters'])),
-          DataCell(Text(ItemDetails[iCtr]['ends'])),
-          DataCell(Text(ItemDetails[iCtr]['reed'])),
-          DataCell(Text(ItemDetails[iCtr]['pick'])),
-          DataCell(Text(ItemDetails[iCtr]['itemname'])),
-          DataCell(Text(ItemDetails[iCtr]['remarks'])),
+          DataCell(Text(ItemDetails[iCtr]['machine'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['rpm'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['dsmeters'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['dsefficiency'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['dsname'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['nsmeters'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['nefficiency'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['nsname'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['totmeters'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['warplength'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['netoutmeterswt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['remainmeters'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['ends'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['reed'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['pick'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['itemname'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['remarks'].toString())),
         ]));
       }
       setState(() {});
@@ -467,7 +459,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
             //     SizedBox(width: 20,)
             //   ],
             // ),
-            Row(children: [
+            Row(children: [ 
               Expanded(
                 child: TextFormField(
                   controller: _branch,

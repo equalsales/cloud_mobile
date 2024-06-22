@@ -547,6 +547,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
           DataCell(Text(ItemDetails[iCtr]['finalamt'].toString())),
         ]));
       }
+      setState(() {});
       // setState(() {
       //   Timer(Duration(milliseconds: 10), () {
       //     _createRows();

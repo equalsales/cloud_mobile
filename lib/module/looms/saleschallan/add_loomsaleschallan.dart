@@ -1000,7 +1000,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _haste,
-                    enabled: false,
+                    enabled: true,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Haste',

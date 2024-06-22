@@ -141,51 +141,51 @@ class SideDrawer extends StatelessWidget {
                           )))
             },
           ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Purchase Challan'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => LoomPurchaseChallanMenu(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Beam Card'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => LoomBeamCardList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Machine Card'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => MachinecardList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.shopping_cart),
+          //   title: Text('Purchase Challan'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (_) => LoomPurchaseChallanMenu(
+          //                   companyid: xcompanyid,
+          //                   companyname: xcompanyname,
+          //                   fbeg: xfbeg,
+          //                   fend: xfend,
+          //                 )))
+          //   },
+          // ),
+          // ListTile(
+          //   leading: Icon(Icons.shopping_cart),
+          //   title: Text('Beam Card'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (_) => LoomBeamCardList(
+          //                   companyid: xcompanyid,
+          //                   companyname: xcompanyname,
+          //                   fbeg: xfbeg,
+          //                   fend: xfend,
+          //                 )))
+          //   },
+          // ),
+          // ListTile(
+          //   leading: Icon(Icons.shopping_cart),
+          //   title: Text('Machine Card'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (_) => MachinecardList(
+          //                   companyid: xcompanyid,
+          //                   companyname: xcompanyname,
+          //                   fbeg: xfbeg,
+          //                   fend: xfend,
+          //                 )))
+          //   },
+          // ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Grey Job Issue'),
