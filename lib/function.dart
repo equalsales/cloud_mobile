@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_mobile/common/alert.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
@@ -139,12 +140,23 @@ Future getPartyDetails(String Party, int Id,
     print(uri);
 
     print("123123" + uri);
+
+    DialogBuilder(context).showLoadingIndicator('');
+
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
 
+    // if(response == '200'){
+    //   print("gni");
+    //   // DialogBuilder(context).showLoadingIndicator('');
+    // } else {
+    //   print("cni");
+    // }
+
     jsonData = jsonData['data'];
     print(jsonData);
+    DialogBuilder(context).hideOpenDialog();
 
     closingbal = double.parse(jsonData[0]['actclosingbal'].toString());
     print("closingbal" + closingbal.toString());
