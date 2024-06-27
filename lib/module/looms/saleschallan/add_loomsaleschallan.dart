@@ -373,11 +373,14 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
           _agent.text = result[0]['agent'].toString();
           _transport.text = result[0]['transport'].toString();
           var endDate = retconvdate(widget.xfend).toString();
+          var startDate = retconvdate(widget.xfbeg).toString();
           var cno = int.parse(globals.companyid.toString());
+
+          print("///////////////" + crlimit.toString());
 
           if (selParty != '') {
             getPartyDetails(
-                    obj.text, 0, crlimit, partyid, context, endDate, cno)
+                    obj.text, 0, crlimit, partyid, context, endDate, cno,startDate)
                 .then((value) {
               setState(() {
                 clobl = value;

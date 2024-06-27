@@ -113,8 +113,10 @@ Future getPartyDetails(String Party, int Id,
     [double crlimit = 0,
     int? partyid,
     dynamic context,
-    String? endDate,
-    int? cno]) async {
+    String? endDate,  
+    int? cno,
+    String? startDate,
+]) async {
   String uri = '';
   var db = globals.dbname;
 
@@ -125,9 +127,10 @@ Future getPartyDetails(String Party, int Id,
   double closingbal = 0;
   if (crlimit > 0) {
     uri =
-        'http://www.cloud.equalsoftlink.com/getpartyledbal?partyid=$partyid&acgroupid=&dbname=' +
+        '${globals.cdomain2}/getpartyledbal?partyid=$partyid&acgroupid=&dbname=' +
             db +
             '&cno=$cno' +
+            '&fromdate=$startDate'+
             '&todate=$endDate' +
             '&lmulticompany=N' +
             '&id=' +
