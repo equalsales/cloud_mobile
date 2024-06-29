@@ -338,6 +338,35 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       });
     }
 
+    void gotoHasteScreen(
+        BuildContext context) async {
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => party_list(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                    acctype: 'HASTE',
+                  )));
+
+      setState(() {
+        var retResult = result;
+        _partylist = result[1];
+        result = result[1];
+
+        var selParty = '';
+        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+          if (ictr > 0) {
+            selParty = selParty + ',';
+          }
+          selParty = selParty + retResult[0][ictr];
+        }        
+        _haste.text = selParty;
+      });
+    }
+
     void gotoPartyScreen2(
         BuildContext context, acctype, TextEditingController obj) async {
       var result = await Navigator.push(
@@ -1010,7 +1039,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                       labelText: 'Haste',
                     ),
                     onTap: () {
-                      gotoPartyScreen(context, 'HASTE', _haste);
+                      gotoHasteScreen(context);
                     },
                     validator: (value) {
                       return null;
