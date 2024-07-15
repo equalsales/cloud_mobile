@@ -91,7 +91,8 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
   var _jsonData = [];
 
   bool isButtonActive = true;
-
+  
+   var validcity= '';
   var crlimit = 0.0;
   dynamic clobl = 0;
 
@@ -396,7 +397,8 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
           obj.text = selParty;
           _delparty.text = selParty;
-
+          
+          validcity = result[0]['city'].toString();
           crlimit = double.parse(result[0]['crlimit'].toString());
           partyid = int.parse(result[0]['id'].toString());
           _agent.text = result[0]['agent'].toString();
@@ -405,7 +407,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
           var startDate = retconvdate(widget.xfbeg).toString();
           var cno = int.parse(globals.companyid.toString());
 
-          print("///////////////" + crlimit.toString());
+          print("/////////////// validcity " + validcity.toString());
 
           if (selParty != '') {
             getPartyDetails(
@@ -537,178 +539,186 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     }
 
     Future<bool> saveData() async {
-      String uri = '';
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var username = globals.username;
-      var packingtype = _packingtype.text;
-      var packingsrchr = _packingsrchr.text;
-      var packingserial = _packingserial.text;
-      var serial = _serial.text;
-      var srchr = _srchr.text;
-      var book = _book.text;
-      var bookno = _bookno.text;
-      var branch = _branch.text;
-      var date = _date.text;
-      var party = _party.text;
-      var agent = _agent.text;
-      var delparty = _delparty.text;
-      var haste = _haste.text;
-      var salesman = _salesman.text;
-      var transport = _transport.text;
-      var remarks = _remarks.text;
-      var parcel = 0;
-      //_parcel.text;
-      var duedays = _duedays.text;
-      // _duedays.text;
-      var station = _station.text;
+      if(ItemDetails.length == 0){
+        showAlertDialog(context, 'ItemDetails can not be blank.');
+        return true;
+      }else{
+        DialogBuilder(context).showLoadingIndicator('');
+        String uri = '';
+        var cno = globals.companyid;
+        var db = globals.dbname;
+        var username = globals.username;
+        var packingtype = _packingtype.text;
+        var packingsrchr = _packingsrchr.text;
+        var packingserial = _packingserial.text;
+        var serial = _serial.text;
+        var srchr = _srchr.text;
+        var book = _book.text;
+        var bookno = _bookno.text;
+        var branch = _branch.text;
+        var date = _date.text;
+        var party = _party.text;
+        var agent = _agent.text;
+        var delparty = _delparty.text;
+        var haste = _haste.text;
+        var salesman = _salesman.text;
+        var transport = _transport.text;
+        var remarks = _remarks.text;
+        var parcel = _parcel.text;
+        var duedays = _duedays.text;
+        var station = _station.text;
 
-      var id = widget.xid;
-      id = int.parse(id);
+        if (parcel == ' ') {
+          parcel = ' ';
+        }
 
-      print(packingtype);
-      print('In Save....');
+        var id = widget.xid;
+        id = int.parse(id);
 
-      print(jsonEncode(ItemDetails));
+        print(packingtype);
+        print('In Save....');
 
-      DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
-      String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
+        print(jsonEncode(ItemDetails));
 
-      party = party.replaceAll('&', '_');
+        DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
+        String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
 
-      uri =
-          "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
-              db +
-              "&company=&cno=" +
-              cno +
-              "&user=" +
-              username +
-              "&branch=" +
-              branch +
-              "&packingtype=" +
-              packingtype +
-              "&party=" +
-              party +
-              "&book=" +
-              book +
-              "&haste=" +
-              haste +
-              '&salesman=' +
-              salesman +
-              "&transport=" +
-              transport +
-              "&station=" +
-              station +
-              "&packingsrchr=" +
-              packingsrchr +
-              "&packingserial=" +
-              packingserial +
-              "&bookno=" +
-              bookno +
-              "&srchr=" +
-              srchr +
-              "&serial=" +
-              serial +
-              "&date=" +
-              newDate +
-              "&remarks=" +
-              remarks +
-              "&duedays=" +
-              duedays.toString() +
-              "&id=" +
-              id.toString() +
-              "&parcel=1";
+        party = party.replaceAll('&', '_');
 
+        uri = "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
+            db +
+            "&company=&cno=" +
+            cno +
+            "&user=" +
+            username +
+            "&branch=" +
+            branch +
+            "&packingtype=" +
+            packingtype +
+            "&party=" +
+            party +
+            "&book=" +
+            book +
+            "&haste=" +
+            haste +
+            '&salesman=' +
+            salesman +
+            "&transport=" +
+            transport +
+            "&station=" +
+            station +
+            "&packingsrchr=" +
+            packingsrchr +
+            "&packingserial=" +
+            packingserial +
+            "&bookno=" +
+            bookno +
+            "&srchr=" +
+            srchr +
+            "&serial=" +
+            serial +
+            "&date=" +
+            newDate +
+            "&remarks=" +
+            remarks +
+            "&duedays=" +
+            duedays.toString() +
+            "&id=" +
+            id.toString() +
+            "&parcel=" +
+            parcel;
 
-      // uri = "http://127.0.0.1:8000/api/api_storeloomssalechln?dbname=" +
-      //     db +
-      //     "&company=&cno=" +
-      //     cno +
-      //     "&user=" +
-      //     username +
-      //     "&branch=" +
-      //     branch +
-      //     "&packingtype=" +
-      //     packingtype +
-      //     "&party=" +
-      //     party +
-      //     "&book=" +
-      //     book +
-      //     "&haste=" +
-      //     haste +
-      //     "&transport=" +
-      //     transport +
-      //     "&station=" +
-      //     station +
-      //     "&packingsrchr=" +
-      //     packingsrchr +
-      //     "&packingserial=" +
-      //     packingserial +
-      //     "&bookno=" +
-      //     bookno +
-      //     "&srchr=" +
-      //     srchr +
-      //     "&serial=" +
-      //     serial +
-      //     "&date=" +
-      //     newDate +
-      //     "&remarks=" +
-      //     remarks +
-      //     "&duedays=" +
-      //     duedays.toString() +
-      //     "&id=" +
-      //     id.toString() +
-      //     "&parcel=1";
-      print("/////////////////////////////////////////////" + uri);
-
-      final headers = {
-        'Content-Type': 'application/json', // Set the appropriate content-type
-        // Add any other headers required by your API
-      };
-
-      var response = await http.post(Uri.parse(uri),
-          headers: headers, body: jsonEncode(ItemDetails));
-
-      var jsonData = jsonDecode(response.body);
-      //print('4');
-
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
-
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else {
-        // var url = 'https://looms.equalsoftlink.com/printsaleorderdf/' +
+        // uri = "http://127.0.0.1:8000/api/api_storeloomssalechln?dbname=" +
+        //     db +
+        //     "&company=&cno=" +
+        //     cno +
+        //     "&user=" +
+        //     username +
+        //     "&branch=" +
+        //     branch +
+        //     "&packingtype=" +
+        //     packingtype +
+        //     "&party=" +
+        //     party +
+        //     "&book=" +
+        //     book +
+        //     "&haste=" +
+        //     haste +
+        //     "&transport=" +
+        //     transport +
+        //     "&station=" +
+        //     station +
+        //     "&packingsrchr=" +
+        //     packingsrchr +
+        //     "&packingserial=" +
+        //     packingserial +
+        //     "&bookno=" +
+        //     bookno +
+        //     "&srchr=" +
+        //     srchr +
+        //     "&serial=" +
+        //     serial +
+        //     "&date=" +
+        //     newDate +
+        //     "&remarks=" +
+        //     remarks +
+        //     "&duedays=" +
+        //     duedays.toString() +
+        //     "&id=" +
         //     id.toString() +
-        //     '?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
+        //     "&parcel=1";
+        print("/////////////////////////////////////////////" + uri);
 
+        final headers = {
+          'Content-Type':
+              'application/json', // Set the appropriate content-type
+          // Add any other headers required by your API
+        };
 
-        //  var url = 'http://127.0.0.1:8000/printsaleorderdf/' +
-        //     id.toString() +
-        //     '?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
-        // final response = await http.get(Uri.parse(url));
+        var response = await http.post(Uri.parse(uri),
+            headers: headers, body: jsonEncode(ItemDetails));
 
-        Fluttertoast.showToast(
-          msg: "Saved !!!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.white,
-          textColor: Colors.purple,
-          fontSize: 16.0,
-        );
-        Navigator.pop(context);
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (_) => LoomSalesChallanList(
-        //               companyid: widget.xcompanyid,
-        //               companyname: widget.xcompanyname,
-        //               fbeg: widget.xfbeg,
-        //               fend: widget.xfend,
-        //             )));
+        var jsonData = jsonDecode(response.body);
+        //print('4');
+
+        var jsonCode = jsonData['Code'];
+        var jsonMsg = jsonData['Message'];
+        DialogBuilder(context).hideOpenDialog();
+
+        if (jsonCode == '500') {
+          showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+        } else {
+          // var url = 'https://looms.equalsoftlink.com/printsaleorderdf/' +
+          //     id.toString() +
+          //     '?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
+
+          //  var url = 'http://127.0.0.1:8000/printsaleorderdf/' +
+          //     id.toString() +
+          //     '?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
+          // final response = await http.get(Uri.parse(url));
+
+          Fluttertoast.showToast(
+            msg: "Saved !!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.white,
+            textColor: Colors.purple,
+            fontSize: 16.0,
+          );
+          Navigator.pop(context);
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (_) => LoomSalesChallanList(
+          //               companyid: widget.xcompanyid,
+          //               companyname: widget.xcompanyname,
+          //               fbeg: widget.xfbeg,
+          //               fend: widget.xfend,
+          //             )));
+        }
+        return true;
       }
-      return true;
     }
 
     Future<void> _handleSaveData() async {
@@ -842,7 +852,8 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.done),
-        backgroundColor: Colors.green,
+        backgroundColor: isButtonActive? Colors.green : Colors.grey.shade500,
+        // backgroundColor: Colors.green,
         enableFeedback: isButtonActive,
         onPressed: isButtonActive
             ? () {
@@ -856,7 +867,13 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                       textColor: Colors.purple,
                       fontSize: 16.0);
                 } else {
-                  _handleSaveData();
+                  if (_formKey.currentState!.validate())
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Data saving progressing...')),
+                    );
+                    _handleSaveData();
+                  }
                 }
               }
             : null,
@@ -1136,6 +1153,13 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                     //gotoBranchScreen(context);
                   },
                   validator: (value) {
+                    if(validcity != 'SURAT'){
+                      if(value == null || value.isEmpty){
+                        return 'Please enter parcel.';
+                      }
+                    }else{
+                      _parcel.text = ' ';
+                    }
                     return null;
                   },
                 )),
