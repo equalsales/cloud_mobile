@@ -60,6 +60,7 @@ class _physicalstockAddState extends State<physicalstockAdd> {
   List ItemDetails = [];
 
   String dropdownTrnType = 'REGULAR';
+  bool isButtonActive = true;
 
   var branchid = 0;
   var partyid = 0;
@@ -470,6 +471,17 @@ class _physicalstockAddState extends State<physicalstockAdd> {
       return true;
     }
 
+    Future<void> _handleSaveData() async {
+      setState(() {
+        isButtonActive = false; // Disable the button
+      });
+
+      bool success = await saveData();
+      setState(() {
+        isButtonActive = success;
+      });
+    } 
+
     var items = [
       '',
       'REGULAR',
@@ -561,7 +573,13 @@ class _physicalstockAddState extends State<physicalstockAdd> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done),
           backgroundColor: Colors.green,
-          onPressed: () => {saveData()}),
+          onPressed: () => {
+            isButtonActive
+            ? () {                
+                  _handleSaveData();
+              }
+            : null,
+          }),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,

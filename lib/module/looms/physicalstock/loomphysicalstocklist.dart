@@ -132,11 +132,13 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     var db = globals.dbname;
     var cno = globals.companyid;
     String uri = '';
-
     uri =
         "https://www.cloud.equalsoftlink.com/checkautoeditdelete/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+    print("uri : " + uri);
     var response = await http.get(Uri.parse(uri));
+    print('kii');
     print(uri);
+    print("hii");
     var jsonData = jsonDecode(response.body);
     jsonData['success'];
     print(jsonData['success']);
@@ -146,6 +148,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
           "https://www.cloud.equalsoftlink.com/deletemoddesignAPI/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
       var response = await http.get(Uri.parse(uri));
       print(uri);
+      print("llll");
       var jsonData = jsonDecode(response.body);
       jsonData['success'];
 
@@ -333,7 +336,47 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                   label: 'Print',
                   backgroundColor: Color(0xFFFE4A49)),
               SlidableAction(
-                  onPressed: (context) => DeleteData,
+                  onPressed: (context) {
+                    showDialog<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        //saveData();
+                        return AlertDialog(
+                          title: const Text('Do You Want To Delete Physical Stock !!??'),
+                          content: Container(
+                            height: 10,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [],
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                textStyle: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              child: const Text('YES'),
+                              onPressed: () {
+                                setState(() {
+                                  DeleteData(id);
+                                Navigator.pop(context);
+                                });
+                              },
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                textStyle: Theme.of(context).textTheme.labelLarge,
+                              ),
+                              child: const Text('NO'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                   icon: Icons.delete_forever,
                   label: 'Delete',
                   backgroundColor: Colors.blue)
