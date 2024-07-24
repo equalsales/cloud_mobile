@@ -1143,7 +1143,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                 Expanded(
                     child: TextFormField(
                   controller: _parcel,
-                  keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
                     hintText: 'Parcel',

@@ -56,56 +56,55 @@ class _BeamCardAddState extends State<BeamCardAdd> {
   TextEditingController _beamno = new TextEditingController();
   TextEditingController _itemname = new TextEditingController();
   TextEditingController _warpdate = new TextEditingController();
-  TextEditingController _pipeno = new TextEditingController();
-  TextEditingController _denier1 = new TextEditingController();
-  TextEditingController _denier2 = new TextEditingController();
-  TextEditingController _denier3 = new TextEditingController();
-  TextEditingController _length = new TextEditingController();
-  TextEditingController _ends = new TextEditingController();
-  TextEditingController _oliweight = new TextEditingController();
-  TextEditingController _reed = new TextEditingController();
-  TextEditingController _beamweight = new TextEditingController();
-  TextEditingController _metersonbeam = new TextEditingController();
+  TextEditingController _pipeno = new TextEditingController(text: '0');
+  TextEditingController _denier1 = new TextEditingController(text: '0');
+  TextEditingController _denier2 = new TextEditingController(text: '0');
+  TextEditingController _denier3 = new TextEditingController(text: '0');
+  TextEditingController _length = new TextEditingController(text: '0');
+  TextEditingController _ends = new TextEditingController(text: '0');
+  TextEditingController _oliweight = new TextEditingController(text: '0.000');
+  TextEditingController _reed = new TextEditingController(text: '0');
+  TextEditingController _beamweight = new TextEditingController(text: '0.000');
+  TextEditingController _metersonbeam = new TextEditingController(text: '0');
   TextEditingController _metertaka = new TextEditingController();
   TextEditingController _machineno = new TextEditingController();
-  TextEditingController _shortage = new TextEditingController();
+  TextEditingController _shortage = new TextEditingController(text: '0');
   TextEditingController _estimale = new TextEditingController();
   TextEditingController _estimale2 = new TextEditingController();
-  TextEditingController _warpwttaka = new TextEditingController();
-  TextEditingController _weftdenier1 = new TextEditingController();
-  TextEditingController _weftdenier2 = new TextEditingController();
-  TextEditingController _width = new TextEditingController();
-  TextEditingController _pick = new TextEditingController();
-  TextEditingController _weftweight = new TextEditingController();
+  TextEditingController _warpwttaka = new TextEditingController(text: '0');
+  TextEditingController _weftdenier1 = new TextEditingController(text: '0');
+  TextEditingController _weftdenier2 = new TextEditingController(text: '0');
+  TextEditingController _width = new TextEditingController(text: '0.00');
+  TextEditingController _pick = new TextEditingController(text: '0');
+  TextEditingController _weftweight = new TextEditingController(text: '0.000');
   TextEditingController _jogname = new TextEditingController();
-  TextEditingController _jograte = new TextEditingController();
-  TextEditingController _jogamount = new TextEditingController();
+  TextEditingController _jograte = new TextEditingController(text: '0.00');
+  TextEditingController _jogamount = new TextEditingController(text: '0.00');
   TextEditingController _jogdate = new TextEditingController();
   TextEditingController _droppingname = new TextEditingController();
-  TextEditingController _droppingrate = new TextEditingController();
-  TextEditingController _droppingamount = new TextEditingController();
+  TextEditingController _droppingrate = new TextEditingController(text: '0.00');
+  TextEditingController _droppingamount = new TextEditingController(text: '0.00');
   TextEditingController _beammakeer = new TextEditingController();
   TextEditingController _beamspreader = new TextEditingController();
-  TextEditingController _makerrate = new TextEditingController();
-  TextEditingController _spreaderrate = new TextEditingController();
+  TextEditingController _makerrate = new TextEditingController(text: '0.00');
+  TextEditingController _spreaderrate = new TextEditingController(text: '0.00');
   TextEditingController _remarks = new TextEditingController();
-  TextEditingController _nooftaka = new TextEditingController();
+  TextEditingController _nooftaka = new TextEditingController(text: '0');
   TextEditingController _installdate = new TextEditingController();
-  TextEditingController _1meterswt = new TextEditingController();
-  TextEditingController _weftmeters = new TextEditingController();
+  TextEditingController _1meterswt = new TextEditingController(text: '0.000');
+  TextEditingController _weftmeters = new TextEditingController(text: '0.00');
   TextEditingController _spreaderdate = new TextEditingController();
-  TextEditingController _weighttaka = new TextEditingController();
-  TextEditingController _producemeters = new TextEditingController();
-  TextEditingController _producewt = new TextEditingController();
-  TextEditingController _weight100meters = new TextEditingController();
+  TextEditingController _weighttaka = new TextEditingController(text: '0');
+  TextEditingController _producemeters = new TextEditingController(text: '0.00');
+  TextEditingController _producewt = new TextEditingController(text: '0.000');
+  TextEditingController _weight100meters = new TextEditingController(text: '0.00');
   TextEditingController _completiondate = new TextEditingController();
-  TextEditingController _shrinkage = new TextEditingController();
-  TextEditingController _balmeters = new TextEditingController();
-  TextEditingController _baltaka = new TextEditingController();
+  TextEditingController _shrinkage = new TextEditingController(text: '0');
+  TextEditingController _balmeters = new TextEditingController(text: '0');
+  TextEditingController _baltaka = new TextEditingController(text: '0');
   TextEditingController _droppingdate = new TextEditingController();
-  TextEditingController _masterbeam = new TextEditingController();
-  TextEditingController _recserial = new TextEditingController();
-  TextEditingController _recpartyid = new TextEditingController();
+  TextEditingController _recserial = new TextEditingController(text: '0');
+  TextEditingController _recpartyid = new TextEditingController(text: '0');
   TextEditingController _rectype = new TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -118,26 +117,26 @@ class _BeamCardAddState extends State<BeamCardAdd> {
   var crlimit = 0.0;
   dynamic clobl = 0;
 
-  String? dropdownTopMidLow;
+  String dropdownTopMidLow = 'LOWER';
 
   var TopMidLows = [
     'TOP',
     'MIDDLE',
-    'LOW',
+    'LOWER',
   ];
 
-  String? dropdownPer;
+  String dropdownPer = 'BEAM';
 
   var Pers = [
     'BEAM',
     'CARD',
   ];
 
-  String? dropdownMasterBeam;
+  String dropdownMasterBeam = 'N';
 
   var MasterBeam = [
-    'YES',                                                                                                                                                                                                                       
-    'NO',
+    'N',                                                                                                                                                                                                                       
+    'Y',
   ];
 
   @override
@@ -525,7 +524,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
       var balmeters = _balmeters.text;
       var baltaka = _baltaka.text;
       var droppingdate = _droppingdate.text;
-      var masterbeam = _masterbeam.text;
+      var masterbeam = dropdownMasterBeam;
       var recserial = _recserial.text;
       var recpartyid = _recpartyid.text;
       var rectype = _rectype.text;
@@ -547,7 +546,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
       String newdroppingdate = DateFormat("yyyy-MM-dd").format(parsedDate6);
     
     
-      uri = "${globals.cdomain}/api/api_storebeampurchallan?dbname=" +
+      uri = "${globals.cdomain}/api/api_storebeamcard?dbname=" +
           db + "&company=&cno=" + cno + "&user=" + username + "&srchr=" + srchr + "&serial=" + serial + 
           "&branch=" + branch + "&beamchr=" +beamchr + "&beamno=" + beamno + "&itemname=" + itemname +
           '&warpdate=' + newwarpdate + '&pipeno=' + pipeno + '&denier1=' + denier1 + '&denier2=' + denier2 +
@@ -564,7 +563,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
           "&weighttaka=" + weighttaka + "&producemeters=" + producemeters + "&producewt=" + producewt +
           "&weight100meters=" + weight100meters + "&newcompletiondate=" + newcompletiondate + "&shrinkage=" + shrinkage +
           "&balmeters=" + balmeters + "&baltaka=" + baltaka + "&newdroppingdate=" + newdroppingdate +
-          "&masterbeam=" + masterbeam + "&recserial=" + recserial + "&recpartyid=" +recpartyid +
+          "&masterbeam=" + masterbeam.toString() + "&recserial=" + recserial + "&recpartyid=" +recpartyid +
           "&rectype=" + rectype + "&id=" + id.toString();
 
       print(" saveData : " + uri);
@@ -1207,7 +1206,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _jogamount,
-                    enabled: true,
+                    enabled: false,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
@@ -1593,7 +1592,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _balmeters,
-                    enabled: true,
+                    enabled: false,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
@@ -1708,7 +1707,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _rectype,
-                    enabled: true,
+                    enabled: false,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),

@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/module/looms/beamcard/add_beamcard.dart';
 import 'package:cloud_mobile/module/looms/purchasechallan/beampurchasechallan/add_beampurchasechallan.dart';
 import 'package:flutter/material.dart';
@@ -123,23 +124,23 @@ class _LoomBeamCardListPageState extends State<LoomBeamCardList> {
   Future<bool> loaddetails() async {
     var db = globals.dbname;
     var cno = globals.companyid;
-    var startdate = globals.fbeg;
-    var enddate = globals.fend;
+    var startdate = retconvdate(globals.fbeg);
+    var enddate = retconvdate(globals.fend);
 
     print(globals.enddate);
 
-    DateTime date = DateFormat("dd-MM-yyyy").parse(startdate);
-    String start = DateFormat("yyyy-MM-dd").format(date);
+    // DateTime date = DateFormat("dd-MM-yyyy").parse(startdate);
+    // String start = DateFormat("yyyy-MM-dd").format(date);
 
-    DateTime date2 = DateFormat("dd-MM-yyyy").parse(enddate);
-    String end = DateFormat("yyyy-MM-dd").format(date2);
+    // DateTime date2 = DateFormat("dd-MM-yyyy").parse(enddate);
+    // String end = DateFormat("yyyy-MM-dd").format(date2);
 
-    String uri = '${globals.cdomain}/api/api_getbeampurchallanlist?cno=' +
+    String uri = '${globals.cdomain}/api/getbeamcardlist?cno=' +
                   cno +
                   '&startdate=' +
-                  start +
+                  startdate.toString() +
                   '&enddate=' +
-                  end +
+                  enddate.toString() +
                   '&dbname=' +
                   db;
 
