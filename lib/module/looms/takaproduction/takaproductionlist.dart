@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/module/looms/takaproduction/add_takaproduction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -87,19 +88,19 @@ class _TakaProductionListPageState extends State<TakaProductionList> {
   Future<bool> loaddetails() async {
     var db = globals.dbname;
     var cno = globals.companyid;
-    var startdate = globals.fbeg;
-    var enddate = globals.fend;
+    var startdate = retconvdate(globals.fbeg);
+    var enddate = retconvdate(globals.fend);
 
     print(globals.enddate);
 
-    String uri = '${globals.cdomain}/api/api_gettakaadjustmentlist?dbname=' +
+    String uri = '${globals.cdomain}/api/api_gettakaproductionlist?dbname=' +
             db +
             '&cno=' +
             cno +
             '&startdate=' +
-            startdate +
+            startdate.toString() +
             '&enddate=' +
-            enddate;
+            enddate.toString();
 
     var response = await http.get(Uri.parse(uri));
 
@@ -189,7 +190,6 @@ class _TakaProductionListPageState extends State<TakaProductionList> {
         itemCount: this._companydetails.length,
         itemBuilder: (context, index) {
           String date = this._companydetails[index]['date2'].toString();
-          //date = retconvdatestr(date);
           String serial = this._companydetails[index]['serial'].toString();
           String branch = this._companydetails[index]['branch'].toString();
           String srchr = this._companydetails[index]['srchr'].toString();

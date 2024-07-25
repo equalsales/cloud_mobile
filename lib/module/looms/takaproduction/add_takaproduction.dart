@@ -1,8 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
-import 'package:cloud_mobile/list/branchid_list.dart';
 import 'package:cloud_mobile/list/design_list.dart';
-import 'package:cloud_mobile/list/designid_list.dart';
 import 'package:cloud_mobile/list/item_list.dart';
 import 'package:cloud_mobile/list/machine_list.dart';
 import 'package:cloud_mobile/module/looms/takaproduction/add_takaproductiondet.dart';
@@ -34,8 +32,6 @@ class TakaProductionAdd extends StatefulWidget {
   var xid;
   var serial;
   var srchr;
-  double tottaka = 0;
-  double totmtrs = 0;
 
   @override
   _TakaProductionAddState createState() => _TakaProductionAddState();
@@ -58,6 +54,8 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
   var branchid = 0;
   var partyid = 0;
 
+  var meters = 0.0;
+
   TextEditingController _serial = new TextEditingController();
   TextEditingController _srchr = new TextEditingController();
   TextEditingController _branchid = new TextEditingController();
@@ -66,23 +64,23 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
   TextEditingController _machineno = new TextEditingController();
   TextEditingController _quality = new TextEditingController();
   TextEditingController _beamchr = new TextEditingController();
-  TextEditingController _beamno = new TextEditingController();
+  TextEditingController _beamno = new TextEditingController(text: 0.toString());
   TextEditingController _beaminstalldate = new TextEditingController();
-  TextEditingController _ends = new TextEditingController(text: '0');
-  TextEditingController _stdwt = new TextEditingController();
+  TextEditingController _ends = new TextEditingController(text: 0.toString());
+  TextEditingController _stdwt = new TextEditingController(text: 0.000.toString());
   TextEditingController _takachr = new TextEditingController();
-  TextEditingController _takano = new TextEditingController();
+  TextEditingController _takano = new TextEditingController(text: 0.toString());
   TextEditingController _design = new TextEditingController();
-  TextEditingController _foldmetrs = new TextEditingController();
-  TextEditingController _extrameters = new TextEditingController();
-  TextEditingController _weight = new TextEditingController();
+  TextEditingController _foldmetrs = new TextEditingController(text: 0.00.toString());
+  TextEditingController _extrameters = new TextEditingController(text: 0.00.toString());
+  TextEditingController _weight = new TextEditingController(text: 0.000.toString());
   TextEditingController _avgwt = new TextEditingController();
-  TextEditingController _pcs = new TextEditingController();
-  TextEditingController _cut = new TextEditingController();
-  TextEditingController _cutmeters = new TextEditingController();
+  TextEditingController _pcs = new TextEditingController(text: 0.toString());
+  TextEditingController _cut = new TextEditingController(text: 0.toString());
+  TextEditingController _cutmeters = new TextEditingController(text: 0.toString());
   TextEditingController _remark = new TextEditingController();
-  TextEditingController _actwt = new TextEditingController();
-  TextEditingController _diffwt = new TextEditingController();
+  TextEditingController _actwt = new TextEditingController(text: 0.000.toString());
+  TextEditingController _diffwt = new TextEditingController(text: 0.000.toString());
 
   final _formKey = GlobalKey<FormState>();
   var bmitem;
@@ -150,20 +148,20 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
-    var fromdate = widget.xfbeg;
-    var todate = widget.xfend;
+    var fromdate = retconvdate(widget.xfbeg);
+    var todate = retconvdate(widget.xfend);
 
     uri =
-        '${globals.cdomain}/api/api_gettakaadjustmentlist?dbname=' +
+        '${globals.cdomain}/api/api_edittakaproduction?dbname=' +
             db +
             '&cno=' +
             cno +
             '&id=' +
             id +
             '&startdate=' +
-            fromdate +
+            fromdate.toString() +
             '&enddate=' +
-            todate;
+            todate.toString();
     print(" loadData :" +uri);
     var response = await http.get(Uri.parse(uri));
 
@@ -355,7 +353,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
       var branchid = _branchid.text;
-      print('in');
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -500,15 +497,14 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       List<DataRow> _datarow = [];
       print(ItemDetails);
 
-      widget.tottaka = 0;
-      widget.totmtrs = 0;
+      double totmtrs = 0;
 
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
         double nMeters = 0;
         if (ItemDetails[iCtr]['meters'] != '') {
           nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
-          widget.tottaka += 1;
-          widget.totmtrs += nMeters;
+          totmtrs += nMeters;
+          _extrameters.text = totmtrs.toStringAsFixed(2);
         }
 
         print(ItemDetails[iCtr]);
@@ -539,6 +535,55 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       return _datarow;
     }
 
+    calweightactwt(){
+      var stdwt = double.parse(_stdwt.text);
+      var foldmetrs = double.parse(_foldmetrs.text);
+      var total = 0.0;
+
+      total = (stdwt * foldmetrs) / 100;
+      
+      setState(() {
+        _weight.text = total.toStringAsFixed(2);
+        _actwt.text = total.toStringAsFixed(0);
+      });
+    }
+    
+    calavgwt(){
+      var weight = double.parse(_weight.text);
+      var foldmetrs = double.parse(_foldmetrs.text);
+      var avgwt = 0.0;
+
+      avgwt = (weight / foldmetrs) * 100;
+      
+      setState(() {
+        _avgwt.text = avgwt.toStringAsFixed(2);
+      });
+    }
+    
+    calcutmeters(){
+      var pcs = double.parse(_pcs.text);
+      var cut = double.parse(_cut.text);
+      var cutmeters = 0.0;
+
+      cutmeters = pcs * cut;
+      
+      setState(() {
+        _cutmeters.text = cutmeters.toStringAsFixed(2);
+      });
+    }
+
+    caldiffwt(){
+      var weight = double.parse(_weight.text);
+      var actwt = double.parse(_actwt.text);
+      var diffwt = 0.0;
+
+      diffwt = weight - actwt;
+      
+      setState(() {
+        _diffwt.text = diffwt.toStringAsFixed(2);
+      });
+    }
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -748,7 +793,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                  enabled: false,
+                  enabled: true,
                   controller: _stdwt,
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,
@@ -758,6 +803,12 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     labelText: 'Stdwt',
                   ),
                   onTap: () {},
+                  onChanged: (value) {
+                    calweightactwt();
+                    calavgwt();
+                    calcutmeters();
+                    caldiffwt();
+                  },
                   validator: (value) {
                     return null;
                   },
@@ -837,6 +888,12 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       labelText: 'Fold Meters',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calweightactwt();
+                      calavgwt();
+                      calcutmeters();
+                      caldiffwt();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -875,6 +932,12 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       labelText: 'Weight',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calweightactwt();
+                      calavgwt();
+                      calcutmeters();
+                      caldiffwt();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -913,6 +976,12 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       labelText: 'Pcs',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calweightactwt();
+                      calavgwt();
+                      calcutmeters();
+                      caldiffwt();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -930,6 +999,12 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     labelText: 'Cut',
                   ),
                   onTap: () {},
+                  onChanged: (value) {
+                    calweightactwt();
+                    calavgwt();
+                    calcutmeters();
+                    caldiffwt();
+                  },
                   validator: (value) {
                     return null;
                   },
@@ -991,6 +1066,10 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       labelText: 'Act Weight',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      caldiffwt();
+                      calweightactwt();
+                    },
                     validator: (value) {
                       return null;
                     },

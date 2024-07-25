@@ -62,9 +62,9 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
 
   TextEditingController _date = new TextEditingController();
   TextEditingController _worker = new TextEditingController();
-  TextEditingController _meters = new TextEditingController();
-  TextEditingController _rate = new TextEditingController();
-  TextEditingController _amount = new TextEditingController();
+  TextEditingController _meters = new TextEditingController(text: 0.00.toString());
+  TextEditingController _rate = new TextEditingController(text: 0.00.toString());
+  TextEditingController _amount = new TextEditingController(text: 0.00.toString());
 
 
   double ordMeters = 0;
@@ -123,7 +123,7 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
       Navigator.pop(context, widget.xitemDet);
       return true;
     }
-
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(

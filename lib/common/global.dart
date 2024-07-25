@@ -11,9 +11,9 @@ String enddate = '';
 String dbname = '';
 String username = '';
 String companystate = '';
-// String cdomain = 'https://www.looms.equalsoftlink.com';
-// String cdomain2 = 'https://www.cloud.equalsoftlink.com';
-String cdomain = 'http://127.0.0.1:8000';
+String cdomain = 'https://www.looms.equalsoftlink.com';
+String cdomain2 = 'https://www.cloud.equalsoftlink.com';
+// String cdomain = 'http://127.0.0.1:8000';
 
 void alert(context, _title, _msg) {
   Alert(
