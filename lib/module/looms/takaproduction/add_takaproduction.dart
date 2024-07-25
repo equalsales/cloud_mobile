@@ -109,7 +109,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     var id = widget.xid;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_gettakaadjustmentdetlist?dbname=' +
+        '${globals.cdomain}/api/api_gettakaadjustmentdetlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -154,7 +154,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     var todate = widget.xfend;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_gettakaadjustmentlist?dbname=' +
+        '${globals.cdomain}/api/api_gettakaadjustmentlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -171,14 +171,34 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
     jsonData = jsonData['Data'];
     jsonData = jsonData[0];
-
-    _branch.text = getValue(jsonData['branch'], 'C');
     _serial.text = getValue(jsonData['serial'], 'C');
     _srchr.text = getValue(jsonData['srchr'], 'C');
-    _folddate.text = getValue(jsonData['date2'], 'C');
-    // _bookno.text = getValue(jsonData['bookno'], 'C');
-    // _remarks.text = getValue(jsonData['remarks'], 'C');
 
+    _branch.text = getValue(jsonData['branch'], 'C');
+    _folddate.text = getValue(jsonData['branch'], 'C');
+    _machineno.text = getValue(jsonData['branch'], 'C');
+    _quality.text = getValue(jsonData['branch'], 'C');
+    _beamchr.text = getValue(jsonData['branch'], 'C');
+    _beamno.text = getValue(jsonData['branch'], 'C');
+
+    _beaminstalldate.text = getValue(jsonData['branch'], 'C');
+
+    _ends.text = getValue(jsonData['branch'], 'C');
+    _stdwt.text = getValue(jsonData['branch'], 'C');
+    _takachr.text = getValue(jsonData['branch'], 'C');
+    _takano.text = getValue(jsonData['branch'], 'C');
+    _design.text = getValue(jsonData['branch'], 'C');
+    _foldmetrs.text = getValue(jsonData['branch'], 'C');
+    _extrameters.text = getValue(jsonData['branch'], 'C');
+    _weight.text = getValue(jsonData['branch'], 'C');
+    _avgwt.text = getValue(jsonData['branch'], 'C');
+    _pcs.text = getValue(jsonData['branch'], 'C');
+    _cut.text = getValue(jsonData['branch'], 'C');
+    _cutmeters.text = getValue(jsonData['branch'], 'C');
+    _remark.text = getValue(jsonData['branch'], 'C');
+    _actwt.text = getValue(jsonData['branch'], 'C');
+    _diffwt.text = getValue(jsonData['branch'], 'C');
+    
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
 
@@ -190,7 +210,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     var cno = globals.companyid;
     var db = globals.dbname;
     uri =
-        'https://looms.equalsoftlink.com/api/api_greyjobissChallanno?dbname=' +
+        '${globals.cdomain}/api/api_greyjobissChallanno?dbname=' +
             db +
             '&branch='+
             _branch.text  +
@@ -369,9 +389,27 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       var srchr = _srchr.text;
       var branch = _branch.text;
       var folddate = _folddate.text;
-      // var bookno = _bookno.text;
-      // var remarks = _remarks.text;
-
+      var machineno = _machineno.text;
+      var quality = _quality.text;
+      var beamchr = _beamchr.text;
+      var beamno = _beamno.text;
+      var beaminstalldate = _beaminstalldate.text;
+      var ends = _ends.text;
+      var stdwt = _stdwt.text;
+      var takachr = _takachr.text;
+      var takano = _takano.text;
+      var design = _design.text;
+      var foldmetrs = _foldmetrs.text;
+      var extrameters = _extrameters.text;
+      var weight = _weight.text;
+      var avgwt = _avgwt.text;
+      var pcs = _pcs.text;
+      var cut = _cut.text;
+      var cutmeters = _cutmeters.text;
+      var remark = _remark.text;
+      var actwt = _actwt.text;
+      var diffwt = _diffwt.text;
+    
       var id = widget.xid;
       id = int.parse(id);
 
@@ -382,7 +420,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       String newDate = DateFormat("yyyy-MM-dd").format(parsedDate); 
 
       uri =
-          "https://looms.equalsoftlink.com/api/api_storetakaadjustment?dbname=" +
+          "${globals.cdomain}/api/api_storetakaadjustment?dbname=" +
               db +
               "&company=&cno=" +
               cno +
@@ -709,7 +747,23 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
             Row(
               children: [
                 Expanded(
-                    child: TextFormField(
+                  child: TextFormField(
+                  enabled: false,
+                  controller: _stdwt,
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.person),
+                    hintText: 'Stdwt',
+                    labelText: 'Stdwt',
+                  ),
+                  onTap: () {},
+                  validator: (value) {
+                    return null;
+                  },
+                )),
+                Expanded(
+                  child: TextFormField(
                   enabled: true,
                   controller: _takachr,
                   keyboardType: TextInputType.text,
@@ -729,6 +783,10 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     return null;
                   },
                 )),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: TextFormField(
                     enabled: true,
@@ -745,7 +803,24 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       return null;
                     },
                   )
-                )
+                ),
+                Expanded(
+                  child: TextFormField(
+                  enabled: true,
+                  controller: _design,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.person),
+                    hintText: 'Design',
+                    labelText: 'Design',
+                  ),
+                  onTap: () {
+                    gotoDesignScreen(context);
+                  },
+                  validator: (value) {
+                    return null;
+                  },
+                ))
               ],
             ),
             Row(
@@ -769,7 +844,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: true,
+                    enabled: false,  
                     controller: _extrameters,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
@@ -791,35 +866,13 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                 Expanded(
                   child: TextFormField(
                     enabled: true,
-                    controller: _design,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Design',
-                      labelText: 'Design',
-                    ),
-                    onTap: () {
-                      gotoDesignScreen(context);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  )
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    enabled: true,
-                    controller: _stdwt,
+                    controller: _weight,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Stdwt',
-                      labelText: 'Stdwt',
+                      hintText: 'Weight',
+                      labelText: 'Weight',
                     ),
                     onTap: () {},
                     validator: (value) {
@@ -829,7 +882,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: true,
+                    enabled: false,
                     controller: _avgwt,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
@@ -867,42 +920,24 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: true,
-                    controller: _weight,
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Weight',
-                      labelText: 'Weight',
-                    ),
-                    onTap: () {},
-                    validator: (value) {
-                      return null;
-                    },
-                  )
-                )
+                  enabled: true,
+                  controller: _cut,
+                  keyboardType: TextInputType.number,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    icon: const Icon(Icons.person),
+                    hintText: 'Cut',
+                    labelText: 'Cut',
+                  ),
+                  onTap: () {},
+                  validator: (value) {
+                    return null;
+                  },
+                )),
               ],
             ),
-            Row(
+            Row(  
               children: [
-                Expanded(
-                  child: TextFormField(
-                    enabled: true,
-                    controller: _cut,
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Cut',
-                      labelText: 'Cut',
-                    ),
-                    onTap: () {},
-                    validator: (value) {
-                      return null;
-                    },
-                  )
-                ),
                 Expanded(
                   child: TextFormField(
                     enabled: true,
@@ -919,11 +954,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       return null;
                     },
                   )
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: TextFormField(
                     textCapitalization: TextCapitalization.characters,
@@ -950,7 +981,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    enabled: true,
+                    enabled: false,
                     controller: _actwt,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
@@ -967,7 +998,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: true,
+                    enabled: false,
                     controller: _diffwt,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,

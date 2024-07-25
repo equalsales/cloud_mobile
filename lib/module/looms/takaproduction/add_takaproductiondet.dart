@@ -3,8 +3,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/alert.dart';
 import '../../../common/global.dart' as globals;
@@ -62,17 +60,11 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
-  TextEditingController _orderno = new TextEditingController();
-  TextEditingController _folddate = new TextEditingController();
-  TextEditingController _takachr = new TextEditingController();
-  TextEditingController _takano = new TextEditingController();
-  TextEditingController _ctakano = new TextEditingController();
   TextEditingController _date = new TextEditingController();
   TextEditingController _worker = new TextEditingController();
   TextEditingController _meters = new TextEditingController();
   TextEditingController _rate = new TextEditingController();
   TextEditingController _amount = new TextEditingController();
-  TextEditingController _ordbalmtrs = new TextEditingController();
 
 
   double ordMeters = 0;

@@ -135,7 +135,7 @@ class _LoomBeamCardListPageState extends State<LoomBeamCardList> {
     // DateTime date2 = DateFormat("dd-MM-yyyy").parse(enddate);
     // String end = DateFormat("yyyy-MM-dd").format(date2);
 
-    String uri = '${globals.cdomain}/api/getbeamcardlist?cno=' +
+    String uri = '${globals.cdomain}/api/api_getbeamcardlist?cno=' +
                   cno +
                   '&startdate=' +
                   startdate.toString() +
@@ -187,14 +187,13 @@ class _LoomBeamCardListPageState extends State<LoomBeamCardList> {
         itemCount: this._companydetails.length,
         itemBuilder: (context, index) {
           String id = this._companydetails[index]['id'].toString();
-          String date = this._companydetails[index]['date2'].toString();
-          String serial = this._companydetails[index]['serial'].toString();
-          String srchr = this._companydetails[index]['srchr'].toString();
+          String date = this._companydetails[index]['date'].toString();
+          String beamno = this._companydetails[index]['beamno'].toString();
+          String beamchr = this._companydetails[index]['beamchr'].toString();
           String branch = this._companydetails[index]['branch'].toString();
-          String party = this._companydetails[index]['party'].toString();
-          String chlnno = this._companydetails[index]['chlnno'].toString();
-          String rdurd = this._companydetails[index]['rdurd'].toString();
-          String remarks = this._companydetails[index]['remarks'].toString();
+          String itemname = this._companydetails[index]['itemname'].toString();
+          String dener1 = this._companydetails[index]['dener1'].toString();
+          String den2 = this._companydetails[index]['den2'].toString();
 
           int newid = 0;
           newid = int.parse(id);
@@ -334,25 +333,23 @@ class _LoomBeamCardListPageState extends State<LoomBeamCardList> {
               title: Text(
                       'Date : ' +
                       date +
-                      '  Serial : ' +
-                      serial +
+                      '  Beamno : ' +
+                      beamno +
                       '  Id : ' +
                       id +
                       '  Branch : ' +
                       branch +
-                      '  Party ' +
-                      party,
+                      '  Itemname ' +
+                      itemname,
                   style:
                       TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
               subtitle: Text(
-                      'Remarks : ' +
-                      remarks +
-                      '  RdUrd : ' +
-                      rdurd +
-                      '  Challan No. : ' +
-                      chlnno +
-                      '  SrChr : ' +
-                      srchr,
+                      '  Dener1 : ' +
+                      dener1 +
+                      ' Dener2 : ' +
+                      den2 +
+                      '  Beamchr : ' +
+                      beamchr,
               style:TextStyle(fontSize: 10.0, fontWeight: FontWeight.bold)),
               leading: Icon(Icons.select_all),
               trailing: Icon(Icons.arrow_forward),

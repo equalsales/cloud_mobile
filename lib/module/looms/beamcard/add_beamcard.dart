@@ -1,8 +1,10 @@
 // ignore_for_file: must_be_immutable
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_mobile/list/item_list.dart';
 import 'package:cloud_mobile/list/machine_list.dart';
+import 'package:cloud_mobile/list/worker.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,6 +14,8 @@ import 'package:cloud_mobile/common/global.dart' as globals;
 import 'package:cloud_mobile/list/branch_list.dart';
 import 'package:cloud_mobile/common/bottombar.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:logging/logging.dart';
 
 class BeamCardAdd extends StatefulWidget {
   BeamCardAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
@@ -66,7 +70,8 @@ class _BeamCardAddState extends State<BeamCardAdd> {
   TextEditingController _reed = new TextEditingController(text: '0');
   TextEditingController _beamweight = new TextEditingController(text: '0.000');
   TextEditingController _metersonbeam = new TextEditingController(text: '0');
-  TextEditingController _metertaka = new TextEditingController();
+  TextEditingController _metertaka =
+      new TextEditingController(text: 100.toString());
   TextEditingController _machineno = new TextEditingController();
   TextEditingController _shortage = new TextEditingController(text: '0');
   TextEditingController _estimale = new TextEditingController();
@@ -83,7 +88,8 @@ class _BeamCardAddState extends State<BeamCardAdd> {
   TextEditingController _jogdate = new TextEditingController();
   TextEditingController _droppingname = new TextEditingController();
   TextEditingController _droppingrate = new TextEditingController(text: '0.00');
-  TextEditingController _droppingamount = new TextEditingController(text: '0.00');
+  TextEditingController _droppingamount =
+      new TextEditingController(text: '0.00');
   TextEditingController _beammakeer = new TextEditingController();
   TextEditingController _beamspreader = new TextEditingController();
   TextEditingController _makerrate = new TextEditingController(text: '0.00');
@@ -95,9 +101,11 @@ class _BeamCardAddState extends State<BeamCardAdd> {
   TextEditingController _weftmeters = new TextEditingController(text: '0.00');
   TextEditingController _spreaderdate = new TextEditingController();
   TextEditingController _weighttaka = new TextEditingController(text: '0');
-  TextEditingController _producemeters = new TextEditingController(text: '0.00');
+  TextEditingController _producemeters =
+      new TextEditingController(text: '0.00');
   TextEditingController _producewt = new TextEditingController(text: '0.000');
-  TextEditingController _weight100meters = new TextEditingController(text: '0.00');
+  TextEditingController _weight100meters =
+      new TextEditingController(text: '0.00');
   TextEditingController _completiondate = new TextEditingController();
   TextEditingController _shrinkage = new TextEditingController(text: '0');
   TextEditingController _balmeters = new TextEditingController(text: '0');
@@ -135,7 +143,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
   String dropdownMasterBeam = 'N';
 
   var MasterBeam = [
-    'N',                                                                                                                                                                                                                       
+    'N',
     'Y',
   ];
 
@@ -156,77 +164,145 @@ class _BeamCardAddState extends State<BeamCardAdd> {
     // _book.text = 'PURCHASE A/C';
 
     if (int.parse(widget.xid) > 0) {
-      // loadData();
+      setState(() {
+        loadData();
+      });
     }
   }
 
-  // Future<bool> loadData() async {
-  //   String uri = '';
-  //   String uri2 = '';
-  //   var cno = globals.companyid;
-  //   var db = globals.dbname;
-  //   var id = widget.xid;
-  //   var fromdate = widget.xfbeg;
-  //   var todate = widget.xfend;
-  //   DateTime date = DateFormat("dd-MM-yyyy").parse(fromdate);
-  //   String start = DateFormat("yyyy-MM-dd").format(date);
-  //   DateTime date2 = DateFormat("dd-MM-yyyy").parse(todate);
-  //   String end = DateFormat("yyyy-MM-dd").format(date2);
-  //   uri = '${globals.cdomain}/api/api_getbeampurchallanlist?cno=' +
-  //       cno +
-  //       '&startdate=' +
-  //       start +
-  //       '&enddate=' +
-  //       end +
-  //       '&dbname=' +
-  //       db +
-  //       '&id=' +
-  //       id.toString();
-  //   print(" loadData :" + uri);
-  //   var response = await http.get(Uri.parse(uri));
-  //   var jsonData = jsonDecode(response.body);
-  //   jsonData = jsonData['Data'];
-  //   jsonData = jsonData[0];
-  //   print(jsonData);
-  //   // String inputDateString = jsonData['date2'];
-  //   // List<String> parts = inputDateString.split(' ')[0].split('-');
-  //   // String formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}";
-  //   _date.text = jsonData['date2'];
-  //   _branch.text = jsonData['branch'];
-  //   _serial.text = jsonData['serial'];
-  //   _srchr.text = jsonData['srchr'];
-  //   _book.text = jsonData['book'];
-  //   _party.text = jsonData['party'];
-  //   // partystate = jsonData['station'];
-  //   _chlndt.text = jsonData['chlndt'];
-  //   _chlnno.text = jsonData['chlnno'];
-  //   dropdownTrnType = jsonData['rdurd'].toString();
-  //   if (dropdownTrnType == '') {
-  //     dropdownTrnType = 'RD';
-  //   }
-  //   if (dropdownTrnType == 'null') {
-  //     dropdownTrnType = 'RD';
-  //   }
-  //   _remarks.text = jsonData['remarks'];
-  //   widget.serial = jsonData['serial'].toString();
-  //   widget.srchr = jsonData['srchr'].toString();
-  //   party = _party.text;
-  //   uri2 = '${globals.cdomain}/api/api_getpartylist?dbname=' +
-  //       db +
-  //       '&id=' +
-  //       '&acctype=' +
-  //       partyacctype +
-  //       '&party=' +
-  //       party;
-  //   print(" api_getpartylist :" + uri2);
-  //   var response2 = await http.get(Uri.parse(uri2));
-  //   var Data2 = jsonDecode(response2.body);
-  //   var jsonData2 = Data2['Data'];
-  //   partystate = jsonData2[0]['state'];
-  //   print("  partystate :" + partystate);
-  //   setState(() {});
-  //   return true;
-  // }
+  Future<bool> loadData() async {
+    String uri = '';
+    String uri2 = '';
+    var cno = globals.companyid;
+    var db = globals.dbname;
+    var id = widget.xid;
+    var fromdate = widget.xfbeg;
+    var todate = widget.xfend;
+    DateTime date = DateFormat("dd-MM-yyyy").parse(fromdate);
+    String start = DateFormat("yyyy-MM-dd").format(date);
+    DateTime date2 = DateFormat("dd-MM-yyyy").parse(todate);
+    String end = DateFormat("yyyy-MM-dd").format(date2);
+    uri = '${globals.cdomain}/api/api_editbeamcard?cno=' +
+        cno +
+        '&startdate=' +
+        start +
+        '&enddate=' +
+        end +
+        '&dbname=' +
+        db +
+        '&id=' +
+        id.toString();
+    print(" loadData :" + uri);
+    var response = await http.get(Uri.parse(uri));
+    var jsonData = jsonDecode(response.body);
+    jsonData = jsonData['Data'];
+    jsonData = jsonData[0];
+    print(jsonData);
+    widget.serial = jsonData['serial'].toString();
+    widget.srchr = jsonData['srchr'].toString();
+    _branch.text = jsonData['branch'];
+    _beamchr.text = jsonData['beamchr'];
+    _beamno.text = jsonData['beamno'];
+    _itemname.text = jsonData['itemanme'].toString();
+    String inputDateString = jsonData['date'].toString();
+    List<String> parts = inputDateString.split(' ')[0].split('-');
+    String formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}";
+    _warpdate.text = formattedDate.toString();
+    _pipeno.text = jsonData['pipeno'].toString();
+    _denier1.text = jsonData['den1'].toString();
+    _denier2.text = jsonData['den2'].toString();
+    _denier3.text = jsonData['den3'].toString();
+    _length.text = jsonData['length'].toString();
+    _ends.text = jsonData['ends'].toString();
+    _oliweight.text = jsonData['oilwt'].toString();
+    _reed.text = jsonData['reeds'].toString();
+    _beamweight.text = jsonData['beamwt'].toString();
+    _metersonbeam.text = jsonData['beammtrs'].toString();
+    _metertaka.text = jsonData['mtrspertaka'].toString();
+    _machineno.text = jsonData['machine'].toString();
+    if (_machineno.text == 'null') {
+      _machineno.text = '';
+    }
+    _shortage.text = jsonData['shtperc'].toString();
+    _estimale.text = jsonData['estimate1'].toString();
+    _estimale2.text = jsonData['estimate2'].toString();
+    dropdownTopMidLow = jsonData['tml'].toString();
+    if (dropdownTopMidLow == '') {
+      dropdownTopMidLow = 'LOWER';
+    } else if (dropdownTopMidLow == 'null') {
+      dropdownTopMidLow = 'LOWER';
+    }
+    dropdownPer = jsonData['per'].toString();
+    if (dropdownPer == '') {
+      dropdownPer = 'BEAM';
+    } else if (dropdownPer == 'null') {
+      dropdownPer = 'BEAM';
+    }
+    _warpwttaka.text = jsonData['warpwtpertaka'].toString();
+    _weftdenier1.text = jsonData['weftden1'].toString();
+    _weftdenier2.text = jsonData['weftden2'].toString();
+    _width.text = jsonData['width'].toString();
+    _pick.text = jsonData['pick'].toString();
+    _weftweight.text = jsonData['weftwt'].toString();
+    _jogname.text = jsonData['jogname'].toString();
+    _jograte.text = jsonData['jograte'].toString();
+    _jogamount.text = jsonData['jogamount'].toString();
+    String inputDateString2 = jsonData['jogdate'].toString();
+    List<String> parts2 = inputDateString2.split(' ')[0].split('-');
+    String jogdate = "${parts2[2]}-${parts2[1]}-${parts2[0]}";
+    _jogdate.text = jogdate.toString();
+    _droppingname.text = jsonData['droppingname'].toString();
+    if (_droppingname.text == 'null') {
+      _droppingname.text = '';
+    }
+    _droppingrate.text = jsonData['droppingrate'].toString();
+    _droppingamount.text = jsonData['droppingamount'].toString();
+    _beammakeer.text = jsonData['maker'].toString();
+    if (_beammakeer.text == 'null') {
+      _beammakeer.text = '';
+    }
+    _beamspreader.text = jsonData['spreader'].toString();
+    _makerrate.text = jsonData['makerrate'].toString();
+    _spreaderrate.text = jsonData['spreadrate'].toString();
+    _remarks.text = jsonData['remarks'].toString();
+    _nooftaka.text = jsonData['taka'].toString();
+    String inputDateString3 = jsonData['installdate'].toString();
+    List<String> parts3 = inputDateString3.split(' ')[0].split('-');
+    String installdate = "${parts3[2]}-${parts3[1]}-${parts3[0]}";
+    _installdate.text = installdate.toString();
+    _1meterswt.text = jsonData['mtrswt'].toString();
+    _weftmeters.text = jsonData['weftmtrs'].toString();
+    String inputDateString4 = jsonData['spreaddate'].toString();
+    List<String> parts4 = inputDateString4.split(' ')[0].split('-');
+    String spreaddate = "${parts4[2]}-${parts4[1]}-${parts4[0]}";
+    _spreaderdate.text = spreaddate.toString();
+    _weighttaka.text = jsonData['wefttaka'].toString();
+    _producemeters.text = jsonData['prodmeters'].toString();
+    _producewt.text = jsonData['prodweight'].toString();
+    _weight100meters.text = jsonData['wtmtrs'].toString();
+    String inputDateString5 = jsonData['completiondate'].toString();
+    List<String> parts5 = inputDateString5.split(' ')[0].split('-');
+    String completiondate = "${parts5[2]}-${parts5[1]}-${parts5[0]}";
+    _completiondate.text = completiondate.toString();
+    _shrinkage.text = jsonData['shrinkage'].toString();
+    _balmeters.text = jsonData['balmtr'].toString();
+    _baltaka.text = jsonData['baltaka'].toString();
+    String inputDateString6 = jsonData['droppingdate'].toString();
+    List<String> parts6 = inputDateString6.split(' ')[0].split('-');
+    String droppingdate = "${parts6[2]}-${parts6[1]}-${parts6[0]}";
+    _droppingdate.text = droppingdate;
+    dropdownMasterBeam = jsonData['masterbeam'].toString();
+    if (dropdownMasterBeam == '') {
+      dropdownMasterBeam = 'N';
+    } else if (dropdownMasterBeam == 'null') {
+      dropdownMasterBeam = 'N';
+    }
+    _recserial.text = jsonData['recserial'].toString();
+    _recpartyid.text = jsonData['recpartyid'].toString();
+    _rectype.text = jsonData['rectype'].toString();
+    setState(() {});
+    return true;
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -338,11 +414,12 @@ class _BeamCardAddState extends State<BeamCardAdd> {
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => item_list(
+              builder: (_) => worker_list(
                     companyid: widget.xcompanyid,
                     companyname: widget.xcompanyname,
                     fbeg: widget.xfbeg,
                     fend: widget.xfend,
+                    acctype: 'JOG',
                   )));
       setState(() {
         var retResult = result;
@@ -355,7 +432,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
           selJogname = selJogname + retResult[0][ictr];
         }
         setState(() {
-          _jogname.text = newResult[0]['itemname'].toString();
+          _jogname.text = newResult[0]['worker'].toString();
         });
       });
     }
@@ -364,11 +441,12 @@ class _BeamCardAddState extends State<BeamCardAdd> {
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => item_list(
+              builder: (_) => worker_list(
                     companyid: widget.xcompanyid,
                     companyname: widget.xcompanyname,
                     fbeg: widget.xfbeg,
                     fend: widget.xfend,
+                    acctype: 'DROPIN',
                   )));
       setState(() {
         var retResult = result;
@@ -381,7 +459,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
           selDroppingname = selDroppingname + retResult[0][ictr];
         }
         setState(() {
-          _droppingname.text = newResult[0]['itemname'].toString();
+          _droppingname.text = newResult[0]['worker'].toString();
         });
       });
     }
@@ -390,11 +468,12 @@ class _BeamCardAddState extends State<BeamCardAdd> {
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => item_list(
+              builder: (_) => worker_list(
                     companyid: widget.xcompanyid,
                     companyname: widget.xcompanyname,
                     fbeg: widget.xfbeg,
                     fend: widget.xfend,
+                    acctype: 'SPREADER',
                   )));
       setState(() {
         var retResult = result;
@@ -407,7 +486,34 @@ class _BeamCardAddState extends State<BeamCardAdd> {
           selBeamSpreader = selBeamSpreader + retResult[0][ictr];
         }
         setState(() {
-          _droppingname.text = newResult[0]['itemname'].toString();
+          _beamspreader.text = newResult[0]['worker'].toString();
+        });
+      });
+    }
+
+    void gotoMakerScreen(BuildContext context) async {
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => worker_list(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                    acctype: 'MAKER',
+                  )));
+      setState(() {
+        var retResult = result;
+        var newResult = result[1];
+        var selMaker = '';
+        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+          if (ictr > 0) {
+            selMaker = selMaker + ',';
+          }
+          selMaker = selMaker + retResult[0][ictr];
+        }
+        setState(() {
+          _beammakeer.text = newResult[0]['worker'].toString();
         });
       });
     }
@@ -465,6 +571,8 @@ class _BeamCardAddState extends State<BeamCardAdd> {
 
     Future<bool> saveData() async {
       String uri = '';
+      var fromdate = widget.xfbeg;
+      var todate = widget.xfend;
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
@@ -529,9 +637,27 @@ class _BeamCardAddState extends State<BeamCardAdd> {
       var recpartyid = _recpartyid.text;
       var rectype = _rectype.text;
 
+      // print(" _jogamount.text " + jogamount);
+      // print(" droppingname " + droppingname);
+      // print(" droppingrate " + droppingrate);
+      // print(" droppingamount " + droppingamount);
+      // print(" beammakeer " + beammakeer);
+      // print(" beamspreader " + beamspreader);
+      // print(" makerrate " + makerrate);
+      // print(" remarks " + remarks);
+      // print(" nooftaka " + nooftaka);
+      // print(" weftmeters " + weftmeters);
+      // print(" weighttaka " + weighttaka);
+      // print(" producemeters " + producemeters);
+
+
       var id = widget.xid;
       id = int.parse(id);
 
+      DateTime start = DateFormat("dd-MM-yyyy").parse(fromdate);
+      String startdate = DateFormat("yyyy-MM-dd").format(start);
+      DateTime end = DateFormat("dd-MM-yyyy").parse(todate);
+      String enddate = DateFormat("yyyy-MM-dd").format(end);
       DateTime parsedDate1 = DateFormat("dd-MM-yyyy").parse(warpdate);
       String newwarpdate = DateFormat("yyyy-MM-dd").format(parsedDate1);
       DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(jogdate);
@@ -544,29 +670,145 @@ class _BeamCardAddState extends State<BeamCardAdd> {
       String newcompletiondate = DateFormat("yyyy-MM-dd").format(parsedDate5);
       DateTime parsedDate6 = DateFormat("dd-MM-yyyy").parse(droppingdate);
       String newdroppingdate = DateFormat("yyyy-MM-dd").format(parsedDate6);
-    
-    
+
       uri = "${globals.cdomain}/api/api_storebeamcard?dbname=" +
-          db + "&company=&cno=" + cno + "&user=" + username + "&srchr=" + srchr + "&serial=" + serial + 
-          "&branch=" + branch + "&beamchr=" +beamchr + "&beamno=" + beamno + "&itemname=" + itemname +
-          '&warpdate=' + newwarpdate + '&pipeno=' + pipeno + '&denier1=' + denier1 + '&denier2=' + denier2 +
-          '&denier3=' + denier3 + "&length=" + length + '&ends=' + ends + "&oliweight=" + oliweight +
-          "&reed=" + reed + "&beamweight=" + beamweight + "&metersonbeam=" + metersonbeam + "&metertaka=" + metertaka +
-          "&machineno=" + machineno + "&shortage=" + shortage + "&estimale=" + estimale + "&estimale2=" + estimale2 + 
-          "&topmidlow=" + topmidlow.toString() + "&per=" + per.toString() + "&warpwttaka=" + warpwttaka + "&weftdenier1=" + weftdenier1 + 
-          "&weftdenier2=" + weftdenier2 + "&width=" + width + "&pick=" + pick + "&weftweight=" + weftweight +
-          "&jogname=" + jogname + "&jograte=" + jograte + "&jogamount=" + jogamount + "&newjogdate=" + newjogdate +
-          "&droppingname=" + droppingname + "&droppingrate=" + droppingrate + "&droppingamount=" + droppingamount +
-          "&beammakeer=" + beammakeer + "&beamspreader=" + beamspreader + "&spreaderrate=" + spreaderrate +
-          "&makerrate=" + makerrate + "&remarks=" + remarks + "&nooftaka=" + nooftaka + "&newinstalldate=" + newinstalldate +
-          "&onemeterswt=" + onemeterswt + "&weftmeters=" + weftmeters + "&newspreaderdate=" + newspreaderdate +
-          "&weighttaka=" + weighttaka + "&producemeters=" + producemeters + "&producewt=" + producewt +
-          "&weight100meters=" + weight100meters + "&newcompletiondate=" + newcompletiondate + "&shrinkage=" + shrinkage +
-          "&balmeters=" + balmeters + "&baltaka=" + baltaka + "&newdroppingdate=" + newdroppingdate +
-          "&masterbeam=" + masterbeam.toString() + "&recserial=" + recserial + "&recpartyid=" +recpartyid +
-          "&rectype=" + rectype + "&id=" + id.toString();
+          db +
+          "&company=&cno=" +
+          cno +
+          "&user=" +
+          username +
+          "&srchr=" +
+          srchr +
+          "&serial=" +
+          serial +
+          '&startdate=' +
+          startdate.toString() +
+          '&enddate=' +
+          enddate.toString() +
+          "&branch=" +
+          branch +
+          "&beamchr=" +
+          beamchr +
+          "&beamno=" +
+          beamno +
+          "&itemname=" +
+          itemname +
+          '&date=' +
+          newwarpdate +
+          '&pipeno=' +
+          pipeno +
+          '&den1=' +
+          denier1 +
+          '&den2=' +
+          denier2 +
+          '&den3=' +
+          denier3 +
+          "&length=" +
+          length +
+          '&ends=' +
+          ends +
+          "&oilwt=" +
+          oliweight +
+          "&reeds=" +
+          reed +
+          "&beamwt=" +
+          beamweight +
+          "&beammtrs=" +
+          metersonbeam +
+          "&mtrspertaka=" +
+          metertaka +
+          "&machine=" +
+          machineno +
+          "&shtperc=" +
+          shortage +
+          "&estimate1=" +
+          estimale +
+          "&estimate2=" +
+          estimale2 +
+          "&tml=" +
+          topmidlow.toString() +
+          "&per=" +
+          per.toString() +
+          "&warpwtpertaka=" +
+          warpwttaka +
+          "&weftden1=" +
+          weftdenier1 +
+          "&weftden2=" +
+          weftdenier2 +
+          "&width=" +
+          width +
+          "&pick=" +
+          pick +
+          "&weftwt=" +
+          weftweight +
+          "&jogname=" +
+          jogname +
+          "&jograte=" +
+          jograte +
+          "&jogamount=" +
+          jogamount +
+          "&jogdate=" +
+          newjogdate +
+          "&droppingname=" +
+          droppingname +
+          "&droppingrate=" +
+          droppingrate +
+          "&droppingamount=" +
+          droppingamount +
+          "&maker=" +
+          beammakeer +
+          "&spreader=" +
+          beamspreader +
+          "&spreadrate=" +
+          spreaderrate +
+          "&makerrate=" +
+          makerrate +
+          "&remarks=" +
+          remarks +
+          "&taka=" +
+          nooftaka +
+          "&installdate=" +
+          newinstalldate +
+          "&mtrswt=" +
+          onemeterswt +
+          "&weftmtrs=" +
+          weftmeters +
+          "&spreaddate=" +
+          newspreaderdate +
+          "&wefttaka=" +
+          weighttaka +
+          "&prodmeters=" +
+          producemeters +
+          "&prodweight=" +
+          producewt +
+          "&wtmtrs=" +
+          weight100meters +
+          "&completiondate=" +
+          newcompletiondate +
+          "&shrinkage=" +
+          shrinkage +
+          "&balmtr=" +
+          balmeters +
+          "&baltaka=" +
+          baltaka +
+          "&droppingdate=" +
+          newdroppingdate +
+          "&masterbeam=" +
+          masterbeam.toString() +
+          "&recserial=" +
+          recserial +
+          "&recpartyid=" +
+          recpartyid +
+          "&rectype=" +
+          rectype +
+          "&id=" +
+          id.toString();
 
       print(" saveData : " + uri);
+
+      // final file = File('D:/log.txt');
+      // file.writeAsString(uri.toString(), mode: FileMode.write);
+
       final headers = {
         'Content-Type': 'application/json',
       };
@@ -600,7 +842,119 @@ class _BeamCardAddState extends State<BeamCardAdd> {
       setState(() {
         isButtonActive = success;
       });
-    } 
+    }
+
+    calnooftaka() {
+      var metersonbeam = double.parse(_metersonbeam.text);
+      var metertaka = double.parse(_metertaka.text);
+
+      var nooftaka = metersonbeam / metertaka;
+
+      setState(() {
+        _nooftaka.text = nooftaka.toStringAsFixed(2);
+      });
+    }
+
+    calbeamweight() {
+      var denier1 = double.parse(_denier1.text);
+      var length = double.parse(_length.text);
+      var ends = double.parse(_ends.text);
+      var beamweight = 0.0;
+
+      beamweight = denier1 * length * ends / 9000000;
+
+      setState(() {
+        _beamweight.text = beamweight.toStringAsFixed(3);
+      });
+    }
+
+    cal1meterweight() {
+      var beamweight = double.parse(_beamweight.text);
+      var length = double.parse(_length.text);
+      var onemeterweight = 0.0;
+
+      onemeterweight = beamweight / length;
+
+      setState(() {
+        _1meterswt.text = onemeterweight.toStringAsFixed(3);
+        print("!!!!!!!!!!!!!!!!!!!!!!!!" + _1meterswt.text);
+      });
+    }
+
+    caljogamount() {
+      var ends = double.parse(_ends.text);
+      var jograte = double.parse(_jograte.text);
+      var jogamount = 0.0;
+
+      jogamount = ends * jograte / 1000;
+
+      setState(() {
+        _jogamount.text = jogamount.toStringAsFixed(2);
+      });
+    }
+
+    caldroppingamount() {
+      var ends = double.parse(_ends.text);
+      var droppingrate = double.parse(_droppingrate.text);
+      var droppingamount = 0.0;
+
+      droppingamount = ends * droppingrate / 1000;
+
+      setState(() {
+        _droppingamount.text = droppingamount.toStringAsFixed(2);
+      });
+    }
+
+    calweftweight() {
+      var length = double.parse(_length.text);
+      var weftden1 = double.parse(_weftdenier1.text);
+      var width = double.parse(_width.text);
+      var pick = double.parse(_pick.text);
+      var weftwt = 0.0;
+
+      weftwt = length * weftden1 * width * pick / 9000000;
+
+      setState(() {
+        _weftweight.text = weftwt.toStringAsFixed(3);
+      });
+    }
+
+    calweftmeters() {
+      var weftweight = double.parse(_weftweight.text);
+      var beammeters = double.parse(_metersonbeam.text);
+      var weftmeters = 0.0;
+
+      weftmeters = (weftweight / beammeters) * 100;
+
+      setState(() {
+        _weftmeters.text = weftmeters.toStringAsFixed(3);
+      });
+    }
+
+    calweftwttaka() {
+      var beamweight = double.parse(_beamweight.text);
+      var nooftaka = double.parse(_nooftaka.text);
+      var weftwttaka = 0.0;
+
+      weftwttaka = beamweight / nooftaka;
+
+      setState(() {
+        _warpwttaka.text = weftwttaka.toStringAsFixed(3);
+      });
+    }
+
+    calweight100meters() {
+      var beamweight = double.parse(_beamweight.text);
+      var weftweight = double.parse(_weftweight.text);
+      var beammeters = double.parse(_metersonbeam.text);
+      var weight100meters = 0.0;
+
+      weight100meters = ((beamweight + weftweight) / beammeters) * 100;
+
+      setState(() {
+        _weight100meters.text = weight100meters.toStringAsFixed(3);
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -780,6 +1134,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Denier1',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -800,6 +1165,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Denier2',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -816,6 +1192,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Denier3',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -832,6 +1219,20 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Length',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      setState(() {
+                        _metersonbeam.text = _length.text;
+                        calnooftaka();
+                        calbeamweight();
+                        cal1meterweight();
+                        caljogamount();
+                        caldroppingamount();
+                        calweftweight();
+                        calweftmeters();
+                        calweftwttaka();
+                        calweight100meters();
+                      });
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -852,6 +1253,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Ends',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -920,6 +1332,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Meters On Beam',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -936,6 +1359,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Meters/Taka',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -974,6 +1408,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Shortage',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1019,47 +1464,45 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                 ),
                 Expanded(
                   child: DropdownButtonFormField(
-                    value: dropdownTopMidLow,
-                    decoration: const InputDecoration(
-                        icon: const Icon(Icons.person),
-                        labelText: 'Top/Middle/Low',
-                        hintText: 'Top/Middle/Low'),
-                    items: TopMidLows.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    icon: const Icon(Icons.arrow_drop_down_circle),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownTopMidLow = newValue!;
-                        print(dropdownTopMidLow);
-                      });
-                    }
-                  ),
+                      value: dropdownTopMidLow,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          labelText: 'Top/Middle/Low',
+                          hintText: 'Top/Middle/Low'),
+                      items: TopMidLows.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      icon: const Icon(Icons.arrow_drop_down_circle),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownTopMidLow = newValue!;
+                          print(dropdownTopMidLow);
+                        });
+                      }),
                 ),
                 Expanded(
                   child: DropdownButtonFormField(
-                    value: dropdownPer,
-                    decoration: const InputDecoration(
-                        icon: const Icon(Icons.person),
-                        labelText: 'Per',
-                        hintText: 'Per'),
-                    items: Pers.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    icon: const Icon(Icons.arrow_drop_down_circle),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownPer = newValue!;
-                        print(dropdownPer);
-                      });
-                    }
-                  ),
+                      value: dropdownPer,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          labelText: 'Per',
+                          hintText: 'Per'),
+                      items: Pers.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      icon: const Icon(Icons.arrow_drop_down_circle),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownPer = newValue!;
+                          print(dropdownPer);
+                        });
+                      }),
                 ),
               ],
             ),
@@ -1076,6 +1519,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Warp Weight Taka',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1092,6 +1546,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Weft Denier1',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1108,6 +1573,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Weft Denier2',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1128,6 +1604,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Width',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1144,6 +1631,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Pick',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1198,6 +1696,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Jog Rate',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1270,6 +1779,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Droppingrate',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1304,7 +1824,9 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       hintText: 'Beam Makeer',
                       labelText: 'Beam Makeer',
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      gotoMakerScreen(context);
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1342,6 +1864,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Maker Rate',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1358,6 +1891,17 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       labelText: 'Spreader Rate',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calnooftaka();
+                      calbeamweight();
+                      cal1meterweight();
+                      caljogamount();
+                      caldroppingamount();
+                      calweftweight();
+                      calweftmeters();
+                      calweftwttaka();
+                      calweight100meters();
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -1646,25 +2190,24 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                 ),
                 Expanded(
                   child: DropdownButtonFormField(
-                    value: dropdownMasterBeam,
-                    decoration: const InputDecoration(
-                        icon: const Icon(Icons.person),
-                        labelText: 'MasterBeam',
-                        hintText: 'MasterBeam'),
-                    items: MasterBeam.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    icon: const Icon(Icons.arrow_drop_down_circle),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownMasterBeam = newValue!;
-                        print(dropdownMasterBeam);
-                      });
-                    }
-                  ),
+                      value: dropdownMasterBeam,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          labelText: 'MasterBeam',
+                          hintText: 'MasterBeam'),
+                      items: MasterBeam.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      icon: const Icon(Icons.arrow_drop_down_circle),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownMasterBeam = newValue!;
+                          print(dropdownMasterBeam);
+                        });
+                      }),
                 ),
               ],
             ),
