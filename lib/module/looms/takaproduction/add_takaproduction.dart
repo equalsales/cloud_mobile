@@ -95,7 +95,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     _beaminstalldate.text = DateFormat("dd-MM-yyyy").format(curDate);
     if (int.parse(widget.xid) > 0) {
       loadData();
-
       loadDetData();
     }
   }
@@ -107,7 +106,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     var id = widget.xid;
 
     uri =
-        '${globals.cdomain}/api/api_gettakaadjustmentdetlist?dbname=' +
+        '${globals.cdomain}/api/api_edittakaproduction?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -135,7 +134,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
         "amount": jsonData[iCtr]['amount'].toString(),
       });
     }
-
     setState(() {
       ItemDetails = ItemDet;
     });
@@ -169,33 +167,37 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
     jsonData = jsonData['Data'];
     jsonData = jsonData[0];
-    _serial.text = getValue(jsonData['serial'], 'C');
-    _srchr.text = getValue(jsonData['srchr'], 'C');
+    // _serial.text = getValue(jsonData['serial'], 'C');
+    // _srcr.text = getValue(jsonData['srchr'], 'C');
 
-    _branch.text = getValue(jsonData['branch'], 'C');
-    _folddate.text = getValue(jsonData['branch'], 'C');
-    _machineno.text = getValue(jsonData['branch'], 'C');
-    _quality.text = getValue(jsonData['branch'], 'C');
-    _beamchr.text = getValue(jsonData['branch'], 'C');
-    _beamno.text = getValue(jsonData['branch'], 'C');
-
-    _beaminstalldate.text = getValue(jsonData['branch'], 'C');
-
-    _ends.text = getValue(jsonData['branch'], 'C');
-    _stdwt.text = getValue(jsonData['branch'], 'C');
-    _takachr.text = getValue(jsonData['branch'], 'C');
-    _takano.text = getValue(jsonData['branch'], 'C');
-    _design.text = getValue(jsonData['branch'], 'C');
-    _foldmetrs.text = getValue(jsonData['branch'], 'C');
-    _extrameters.text = getValue(jsonData['branch'], 'C');
-    _weight.text = getValue(jsonData['branch'], 'C');
-    _avgwt.text = getValue(jsonData['branch'], 'C');
-    _pcs.text = getValue(jsonData['branch'], 'C');
-    _cut.text = getValue(jsonData['branch'], 'C');
-    _cutmeters.text = getValue(jsonData['branch'], 'C');
-    _remark.text = getValue(jsonData['branch'], 'C');
-    _actwt.text = getValue(jsonData['branch'], 'C');
-    _diffwt.text = getValue(jsonData['branch'], 'C');
+    _branch.text = getValue(jsonData['branch'].toString(), 'C');
+    String inputDateString = getValue(jsonData['date'].toString(), 'N');
+    List<String> parts = inputDateString.split(' ')[0].split('-');
+    String date = "${parts[2]}-${parts[1]}-${parts[0]}";
+    _folddate.text = date.toString();
+    _machineno.text = getValue(jsonData['machine'].toString(), 'C');
+    _quality.text = getValue(jsonData['itemname'].toString(), 'C');
+    _beamchr.text = getValue(jsonData['beamchr'].toString(), 'C');
+    _beamno.text = getValue(jsonData['beamno'].toString(), 'C');
+    String inputDateString2 = getValue(jsonData['beaminstalldate'].toString(), 'N');
+    List<String> parts2 = inputDateString2.split(' ')[0].split('-');
+    String beaminstalldate = "${parts2[2]}-${parts2[1]}-${parts2[0]}";
+    _beaminstalldate.text = beaminstalldate.toString();
+    _ends.text = getValue(jsonData['ends'].toString(), 'C');
+    _stdwt.text = getValue(jsonData['stdwt'].toString(), 'C');
+    _takachr.text = getValue(jsonData['takachr'].toString(), 'C');
+    _takano.text = getValue(jsonData['takano'].toString(), 'C');
+    _design.text = getValue(jsonData['design'].toString(), 'C');
+    _foldmetrs.text = getValue(jsonData['foldmtrs'].toString(), 'C');
+    _extrameters.text = getValue(jsonData['extrameters'].toString(), 'C');
+    _weight.text = getValue(jsonData['weight'].toString(), 'C');
+    _avgwt.text = getValue(jsonData['avgwt'].toString(), 'C');
+    _pcs.text = getValue(jsonData['pcs'].toString(), 'C');
+    _cut.text = getValue(jsonData['cut'].toString(), 'C');
+    _cutmeters.text = getValue(jsonData['cutmeters'].toString(), 'C');
+    _remark.text = getValue(jsonData['remarks'].toString(), 'C');
+    _actwt.text = getValue(jsonData['actwt'].toString(), 'C');
+    _diffwt.text = getValue(jsonData['diffwt'].toString(), 'C');
     
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
@@ -414,7 +416,10 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       print(jsonEncode(ItemDetails));
 
       DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(folddate);
-      String newDate = DateFormat("yyyy-MM-dd").format(parsedDate); 
+      String newfolddate = DateFormat("yyyy-MM-dd").format(parsedDate); 
+
+      DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(beaminstalldate);
+      String newbeaminstalldate = DateFormat("yyyy-MM-dd").format(parsedDate2); 
 
       uri =
           "${globals.cdomain}/api/api_storetakaadjustment?dbname=" +
@@ -432,7 +437,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
               "&serial=" +
               serial +
               "&date=" +
-              newDate +
+              newfolddate +
               "&book=" +
               "&remarks=" +
               // remarks +
@@ -443,35 +448,35 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
               "&parcel=1";
       print(" SaveData " + uri);
 
-      final headers = {
-        'Content-Type': 'application/json', // Set the appropriate content-type
-        // Add any other headers required by your API
-      };
-      print(ItemDetails);
-      var response = await http.post(Uri.parse(uri),
-          headers: headers, body: jsonEncode(ItemDetails));
+      // final headers = {
+      //   'Content-Type': 'application/json', // Set the appropriate content-type
+      //   // Add any other headers required by your API
+      // };
+      // print(ItemDetails);
+      // var response = await http.post(Uri.parse(uri),
+      //     headers: headers, body: jsonEncode(ItemDetails));
 
-      var jsonData = jsonDecode(response.body);
+      // var jsonData = jsonDecode(response.body);
 
-      //print('4');
+      // //print('4');
 
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
+      // var jsonCode = jsonData['Code'];
+      // var jsonMsg = jsonData['Message'];
 
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else {
-        Fluttertoast.showToast(
-          msg: "Saved !!!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.white,
-          textColor: Colors.purple,
-          fontSize: 16.0,
-        );
-        Navigator.pop(context);
-      }
+      // if (jsonCode == '500') {
+      //   showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+      // } else {
+      //   Fluttertoast.showToast(
+      //     msg: "Saved !!!",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.white,
+      //     textColor: Colors.purple,
+      //     fontSize: 16.0,
+      //   );
+      //   Navigator.pop(context);
+      // }
       return true;
     }
 
@@ -519,11 +524,11 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
             label: Text('',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
           )),
-          DataCell(Text(ItemDetails[iCtr]['newdate'])),
-          DataCell(Text(ItemDetails[iCtr]['worker'])),
-          DataCell(Text(ItemDetails[iCtr]['meters'])),
-          DataCell(Text(ItemDetails[iCtr]['rate'])),
-          DataCell(Text(ItemDetails[iCtr]['amount'])),
+          DataCell(Text(ItemDetails[iCtr]['newdate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['worker'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['meters'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['rate'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['amount'].toString())),
         ]));
       }
 

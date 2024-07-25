@@ -189,12 +189,14 @@ class _TakaProductionListPageState extends State<TakaProductionList> {
           child: ListView.builder(
         itemCount: this._companydetails.length,
         itemBuilder: (context, index) {
-          String date = this._companydetails[index]['date2'].toString();
+          String date = this._companydetails[index]['date'].toString();
           String serial = this._companydetails[index]['serial'].toString();
           String branch = this._companydetails[index]['branch'].toString();
-          String srchr = this._companydetails[index]['srchr'].toString();
-          String remarks = this._companydetails[index]['remarks'].toString();
-          String bookno = this._companydetails[index]['bookno'].toString();
+          String machine = this._companydetails[index]['machine'].toString();
+          String quality = this._companydetails[index]['quality'].toString();
+          String beamchr = this._companydetails[index]['beamchr'].toString();
+          String foldmtrs = this._companydetails[index]['foldmtrs'].toString();
+          String extrameters = this._companydetails[index]['extrameters'].toString();
           String id = this._companydetails[index]['id'].toString();
 
           int newid = 0;
@@ -337,15 +339,21 @@ class _TakaProductionListPageState extends State<TakaProductionList> {
                       ' [ ' +
                       id +
                       ' ]' +
-                      ' BookNo : ' +
-                      bookno,
+                      ' Machine : ' +
+                      machine,
                   style: TextStyle(
                       fontFamily: 'verdana',
                       fontSize: 10.0,
                       fontWeight: FontWeight.bold)),
               subtitle: Text(
-                  'Remarks :' +
-                      remarks ,
+                  'Quality :' +
+                  quality +
+                  'Beamchr :' + 
+                  beamchr +
+                  'Foldmtrs :' +
+                  foldmtrs +
+                  'Extrameters :' +
+                  extrameters,
                   style: TextStyle(
                       fontFamily: 'verdana',
                       fontSize: 10.0,

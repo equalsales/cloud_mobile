@@ -115,9 +115,9 @@ class _MyHomePage extends State<MyHomePage> {
     print('5');
     globals.dbname = _db;
     globals.username = _username;
-
+    //cdomain2
     var url = Uri.parse(
-        '${globals.cdomain2}/api/api_authuser?dbname=' +
+        '${globals.cdomain}/api/api_authuser?dbname=' +
             _db +
             '&username=' +
             _username +

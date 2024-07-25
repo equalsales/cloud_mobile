@@ -36,8 +36,9 @@ class _YearSelectionPageState extends State<YearSelection> {
 
   Future<bool> companydetails(_user, _pwd) async {
     var db = globals.dbname;
+    //cdomain2
     var response = await http.get(Uri.parse(
-        '${globals.cdomain2}/api/api_getcompanylist?dbname=' +
+        '${globals.cdomain}/api/api_getcompanylist?dbname=' +
             db +
             '&username=' +
             widget.xuser +
