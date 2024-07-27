@@ -155,11 +155,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
             '&cno=' +
             cno +
             '&id=' +
-            id +
-            '&startdate=' +
-            fromdate.toString() +
-            '&enddate=' +
-            todate.toString();
+            id;
     print(" loadData :" +uri);
     var response = await http.get(Uri.parse(uri));
 
@@ -422,7 +418,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       String newbeaminstalldate = DateFormat("yyyy-MM-dd").format(parsedDate2); 
 
       uri =
-          "${globals.cdomain}/api/api_storetakaadjustment?dbname=" +
+          "${globals.cdomain}/api/api_storetakaproduction?dbname=" +
               db +
               "&company=&cno=" +
               cno +
@@ -430,53 +426,84 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
               username +
               "&branch=" +
               branch +
-              "&type=" +
-              "&party=" +
+              "&date=" +
+              newfolddate.toString() +
+              "&machine=" +
+              machineno + 
+              "&itemname=" +
+              quality +
+              "&beamchr=" +
+              beamchr +
+              "&beamno=" +
+              beamno +
+              "&beaminstalldate=" +
+              newbeaminstalldate +
+              "&ends=" +
+              ends +
+              "&stdwt=" +
+              stdwt +
+              "&takachr=" +
+              takachr +
+              "&takano=" +
+              takano +
+              "&design=" +
+              design +
+              "&foldmtrs=" + 
+              foldmetrs +
+              "&extrameters=" +
+              extrameters +
+              "&weight=" +
+              weight +
+              "&avgwt=" + 
+              avgwt +
+              "&pcs=" +
+              pcs +  
+              "&cut=" +
+              cut +  
+              "&cutmeters=" +
+              cutmeters +
+              "&remarks=" +
+              remark +  
+              "&actwt=" +
+              actwt +  
+              "&diffwt=" +
+              diffwt +  
               "&srchr=" +
               srchr +
               "&serial=" +
               serial +
-              "&date=" +
-              newfolddate +
-              "&book=" +
-              "&remarks=" +
-              // remarks +
-              "&chlnno=" +
-              "&chlnchr=" +
               "&id=" +
-              id.toString() +
-              "&parcel=1";
+              id.toString();
+
       print(" SaveData " + uri);
 
-      // final headers = {
-      //   'Content-Type': 'application/json', // Set the appropriate content-type
-      //   // Add any other headers required by your API
-      // };
-      // print(ItemDetails);
-      // var response = await http.post(Uri.parse(uri),
-      //     headers: headers, body: jsonEncode(ItemDetails));
+      final headers = {
+        'Content-Type': 'application/json',
+      };
+      print(ItemDetails);
+      var response = await http.post(Uri.parse(uri),
+          headers: headers, body: jsonEncode(ItemDetails));
 
-      // var jsonData = jsonDecode(response.body);
+      var jsonData = jsonDecode(response.body);
 
-      // //print('4');
 
-      // var jsonCode = jsonData['Code'];
-      // var jsonMsg = jsonData['Message'];
+      var jsonCode = jsonData['Code'];
+      var jsonMsg = jsonData['Message'];
 
-      // if (jsonCode == '500') {
-      //   showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      // } else {
-      //   Fluttertoast.showToast(
-      //     msg: "Saved !!!",
-      //     toastLength: Toast.LENGTH_SHORT,
-      //     gravity: ToastGravity.BOTTOM,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Colors.white,
-      //     textColor: Colors.purple,
-      //     fontSize: 16.0,
-      //   );
-      //   Navigator.pop(context);
-      // }
+      if (jsonCode == '500') {
+        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+      } else {
+        Fluttertoast.showToast(
+          msg: "Saved !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
+        );
+        Navigator.pop(context);
+      }
       return true;
     }
 

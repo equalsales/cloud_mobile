@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:convert';
+import 'package:cloud_mobile/list/worker.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:http/http.dart' as http;
@@ -98,6 +99,33 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
       });
   }
 
+  void gotoWorkerScreen(BuildContext context) async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => worker_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  acctype: '',
+                )));
+    setState(() {
+      var retResult = result;
+      var newResult = result[1];
+      var selJogname = '';
+      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+        if (ictr > 0) {
+          selJogname = selJogname + ',';
+        }
+        selJogname = selJogname + retResult[0][ictr];
+      }
+      setState(() {
+        _worker.text = newResult[0]['worker'].toString();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Future<bool> saveData() async {
@@ -180,7 +208,9 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
                       hintText: 'Select Worker',
                       labelText: 'Select Worker',
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      gotoWorkerScreen(context);
+                    },
                     validator: (value) {
                       return null;
                     },
