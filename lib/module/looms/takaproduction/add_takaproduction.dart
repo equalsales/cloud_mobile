@@ -536,8 +536,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
         if (ItemDetails[iCtr]['meters'] != '') {
           nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
           totmtrs += nMeters;
-          _extrameters.text = totmtrs.toStringAsFixed(2);
         }
+        var foldmetrs = double.parse(_foldmetrs.text);
+        _extrameters.text = (foldmetrs - totmtrs).toStringAsFixed(2);
 
         print(ItemDetails[iCtr]);
         _datarow.add(DataRow(cells: [
@@ -686,6 +687,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     gotoBranchScreen(context);
                   },
                   validator: (value) {
+                    if(value == ''){
+                      return "Please enter Branch";
+                    }
                     return null;
                   },
                 ),
@@ -703,6 +707,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                 _selectDate(context);
               },
               validator: (value) {
+                if(value == ''){
+                  return "Please enter folddate";
+                }
                 return null;
               },
             ),
@@ -722,6 +729,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       gotoMachineScreen(context);
                     },
                     validator: (value) {
+                      if(value == ''){
+                        return "Please enter machine";
+                      }
                       return null;
                     },
                   )
@@ -740,6 +750,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       gotoItemnameScreen(context);
                     },
                     validator: (value) {
+                      if(value == ''){
+                        return "Please enter quality";
+                      }
                       return null;
                     },
                   )
@@ -776,6 +789,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
+                      if(value == ''){
+                        return "Please enter beamno";
+                      }
                       return null;
                     },
                   )
@@ -863,6 +879,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                   },
                   onTap: () {},
                   validator: (value) {
+                    if(value == ''){
+                      return "Please enter takachr";
+                    }
                     return null;
                   },
                 )),
@@ -883,6 +902,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
+                      if(value == ''){
+                        return "Please enter takano";
+                      }
                       return null;
                     },
                   )
@@ -901,6 +923,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     gotoDesignScreen(context);
                   },
                   validator: (value) {
+                    if(value == ''){
+                      return "Please enter design";
+                    }
                     return null;
                   },
                 ))
@@ -927,6 +952,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       caldiffwt();
                     },
                     validator: (value) {
+                      if(value == ''){
+                        return "Please enter foldmeters";
+                      }
                       return null;
                     },
                   )
@@ -971,6 +999,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       caldiffwt();
                     },
                     validator: (value) {
+                      if(value == ''){
+                        return "Please enter weight";
+                      }
                       return null;
                     },
                   )

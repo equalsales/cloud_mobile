@@ -126,6 +126,18 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
     });
   }
 
+  calamount(){
+    var rate = double.parse(_rate.text);
+    var meters = double.parse(_meters.text);
+    var amount = 0.0;
+
+    amount = meters * rate;
+
+    setState(() {
+      _amount.text = amount.toStringAsFixed(2);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Future<bool> saveData() async {
@@ -212,6 +224,9 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
                       gotoWorkerScreen(context);
                     },
                     validator: (value) {
+                      if(value == ''){
+                        return "Please enter worker";
+                      }
                       return null;
                     },
                   ),
@@ -232,8 +247,11 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
                       labelText: 'Meters',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calamount();
+                    },
                     validator: (value) {
-                      if(value == '' || value == 0){
+                      if(value == ''){
                         return "Please enter Meter";
                       }
                       return null;
@@ -252,6 +270,9 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
                       labelText: 'Rate',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      calamount();
+                    },
                     validator: (value) {
                       return null;
                     },

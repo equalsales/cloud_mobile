@@ -129,7 +129,7 @@ Future getPartyDetails(String Party, int Id,
   if (crlimit > 0) {
     uri =
     //cdomain2
-        '${globals.cdomain}/getpartyledbal?partyid=$partyid&acgroupid=&dbname=' +
+        '${globals.cdomain2}/getpartyledbal?partyid=$partyid&acgroupid=&dbname=' +
             db +
             '&cno=$cno' +
             '&fromdate=$startDate'+

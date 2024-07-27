@@ -1031,6 +1031,9 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                     gotoBranchScreen(context);
                   },
                   validator: (value) {
+                    if(value == ''){
+                      return "Please enter Branch";
+                    }
                     return null;
                   },
                 ),
@@ -1065,6 +1068,9 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
+                      if(value == ''){
+                        return "Please enter Beamno";
+                      }
                       return null;
                     },
                   ),
@@ -1082,6 +1088,9 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                       gotoItemnameScreen(context);
                     },
                     validator: (value) {
+                      if(value == ''){
+                        return "Please enter Itemname";
+                      }
                       return null;
                     },
                   ),
