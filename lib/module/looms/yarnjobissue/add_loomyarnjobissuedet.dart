@@ -165,6 +165,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     // });
   }
 
+
   Future<bool> fetchdetails() async {
     String uri = '';
     var cno = globals.companyid;
@@ -175,6 +176,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     var branch = widget.xbranch;
     var cartonno = _Cartonno.text;
     var cartonchr = _Cartonchr.text;
+
 
     fromdate = retconvdate(fromdate);
     todate = retconvdate(todate);
@@ -197,58 +199,123 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
           return true;
         }
       }
-    }
+    } 
+     
+    // uri =
+    //     '${globals.cdomain}/api/commonapi_gettakastock2?dbname=' +
+    //         db +
+    //         '&partyfilter=N&takachr=' +
+    //         cartonchr +
+    //         '&takano=' +
+    //         cartonno +
+    //         '&branchid=(' +
+    //         branch +
+    //         ')&getdata=Y';
 
-    uri = 'https://looms.equalsoftlink.com/api/commonapi_cartoonstock?dbname=' +
-        db +
-        '&cno=' +
-        cno +
-        '&fromdate=' +
-        fromdate +
-        '&todate=' +
-        todate +
-        '&branch=' + 
-        branch + 
-        '&itemname=&cartonchr=' +
-        cartonchr +
-        '&cartonno=' +
-        cartonno;
-    // 'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
+    //  uri = 'https://looms.equalsoftlink.com/api/commonapi_cartoonstock?dbname=' +
     //     db +
     //     '&cno=' +
     //     cno +
-    //     '&id=' +
-    //     id +
-    //     '&startdate=' +
+    //     '&fromdate=' +
     //     fromdate +
-    //     '&enddate=' +
-    //     todate;
-    print(uri);
+    //     '&todate=' +
+    //     todate +
+    //     '&branch=' + 
+    //     branch + 
+    //     '&itemname=&cartonchr=' +
+    //     cartonchr +
+    //     '&cartonno=' +
+    //     cartonno;
+
+    print(" fetchdetails  :" + uri);
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
 
     jsonData = jsonData['Data'];
     if (jsonData == null) {
-      showAlertDialog(context, 'Carton no No Found...');
+      showAlertDialog(context, 'Carton No Found...');
       return true;
     }
 
-    jsonData = jsonData[0];
+    _jsonData = List<Map<String, dynamic>>.from(jsonData);
 
-    setState(() {
-      _itemname.text = jsonData['itemname'];
-      _netwt.text = jsonData['balwt'].toString();
-      _cops.text = jsonData['cops'].toString();
-      _unit.text = jsonData['unit'];
-      _lotno.text = jsonData['lotno'];
-      _ychlndetid.text = jsonData['detid'].toString();
-      _ychlnid.text = jsonData['mstid'].toString();
-      _ychlnsubdetid.text = jsonData['subdetid'].toString();
-      _fmode.text = jsonData['fmode'];
-      _rate.text = jsonData['rate'];
-      _amount.text = jsonData['amount'];
-      _cone.text = '0';
+    print(_jsonData);
+
+    if (1 < _jsonData.length) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Select Item"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: double.maxFinite,
+                  height: MediaQuery.sizeOf(context).height / 2,
+                  child: ListView.builder(
+                    itemCount: _jsonData.length,
+                    itemBuilder: (context, index) {
+                      return CheckboxListTile(
+                        value: false,
+                        subtitle: Text(_jsonData[index]['itemname'].toString()),
+                        title: Text(_jsonData[index]['meters'].toString()),
+                        onChanged: (bool? value) {
+                          _itemname.text = jsonData[index]['itemname'].toString();
+                          _netwt.text = jsonData[index]['balwt'].toString();
+                          _cops.text = jsonData[index]['cops'].toString();
+                          _unit.text = jsonData[index]['unit'].toString();
+                          _lotno.text = jsonData[index]['lotno'].toString();
+                          _ychlndetid.text = jsonData[index]['detid'].toString();
+                          _ychlnid.text = jsonData[index]['mstid'].toString();
+                          _ychlnsubdetid.text = jsonData[index]['subdetid'].toString();
+                          _fmode.text = jsonData[index]['fmode'].toString();
+                          _rate.text = jsonData[index]['rate'].toString();
+                          _amount.text = jsonData[index]['amount'].toString();
+                          _cone.text = '0';
+
+                          double netwt = double.parse(_netwt.text);
+                          double cops = double.parse(_cops.text);
+
+                          String unit = _unit.text;
+                          double rate = 0;
+                          if (_rate.text != '') {
+                            rate = double.parse(_rate.text);
+                          }
+                          double amount = 0;
+                          if ((unit == 'W') || (unit == '')) {
+                            amount = netwt * rate;
+                          } else {
+                            amount = cops * rate;
+                          }
+                          _amount.text = amount.toString();
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } else {
+      setState(() {
+        _itemname.text = jsonData[0]['itemname'].toString();
+        _netwt.text = jsonData[0]['balwt'].toString();
+        _cops.text = jsonData[0]['cops'].toString();
+        _unit.text = jsonData[0]['unit'].toString();
+        _lotno.text = jsonData[0]['lotno'].toString();
+        _ychlndetid.text = jsonData[0]['detid'].toString();
+        _ychlnid.text = jsonData[0]['mstid'].toString();
+        _ychlnsubdetid.text = jsonData[0]['subdetid'].toString();
+        _fmode.text = jsonData[0]['fmode'].toString();
+        _rate.text = jsonData[0]['rate'].toString();
+        _amount.text = jsonData[0]['amount'].toString();
+        _cone.text = '0';
+      });
 
       double netwt = double.parse(_netwt.text);
       double cops = double.parse(_cops.text);
@@ -265,8 +332,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
         amount = cops * rate;
       }
       _amount.text = amount.toString();
-    });
-    print(jsonData);
+    }
     return true;
   }
 
@@ -301,7 +367,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       // }
 
       fetchdetails();
-      //_scanBarcode = barcodeScanRes;
+      // _scanBarcode = barcodeScanRes;
     });
   }
 
