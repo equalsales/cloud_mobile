@@ -555,7 +555,15 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
         backgroundColor: Colors.green,
         enableFeedback: isButtonActive,
         onPressed: isButtonActive
-            ? _handleSaveData
+            ? () {
+              if (_formKey.currentState!.validate())
+              {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Form submitted successfully')),
+                );
+                _handleSaveData();
+              }
+            }
             : null,
       ),
       body: SingleChildScrollView(
@@ -610,6 +618,9 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                     gotoBranchScreen(context);
                   },
                   validator: (value) {
+                    if (value == ' ') {
+                      return 'Please enter branch';
+                    } 
                     return null;
                   },
                 ),
@@ -643,6 +654,9 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                       gotoPartyScreen2(context, 'SALE PARTY', _party);
                     },
                     validator: (value) {
+                      if (value == ' ') {
+                        return 'Please enter party';
+                      } 
                       return null;
                     },
                   ),
@@ -664,6 +678,9 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                      
                     },
                     validator: (value) {
+                      if (value == ' ') {
+                        return 'Please enter challanno';
+                      } 
                       return null;
                     },
                   ),
@@ -711,6 +728,9 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                     },
                     onTap: () {},
                     validator: (value) {
+                      if (value == ' ') {
+                        return 'Please enter remarks';
+                      } 
                       return null;
                     },
                   ),

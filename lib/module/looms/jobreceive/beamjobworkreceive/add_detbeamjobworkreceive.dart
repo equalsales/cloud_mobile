@@ -554,6 +554,9 @@ class _BeamJobworkReceiveDetAddState extends State<BeamJobworkReceiveDetAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
+                      if (value == ' ') {
+                        return 'Please enter ItemId';
+                      } 
                       return null;
                     },
                   ),
@@ -630,6 +633,9 @@ class _BeamJobworkReceiveDetAddState extends State<BeamJobworkReceiveDetAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
+                      if (value == ' ') {
+                        return 'Please enter weight';
+                      } 
                       return null;
                     },
                   ),
