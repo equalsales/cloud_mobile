@@ -1,6 +1,6 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cloud_mobile/module/looms/purchasechallan/yarnpurchasechallan/add_yarnpurchasechallan.dart';
+import 'package:cloud_mobile/module/looms/jobreceive/dyegreyjobworkreceive/add_dyegreyjobworkreceive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:convert';
@@ -10,13 +10,13 @@ import 'package:cloud_mobile/common/alert.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_mobile/common/global.dart' as globals;
 
-class YarnPurchaseChallanList extends StatefulWidget {
+class DyegreyJobworkReceivedList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
 
-  YarnPurchaseChallanList({Key? mykey, companyid, companyname, fbeg, fend})
+  DyegreyJobworkReceivedList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -25,10 +25,10 @@ class YarnPurchaseChallanList extends StatefulWidget {
   }
 
   @override
-  _YarnPurchaseChallanListPageState createState() => _YarnPurchaseChallanListPageState();
+  _DygreyJobworkReceivedState createState() => _DygreyJobworkReceivedState();
 }
 
-class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
+class _DygreyJobworkReceivedState extends State<DyegreyJobworkReceivedList> {
   List _companydetails = [];
   List PrintFormatDetails = [];
   List PrintidDetails = [];
@@ -39,130 +39,16 @@ class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
   String dropdownPrintFormat = 'Print Format';
   @override
   void initState() {
+    super.initState();
     loaddetails();
     loadprintformet();
-  }
-
-  Future<bool> loadprintformet() async {
-    var companyid = widget.xcompanyid;
-    var db = globals.dbname;
-    String uri = '';
-    uri =
-        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
-
-    var response = await http.get(Uri.parse(uri));
-    print(uri);
-    var jsonData = jsonDecode(response.body);
-    jsonData = jsonData['Data'];
-    print(jsonData);
-    //print(jsonData);
-    List unitDet = [];
-
-    for (var iCtr = 0; iCtr < jsonData.length; iCtr++) {
-      unitDet.add({
-        "caption": jsonData[iCtr]['caption'].toString(),
-      });
-    }
-    setState(() {
-      PrintFormatDetails = unitDet;
-    });
-    print(PrintFormatDetails);
-    return true;
-  }
-
-  Future<bool> setprintformet(printformet) async {
-    var companyid = widget.xcompanyid;
-    var db = globals.dbname;
-    String uri = '';
-    uri =
-        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
-
-    var response = await http.get(Uri.parse(uri));
-    print(uri);
-    var jsonData = jsonDecode(response.body);
-    jsonData = jsonData['Data'];
-    this.setState(() {
-      PrintidDetails = jsonData;
-    });
-    print(PrintidDetails);
-    return true;
-  }
-
-  void execExportPDF(id) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => PdfViewerPagePrint(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend,
-                  id: id.toString(),
-                  cPW: "PDF",
-                )));
-  }
-
-  void execWhatsApp(id) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PdfViewerPagePrint(
-            companyid: widget.xcompanyid,
-            companyname: widget.xcompanyname,
-            fbeg: widget.xfbeg,
-            fend: widget.xfend,
-            id: id.toString(),
-            cPW: "WhatsApp",
-            formatid: 55,
-            printid: 49,
-          ),
-        ));
-  }
-
-  Future<bool> loaddetails() async {
-    var db = globals.dbname;
-    var cno = globals.companyid;
-    var startdate = globals.fbeg;
-    var enddate = globals.fend;
-
-    print(globals.enddate);
-
-    DateTime date = DateFormat("dd-MM-yyyy").parse(startdate);
-    String start = DateFormat("yyyy-MM-dd").format(date);
-
-    DateTime date2 = DateFormat("dd-MM-yyyy").parse(enddate);
-    String end = DateFormat("yyyy-MM-dd").format(date2);
-
-    String uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&startdate=' +
-            start +
-            '&enddate=' +
-            end;
-
-
-    var response = await http.get(Uri.parse(uri));
-
-    print(" loaddetails " + uri);
-
-    var jsonData = jsonDecode(response.body);
-
-    jsonData = jsonData['Data'];
-
-    this.setState(() {
-      _companydetails = jsonData;
-    });
-
-    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Yarn Purchase Challan  List',
+        title: Text('Dygrey Jobwork Received List',
             style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
       floatingActionButton: FloatingActionButton(
@@ -171,7 +57,7 @@ class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => YarnPurchaseChallanAdd(
+                  builder: (_) => DyegreyJobworkReceivedAdd(
                         companyid: widget.xcompanyid,
                         companyname: widget.xcompanyname,
                         fbeg: widget.xfbeg,
@@ -198,8 +84,8 @@ class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
 
           String id = this._companydetails[index]['id'].toString();
 
-          int newid = 0;
-          newid = int.parse(id);
+          // int newid = 0;
+          // newid = int.parse(id);
 
           return Slidable(
             key: ValueKey(index),
@@ -364,19 +250,134 @@ class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => YarnPurchaseChallanAdd(
+                        builder: (_) => DyegreyJobworkReceivedAdd(
                               companyid: widget.xcompanyid,
                               companyname: widget.xcompanyname,
                               fbeg: widget.xfbeg,
                               fend: widget.xfend,
                               id: id,
-                            ))).then((value) => loaddetails());
+                            )));
+                // ))).then((value) => loaddetails());
               },
             ))),
           );
         },
       )),
     );
+  }
+
+  Future<bool> loadprintformet() async {
+    var companyid = widget.xcompanyid;
+    var db = globals.dbname;
+    String uri = '';
+    uri =
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
+
+    var response = await http.get(Uri.parse(uri));
+    print(uri);
+    var jsonData = jsonDecode(response.body);
+    jsonData = jsonData['Data'];
+    print(jsonData);
+    //print(jsonData);
+    List unitDet = [];
+
+    for (var iCtr = 0; iCtr < jsonData.length; iCtr++) {
+      unitDet.add({
+        "caption": jsonData[iCtr]['caption'].toString(),
+      });
+    }
+    setState(() {
+      PrintFormatDetails = unitDet;
+    });
+    print(PrintFormatDetails);
+    return true;
+  }
+
+  Future<bool> setprintformet(printformet) async {
+    var companyid = widget.xcompanyid;
+    var db = globals.dbname;
+    String uri = '';
+    uri =
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
+
+    var response = await http.get(Uri.parse(uri));
+    print(uri);
+    var jsonData = jsonDecode(response.body);
+    jsonData = jsonData['Data'];
+    this.setState(() {
+      PrintidDetails = jsonData;
+    });
+    print(PrintidDetails);
+    return true;
+  }
+
+  void execExportPDF(id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => PdfViewerPagePrint(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  id: id.toString(),
+                  cPW: "PDF",
+                )));
+  }
+
+  void execWhatsApp(id) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PdfViewerPagePrint(
+            companyid: widget.xcompanyid,
+            companyname: widget.xcompanyname,
+            fbeg: widget.xfbeg,
+            fend: widget.xfend,
+            id: id.toString(),
+            cPW: "WhatsApp",
+            formatid: 55,
+            printid: 49,
+          ),
+        ));
+  }
+
+  Future<bool> loaddetails() async {
+    var db = globals.dbname;
+    var cno = globals.companyid;
+    var startdate = globals.fbeg;
+    var enddate = globals.fend;
+
+    print(globals.enddate);
+
+    DateTime date = DateFormat("dd-MM-yyyy").parse(startdate);
+    String start = DateFormat("yyyy-MM-dd").format(date);
+
+    DateTime date2 = DateFormat("dd-MM-yyyy").parse(enddate);
+    String end = DateFormat("yyyy-MM-dd").format(date2);
+
+    String uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
+        db +
+        '&cno=' +
+        cno +
+        '&startdate=' +
+        start +
+        '&enddate=' +
+        end;
+
+    var response = await http.get(Uri.parse(uri));
+
+    print(" loaddetails " + uri);
+
+    var jsonData = jsonDecode(response.body);
+
+    jsonData = jsonData['Data'];
+
+    this.setState(() {
+      _companydetails = jsonData;
+    });
+
+    return true;
   }
 }
 
@@ -394,16 +395,15 @@ void execDelete(BuildContext context, int index, int id, String name) {
         TextButton(
           onPressed: () async {
             var db = globals.dbname;
-            var cno = globals.companyid;
+            // var cno = globals.companyid;
 
             String uri = '';
 
             uri = '${globals.cdomain}/api/api_deletecashbook?dbname=' +
-                  db +
-                  '&id=' +
-                  id.toString();
-              
-            
+                db +
+                '&id=' +
+                id.toString();
+
             print(uri);
 
             var response = await http.post(Uri.parse(uri));
@@ -413,7 +413,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => YarnPurchaseChallanList(
+                      builder: (_) => DyegreyJobworkReceivedList(
                           companyid: globals.companyid,
                           companyname: globals.companyname,
                           fbeg: globals.fbeg,
