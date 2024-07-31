@@ -1,5 +1,6 @@
 import 'package:cloud_mobile/module/looms/beamcard/beamcardlist.dart';
 import 'package:cloud_mobile/module/looms/customreport/customreportmenu.dart';
+import 'package:cloud_mobile/module/looms/jobreceive/beamjobworkreceive/list_beamjobworkreceive.dart';
 import 'package:cloud_mobile/module/looms/machinecard/loomsmachinecardlist.dart';
 import 'package:cloud_mobile/module/looms/physicalstock/loomphysicalstocklist.dart';
 import 'package:cloud_mobile/module/looms/purchasechallan/purchasemenu.dart';
@@ -253,7 +254,7 @@ class SideDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => LoomphysicalstockList(
+                      builder: (_) => BeamJobworkReceiveList(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,
