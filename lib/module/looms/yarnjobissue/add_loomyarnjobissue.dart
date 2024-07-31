@@ -395,6 +395,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
 
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
+      var itemname = _item.text;
       print('in');
       var result = await Navigator.push(
           context,
@@ -407,6 +408,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     branch: branch,
                     partyid: partyid,
                     itemDet: ItemDetails,
+                    itemname: itemname
                   )));
       //print('out');
       //print(result);

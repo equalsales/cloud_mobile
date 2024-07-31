@@ -1,6 +1,5 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
-import 'dart:js_interop';
 import 'package:cloud_mobile/list/design_list.dart';
 import 'package:cloud_mobile/list/item_list.dart';
 import 'package:cloud_mobile/list/machine_list.dart';

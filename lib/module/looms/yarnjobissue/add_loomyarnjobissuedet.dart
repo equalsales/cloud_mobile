@@ -35,6 +35,7 @@ class LoomYarnJobIssueDetAdd extends StatefulWidget {
       branch,
       partyid,
       itemDet,
+      itemname,
       id})
       : super(key: mykey) {
     xcompanyid = companyid;
@@ -45,6 +46,7 @@ class LoomYarnJobIssueDetAdd extends StatefulWidget {
     xparty = partyid;
     xid = id;
     xItemDetails = itemDet;
+    xitemname = itemname;
     //xitemDet = itemDet;
 
     print('in Item Details');
@@ -60,6 +62,7 @@ class LoomYarnJobIssueDetAdd extends StatefulWidget {
   var xid;
   var xbranch;
   var xparty;
+  var xitemname;
   List xitemDet = [];
   List xItemDetails = [];
 
@@ -174,6 +177,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     var fromdate = widget.xfbeg;
     var todate = widget.xfend;
     var branch = widget.xbranch;
+    var item = widget.xitemname;
     var cartonno = _Cartonno.text;
     var cartonchr = _Cartonchr.text;
 
@@ -201,16 +205,9 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       }
     } 
      
-    // uri =
-    //     '${globals.cdomain}/api/commonapi_gettakastock2?dbname=' +
-    //         db +
-    //         '&partyfilter=N&takachr=' +
-    //         cartonchr +
-    //         '&takano=' +
-    //         cartonno +
-    //         '&branchid=(' +
-    //         branch +
-    //         ')&getdata=Y';
+    uri =
+        '${globals.cdomain}/cartoonstockqry?dbname=$db&cno=$cno&branch=$branch'
+        '&itemname=$item&getdata=Y&itemfilter=Y&cartonno=$cartonno&cartonchr=$cartonchr';
 
     //  uri = 'https://looms.equalsoftlink.com/api/commonapi_cartoonstock?dbname=' +
     //     db +
@@ -232,7 +229,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
 
     var jsonData = jsonDecode(response.body);
 
-    jsonData = jsonData['Data'];
+    jsonData = jsonData;
     if (jsonData == null) {
       showAlertDialog(context, 'Carton No Found...');
       return true;
