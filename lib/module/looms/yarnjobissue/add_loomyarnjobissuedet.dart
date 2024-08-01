@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //import 'dart:convert';
 
@@ -83,10 +84,13 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
   TextEditingController _itemname = new TextEditingController();
   TextEditingController _lotno = new TextEditingController();
   TextEditingController _cops = new TextEditingController();
+  TextEditingController _rolls= new TextEditingController();
+  TextEditingController _box = new TextEditingController(text: '0');
   TextEditingController _cone = new TextEditingController();
   TextEditingController _rate = new TextEditingController();
-  TextEditingController _unit = new TextEditingController();
+  // TextEditingController _unit = new TextEditingController();
   TextEditingController _amount = new TextEditingController();
+  TextEditingController _cost = new TextEditingController(text: '0.00');
   TextEditingController _ychlndetid = new TextEditingController();
   TextEditingController _ychlnid = new TextEditingController();
   TextEditingController _ychlnsubdetid = new TextEditingController();
@@ -95,10 +99,19 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
   final _formKey = GlobalKey<FormState>();
 
   var _jsonData = [];
-  //TextEditingController _fromdatecontroller = new TextEditingController(text: 'dhaval');
+
+  String dropdownUnitType = 'W';
+
+  var UnitType = [
+    'W',
+    'P',
+    'M',
+    'C'
+  ];
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -108,10 +121,30 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     int length = ItemDetails.length;
     print('Length :' + length.toString());
     if (length > 0) {
-      setState(() {
-        
-      });
+      setState(() {});
     }
+
+    // if("Edit Row" == xeditrow){
+    //   setState(() {
+    //     _Cartonchr.text = ItemDetails[length - 1]['cartonchr'].toString();
+    //     _Cartonno.text = ItemDetails[length - 1]['cartonno'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['netwt'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['itemname'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['lotno'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['cops'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['rolls'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['box'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['cone'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['unit'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['rate'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['amount'].toString();
+    //     _rate.text = ItemDetails[length - 1]['cost'].toString();
+    //     _rate.text = ItemDetails[length - 1]['ychlnsubdetid'].toString();
+    //     _rate.text = ItemDetails[length - 1]['ychlnid'].toString();
+    //     _rate.text = ItemDetails[length - 1]['ychlndetid'].toString();
+    //     _rate.text = ItemDetails[length - 1]['fmode'].toString();
+    //   });
+    // }
 
     //_date.text = curDate.toString().split(' ')[0];
 
@@ -120,7 +153,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     // }
   }
 
-  void gotoOrderScreen(BuildContext contex) async {
+  // void gotoOrderScreen(BuildContext contex) async {
     // var result = await Navigator.push(
     //     context,
     //     MaterialPageRoute(
@@ -131,17 +164,13 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     //               fend: widget.xfend,
     //               partyid: widget.xparty,
     //             )));
-
     // setState(() {
     //   var retResult = result;
-
     //   print(retResult);
     //   var _orderlist = result[1];
     //   result = result[1];
     //   var orderid = _orderlist[0];
-
     //   print(orderid);
-
     //   var selOrder = '';
     //   for (var ictr = 0; ictr < retResult[0].length; ictr++) {
     //     if (ictr > 0) {
@@ -149,9 +178,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     //     }
     //     selOrder = selOrder + retResult[0][ictr];
     //   }
-
     //   _orderno.text = selOrder;
-
     //   print('dhruv');
     //   print(result);
     //   setState(() {
@@ -166,7 +193,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     //     _ordbalmtrs.text = result[0]['balmeters'].toString();
     //   });
     // });
-  }
+  // }
 
 
   Future<bool> fetchdetails() async {
@@ -209,28 +236,21 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
         '${globals.cdomain}/cartoonstockqry?dbname=$db&cno=$cno&branch=$branch'
         '&itemname=$item&getdata=Y&itemfilter=Y&cartonno=$cartonno&cartonchr=$cartonchr';
 
-    //  uri = 'https://looms.equalsoftlink.com/api/commonapi_cartoonstock?dbname=' +
-    //     db +
-    //     '&cno=' +
-    //     cno +
-    //     '&fromdate=' +
-    //     fromdate +
-    //     '&todate=' +
-    //     todate +
-    //     '&branch=' + 
-    //     branch + 
-    //     '&itemname=&cartonchr=' +
-    //     cartonchr +
-    //     '&cartonno=' +
-    //     cartonno;
-
     print(" fetchdetails  :" + uri);
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
 
-    jsonData = jsonData;
-    if (jsonData == null) {
+    print("hhhhhhhhhhhhhh");
+
+    print(jsonData);
+
+    if (jsonData == '[]') {
+      print("1111111");
+      showAlertDialog(context, 'Carton No Found...');
+      return true;
+    } else if (jsonData == ''){
+      print("22222222");
       showAlertDialog(context, 'Carton No Found...');
       return true;
     }
@@ -254,41 +274,93 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                   child: ListView.builder(
                     itemCount: _jsonData.length,
                     itemBuilder: (context, index) {
-                      return CheckboxListTile(
-                        value: false,
-                        subtitle: Text(_jsonData[index]['itemname'].toString()),
-                        title: Text(_jsonData[index]['meters'].toString()),
-                        onChanged: (bool? value) {
-                          _itemname.text = jsonData[index]['itemname'].toString();
-                          _netwt.text = jsonData[index]['balwt'].toString();
-                          _cops.text = jsonData[index]['cops'].toString();
-                          _unit.text = jsonData[index]['unit'].toString();
-                          _lotno.text = jsonData[index]['lotno'].toString();
-                          _ychlndetid.text = jsonData[index]['detid'].toString();
-                          _ychlnid.text = jsonData[index]['mstid'].toString();
-                          _ychlnsubdetid.text = jsonData[index]['subdetid'].toString();
-                          _fmode.text = jsonData[index]['fmode'].toString();
-                          _rate.text = jsonData[index]['rate'].toString();
-                          _amount.text = jsonData[index]['amount'].toString();
-                          _cone.text = '0';
+                      return Column(
+                        children: [
+                          ListTile(
+                            title: Text(
+                                "Itemname : ${jsonData[index]['itemname'].toString()}  Balwt : ${jsonData[index]['balwt'].toString()}"),
+                            subtitle: Text(
+                                "Cartonchr : ${jsonData[index]['cartonchr'].toString()}  Cartonno : ${jsonData[index]['cartonno'].toString()}"),
+                            onTap: () {
+                                _Cartonno.text = jsonData[index]['cartonno'].toString();
+                                _Cartonchr.text = jsonData[index]['cartonchr'].toString();
+                                _itemname.text = jsonData[index]['itemname'].toString();
+                                _netwt.text = jsonData[index]['balwt'].toString();
+                                _cops.text = jsonData[index]['cops'].toString();
+                                dropdownUnitType = jsonData[index]['unit'].toString();
+                                if(dropdownUnitType == 'null'){
+                                  dropdownUnitType = 'W';
+                                }else if(dropdownUnitType == ''){
+                                  dropdownUnitType = 'W';
+                                }
+                                _lotno.text = jsonData[index]['lotno'].toString();
+                                _ychlndetid.text = jsonData[index]['detid'].toString();
+                                _ychlnid.text = jsonData[index]['mstid'].toString();
+                                _ychlnsubdetid.text = jsonData[index]['subdetid'].toString();
+                                _fmode.text = jsonData[index]['fmode'].toString();
+                                _rate.text = jsonData[index]['rate'].toString();
+                                _amount.text = jsonData[index]['amount'].toString();
+                                _cost.text = jsonData[index]['cost'].toString();
+                                _cone.text = '0';
 
-                          double netwt = double.parse(_netwt.text);
-                          double cops = double.parse(_cops.text);
+                                double netwt = double.parse(_netwt.text);
+                                double cops = double.parse(_cops.text);
 
-                          String unit = _unit.text;
-                          double rate = 0;
-                          if (_rate.text != '') {
-                            rate = double.parse(_rate.text);
-                          }
-                          double amount = 0;
-                          if ((unit == 'W') || (unit == '')) {
-                            amount = netwt * rate;
-                          } else {
-                            amount = cops * rate;
-                          }
-                          _amount.text = amount.toString();
-                          Navigator.pop(context);
-                        },
+                                String unit = dropdownUnitType;
+                                double rate = 0;
+                                if (_rate.text != '') {
+                                  rate = double.parse(_rate.text);
+                                }
+                                double amount = 0;
+                                if ((unit == 'W') || (unit == '')) {
+                                  amount = netwt * rate;
+                                } else {
+                                  amount = cops * rate;
+                                }
+                                _amount.text = amount.toString();
+
+                                for (int iCtr = 0; iCtr < length; iCtr++) {
+                                  if ((ItemDetails[iCtr]['cartonno'] ==
+                                          _Cartonno.text) &&
+                                      ((ItemDetails[iCtr]['cartonchr'] ==
+                                          _Cartonchr.text))) {
+                                    setState(() {
+                                      _Cartonno.text = '0';
+                                      _Cartonchr.text = '';
+                                      _itemname.text = '';
+                                      _netwt.text = '';
+                                      _cops.text = '';
+                                      _rolls.text = '';
+                                      _box.text = '0';
+                                      dropdownUnitType = 'W';
+                                      _lotno.text = '';
+                                      _ychlndetid.text = '';
+                                      _ychlnid.text = '';
+                                      _ychlnsubdetid.text = '';
+                                      _fmode.text = '';
+                                      _rate.text = '';
+                                      _amount.text = '';
+                                      _cost.text = '';
+                                      _cone.text = '0';
+                                      print("111111");
+                                      Fluttertoast.showToast(
+                                        msg: "Carton no Already Exists...",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Colors.white,
+                                        textColor: Colors.purple,
+                                        fontSize: 16.0,
+                                      );
+                                      print("2222222");
+                                    });
+                                  }
+                                }
+                                Navigator.pop(context);
+                              }
+                          ),
+                          Divider()
+                        ],
                       );
                     },
                   ),
@@ -300,10 +372,17 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       );
     } else {
       setState(() {
+        _Cartonno.text = jsonData[0]['cartonno'].toString();
+        _Cartonchr.text = jsonData[0]['cartonchr'].toString();
         _itemname.text = jsonData[0]['itemname'].toString();
         _netwt.text = jsonData[0]['balwt'].toString();
         _cops.text = jsonData[0]['cops'].toString();
-        _unit.text = jsonData[0]['unit'].toString();
+        dropdownUnitType = jsonData[0]['unit'].toString();
+        if (dropdownUnitType == 'null') {
+          dropdownUnitType = 'W';
+        } else if (dropdownUnitType == '') {
+          dropdownUnitType = 'W';
+        }
         _lotno.text = jsonData[0]['lotno'].toString();
         _ychlndetid.text = jsonData[0]['detid'].toString();
         _ychlnid.text = jsonData[0]['mstid'].toString();
@@ -317,7 +396,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       double netwt = double.parse(_netwt.text);
       double cops = double.parse(_cops.text);
 
-      String unit = _unit.text;
+      String unit = dropdownUnitType;
       double rate = 0;
       if (_rate.text != '') {
         rate = double.parse(_rate.text);
@@ -332,6 +411,39 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
     }
     return true;
   }
+  
+  void totCalUnit() {
+    double netwt = 0.0;
+    double cops = 0.0;
+    double rate = 0.0;
+    String unit = dropdownUnitType.toString();
+
+    if (_netwt.text.isNotEmpty) {
+      netwt = double.tryParse(_netwt.text) ?? 0.0;
+    }
+
+    if (_cops.text.isNotEmpty) {
+      cops = double.tryParse(_cops.text) ?? 0.0;
+    }
+
+    if (_rate.text.isNotEmpty) {
+      rate = double.tryParse(_rate.text) ?? 0.0;
+    }
+
+    double amount = 0.0;
+
+    if (unit == 'W') {
+      amount = netwt * rate;
+    } else {
+      amount = cops * rate;
+    }
+
+    setState(() {
+      _amount.text = amount.toString();
+    });
+  }
+
+
 
   Future<void> barcodeScan() async {
     String barcodeScanRes;
@@ -379,17 +491,19 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       var username = globals.username;
       var cartonchr = _Cartonchr.text;
       var cartonno = _Cartonno.text;
-      var ccartonno = _cCartonno.text;
+      // var ccartonno = _cCartonno.text;
       var netwt = _netwt.text;
       var lotno = _lotno.text;
       var cops = _cops.text;
+      var rolls = _rolls.text;
+      var box = _box.text;
       var cone = _cone.text;
       var itemname = _itemname.text;
 
       var rate = _rate.text;
-      var unit = _unit.text;
+      var unit = dropdownUnitType;
       var amount = _amount.text;
-
+      var cost = _cost.text;
       var ychlndetid = _ychlndetid.text;
       var ychlnid = _ychlnid.text;
       var ychlnsubdetid = _ychlnsubdetid.text;
@@ -403,11 +517,13 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
         'itemname': itemname,
         'lotno': lotno,
         'cops': cops,
+        'rolls': rolls,
+        'box': box,
         'cone': cone,
         'unit': unit,
         'rate': rate,
         'amount': amount,
-        'cost': '0',
+        'cost': cost,
         'ychlnsubdetid': ychlnsubdetid.toString(),
         'ychlnid': ychlnid.toString(),
         'ychlndetid': ychlndetid.toString(),
@@ -432,7 +548,15 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done),
           backgroundColor: const Color.fromRGBO(76, 175, 80, 1),
-          onPressed: () => {saveData()}),
+          onPressed: () => {
+            if (_formKey.currentState!.validate()) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Form submitted successfully')),
+              ),
+              saveData()
+            }
+          }
+        ),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -445,6 +569,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                   child: TextFormField(
                     controller: _Cartonchr,
                     autofocus: true,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select carton ',
@@ -463,6 +588,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _Cartonno,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -473,6 +599,9 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                       //gotoBranchScreen(context);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter cartonno';
+                      }
                       return null;
                     },
                   ),
@@ -503,6 +632,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                   child: TextFormField(
                     enabled: false,
                     controller: _itemname,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Item Name',
@@ -523,6 +653,8 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _netwt,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Net Weight',
@@ -530,6 +662,9 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);
+                    },
+                    onChanged: (value) {
+                      totCalUnit();
                     },
                     validator: (value) {
                       return null;
@@ -539,6 +674,8 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _cops,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Cops',
@@ -546,6 +683,9 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                     ),
                     onTap: () {
                       //gotoBranchScreen(context);
+                    },
+                    onChanged: (value) {
+                      totCalUnit();
                     },
                     validator: (value) {
                       return null;
@@ -558,7 +698,44 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    controller: _rolls,
+                    textInputAction: TextInputAction.next,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Rolls',
+                      labelText: 'Rolls',
+                    ),
+                    onTap: () {},
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _box,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Box',
+                      labelText: 'Box',
+                    ),
+                    onTap: () {},
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
                     controller: _cone,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Cone',
@@ -595,6 +772,8 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _rate,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Rate',
@@ -603,27 +782,36 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                     onTap: () {
                       //gotoBranchScreen(context);
                     },
+                    onChanged: (value) {
+                      totCalUnit();
+                    },
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
                 Expanded(
-                  child: TextFormField(
-                    controller: _unit,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Unit',
-                      labelText: 'Unit',
-                    ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )
+                  child: DropdownButtonFormField(
+                      value: dropdownUnitType,
+                      decoration: const InputDecoration(
+                        labelText: 'Unit',
+                        hintText: "Unit",
+                        icon: const Icon(Icons.person),
+                      ),
+                      items: UnitType.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      icon: const Icon(Icons.arrow_drop_down_circle),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          dropdownUnitType = newValue!;
+                          totCalUnit();
+                        });
+                      }),
+                ),
               ],
             ),
             Row(
@@ -631,6 +819,8 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _amount,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Amount',
@@ -639,6 +829,29 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                     onTap: () {
                       //gotoBranchScreen(context);
                     },
+                    onChanged: (value) {
+                      totCalUnit();
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _cost,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Cost',
+                      labelText: 'Cost',
+                    ),
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -652,6 +865,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                   child: TextFormField(
                     enabled: false,
                     controller: _ychlndetid,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'ychlndetid',
@@ -669,6 +883,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                   child: TextFormField(
                     enabled: false,
                     controller: _ychlnid,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'ychlnid',
@@ -686,6 +901,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                   child: TextFormField(
                     enabled: false,
                     controller: _ychlnsubdetid,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'ychlnsubdetid',
@@ -703,6 +919,7 @@ class _LoomYarnJobIssueDetAddState extends State<LoomYarnJobIssueDetAdd> {
                   child: TextFormField(
                     enabled: false,
                     controller: _fmode,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'FMode',

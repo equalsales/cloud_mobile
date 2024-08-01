@@ -1044,6 +1044,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _beamchr,
+                    enabled: false,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -1059,6 +1060,7 @@ class _BeamCardAddState extends State<BeamCardAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _beamno,
+                    enabled: false,
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
