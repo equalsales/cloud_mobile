@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:cloud_mobile/module/looms/purchasechallan/yarnpurchasechallan/add_yarnpurchasechallan.dart';
+import 'package:cloud_mobile/module/looms/jobreceive/yarnjobworkreceive/add_yarnjobworkreceive.dart';
+// import 'package:cloud_mobile/module/looms/purchasechallan/yarnpurchasechallan/add_yarnpurchasechallan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:convert';
@@ -10,13 +11,13 @@ import 'package:cloud_mobile/common/alert.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_mobile/common/global.dart' as globals;
 
-class YarnPurchaseChallanList extends StatefulWidget {
+class YarnJobworkReceiveList extends StatefulWidget {
   var xcompanyid;
   var xcompanyname;
   var xfbeg;
   var xfend;
 
-  YarnPurchaseChallanList({Key? mykey, companyid, companyname, fbeg, fend})
+  YarnJobworkReceiveList({Key? mykey, companyid, companyname, fbeg, fend})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -25,10 +26,11 @@ class YarnPurchaseChallanList extends StatefulWidget {
   }
 
   @override
-  _YarnPurchaseChallanListPageState createState() => _YarnPurchaseChallanListPageState();
+  _YarnJobworkReceiveListPageState createState() =>
+      _YarnJobworkReceiveListPageState();
 }
 
-class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
+class _YarnJobworkReceiveListPageState extends State<YarnJobworkReceiveList> {
   List _companydetails = [];
   List PrintFormatDetails = [];
   List PrintidDetails = [];
@@ -39,6 +41,7 @@ class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
   String dropdownPrintFormat = 'Print Format';
   @override
   void initState() {
+    super.initState();
     loaddetails();
     loadprintformet();
   }
@@ -134,14 +137,13 @@ class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
     String end = DateFormat("yyyy-MM-dd").format(date2);
 
     String uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&startdate=' +
-            start +
-            '&enddate=' +
-            end;
-
+        db +
+        '&cno=' +
+        cno +
+        '&startdate=' +
+        start +
+        '&enddate=' +
+        end;
 
     var response = await http.get(Uri.parse(uri));
 
@@ -162,7 +164,7 @@ class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Yarn Purchase Challan  List',
+        title: Text('Yarn Jobwork Receive List',
             style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal)),
       ),
       floatingActionButton: FloatingActionButton(
@@ -171,7 +173,7 @@ class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (_) => YarnPurchaseChallanAdd(
+                  builder: (_) => YarnJobworkReceiveAdd(
                         companyid: widget.xcompanyid,
                         companyname: widget.xcompanyname,
                         fbeg: widget.xfbeg,
@@ -198,6 +200,7 @@ class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
 
           String id = this._companydetails[index]['id'].toString();
 
+          // ignore: unused_local_variable
           int newid = 0;
           newid = int.parse(id);
 
@@ -364,7 +367,7 @@ class _YarnPurchaseChallanListPageState extends State<YarnPurchaseChallanList> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => YarnPurchaseChallanAdd(
+                        builder: (_) => YarnJobworkReceiveAdd(
                               companyid: widget.xcompanyid,
                               companyname: widget.xcompanyname,
                               fbeg: widget.xfbeg,
@@ -394,16 +397,16 @@ void execDelete(BuildContext context, int index, int id, String name) {
         TextButton(
           onPressed: () async {
             var db = globals.dbname;
+            // ignore: unused_local_variable
             var cno = globals.companyid;
 
             String uri = '';
 
             uri = '${globals.cdomain}/api/api_deletecashbook?dbname=' +
-                  db +
-                  '&id=' +
-                  id.toString();
-              
-            
+                db +
+                '&id=' +
+                id.toString();
+
             print(uri);
 
             var response = await http.post(Uri.parse(uri));
@@ -413,7 +416,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
               await Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => YarnPurchaseChallanList(
+                      builder: (_) => YarnJobworkReceiveList(
                           companyid: globals.companyid,
                           companyname: globals.companyname,
                           fbeg: globals.fbeg,

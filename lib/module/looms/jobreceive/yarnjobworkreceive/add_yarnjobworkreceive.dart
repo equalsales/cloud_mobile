@@ -1,6 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
-import 'package:cloud_mobile/module/looms/purchasechallan/yarnpurchasechallan/add_yarnpurchasechallandet.dart';
+import 'package:cloud_mobile/module/looms/jobreceive/yarnjobworkreceive/add_detyarnjobworkreceive.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,8 +12,8 @@ import 'package:cloud_mobile/common/bottombar.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_mobile/common/global.dart' as globals;
 
-class YarnPurchaseChallanAdd extends StatefulWidget {
-  YarnPurchaseChallanAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
+class YarnJobworkReceiveAdd extends StatefulWidget {
+  YarnJobworkReceiveAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
@@ -33,32 +33,28 @@ class YarnPurchaseChallanAdd extends StatefulWidget {
   double totmtrs = 0;
 
   @override
-  _YarnPurchaseChallanAddState createState() => _YarnPurchaseChallanAddState();
+  _YarnJobworkReceiveAddState createState() => _YarnJobworkReceiveAddState();
 }
 
-class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
+class _YarnJobworkReceiveAddState extends State<YarnJobworkReceiveAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
   List _branchlist = [];
+  // ignore: unused_field
   List _partylist = [];
-  List _delpartylist = [];
-  List _booklist = [];
-  List _agentlist = [];
-  List _hastelist = [];
-  List _transportlist = [];
-  List _stationlist = [];
 
   List ItemDetails = [];
 
   var branchid = 0;
   int? partyid;
   var bookid = 0;
+
+  TextEditingController _branch = new TextEditingController();
+  TextEditingController _srchr = new TextEditingController();
+  TextEditingController _serial = new TextEditingController();
   TextEditingController _packingsrchr = new TextEditingController();
   TextEditingController _packingserial = new TextEditingController();
-  TextEditingController _serial = new TextEditingController();
-  TextEditingController _srchr = new TextEditingController();
-  TextEditingController _branch = new TextEditingController();
   TextEditingController _branchid = new TextEditingController();
   TextEditingController _book = new TextEditingController();
   TextEditingController _date = new TextEditingController();
@@ -70,8 +66,6 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
   TextEditingController _totmtrs = new TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _gstregno = new TextEditingController();
-  var _jsonData = [];
 
   bool isButtonActive = true;
 
@@ -79,14 +73,28 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
   dynamic clobl = 0;
 
   String? dropdownTrnType;
+  String? dropdownYarnType;
+    String? dropdownWasteType;
+
 
   var items = [
-    'RD',
-    'URD',
+    'REGULAR',
+    'RETURN',
+  ];
+
+  var yarnItems = [
+    'NORMAL',
+    'RETURN',
+  ];
+  
+  var westItems = [
+    'YES',
+    'NO',
   ];
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -108,7 +116,6 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
-
 
     uri = '${globals.cdomain}/api/api_getsalechallandetlist?dbname=' +
         db +
@@ -165,7 +172,8 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
       });
     }
 
-    print("jsonData[iCtr]['ordno'].toString()" + jsonData[0]['orderno'].toString());
+    print("jsonData[iCtr]['ordno'].toString()" +
+        jsonData[0]['orderno'].toString());
 
     setState(() {
       ItemDetails = ItemDet;
@@ -187,7 +195,6 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
 
     DateTime date2 = DateFormat("dd-MM-yyyy").parse(todate);
     String end = DateFormat("yyyy-MM-dd").format(date2);
-
 
     uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
         db +
@@ -258,6 +265,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
 
   @override
   Widget build(BuildContext context) {
+    
     void gotoPartyScreen(
         BuildContext context, acctype, TextEditingController obj) async {
       var result = await Navigator.push(
@@ -379,7 +387,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => YarnPurchaseChallanDetAdd(
+              builder: (_) => YarnJobwokReceiveDetAdd(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
@@ -409,9 +417,6 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
       var branch = _branch.text;
       var date = _date.text;
       var party = _party.text;
-      var challanno = _chlnno.text;
-      var challandt = _chlndt.text;
-      var rdurd = dropdownTrnType;
       var remarks = _remarks.text;
 
       var id = widget.xid;
@@ -426,40 +431,39 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
 
       party = party.replaceAll('&', '_');
 
-      uri =
-          "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
-              db +
-              "&company=&cno=" +
-              cno +
-              "&user=" +
-              username +
-              "&branch=" +
-              branch +
-              "&packingtype=" +
-              "&party=" +
-              party +
-              "&book=" +
-              book +
-               "&haste=" +
-              "&transport=" +
-              "&station=" +
-              "&packingsrchr=" +
-              packingsrchr +
-              "&packingserial=" +
-              packingserial +
-              "&bookno=" +
-              "&srchr=" +
-              srchr +
-              "&serial=" +
-              serial +
-              "&date=" +
-              newDate +
-              "&remarks=" +
-              remarks +
-              "&duedays=" +
-              "&id=" +
-              id.toString() +
-              "&parcel=1";
+      uri = "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
+          db +
+          "&company=&cno=" +
+          cno +
+          "&user=" +
+          username +
+          "&branch=" +
+          branch +
+          "&packingtype=" +
+          "&party=" +
+          party +
+          "&book=" +
+          book +
+          "&haste=" +
+          "&transport=" +
+          "&station=" +
+          "&packingsrchr=" +
+          packingsrchr +
+          "&packingserial=" +
+          packingserial +
+          "&bookno=" +
+          "&srchr=" +
+          srchr +
+          "&serial=" +
+          serial +
+          "&date=" +
+          newDate +
+          "&remarks=" +
+          remarks +
+          "&duedays=" +
+          "&id=" +
+          id.toString() +
+          "&parcel=1";
       print("/////////////////////////////////////////////" + uri);
 
       final headers = {
@@ -522,11 +526,10 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
       widget.totmtrs = 0;
 
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
-
         double nMeters = 0;
         if (ItemDetails[iCtr]['meters'] != '') {
           nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
-          widget.tottaka += 1;          
+          widget.tottaka += 1;
           widget.totmtrs += nMeters;
         }
         print(nMeters);
@@ -538,7 +541,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
         if (ordmtrAsDouble != null) {
           tot = ordmtrAsDouble - nMeters;
           print(tot);
-          ItemDetails[iCtr]['ordbalmtrs'] = tot.toString(); 
+          ItemDetails[iCtr]['ordbalmtrs'] = tot.toString();
           print(ItemDetails[iCtr]['ordbalmtrs']);
         } else {
           print('Error: Invalid format for ordmtr');
@@ -596,7 +599,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Yarn Purchase Challan [ ' +
+          'Yarn Jobwork Receive [ ' +
               (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
               ' ] ' +
               (int.parse(widget.xid) > 0
@@ -629,343 +632,322 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     int.parse(widget.xid) > 0
-            //         ? Expanded(
-            //             child: Center(
-            //                 child: Text(
-            //             'Challan No : ' + widget.serial.toString(),
-            //             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            //           )))
-            //         : Container(),
-            //     Container(
-            //       width: 300,
-            //       child: TextFormField(
-            //         textAlign: TextAlign.center,
-            //         controller: _date,
-            //         decoration: const InputDecoration(
-            //           icon: const Icon(Icons.person),
-            //           hintText: 'Date',
-            //           labelText: 'Date',
-            //         ),
-            //         onTap: () {
-            //           _selectDate(context);
-            //         },
-            //         validator: (value) {
-            //           return null;
-            //         },
-            //       ),
-            //     ),
-            //     SizedBox(width: 20,)
-            //   ],
-            // ),
-            Row(children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _branch,
-                  autofocus: true,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Select Branch',
-                    labelText: 'Branch',
-                  ),
-                  onTap: () {
-                    gotoBranchScreen(context);
-                  },
-                  validator: (value) {
-                    return null;
-                  },
-                ),
-              ),
-            ]),
-            TextFormField(
-              controller: _date,
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.person),
-                hintText: 'Date',
-                labelText: 'Date',
-              ),
-              onTap: () {
-                _selectDate(context);
-              },
-              validator: (value) {
-                return null;
-              },
-            ),
-            Row(
-              children: [
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     int.parse(widget.xid) > 0
+              //         ? Expanded(
+              //             child: Center(
+              //                 child: Text(
+              //             'Challan No : ' + widget.serial.toString(),
+              //             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              //           )))
+              //         : Container(),
+              //     Container(
+              //       width: 300,
+              //       child: TextFormField(
+              //         textAlign: TextAlign.center,
+              //         controller: _date,
+              //         decoration: const InputDecoration(
+              //           icon: const Icon(Icons.person),
+              //           hintText: 'Date',
+              //           labelText: 'Date',
+              //         ),
+              //         onTap: () {
+              //           _selectDate(context);
+              //         },
+              //         validator: (value) {
+              //           return null;
+              //         },
+              //       ),
+              //     ),
+              //     SizedBox(width: 20,)
+              //   ],
+              // ),
+              Row(children: [
                 Expanded(
                   child: TextFormField(
-                    controller: _book,
+                    controller: _branch,
+                    autofocus: true,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Select Book',
-                      labelText: 'Book',
+                      hintText: 'Select Branch Name',
+                      labelText: 'Branch Name',
                     ),
                     onTap: () {
-                      gotoPartyScreen(context, 'SALE BOOK', _book);
+                      gotoBranchScreen(context);
                     },
                     validator: (value) {
                       return null;
                     },
                   ),
                 ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _party,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Party',
-                      labelText: 'Party',
-                    ),
-                    onTap: () {
-                      gotoPartyScreen2(context, 'SALE PARTY', _party);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _chlnno,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Challan No',
-                      labelText: 'Challan No',
-                    ),
-                    onTap: () {
-                     
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _chlndt,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Challan Date',
-                      labelText: 'Challan Date',
-                    ),
-                    onTap: () {
-                      _selectDate2(context);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButtonFormField(
-                    value: dropdownTrnType,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      labelText: 'RD/URD',
-                      hintText: 'RD/URD'
-                    ),
-                    items: items.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    icon: const Icon(Icons.arrow_drop_down_circle),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownTrnType = newValue!;
-                        print(dropdownTrnType);
-                      });
-                    }
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    textCapitalization: TextCapitalization.characters,
-                    controller: _remarks,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Remarks',
-                      labelText: 'Remarks',
-                    ),
-                    onChanged: (value) {
-                      _remarks.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _remarks.selection);
-                    },
-                    onTap: () {},
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
+              ]),
+              Row(
+                children: [
+                  Expanded(
                     child: TextFormField(
-                  enabled: false,
-                  controller: _tottaka,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Total Taka',
-                    labelText: 'Total Taka',
+                      controller: _chlnno,
+                      // keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        icon: const Icon(Icons.person),
+                        hintText: 'Enter Srchr',
+                        labelText: 'Srchr',
+                      ),
+                      onTap: () {},
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
                   ),
-                  onTap: () {
-                    //gotoBranchScreen(context);
-                  },
-                  validator: (value) {
-                    return null;
-                  },
-                )),
-                Expanded(
+                  Expanded(
                     child: TextFormField(
-                  enabled: false,
-                  controller: _totmtrs,
-                  keyboardType: TextInputType.number,
+                      controller: _serial,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        icon: const Icon(Icons.person),
+                        hintText: 'Enter Serial',
+                        labelText: 'Serial',
+                      ),
+                      onTap: () {},
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _date,
+                      decoration: const InputDecoration(
+                        icon: const Icon(Icons.person),
+                        hintText: 'Date',
+                        labelText: 'Date',
+                      ),
+                      onTap: () {
+                        _selectDate(context);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _chlnno,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        icon: const Icon(Icons.person),
+                        hintText: 'Challan No',
+                        labelText: 'Challan No',
+                      ),
+                      onTap: () {},
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  )
+                ],
+              ),
+              TextFormField(
+                controller: _party,
+                decoration: const InputDecoration(
+                  icon: const Icon(Icons.person),
+                  hintText: 'Select Party',
+                  labelText: 'Party',
+                ),
+                onTap: () {
+                  gotoPartyScreen2(context, 'SALE PARTY', _party);
+                },
+                validator: (value) {
+                  return null;
+                },
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField(
+                        value: dropdownTrnType,
+                        decoration: const InputDecoration(
+                            icon: const Icon(Icons.person),
+                            labelText: 'Type',
+                            hintText: 'Type'),
+                        items: items.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items),
+                          );
+                        }).toList(),
+                        icon: const Icon(Icons.arrow_drop_down_circle),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownTrnType = newValue!;
+                            print(dropdownTrnType);
+                          });
+                        }),
+                  ),
+                  Expanded(
+                    child: DropdownButtonFormField(
+                        value: dropdownYarnType,
+                        decoration: const InputDecoration(
+                            icon: const Icon(Icons.person),
+                            labelText: 'Yarntype',
+                            hintText: 'Yarntype'),
+                        items: yarnItems.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items),
+                          );
+                        }).toList(),
+                        icon: const Icon(Icons.arrow_drop_down_circle),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownYarnType = newValue!;
+                            print(dropdownYarnType);
+                          });
+                        }),
+                  ),
+                ],
+              ),
+              DropdownButtonFormField(
+                  value: dropdownWasteType,
                   decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Total Meters',
-                    labelText: 'Total Meters',
-                  ),
-                  onTap: () {
-                    //gotoBranchScreen(context);
-                  },
-                  validator: (value) {
-                    return null;
-                  },
-                ))
-              ],
-            ),
-            Padding(padding: EdgeInsets.all(5)),
-            ElevatedButton(
-              onPressed: () {
-                print("clobl");
-                print(clobl);
-                print("crlimit");
-                print(crlimit);
-                if (crlimit < clobl) {
-                  Fluttertoast.showToast(
-                    msg: "Crlimit exceed!!!.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 3,
-                    backgroundColor: Colors.white,
-                    textColor: Colors.purple,
-                    fontSize: 16.0,
-                  );
-                } else {
-                  gotoChallanItemDet(context);
-                }
-              },
-              child: Text('Add Item Details',
-                  style:
-                      TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
-            ),
-            SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(columns: [
-                  DataColumn(
-                    label: Text("Action"),
-                  ),
-                  DataColumn(
-                    label: Text("Item Name"),
-                  ),
-                  DataColumn(
-                    label: Text("HSN Code"),
-                  ),
-                  DataColumn(
-                    label: Text("Grade"),
-                  ),
-                  DataColumn(
-                    label: Text("Lotno"),
-                  ),
-                  DataColumn(
-                    label: Text("Cops"),
-                  ),
-                  DataColumn(
-                    label: Text("Totcrtn"),
-                  ),
-                  DataColumn(
-                    label: Text("Actnetwt"),
-                  ),
-                  DataColumn(
-                    label: Text("Netwt"),
-                  ),
-                  DataColumn(
-                    label: Text("Cone"),
-                  ),
-                  DataColumn(
-                    label: Text("Rate"),
-                  ),
-                  DataColumn(
-                    label: Text("Unit"),
-                  ),
-                  DataColumn(
-                    label: Text("Amount"),
-                  ),
-                  DataColumn(
-                    label: Text("FMode"),
-                  ),
-                  DataColumn(
-                    label: Text("OrdId"),
-                  ),
-                  DataColumn(
-                    label: Text("OrdDetId"),
-                  ),
-                  DataColumn(
-                    label: Text("DiscRate"),
-                  ),
-                  DataColumn(
-                    label: Text("DiscAmt"),
-                  ),
-                  DataColumn(
-                    label: Text("AddAmt"),
-                  ),
-                  DataColumn(
-                    label: Text("TaxableValue"),
-                  ),
-                  DataColumn(
-                    label: Text("SGST Rate"),
-                  ),
-                  DataColumn(
-                    label: Text("SGST Amt"),
-                  ),
-                  DataColumn(
-                    label: Text("CGST Rate"),
-                  ),
-                  DataColumn(
-                    label: Text("CGST Amt"),
-                  ),
-                  DataColumn(
-                    label: Text("IGST Rate"),
-                  ),
-                  DataColumn(
-                    label: Text("IGST Amt"),
-                  ),
-                  DataColumn(
-                    label: Text("FinalAmt"),
-                  ),
-                ], rows: _createRows())),
-          ],
+                      icon: const Icon(Icons.person),
+                      labelText: 'Waste',
+                      hintText: 'Waste'),
+                  items: westItems.map((String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  }).toList(),
+                  icon: const Icon(Icons.arrow_drop_down_circle),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      dropdownWasteType = newValue!;
+                      print(dropdownWasteType);
+                    });
+                  }),
+              Padding(padding: EdgeInsets.all(5)),
+              ElevatedButton(
+                onPressed: () {
+                  print("clobl");
+                  print(clobl);
+                  print("crlimit");
+                  print(crlimit);
+                  if (crlimit < clobl) {
+                    Fluttertoast.showToast(
+                      msg: "Crlimit exceed!!!.",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 3,
+                      backgroundColor: Colors.white,
+                      textColor: Colors.purple,
+                      fontSize: 16.0,
+                    );
+                  } else {
+                    gotoChallanItemDet(context);
+                  }
+                },
+                child: Text('Add Item Details',
+                    style:
+                        TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+              ),
+              SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(columns: [
+                    DataColumn(
+                      label: Text("Action"),
+                    ),
+                    DataColumn(
+                      label: Text("Issno"),
+                    ),
+                    DataColumn(
+                      label: Text("Isschr"),
+                    ),
+                    DataColumn(
+                      label: Text("Cartonchr"),
+                    ),
+                    DataColumn(
+                      label: Text("Cartonno"),
+                    ),
+                    DataColumn(
+                      label: Text("Lotno"),
+                    ),
+                    DataColumn(
+                      label: Text("Lotchr"),
+                    ),
+                    DataColumn(
+                      label: Text("Item Name"),
+                    ),
+                    DataColumn(
+                      label: Text("Type"),
+                    ),
+                    DataColumn(
+                      label: Text("Cops"),
+                    ),
+                    DataColumn(
+                      label: Text("Rolls"),
+                    ),
+                    DataColumn(
+                      label: Text("Box"),
+                    ),
+                    DataColumn(
+                      label: Text("Weight"),
+                    ),
+                    DataColumn(
+                      label: Text("Netwt"),
+                    ),
+                    DataColumn(
+                      label: Text("Rate"),
+                    ),
+                    DataColumn(
+                      label: Text("Unit"),
+                    ),
+                    DataColumn(
+                      label: Text("Amount"),
+                    ),
+                    DataColumn(
+                      label: Text("Cone"),
+                    ),
+                    DataColumn(
+                      label: Text("New Item"),
+                    ),
+                    DataColumn(
+                      label: Text("Clothcost"),
+                    ),
+                    DataColumn(
+                      label: Text("Cost"),
+                    ),
+                    DataColumn(
+                      label: Text("Actwt"),
+                    ),
+                    DataColumn(
+                      label: Text("Actmtrs"),
+                    ),
+                    DataColumn(
+                      label: Text("Lnkid"),
+                    ),
+                    DataColumn(
+                      label: Text("Lnkdetid"),
+                    ),
+                    DataColumn(
+                      label: Text("Lnkdettkid"),
+                    ),
+                    DataColumn(
+                      label: Text("Fmode"),
+                    ),
+                  ], rows: _createRows())),
+            ],
+          ),
         ),
       )),
       bottomNavigationBar: BottomBar(

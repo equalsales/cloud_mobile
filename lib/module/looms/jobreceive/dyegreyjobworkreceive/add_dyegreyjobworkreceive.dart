@@ -379,7 +379,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (_) => YarnPurchaseChallanDetAdd(
+              builder: (_) => YarnJobworkReceiveDetAdd(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,

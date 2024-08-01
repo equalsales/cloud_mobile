@@ -11,8 +11,8 @@ import 'package:cloud_mobile/common/global.dart' as globals;
 import 'package:cloud_mobile/common/bottombar.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-class YarnPurchaseChallanDetAdd extends StatefulWidget {
-  YarnPurchaseChallanDetAdd(
+class YarnJobworkReceiveDetAdd extends StatefulWidget {
+  YarnJobworkReceiveDetAdd(
       {Key? mykey,
       companyid,
       companyname,
@@ -59,10 +59,10 @@ class YarnPurchaseChallanDetAdd extends StatefulWidget {
   List xItemDetails = [];
 
   @override
-  _YarnPurchaseChallanDetAddState createState() => _YarnPurchaseChallanDetAddState();
+  _YarnJobworkReceiveDetAddState createState() => _YarnJobworkReceiveDetAddState();
 }
 
-class _YarnPurchaseChallanDetAddState extends State<YarnPurchaseChallanDetAdd> {
+class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
