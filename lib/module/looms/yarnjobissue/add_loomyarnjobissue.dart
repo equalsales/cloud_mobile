@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:cloud_mobile/module/looms/yarnjobissue/loomyarnjobissuelist.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
+import 'package:flutter/widgets.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //import 'dart:convert';
 
@@ -62,7 +64,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
 
   List ItemDetails = [];
 
-  //String dropdownTrnType = 'REGULAR';
+  bool isButtonActive = true;
 
   var branchid = 0;
   var itemid = 0;
@@ -79,6 +81,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
   TextEditingController _date = new TextEditingController();
   TextEditingController _party = new TextEditingController();
   TextEditingController _remarks = new TextEditingController();
+  TextEditingController _expecdelvdate = new TextEditingController();
   TextEditingController _totWt = new TextEditingController();
   TextEditingController _totcops = new TextEditingController();
   TextEditingController _totcone = new TextEditingController();
@@ -92,10 +95,10 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
 
     var curDate = getsystemdate();
     _date.text = curDate.toString().split(' ')[0];
+    // _expecdelvdate.text = curDate.toString().split(' ')[0];
 
     if (int.parse(widget.xid) > 0) {
       loadData();
-
       loadDetData();
     }
   }
@@ -107,7 +110,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
     var id = widget.xid;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getyarnjobissuedetlist?dbname=' +
+        '${globals.cdomain}/api/api_getyarnjobissuedetlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -134,6 +137,8 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         "netwt": jsonData[iCtr]['netwt'].toString(),
         "lotno": jsonData[iCtr]['lotno'].toString(),
         "cops": jsonData[iCtr]['cops'].toString(),
+        "rolls": jsonData[iCtr]['rolls'].toString(),
+        "box": jsonData[iCtr]['box'].toString(),
         "cone": jsonData[iCtr]['cone'].toString(),
         "itemname": jsonData[iCtr]['itemname'].toString(),
         "unit": jsonData[iCtr]['unit'].toString(),
@@ -164,7 +169,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
     var todate = retconvdate(widget.xfend).toString();
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getyarnjobissuelist?dbname=' +
+        '${globals.cdomain}/api/api_getyarnjobissuelist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -197,6 +202,10 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
     _creelno.text = getValue(jsonData['creelno'], 'N');
     _machine.text = getValue(jsonData['machine'], 'N');
     _item.text = getValue(jsonData['itemname'], 'N');
+    String inputDateString2 = getValue(jsonData['expecdelvdt'], 'C');
+    List<String> parts2 = inputDateString2.split(' ')[0].split('-');
+    String expecdelvdt = "${parts2[0]}-${parts2[1]}-${parts2[2]}";
+    _date.text = getValue(expecdelvdt, 'C');
 
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
@@ -222,6 +231,22 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       setState(() {
         fromDate = picked;
         _date.text = picked.toString().split(' ')[0];
+      });
+  }
+
+  Future<void> _selectDate2(BuildContext context) async {
+    if (_date.text != '') {
+      fromDate = retconvdate(_date.text, 'yyyy-mm-dd');
+    }
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: fromDate,
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != fromDate)
+      setState(() {
+        fromDate = picked;
+        _expecdelvdate.text = picked.toString().split(' ')[0];
       });
   }
 
@@ -395,6 +420,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
 
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
+      var itemname = _item.text;
       print('in');
       var result = await Navigator.push(
           context,
@@ -407,6 +433,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     branch: branch,
                     partyid: partyid,
                     itemDet: ItemDetails,
+                    itemname: itemname
                   )));
       //print('out');
       //print(result);
@@ -419,90 +446,110 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
     }
 
     Future<bool> saveData() async {
-      String uri = '';
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var username = globals.username;
-      var serial = _serial.text;
-      var srchr = _srchr.text;
-      var branch = _branch.text;
-      var date = _date.text;
-      var party = _party.text;
-      var remarks = _remarks.text;
-      var chlnno = _chlnno.text;
-      var creelno = _creelno.text;
-      var cmachine = _machine.text;
-      var citem = _item.text;
+      if(ItemDetails.length == 0){
+        showAlertDialog(context, 'ItemDetails can not be blank.');
+        return true;
+      }else{
+        String uri = '';
+        var cno = globals.companyid;
+        var db = globals.dbname;
+        var username = globals.username;
+        var serial = _serial.text;
+        var srchr = _srchr.text;
+        var branch = _branch.text;
+        var date = _date.text;
+        var party = _party.text;
+        var remarks = _remarks.text;
+        var expecdelvdate = _expecdelvdate.text;
+        var chlnno = _chlnno.text;
+        var creelno = _creelno.text;
+        var cmachine = _machine.text;
+        var citem = _item.text;
 
-      var id = widget.xid;
-      id = int.parse(id);
+        var id = widget.xid;
+        id = int.parse(id);
 
-      print('In Save....');
+        print('In Save....');
 
-      print(jsonEncode(ItemDetails));
-      //return true;
+        print(jsonEncode(ItemDetails));
+        //return true;
 
-      uri =
-          "https://looms.equalsoftlink.com/api/api_storeloomsyarnissuechln?dbname=" +
-              db +
-              "&company=&cno=" +
-              cno +
-              "&user=" +
-              username +
-              "&branch=" +
-              branch +
-              "&party=" +
-              party +
-              "&item=" +
-              citem +
-              "&machine=" +
-              cmachine +
-              "&creelno=" +
-              creelno +
-              "&chlnno=" +
-              chlnno +
-              "&srchr=" +
-              srchr +
-              "&serial=" +
-              serial +
-              "&date=" +
-              date +
-              "&remarks=" +
-              remarks +
-              "&id=" +
-              id.toString();
+        uri =
+            "${globals.cdomain}/api/api_storeloomsyarnissuechln?dbname=" +
+                db +
+                "&company=&cno=" +
+                cno +
+                "&user=" +
+                username +
+                "&branch=" +
+                branch +
+                "&party=" +
+                party +
+                "&item=" +
+                citem +
+                "&machine=" +
+                cmachine +
+                "&creelno=" +
+                creelno +
+                "&chlnno=" +
+                chlnno +
+                "&srchr=" +
+                srchr +
+                "&serial=" +
+                serial +
+                "&date=" +
+                date +
+                "&expecdelvdt=" +
+                expecdelvdate +
+                "&remarks=" +
+                remarks +
+                "&id=" +
+                id.toString();
 
-      print(uri);
+        print(uri);
 
-      final headers = {
-        'Content-Type': 'application/json', // Set the appropriate content-type
-        // Add any other headers required by your API
-      };
+        final headers = {
+          'Content-Type': 'application/json', // Set the appropriate content-type
+          // Add any other headers required by your API
+        };
 
-      var response = await http.post(Uri.parse(uri),
-          headers: headers, body: jsonEncode(ItemDetails));
-      var jsonData = jsonDecode(response.body);
+        var response = await http.post(Uri.parse(uri),
+            headers: headers, body: jsonEncode(ItemDetails));
+        var jsonData = jsonDecode(response.body);
 
-      //print('4');
+        //print('4');
 
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
+        var jsonCode = jsonData['Code'];
+        var jsonMsg = jsonData['Message'];
 
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else {
-        showAlertDialog(context, 'Saved !!!');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => LoomYarnJobIssueList(
-                      companyid: widget.xcompanyid,
-                      companyname: widget.xcompanyname,
-                      fbeg: widget.xfbeg,
-                      fend: widget.xfend,
-                    )));
-      }
+        if (jsonCode == '500') {
+          showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+        } else {
+          Fluttertoast.showToast(
+            msg: "Saved !!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.white,
+            textColor: Colors.purple,
+            fontSize: 16.0,
+          );
+          Navigator.pop(context);
+        }
       return true;
+      }
+    }
+
+    Future<void> _handleSaveData() async {
+      setState(() {
+        isButtonActive = false;
+      });
+
+      bool success = await saveData();
+
+      setState(() {
+        isButtonActive = success;
+      });
     }
 
     void deleteRow(index) {
@@ -534,7 +581,11 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
         }
 
         print(ItemDetails[iCtr]);
-        _datarow.add(DataRow(cells: [
+        _datarow.add(DataRow(
+          // onSelectChanged: (value) {
+          //   gotoChallanItemDet(context);
+          // },
+          cells: [
           DataCell(ElevatedButton.icon(
             onPressed: () => {deleteRow(iCtr)},
             icon: Icon(
@@ -551,6 +602,8 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
           DataCell(Text(ItemDetails[iCtr]['itemname'])),
           DataCell(Text(ItemDetails[iCtr]['lotno'])),
           DataCell(Text(ItemDetails[iCtr]['cops'])),
+          DataCell(Text(ItemDetails[iCtr]['rolls'])),
+          DataCell(Text(ItemDetails[iCtr]['box'])),
           DataCell(Text(ItemDetails[iCtr]['cone'])),
           DataCell(Text(ItemDetails[iCtr]['unit'])),
           DataCell(Text(ItemDetails[iCtr]['rate'])),
@@ -590,7 +643,17 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done),
           backgroundColor: Colors.green,
-          onPressed: () => {saveData()}),
+          onPressed: isButtonActive
+            ? () {
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Form submitted successfully')),
+                    );
+                    _handleSaveData();
+                  }
+                }
+            : null,
+      ),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -602,6 +665,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                 child: TextFormField(
                   controller: _branch,
                   autofocus: true,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
                     hintText: 'Select Branch',
@@ -611,6 +675,9 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     gotoBranchScreen(context);
                   },
                   validator: (value) {
+                    if (value == '') {
+                      return 'Please enter branch';
+                    }
                     return null;
                   },
                 ),
@@ -618,6 +685,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
             ]),
             TextFormField(
               controller: _date,
+              textInputAction: TextInputAction.next,
               decoration: const InputDecoration(
                 icon: const Icon(Icons.person),
                 hintText: 'Date',
@@ -635,6 +703,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _party,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Party',
@@ -644,6 +713,9 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                       gotoPartyScreen2(context, 'JOBWORK PARTY', _party);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter party';
+                      }
                       return null;
                     },
                   ),
@@ -655,6 +727,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                 Expanded(
                   child: TextFormField(
                     keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
                     controller: _chlnno,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -668,6 +741,9 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     },
                     onTap: () {},
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter challanno';
+                      }
                       return null;
                     },
                   ),
@@ -676,6 +752,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                   child: TextFormField(
                     textCapitalization: TextCapitalization.characters,
                     controller: _creelno,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Creelno',
@@ -699,6 +776,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _machine,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Machine',
@@ -715,6 +793,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _item,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Item',
@@ -724,6 +803,9 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                       gotoItemScreen(context);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter itemname';
+                      }
                       return null;
                     },
                   ),
@@ -736,6 +818,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                   child: TextFormField(
                     textCapitalization: TextCapitalization.characters,
                     controller: _remarks,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Remarks',
@@ -748,10 +831,30 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     },
                     onTap: () {},
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter remarks';
+                      }
                       return null;
                     },
                   ),
-                )
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _expecdelvdate,
+                    textInputAction: TextInputAction.next,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Expec Delv Date',
+                      labelText: 'Expec Delv Date',
+                    ),
+                    onTap: () {
+                      _selectDate2(context);
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
               ],
             ),
             Row(
@@ -760,6 +863,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     child: TextFormField(
                   enabled: false,
                   controller: _totWt,
+                  textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
@@ -777,6 +881,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     child: TextFormField(
                   enabled: false,
                   controller: _totcops,
+                  textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
@@ -794,6 +899,7 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                     child: TextFormField(
                   enabled: false,
                   controller: _totcone,
+                  textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
@@ -839,6 +945,12 @@ class _YarnJobIssueAddState extends State<YarnJobIssueAdd> {
                   ),
                   DataColumn(
                     label: Text("Cops"),
+                  ),
+                  DataColumn(
+                    label: Text("Rolls"),
+                  ),
+                  DataColumn(
+                    label: Text("Box"),
                   ),
                   DataColumn(
                     label: Text("Cone"),

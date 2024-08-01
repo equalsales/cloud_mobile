@@ -92,8 +92,10 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
     // dropdownTrnType = 'PACKING';
 
     if (int.parse(widget.xid) > 0) {
-      loadData();
-      loadDetData();
+      setState(() {
+        loadData();
+        loadDetData();
+      });
     }
   }
 
@@ -152,6 +154,7 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
         "cone": jsonData[iCtr]['cone'].toString(),
       });
     }
+
     setState(() {
       ItemDetails = ItemDet;
     });
@@ -372,7 +375,6 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                   type: type)));
       setState(() {
         ItemDetails.add(result[0]);
-        _remarks.text = result[0]['remarks'];
         print(ItemDetails);
       });
     }
@@ -493,9 +495,8 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
     List<DataRow> _createRows() {
       List<DataRow> _datarow = [];
 
-      setState(() {
         for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
-       
+          
           _datarow.add(DataRow(cells: [
             DataCell(ElevatedButton.icon(
               onPressed: () => {deleteRow(iCtr)},
@@ -532,7 +533,7 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
             DataCell(Text(ItemDetails[iCtr]['cone'].toString())),
           ]));
         }
-      });
+        setState(() {});
 
       return _datarow;
     }
@@ -554,7 +555,15 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
         backgroundColor: Colors.green,
         enableFeedback: isButtonActive,
         onPressed: isButtonActive
-            ? _handleSaveData
+            ? () {
+              if (_formKey.currentState!.validate())
+              {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Form submitted successfully')),
+                );
+                _handleSaveData();
+              }
+            }
             : null,
       ),
       body: SingleChildScrollView(
@@ -609,6 +618,9 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                     gotoBranchScreen(context);
                   },
                   validator: (value) {
+                    if (value == ' ') {
+                      return 'Please enter branch';
+                    } 
                     return null;
                   },
                 ),
@@ -642,6 +654,9 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                       gotoPartyScreen2(context, 'SALE PARTY', _party);
                     },
                     validator: (value) {
+                      if (value == ' ') {
+                        return 'Please enter party';
+                      } 
                       return null;
                     },
                   ),
@@ -663,6 +678,9 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                      
                     },
                     validator: (value) {
+                      if (value == ' ') {
+                        return 'Please enter challanno';
+                      } 
                       return null;
                     },
                   ),
@@ -710,6 +728,9 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                     },
                     onTap: () {},
                     validator: (value) {
+                      if (value == ' ') {
+                        return 'Please enter remarks';
+                      } 
                       return null;
                     },
                   ),

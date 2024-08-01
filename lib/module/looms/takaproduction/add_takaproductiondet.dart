@@ -147,14 +147,18 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
       // var username = globals.username;
       // var ctakano = _ctakano.text;
 
-      var newdate = _date.text;
+      var date = _date.text;
       var worker = _worker.text;
       var meters = _meters.text;
       var rate = _rate.text;
       var amount = _amount.text;
 
+      DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
+      String newdate = DateFormat("yyyy-MM-dd").format(parsedDate);
+
+
       widget.xitemDet.add({
-        'newdate': newdate,
+        'date': newdate,
         'worker': worker,
         'meters': meters,
         'rate': rate,
