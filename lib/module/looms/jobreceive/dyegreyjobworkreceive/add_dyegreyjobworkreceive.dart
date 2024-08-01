@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
 import 'package:cloud_mobile/module/looms/jobreceive/dyegreyjobworkreceive/add_detdyegreyjobworkreceive.dart';
+import 'package:cloud_mobile/module/looms/purchasechallan/yarnpurchasechallan/add_yarnpurchasechallandet.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -908,9 +909,9 @@ class _DyegreyJobworkReceivedAddState extends State<DyegreyJobworkReceivedAdd> {
 
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
-      var branchid = _branchid.text;
-      var type = dropdownTrnType;
-      print("type : $type");
+      // var branchid = _branchid.text;
+      // var type = dropdownTrnType;
+      // print("type : $type");
       print('in');
       var result = await Navigator.push(
           context,
@@ -923,8 +924,7 @@ class _DyegreyJobworkReceivedAddState extends State<DyegreyJobworkReceivedAdd> {
                   branch: branch,
                   partyid: partyid,
                   itemDet: ItemDetails,
-                  branchid: branchid,
-                  type: type)));
+                  branchid: branchid,)));
       setState(() {
         ItemDetails.add(result[0]);
         _remarks.text = result[0]['remarks'];
