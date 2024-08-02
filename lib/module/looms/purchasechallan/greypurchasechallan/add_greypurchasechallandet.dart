@@ -66,37 +66,33 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
-  TextEditingController _orderno = new TextEditingController();
-  TextEditingController _folddate = new TextEditingController();
-  TextEditingController _takachr = new TextEditingController();
-  TextEditingController _takano = new TextEditingController();
-  TextEditingController _ctakano = new TextEditingController();
-  TextEditingController _ordbalmtrs = new TextEditingController();
+  TextEditingController _orderno = new TextEditingController(text: '0');
+  TextEditingController _orderchr = new TextEditingController();
   TextEditingController _itemname = new TextEditingController();
   TextEditingController _design= new TextEditingController();
-  TextEditingController _pcs = new TextEditingController();
-  TextEditingController _meters = new TextEditingController();
-  TextEditingController _weight = new TextEditingController();
-  TextEditingController _rate = new TextEditingController();
-  TextEditingController _stdwt = new TextEditingController();
-  TextEditingController _amount = new TextEditingController();
+  TextEditingController _pcs = new TextEditingController(text: '0.000');
+  TextEditingController _meters = new TextEditingController(text: '0.000');
+  TextEditingController _weight = new TextEditingController(text: '0.00');
+  TextEditingController _rate = new TextEditingController(text: '0.00');
+  TextEditingController _stdwt = new TextEditingController(text: '0.000');
+  TextEditingController _amount = new TextEditingController(text: '0');
   TextEditingController _fmode = new TextEditingController();
-  TextEditingController _foldmtrs = new TextEditingController();
-  TextEditingController _shtmtrs = new TextEditingController();
-  TextEditingController _shtrate = new TextEditingController();
-  TextEditingController _ordid = new TextEditingController();
-  TextEditingController _orddetid = new TextEditingController();
-  TextEditingController _discrate = new TextEditingController();
-  TextEditingController _discamt = new TextEditingController();
-  TextEditingController _addamt = new TextEditingController();
-  TextEditingController _texavalue = new TextEditingController();
-  TextEditingController _sgstrate = new TextEditingController();
-  TextEditingController _sgstamt = new TextEditingController();
-  TextEditingController _cgstrate = new TextEditingController();
-  TextEditingController _cgstamt = new TextEditingController();
-  TextEditingController _igstrate = new TextEditingController();
-  TextEditingController _igstamt = new TextEditingController();
-  TextEditingController _finalamt = new TextEditingController();
+  TextEditingController _foldmtrs = new TextEditingController(text: '0.00');
+  TextEditingController _shtmtrs = new TextEditingController(text: '0.000');
+  TextEditingController _shtrate = new TextEditingController(text: '0.000');
+  TextEditingController _ordid = new TextEditingController(text: '0');
+  TextEditingController _orddetid = new TextEditingController(text: '0');
+  TextEditingController _discrate = new TextEditingController(text: '0.00');
+  TextEditingController _discamt = new TextEditingController(text: '0.00');
+  TextEditingController _addamt = new TextEditingController(text: '0.00');
+  TextEditingController _texavalue = new TextEditingController(text: '0.00');
+  TextEditingController _sgstrate = new TextEditingController(text: '0.00');
+  TextEditingController _sgstamt = new TextEditingController(text: '0.00');
+  TextEditingController _cgstrate = new TextEditingController(text: '0.00');
+  TextEditingController _cgstamt = new TextEditingController(text: '0.00');
+  TextEditingController _igstrate = new TextEditingController(text: '0.00');
+  TextEditingController _igstamt = new TextEditingController(text: '0.00');
+  TextEditingController _finalamt = new TextEditingController(text: '0.00');
 
   double ordMeters = 0;
 
@@ -121,18 +117,18 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
     List ItemDetails = widget.xItemDetails;
     int length = ItemDetails.length;
     print('Length :' + length.toString());
-    if (length > 0) {
-      setState(() {
-        _orderno.text = ItemDetails[length - 1]['orderno'].toString();
-        _folddate.text = ItemDetails[length - 1]['folddate'].toString();
-        _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
-        _ordid.text = ItemDetails[length - 1]['ordid'].toString();
-        _orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
-        _itemname.text = ItemDetails[length - 1]['itemname'].toString();
-        _design.text = ItemDetails[length - 1]['design'].toString();
-        _rate.text = ItemDetails[length - 1]['rate'].toString();
-      });
-    }
+    // if (length > 0) {
+    //   setState(() {
+    //     _orderno.text = ItemDetails[length - 1]['orderno'].toString();
+    //     _folddate.text = ItemDetails[length - 1]['folddate'].toString();
+    //     _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
+    //     _ordid.text = ItemDetails[length - 1]['ordid'].toString();
+    //     _orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['itemname'].toString();
+    //     _design.text = ItemDetails[length - 1]['design'].toString();
+    //     _rate.text = ItemDetails[length - 1]['rate'].toString();
+    //   });
+    // }
   }
 
   void gotoOrderScreen(BuildContext contex) async {
@@ -170,7 +166,6 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
       print('dhruv');
       print(result);
       setState(() {
-        _folddate.text = result[0]['date'];
         _itemname.text = result[0]['itemname'];
         _design.text = result[0]['design'];
         dropdownUnitType = result[0]['unit'];
@@ -178,7 +173,6 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
         _ordid.text = result[0]['ordid'].toString();
         _orddetid.text = result[0]['orddetid'].toString();
         ordMeters = double.parse(result[0]['balmeters'].toString());
-        _ordbalmtrs.text = result[0]['balmeters'].toString();
       });
     });
   }
@@ -190,8 +184,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
     var id = widget.xid;
     var fromdate = widget.xfbeg;
     var todate = widget.xfend;
-    var takano = _takano.text;
-    var takachr = _takachr.text;
+    var orderno = _orderno.text;
+    var orderchr = _orderchr.text;
     var branch = widget.xbranchid;
 
     fromdate = retconvdate(fromdate);
@@ -205,12 +199,12 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
     print('Length :' + length.toString());
     if (length > 0) {
       for (int iCtr = 0; iCtr < length; iCtr++) {
-        if ((ItemDetails[iCtr]['takano'] == takano) &&
-            ((ItemDetails[iCtr]['takachr'] == takachr))) {
+        if ((ItemDetails[iCtr]['takano'] == orderno) &&
+            ((ItemDetails[iCtr]['takachr'] == orderchr))) {
           showAlertDialog(context, 'Taka No Already Exists...');
           setState(() {
-            _takano.text = '0';
-            _takachr.text = '';
+            _orderno.text = '0';
+            _orderchr.text = '';
           });
           return true;
         }
@@ -221,9 +215,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
         '${globals.cdomain}/api/commonapi_gettakastock2?dbname=' +
             db +
             '&partyfilter=N&takachr=' +
-            takachr +
+            orderchr +
             '&takano=' +
-            takano +
+            orderno +
             '&branchid=(' +
             branch +
             ')&getdata=Y';
@@ -259,13 +253,12 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                     itemCount: _jsonData.length,
                     itemBuilder: (context, index) {
                       return CheckboxListTile(
-                        value: false,
+                        value: true,
                         subtitle: Text(_jsonData[index]['itemname'].toString()),
                         title: Text(_jsonData[index]['meters'].toString()),
                         onChanged: (bool? value) {                        
-                          _takachr.text = _jsonData[index]['takachr'].toString();
-                          _takano.text = _jsonData[index]['takano'].toString();
-                          _folddate.text = _jsonData[index]['date'].toString();
+                          _orderchr.text = _jsonData[index]['takachr'].toString();
+                          _orderno.text = _jsonData[index]['takano'].toString();
                           _itemname.text = _jsonData[index]['itemname'].toString();
                           _design.text = _jsonData[index]['design'].toString();
                           _pcs.text = _jsonData[index]['pcs'].toString();
@@ -287,10 +280,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
       );
     } else {
       setState(() {
-        _takachr.text = _jsonData[0]['takachr'].toString();
-        _takano.text = _jsonData[0]['takano'].toString();
+        _orderchr.text = _jsonData[0]['takachr'].toString();
+        _orderno.text = _jsonData[0]['takano'].toString();
         _itemname.text = jsonData[0]['itemname'].toString();
-        _folddate.text = jsonData[0]['date'].toString();
         _design.text = jsonData[0]['design'].toString();
         _pcs.text = jsonData[0]['pcs'].toString();
         _meters.text = jsonData[0]['meters'].toString();
@@ -322,18 +314,16 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
     setState(() {
       print(barcodeScanRes);
 
-      //const string = barcodeScanRes;
       final splitted = barcodeScanRes.split('-');
-      print(splitted); // [Hello, world!];
+      print(splitted); 
       print(splitted.length);
       print('dhruv');
-      _takachr.text = splitted[0];
+      _orderchr.text = splitted[0];
       if (splitted.length > 1) {
-        _takano.text = splitted[1];
+        _orderno.text = splitted[1];
       } else {
-        _takano.text = '0';
+        _orderno.text = '0';
       }
-
       fetchdetails();
       //_scanBarcode = barcodeScanRes;
     });
@@ -342,16 +332,11 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
   @override
   Widget build(BuildContext context) {
     Future<bool> saveData() async {
-      String uri = '';
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
-      var takachr = _takachr.text;
-      var takano = _takano.text;
-      var ordbalmtrs = _ordbalmtrs.text;
-      var folddate = _folddate.text;
       var orderno = _orderno.text;
-      var ctakano = _ctakano.text;
+      var orderchr = _orderchr.text;
       var itemname = _itemname.text;
       var design = _design.text;
       var pcs = _pcs.text;
@@ -383,10 +368,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
 
       widget.xitemDet.add({
         'orderno': orderno,
-        'takachr': takachr,
-        'takano': takano,
-        'ordbalmtrs': ordbalmtrs,
-        'folddate': folddate,
+        'orderchr': orderchr,
         'itemname': itemname,
         'orddesign': design,
         'pcs': pcs,
@@ -451,6 +433,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                   child: TextFormField(
                     controller: _orderno,
                     autofocus: true,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Sales Order',
@@ -468,78 +452,24 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                           value == '') {
                         return 'Please enter order no';
                       }
-                      // if (value == null ||
-                      //     value.isEmpty ||
-                      //     value == "0" ||
-                      //     'Delivery' == widget.xtype) {
-                      //   return 'Please enter order no';
-                      // }
                       return null;
                     },
                   ),
                 ),
                 Expanded(
                   child: TextFormField(
-                    controller: _folddate,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Fold Date',
-                      labelText: 'Fold Date',
-                    ),
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _ordbalmtrs,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Order Balance',
-                      labelText: 'Order Balance',
-                    ),
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _takachr,
+                    controller: _orderchr,
                     autofocus: true,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Select Taka ',
-                      labelText: 'Takachr',
+                      hintText: 'Select OrderChr ',
+                      labelText: 'OrderChr',
                     ),
                     onChanged: (value) {
-                      _takachr.value = TextEditingValue(
+                      _orderchr.value = TextEditingValue(
                           text: value.toUpperCase(),
-                          selection: _takachr.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _takano,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Taka No',
-                      labelText: 'Taka No',
-                    ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
+                          selection: _orderchr.selection);
                     },
                     validator: (value) {
                       return null;
@@ -588,16 +518,15 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _itemname,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Item Name',
                       labelText: 'Item Name',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -605,16 +534,15 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _design,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Design',
                       labelText: 'Design',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -627,6 +555,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _pcs,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -642,18 +571,20 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _meters,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Meters',
                       labelText: 'Meters',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter meters';
+                      }
                       return null;
                     },
                   ),
@@ -664,17 +595,16 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _weight,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Weight',
                       labelText: 'Weight',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -682,17 +612,16 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _rate,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Rate',
                       labelText: 'Rate',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -705,16 +634,15 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _stdwt,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'StdWt',
                       labelText: 'StdWt',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -748,16 +676,15 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _amount,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Amount',
                       labelText: 'Amount',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -769,17 +696,16 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _fmode,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Fmode',
                       labelText: 'Fmode',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -788,16 +714,15 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _foldmtrs,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Foldmtrs',
                       labelText: 'Foldmtrs',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -810,16 +735,15 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _shtmtrs,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Shtmtrs',
                       labelText: 'Shtmtrs',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -827,17 +751,16 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _shtrate,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'ShtRate',
                       labelText: 'ShtRate',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -850,7 +773,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _ordid,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -865,8 +789,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _orddetid,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -886,7 +811,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _discrate,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -901,8 +827,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _discamt,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -922,7 +849,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _addamt,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -937,8 +865,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _texavalue,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -958,7 +887,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _sgstrate,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -973,8 +903,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _sgstamt,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -994,7 +925,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _cgstrate,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -1009,8 +941,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _cgstamt,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -1030,7 +963,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _igstrate,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -1045,8 +979,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _igstamt,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -1066,7 +1001,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _finalamt,
-                    enabled: false,
+                    enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),

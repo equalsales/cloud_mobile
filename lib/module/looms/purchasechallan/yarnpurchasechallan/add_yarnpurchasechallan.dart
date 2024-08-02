@@ -42,12 +42,6 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
 
   List _branchlist = [];
   List _partylist = [];
-  List _delpartylist = [];
-  List _booklist = [];
-  List _agentlist = [];
-  List _hastelist = [];
-  List _transportlist = [];
-  List _stationlist = [];
 
   List ItemDetails = [];
 
@@ -70,8 +64,6 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
   TextEditingController _totmtrs = new TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _gstregno = new TextEditingController();
-  var _jsonData = [];
 
   bool isButtonActive = true;
 
@@ -87,6 +79,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -460,18 +453,16 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
               "&id=" +
               id.toString() +
               "&parcel=1";
-      print("/////////////////////////////////////////////" + uri);
+      print(" saveData : " + uri);
 
       final headers = {
-        'Content-Type': 'application/json', // Set the appropriate content-type
-        // Add any other headers required by your API
+        'Content-Type': 'application/json',
       };
 
       var response = await http.post(Uri.parse(uri),
           headers: headers, body: jsonEncode(ItemDetails));
 
       var jsonData = jsonDecode(response.body);
-      //print('4');
 
       var jsonCode = jsonData['Code'];
       var jsonMsg = jsonData['Message'];
@@ -479,10 +470,6 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
       if (jsonCode == '500') {
         showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
       } else {
-        // var url = '${globals.cdomain}/printsaleorderdf/' +
-        //     id.toString() +
-        //     '?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
-
         Fluttertoast.showToast(
           msg: "Saved !!!",
           toastLength: Toast.LENGTH_SHORT,
@@ -611,18 +598,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
         enableFeedback: isButtonActive,
         onPressed: isButtonActive
             ? () {
-                if (crlimit < clobl) {
-                  Fluttertoast.showToast(
-                      msg: "CrLimit limit exceed!!!.",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 3,
-                      backgroundColor: Colors.white,
-                      textColor: Colors.purple,
-                      fontSize: 16.0);
-                } else {
-                  _handleSaveData();
-                }
+                _handleSaveData();
               }
             : null,
       ),
@@ -744,9 +720,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                       hintText: 'Challan No',
                       labelText: 'Challan No',
                     ),
-                    onTap: () {
-                     
-                    },
+                    onTap: () {},
                     validator: (value) {
                       return null;
                     },
@@ -829,9 +803,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                     hintText: 'Total Taka',
                     labelText: 'Total Taka',
                   ),
-                  onTap: () {
-                    //gotoBranchScreen(context);
-                  },
+                  onTap: () {},
                   validator: (value) {
                     return null;
                   },
@@ -846,9 +818,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                     hintText: 'Total Meters',
                     labelText: 'Total Meters',
                   ),
-                  onTap: () {
-                    //gotoBranchScreen(context);
-                  },
+                  onTap: () {},
                   validator: (value) {
                     return null;
                   },
@@ -858,23 +828,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
             Padding(padding: EdgeInsets.all(5)),
             ElevatedButton(
               onPressed: () {
-                print("clobl");
-                print(clobl);
-                print("crlimit");
-                print(crlimit);
-                if (crlimit < clobl) {
-                  Fluttertoast.showToast(
-                    msg: "Crlimit exceed!!!.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 3,
-                    backgroundColor: Colors.white,
-                    textColor: Colors.purple,
-                    fontSize: 16.0,
-                  );
-                } else {
-                  gotoChallanItemDet(context);
-                }
+                gotoChallanItemDet(context);
               },
               child: Text('Add Item Details',
                   style:

@@ -385,7 +385,6 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                   )));
       setState(() {
         ItemDetails.add(result[0]);
-        _remarks.text = result[0]['remarks'];
         print(ItemDetails);
       });
     }
@@ -459,7 +458,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
           id.toString() +
           "&parcel=1";
 
-      print("/////////////////////////////////////////////" + uri);
+      print(" saveData : " + uri);
 
       final headers = {
         'Content-Type': 'application/json', // Set the appropriate content-type
@@ -548,11 +547,6 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
         ]));
       }
       setState(() {});
-      // setState(() {
-      //   Timer(Duration(milliseconds: 10), () {
-      //     _createRows();
-      //   });
-      // });
       return _datarow;
     }
 
@@ -574,7 +568,12 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
         enableFeedback: isButtonActive,
         onPressed: isButtonActive
             ? () {
-                _handleSaveData();
+                if (_formKey.currentState!.validate()) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Form submitted successfully')),
+                  );
+                  _handleSaveData();
+                }
               }
             : null,
       ),
@@ -621,6 +620,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                 child: TextFormField(
                   controller: _branch,
                   autofocus: true,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
                     hintText: 'Select Branch',
@@ -630,6 +630,9 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                     gotoBranchScreen(context);
                   },
                   validator: (value) {
+                    if (value == '') {
+                      return 'Please enter branch';
+                    }
                     return null;
                   },
                 ),
@@ -637,6 +640,8 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
             ]),
             TextFormField(
               controller: _date,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 icon: const Icon(Icons.person),
                 hintText: 'Date',
@@ -646,6 +651,9 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                 _selectDate(context);
               },
               validator: (value) {
+                if (value == '') {
+                  return 'Please enter date';
+                }
                 return null;
               },
             ),
@@ -654,6 +662,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _book,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Book',
@@ -670,6 +679,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _party,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Party',
@@ -679,6 +689,9 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                       gotoPartyScreen2(context);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter party';
+                      }
                       return null;
                     },
                   ),
@@ -690,6 +703,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _chlnno,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -698,6 +712,9 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter challan no';
+                      }
                       return null;
                     },
                   ),
@@ -705,6 +722,8 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _chlndt,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Challan Date',
@@ -747,6 +766,7 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
                   child: TextFormField(
                     textCapitalization: TextCapitalization.characters,
                     controller: _remarks,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Remarks',

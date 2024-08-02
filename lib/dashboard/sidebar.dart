@@ -1,33 +1,22 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cloud_mobile/module/looms/beamcard/beamcardlist.dart';
 import 'package:cloud_mobile/module/looms/customreport/customreportmenu.dart';
-
-import 'package:cloud_mobile/module/looms/jobreceive/yarnjobworkreceive/list_yarnjobworkreceive.dart';
-
-import 'package:cloud_mobile/module/looms/jobreceive/beamjobworkreceive/list_beamjobworkreceive.dart';
-import 'package:cloud_mobile/module/looms/machinecard/loomsmachinecardlist.dart';
 import 'package:cloud_mobile/module/looms/physicalstock/loomphysicalstocklist.dart';
-import 'package:cloud_mobile/module/looms/purchasechallan/purchasemenu.dart';
+import 'package:cloud_mobile/module/looms/purchasechallan/beampurchasechallan/beampurchasechallanlist.dart';
+import 'package:cloud_mobile/module/looms/purchasechallan/greypurchasechallan/greypurchasechallanlist.dart';
 import 'package:cloud_mobile/module/looms/stockreport/stockreportmenu.dart';
 import 'package:cloud_mobile/module/looms/takaadjustment/loomstakaadjustmentlist.dart';
 import 'package:cloud_mobile/module/looms/takaproduction/takaproductionlist.dart';
 import 'package:cloud_mobile/module/looms/yarnphysicalstock/loomyarnphysicalstocklist.dart';
 import 'package:cloud_mobile/module/master/master.dart';
-//import 'package:cloud_mobile/module/purchase/purchasebilllist.dart';
-//import 'package:cloud_mobile/module/salebill/add_salebill.dart';
 import 'package:flutter/material.dart';
-//import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 import 'package:cloud_mobile/module/enq/enqlist.dart';
 import 'package:cloud_mobile/module/bankbook/bankbooklist.dart';
 import 'package:cloud_mobile/module/cashbook/cashbooklist.dart';
 import 'package:cloud_mobile/module/salebill/salebilllist.dart';
 import 'package:cloud_mobile/report/account/view_ledger.dart';
-
-//import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
-
-//import 'package:cloud_mobile/transactionmenu.dart';
 import 'package:cloud_mobile/main.dart';
-
-// For Looms
 import 'package:cloud_mobile/module/looms/saleschallan/loomsaleschallanlist.dart';
 import 'package:cloud_mobile/module/looms/greyjobissue/loomgreyjobissuelist.dart';
 import 'package:cloud_mobile/module/looms/yarnjobissue/loomyarnjobissuelist.dart';
@@ -49,7 +38,6 @@ import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 //import 'package:myfirstapp/screens/transaction/saleorder/saleorderview_screen.dart';
 //import 'package:myfirstapp/screens/saleos/saleosview_screen.dart';
 
-import '../common/global.dart' as globals;
 
 class SideDrawer extends StatelessWidget {
   var xcompanyid;
@@ -145,14 +133,44 @@ class SideDrawer extends StatelessWidget {
                           )))
             },
           ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Beam Purchase Challan'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => BeamPurchaseChallanList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Grey Purchase Challan'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => GreyPurchaseChallanList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
           // ListTile(
           //   leading: Icon(Icons.shopping_cart),
-          //   title: Text('Purchase Challan'),
+          //   title: Text('Yarn Purchase Challan'),
           //   onTap: () => {
           //     Navigator.push(
           //         context,
           //         MaterialPageRoute(
-          //             builder: (_) => LoomPurchaseChallanMenu(
+          //             builder: (_) => YarnPurchaseChallanList(
           //                   companyid: xcompanyid,
           //                   companyname: xcompanyname,
           //                   fbeg: xfbeg,

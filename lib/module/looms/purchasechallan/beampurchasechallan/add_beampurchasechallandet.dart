@@ -43,34 +43,27 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
-  TextEditingController _orderno = new TextEditingController();
-  TextEditingController _folddate = new TextEditingController();
-  TextEditingController _takachr = new TextEditingController();
-  TextEditingController _takano = new TextEditingController();
-  // TextEditingController _ctakano = new TextEditingController();
-  TextEditingController _ordbalmtrs = new TextEditingController();
   TextEditingController _itemname = new TextEditingController();
   TextEditingController _hsncode = new TextEditingController();
   TextEditingController _beamchr = new TextEditingController();
-  TextEditingController _beamno = new TextEditingController();
-  TextEditingController _beammtrs = new TextEditingController();
-  TextEditingController _beamwt = new TextEditingController();
-  TextEditingController _ends = new TextEditingController();
-  TextEditingController _rate = new TextEditingController();
-  TextEditingController _unit = new TextEditingController();
-  TextEditingController _amount = new TextEditingController();
+  TextEditingController _beamno = new TextEditingController(text: '0');
+  TextEditingController _beammtrs = new TextEditingController(text: '0.00');
+  TextEditingController _beamwt = new TextEditingController(text: '0.00');
+  TextEditingController _ends = new TextEditingController(text: '0.000');
+  TextEditingController _rate = new TextEditingController(text: '0.00');
+  TextEditingController _amount = new TextEditingController(text: '0.00');
   TextEditingController _fmode = new TextEditingController();
-  TextEditingController _discrate = new TextEditingController();
-  TextEditingController _discamt = new TextEditingController();
-  TextEditingController _addamt = new TextEditingController();
-  TextEditingController _texavalue = new TextEditingController();
-  TextEditingController _sgstrate = new TextEditingController();
-  TextEditingController _sgstamt = new TextEditingController();
-  TextEditingController _cgstrate = new TextEditingController();
-  TextEditingController _cgstamt = new TextEditingController();
-  TextEditingController _igstrate = new TextEditingController();
-  TextEditingController _igstamt = new TextEditingController();
-  TextEditingController _finalamt = new TextEditingController();
+  TextEditingController _discrate = new TextEditingController(text: '0.00');
+  TextEditingController _discamt = new TextEditingController(text: '0.00');
+  TextEditingController _addamt = new TextEditingController(text: '0.00');
+  TextEditingController _texavalue = new TextEditingController(text: '0.00');
+  TextEditingController _sgstrate = new TextEditingController(text: '0.00');
+  TextEditingController _sgstamt = new TextEditingController(text: '0.00');
+  TextEditingController _cgstrate = new TextEditingController(text: '0.00');
+  TextEditingController _cgstamt = new TextEditingController(text: '0.00');
+  TextEditingController _igstrate = new TextEditingController(text: '0.00');
+  TextEditingController _igstamt = new TextEditingController(text: '0.00');
+  TextEditingController _finalamt = new TextEditingController(text: '0.00');
 
   double ordMeters = 0;
 
@@ -112,7 +105,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
     var clientid = globals.dbname;
     var companystate = globals.companystate;
 
-    uri = 'https://www.cloud.equalsoftlink.com/api/api_gethsndet?dbname=$clientid&hsncode=${_hsncode.text}&rate=${_rate.text}&statename=${widget.xpartystate}&costatename=${companystate}';
+    uri = '${globals.cdomain2}/api/api_gethsndet?dbname=$clientid&hsncode=${_hsncode.text}&rate=${_rate.text}&statename=${widget.xpartystate}&costatename=${companystate}';
 
     var response = await http.get(Uri.parse(uri));
     print(uri);
@@ -435,6 +428,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     enabled: true,
                     controller: _itemname,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Item Name',
@@ -452,6 +446,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     enabled: true,
                     controller: _hsncode,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -472,6 +467,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     enabled: true,
                     controller: _beamchr,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Beamchr',
@@ -488,6 +484,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     enabled: true,
                     controller: _beamno,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -508,6 +505,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     enabled: true,
                     controller: _beammtrs,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -525,6 +523,9 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                       });
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter meters';
+                      }
                       return null;
                     },
                   ),
@@ -533,6 +534,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     enabled: true,
                     controller: _beamwt,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -550,6 +552,9 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                       });
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter Beamwt';
+                      }
                       return null;
                     },
                   ),
@@ -562,6 +567,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     controller: _ends,
                     enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -587,6 +593,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     enabled: true,
                     controller: _fmode,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Fmode',
@@ -606,6 +613,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     controller: _rate,
                     enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -625,6 +633,9 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                       });
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter rate';
+                      }
                       return null;
                     },
                   ),
@@ -659,6 +670,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     controller: _amount,
                     enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -688,6 +700,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     controller: _discrate,
                     enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -713,6 +726,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     enabled: true,
                     controller: _discamt,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -742,6 +756,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                   child: TextFormField(
                     controller: _addamt,
                     enabled: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -768,6 +783,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                     enabled: true,
                     readOnly: true,
                     controller: _texavalue,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -789,6 +805,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                     controller: _sgstrate,
                     enabled: true,
                     readOnly: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -806,6 +823,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                     enabled: true,
                     readOnly: true,
                     controller: _sgstamt,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -827,6 +845,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                     controller: _cgstrate,
                     enabled: true,
                     readOnly: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -844,6 +863,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                     enabled: true,
                     readOnly: true,
                     controller: _cgstamt,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -865,6 +885,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                     controller: _igstrate,
                     enabled: true,
                     readOnly: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -882,6 +903,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                     enabled: true,
                     readOnly: true,
                     controller: _igstamt,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -903,6 +925,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                     controller: _finalamt,
                     enabled: true,
                     readOnly: true,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),

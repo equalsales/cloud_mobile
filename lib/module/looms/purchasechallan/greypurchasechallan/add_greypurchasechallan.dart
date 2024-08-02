@@ -42,12 +42,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
 
   List _branchlist = [];
   List _partylist = [];
-  List _delpartylist = [];
-  List _booklist = [];
-  List _agentlist = [];
-  List _hastelist = [];
-  List _transportlist = [];
-  List _stationlist = [];
 
   List ItemDetails = [];
 
@@ -128,6 +122,8 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
       ItemDet.add({
         "controlid": jsonData[iCtr]['controlid'].toString(),
         "id": jsonData[iCtr]['id'].toString(),
+        "orderno": jsonData[iCtr]['orderno'].toString(),
+        "orderchr": jsonData[iCtr]['orderchr'].toString(),
         "itemname": jsonData[iCtr]['itemname'].toString(),
         "design": jsonData[iCtr]['design'].toString(),
         "pcs": jsonData[iCtr]['pcs'].toString(),
@@ -141,8 +137,8 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
         "foldmtrs": jsonData[iCtr]['foldmtrs'].toString(),
         "shtmtrs": jsonData[iCtr]['shtmtrs'].toString(),
         "shtprc": jsonData[iCtr]['shtprc'].toString(),
-        // "ordid": jsonData[iCtr]['ordid'].toString(),
-        // "orddetid": jsonData[iCtr]['orddetid'].toString(),
+        "ordid": jsonData[iCtr]['ordid'].toString(),
+        "orddetid": jsonData[iCtr]['orddetid'].toString(),
         "discper": jsonData[iCtr]['discper'].toString(),
         "discamt": jsonData[iCtr]['discamt'].toString(),
         "addamt": jsonData[iCtr]['addamt'].toString(),
@@ -390,8 +386,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                   type: type)));
       setState(() {
         ItemDetails.add(result[0]);
-        _remarks.text = result[0]['remarks'];
-        // ItemDetails = ItemDetails[0];
         print(ItemDetails);
       });
     }
@@ -469,18 +463,16 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
           id.toString() +
           "&parcel=1";
 
-      print("/////////////////////////////////////////////" + uri);
+      print(" SaveData : " + uri);
 
       final headers = {
-        'Content-Type': 'application/json', // Set the appropriate content-type
-        // Add any other headers required by your API
+        'Content-Type': 'application/json',
       };
 
       var response = await http.post(Uri.parse(uri),
           headers: headers, body: jsonEncode(ItemDetails));
 
       var jsonData = jsonDecode(response.body);
-      //print('4');
 
       var jsonCode = jsonData['Code'];
       var jsonMsg = jsonData['Message'];
@@ -488,10 +480,6 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
       if (jsonCode == '500') {
         showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
       } else {
-        // var url = '${globals.cdomain}/printsaleorderdf/' +
-        //     id.toString() +
-        //     '?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
-
         Fluttertoast.showToast(
           msg: "Saved !!!",
           toastLength: Toast.LENGTH_SHORT,
@@ -565,6 +553,8 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
             label: Text('',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
           )),
+          DataCell(Text(ItemDetails[iCtr]['orderno'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['orderchr'].toString())),
           DataCell(Text(ItemDetails[iCtr]['itemname'].toString())),
           DataCell(Text(ItemDetails[iCtr]['design'].toString())),
           DataCell(Text(ItemDetails[iCtr]['pcs'].toString())),
@@ -616,18 +606,13 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
         enableFeedback: isButtonActive,
         onPressed: isButtonActive
             ? () {
-                if (crlimit < clobl) {
-                  Fluttertoast.showToast(
-                      msg: "CrLimit limit exceed!!!.",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 3,
-                      backgroundColor: Colors.white,
-                      textColor: Colors.purple,
-                      fontSize: 16.0);
-                } else {
-                  _handleSaveData();
-                }
+                  if (_formKey.currentState!.validate())
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Form submitted successfully')),
+                    );
+                    _handleSaveData();
+                  }
               }
             : null,
       ),
@@ -674,6 +659,7 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                 child: TextFormField(
                   controller: _branch,
                   autofocus: true,
+                  textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
                     hintText: 'Select Branch',
@@ -683,6 +669,9 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                     gotoBranchScreen(context);
                   },
                   validator: (value) {
+                    if (value == '') {
+                      return 'Please enter branch';
+                    }
                     return null;
                   },
                 ),
@@ -690,6 +679,8 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
             ]),
             TextFormField(
               controller: _date,
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 icon: const Icon(Icons.person),
                 hintText: 'Date',
@@ -699,6 +690,9 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                 _selectDate(context);
               },
               validator: (value) {
+                if (value == '') {
+                  return 'Please enter date';
+                }
                 return null;
               },
             ),
@@ -707,6 +701,7 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _book,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Book',
@@ -723,6 +718,7 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _party,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Party',
@@ -732,6 +728,9 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                       gotoPartyScreen2(context, 'SALE PARTY', _party);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter party';
+                      }
                       return null;
                     },
                   ),
@@ -743,6 +742,7 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _chlnno,
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -753,6 +753,9 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                       // gotoPartyScreen(context, 'SALE PARTY', _delparty);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter challan no';
+                      }
                       return null;
                     },
                   ),
@@ -760,6 +763,8 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _chlndt,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Challan Date',
@@ -780,6 +785,7 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _agent,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Agent',
@@ -822,6 +828,7 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                   child: TextFormField(
                     textCapitalization: TextCapitalization.characters,
                     controller: _remarks,
+                    textInputAction: TextInputAction.next,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Remarks',
@@ -843,7 +850,7 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
             Row(
               children: [
                 Expanded(
-                    child: TextFormField(
+                  child: TextFormField(
                   enabled: false,
                   controller: _tottaka,
                   keyboardType: TextInputType.number,
@@ -881,23 +888,7 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
             Padding(padding: EdgeInsets.all(5)),
             ElevatedButton(
               onPressed: () {
-                print("clobl");
-                print(clobl);
-                print("crlimit");
-                print(crlimit);
-                if (crlimit < clobl) {
-                  Fluttertoast.showToast(
-                    msg: "Crlimit exceed!!!.",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 3,
-                    backgroundColor: Colors.white,
-                    textColor: Colors.purple,
-                    fontSize: 16.0,
-                  );
-                } else {
-                  gotoChallanItemDet(context);
-                }
+                gotoChallanItemDet(context);
               },
               child: Text('Add Item Details',
                   style:
@@ -908,6 +899,12 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                 child: DataTable(columns: [
                   DataColumn(
                     label: Text("Action"),
+                  ),
+                  DataColumn(
+                    label: Text("Order No"),
+                  ),
+                  DataColumn(
+                    label: Text("OrderChr"),
                   ),
                   DataColumn(
                     label: Text("Item Name"),
