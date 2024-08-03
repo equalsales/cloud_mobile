@@ -503,27 +503,6 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
 
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
 
-        double nMeters = 0;
-        if (ItemDetails[iCtr]['meters'] != '') {
-          nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
-          widget.tottaka += 1;          
-          widget.totmtrs += nMeters;
-        }
-        print(nMeters);
-
-        var tot;
-        var ordmtr = ItemDetails[iCtr]['ordmtr'].toString();
-        var ordmtrAsDouble = double.tryParse(ordmtr);
-
-        if (ordmtrAsDouble != null) {
-          tot = ordmtrAsDouble - nMeters;
-          print(tot);
-          ItemDetails[iCtr]['ordbalmtrs'] = tot.toString(); 
-          print(ItemDetails[iCtr]['ordbalmtrs']);
-        } else {
-          print('Error: Invalid format for ordmtr');
-        }
-
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
             onPressed: () => {deleteRow(iCtr)},
@@ -543,7 +522,6 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
           DataCell(Text(ItemDetails[iCtr]['lotno'].toString())),
           DataCell(Text(ItemDetails[iCtr]['cops'].toString())),
           DataCell(Text(ItemDetails[iCtr]['totcrtn'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['rate'].toString())),
           DataCell(Text(ItemDetails[iCtr]['actnetwt'].toString())),
           DataCell(Text(ItemDetails[iCtr]['netwt'].toString())),
           DataCell(Text(ItemDetails[iCtr]['cone'].toString())),
@@ -556,7 +534,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
           DataCell(Text(ItemDetails[iCtr]['discrate'].toString())),
           DataCell(Text(ItemDetails[iCtr]['discamt'].toString())),
           DataCell(Text(ItemDetails[iCtr]['addamt'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['taxablevalue'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['texavalue'].toString())),
           DataCell(Text(ItemDetails[iCtr]['sgstrate'].toString())),
           DataCell(Text(ItemDetails[iCtr]['sgstamt'].toString())),
           DataCell(Text(ItemDetails[iCtr]['cgstrate'].toString())),
@@ -854,13 +832,13 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                     label: Text("Action"),
                   ),
                   DataColumn(
-                    label: Text("Item Name"),
-                  ),
-                  DataColumn(
                     label: Text("orderno"),
                   ),
                   DataColumn(
                     label: Text("orderchr"),
+                  ),
+                  DataColumn(
+                    label: Text("Item Name"),
                   ),
                   DataColumn(
                     label: Text("HSN Code"),

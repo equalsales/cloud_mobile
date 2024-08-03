@@ -385,7 +385,6 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
         'unit': unit,
         'amount': amount,
         'fmode': fmode,
-        'orditem': itemname,
         'ordid': ordid,
         'orddetid': orddetid,
         'discrate': discrate,
@@ -400,9 +399,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
         'igstamt': igstamt,
         'finalamt': finalamt,
       });
-
       Navigator.pop(context, widget.xitemDet);
-
       return true;
     }
 
@@ -472,6 +469,9 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
               ],
             ),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               children: [
                 Padding(padding: EdgeInsets.all(2)),
@@ -512,7 +512,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _itemname,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -529,7 +529,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _hsncode,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -552,7 +552,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _grade,
-                    enabled: false,
+                    enabled: true,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -568,7 +568,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _lotno,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -589,7 +589,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _cops,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -607,7 +607,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _totcrtn,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -629,7 +629,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _actnetwt,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -647,7 +647,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _netwt,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -672,7 +672,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _cone,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -690,7 +690,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _fmode,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -713,7 +713,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _rate,
-                    enabled: false,
+                    enabled: true,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Rate',
@@ -764,7 +764,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _amount,
-                    enabled: false,
+                    enabled: true,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Amount',
@@ -785,7 +785,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _ordid,
-                    enabled: false,
+                    enabled: true,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -800,7 +800,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _orddetid,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -821,7 +821,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _discrate,
-                    enabled: false,
+                    enabled: true,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -836,7 +836,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _discamt,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -857,7 +857,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _addamt,
-                    enabled: false,
+                    enabled: true,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -872,7 +872,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _texavalue,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -893,7 +893,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _sgstrate,
-                    enabled: false,
+                    enabled: true,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -908,7 +908,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _sgstamt,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -929,7 +929,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _cgstrate,
-                    enabled: false,
+                    enabled: true,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -944,7 +944,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _cgstamt,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -965,7 +965,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _igstrate,
-                    enabled: false,
+                    enabled: true,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
@@ -980,7 +980,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
-                    enabled: false,
+                    enabled: true,
                     controller: _igstamt,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -1001,7 +1001,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _finalamt,
-                    enabled: false,
+                    enabled: true,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),

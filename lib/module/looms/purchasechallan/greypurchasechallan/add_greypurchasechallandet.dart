@@ -473,6 +473,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                 ),
               ],
             ),
+            SizedBox(
+              height: 20,
+            ),
             Row(
               children: [
                 Padding(padding: EdgeInsets.all(2)),

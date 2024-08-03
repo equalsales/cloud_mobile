@@ -5,6 +5,7 @@ import 'package:cloud_mobile/module/looms/customreport/customreportmenu.dart';
 import 'package:cloud_mobile/module/looms/physicalstock/loomphysicalstocklist.dart';
 import 'package:cloud_mobile/module/looms/purchasechallan/beampurchasechallan/beampurchasechallanlist.dart';
 import 'package:cloud_mobile/module/looms/purchasechallan/greypurchasechallan/greypurchasechallanlist.dart';
+import 'package:cloud_mobile/module/looms/purchasechallan/yarnpurchasechallan/yarnpurchasechallanlist.dart';
 import 'package:cloud_mobile/module/looms/stockreport/stockreportmenu.dart';
 import 'package:cloud_mobile/module/looms/takaadjustment/loomstakaadjustmentlist.dart';
 import 'package:cloud_mobile/module/looms/takaproduction/takaproductionlist.dart';
@@ -133,36 +134,36 @@ class SideDrawer extends StatelessWidget {
                           )))
             },
           ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Beam Purchase Challan'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => BeamPurchaseChallanList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Grey Purchase Challan'),
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => GreyPurchaseChallanList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.shopping_cart),
+          //   title: Text('Beam Purchase Challan'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (_) => BeamPurchaseChallanList(
+          //                   companyid: xcompanyid,
+          //                   companyname: xcompanyname,
+          //                   fbeg: xfbeg,
+          //                   fend: xfend,
+          //                 )))
+          //   },
+          // ),
+          // ListTile(
+          //   leading: Icon(Icons.shopping_cart),
+          //   title: Text('Grey Purchase Challan'),
+          //   onTap: () => {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (_) => GreyPurchaseChallanList(
+          //                   companyid: xcompanyid,
+          //                   companyname: xcompanyname,
+          //                   fbeg: xfbeg,
+          //                   fend: xfend,
+          //                 )))
+          //   },
+          // ),
           // ListTile(
           //   leading: Icon(Icons.shopping_cart),
           //   title: Text('Yarn Purchase Challan'),

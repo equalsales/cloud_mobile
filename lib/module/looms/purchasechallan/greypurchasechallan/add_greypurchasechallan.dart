@@ -529,19 +529,18 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
         }
         print(nMeters);
 
+        // var tot;
+        // var ordmtr = ItemDetails[iCtr]['ordmtr'].toString();
+        // var ordmtrAsDouble = double.tryParse(ordmtr);
 
-        var tot;
-        var ordmtr = ItemDetails[iCtr]['ordmtr'].toString();
-        var ordmtrAsDouble = double.tryParse(ordmtr);
-
-        if (ordmtrAsDouble != null) {
-          tot = ordmtrAsDouble - nMeters;
-          print(tot);
-          ItemDetails[iCtr]['ordbalmtrs'] = tot.toString(); 
-          print(ItemDetails[iCtr]['ordbalmtrs']);
-        } else {
-          print('Error: Invalid format for ordmtr');
-        }
+        // if (ordmtrAsDouble != null) {
+        //   tot = ordmtrAsDouble - nMeters;
+        //   print(tot);
+        //   ItemDetails[iCtr]['ordbalmtrs'] = tot.toString(); 
+        //   print(ItemDetails[iCtr]['ordbalmtrs']);
+        // } else {
+        //   print('Error: Invalid format for ordmtr');
+        // }
 
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
