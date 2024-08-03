@@ -31,11 +31,6 @@ class GreyPurchaseChallanDetAdd extends StatefulWidget {
     xordno = ordno;
     xItemDetails = itemDet;
     xtype = type;
-
-    print('in Item Details');
-    print(xbranch);
-    print(xparty);
-    print(xItemDetails);
   }
 
   var xcompanyid;
@@ -71,8 +66,6 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
   
   final _formKey = GlobalKey<FormState>();
 
-  List<Map<String, dynamic>> _jsonData = [];
-
   String? dropdownUnitType;
 
   var UnitType = [
@@ -82,6 +75,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -126,7 +120,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Grey Purchase Challan Details[ ] ',
+          'Grey Purchase Challan Sub Details[ ] ',
           style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
         ),
       ),

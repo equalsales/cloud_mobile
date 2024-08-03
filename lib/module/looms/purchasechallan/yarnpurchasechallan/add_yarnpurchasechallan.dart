@@ -127,8 +127,7 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
         "controlid": jsonData[iCtr]['controlid'].toString(),
         "id": jsonData[iCtr]['id'].toString(),
         "orderno": jsonData[iCtr]['orderno'].toString(),
-        "takano": jsonData[iCtr]['takano'].toString(),
-        "takachr": jsonData[iCtr]['takachr'].toString(),
+        "orderchr": jsonData[iCtr]['orderchr'].toString(),
         "itemname": jsonData[iCtr]['itemname'].toString(),
         "hsncode": jsonData[iCtr]['hsncode'].toString(),
         "grade": jsonData[iCtr]['grade'].toString(),
@@ -157,13 +156,9 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
         "finalamt": jsonData[iCtr]['finalamt'].toString(),
       });
     }
-
-    print("jsonData[iCtr]['ordno'].toString()" + jsonData[0]['orderno'].toString());
-
     setState(() {
       ItemDetails = ItemDet;
     });
-
     return true;
   }
 
@@ -384,8 +379,6 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                   type: type)));
       setState(() {
         ItemDetails.add(result[0]);
-        _remarks.text = result[0]['remarks'];
-        print(ItemDetails);
       });
     }
 
@@ -542,6 +535,8 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
             label: Text('',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
           )),
+          DataCell(Text(ItemDetails[iCtr]['orderno'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['orderchr'].toString())),
           DataCell(Text(ItemDetails[iCtr]['itemname'].toString())),
           DataCell(Text(ItemDetails[iCtr]['hsncode'].toString())),
           DataCell(Text(ItemDetails[iCtr]['grade'].toString())),
@@ -598,7 +593,13 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
         enableFeedback: isButtonActive,
         onPressed: isButtonActive
             ? () {
-                _handleSaveData();
+                if (_formKey.currentState!.validate())
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Form submitted successfully')),
+                  );
+                  _handleSaveData();
+                }
               }
             : null,
       ),
@@ -654,6 +655,9 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                     gotoBranchScreen(context);
                   },
                   validator: (value) {
+                    if (value == '') {
+                      return 'Please enter branch';
+                    }
                     return null;
                   },
                 ),
@@ -670,6 +674,9 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                 _selectDate(context);
               },
               validator: (value) {
+                if (value == '') {
+                  return 'Please enter date';
+                }
                 return null;
               },
             ),
@@ -703,6 +710,9 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                       gotoPartyScreen2(context, 'SALE PARTY', _party);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter party';
+                      }
                       return null;
                     },
                   ),
@@ -722,6 +732,9 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter challanno';
+                      }
                       return null;
                     },
                   ),
@@ -791,40 +804,40 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                 )
               ],
             ),
-            Row(
-              children: [
-                Expanded(
-                    child: TextFormField(
-                  enabled: false,
-                  controller: _tottaka,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Total Taka',
-                    labelText: 'Total Taka',
-                  ),
-                  onTap: () {},
-                  validator: (value) {
-                    return null;
-                  },
-                )),
-                Expanded(
-                    child: TextFormField(
-                  enabled: false,
-                  controller: _totmtrs,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Total Meters',
-                    labelText: 'Total Meters',
-                  ),
-                  onTap: () {},
-                  validator: (value) {
-                    return null;
-                  },
-                ))
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //         child: TextFormField(
+            //       enabled: false,
+            //       controller: _tottaka,
+            //       keyboardType: TextInputType.number,
+            //       decoration: const InputDecoration(
+            //         icon: const Icon(Icons.person),
+            //         hintText: 'Total Taka',
+            //         labelText: 'Total Taka',
+            //       ),
+            //       onTap: () {},
+            //       validator: (value) {
+            //         return null;
+            //       },
+            //     )),
+            //     Expanded(
+            //         child: TextFormField(
+            //       enabled: false,
+            //       controller: _totmtrs,
+            //       keyboardType: TextInputType.number,
+            //       decoration: const InputDecoration(
+            //         icon: const Icon(Icons.person),
+            //         hintText: 'Total Meters',
+            //         labelText: 'Total Meters',
+            //       ),
+            //       onTap: () {},
+            //       validator: (value) {
+            //         return null;
+            //       },
+            //     ))
+            //   ],
+            // ),
             Padding(padding: EdgeInsets.all(5)),
             ElevatedButton(
               onPressed: () {
@@ -842,6 +855,12 @@ class _YarnPurchaseChallanAddState extends State<YarnPurchaseChallanAdd> {
                   ),
                   DataColumn(
                     label: Text("Item Name"),
+                  ),
+                  DataColumn(
+                    label: Text("orderno"),
+                  ),
+                  DataColumn(
+                    label: Text("orderchr"),
                   ),
                   DataColumn(
                     label: Text("HSN Code"),

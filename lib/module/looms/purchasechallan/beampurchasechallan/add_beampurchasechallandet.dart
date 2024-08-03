@@ -69,8 +69,6 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
 
   final _formKey = GlobalKey<FormState>();
 
-  List<Map<String, dynamic>> _jsonData = [];
-
   String? dropdownUnitType;
 
   var UnitType = [
@@ -82,6 +80,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 

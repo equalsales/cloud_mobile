@@ -37,12 +37,6 @@ class GreyPurchaseChallanDetAdd extends StatefulWidget {
     xordno = ordno;
     xItemDetails = itemDet;
     xtype = type;
-    //xitemDet = itemDet;
-
-    print('in Item Details');
-    print(xbranch);
-    print(xparty);
-    print(xItemDetails);
   }
 
   var xcompanyid;
@@ -109,6 +103,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 

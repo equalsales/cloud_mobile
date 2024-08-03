@@ -67,37 +67,32 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
   DateTime toDate = DateTime.now();
 
   TextEditingController _orderno = new TextEditingController();
-  TextEditingController _folddate = new TextEditingController();
-  TextEditingController _takachr = new TextEditingController();
-  TextEditingController _takano = new TextEditingController();
-  TextEditingController _ctakano = new TextEditingController();
-  TextEditingController _ordbalmtrs = new TextEditingController();
+  TextEditingController _orderchr = new TextEditingController();
   TextEditingController _itemname = new TextEditingController();
   TextEditingController _hsncode = new TextEditingController();
   TextEditingController _grade = new TextEditingController();
   TextEditingController _lotno = new TextEditingController();
-  TextEditingController _cops = new TextEditingController();
-  TextEditingController _totcrtn = new TextEditingController();
-  TextEditingController _actnetwt = new TextEditingController();
-  TextEditingController _netwt = new TextEditingController();
-  TextEditingController _cone = new TextEditingController();
-  TextEditingController _rate = new TextEditingController();
-  TextEditingController _amount = new TextEditingController();
+  TextEditingController _cops = new TextEditingController(text: '0');
+  TextEditingController _totcrtn = new TextEditingController(text: '0');
+  TextEditingController _actnetwt = new TextEditingController(text: '0.000');
+  TextEditingController _netwt = new TextEditingController(text: '0.000');
+  TextEditingController _cone = new TextEditingController(text: '0');
+  TextEditingController _rate = new TextEditingController(text: '0.00');
+  TextEditingController _amount = new TextEditingController(text: '0.00');
   TextEditingController _fmode = new TextEditingController();
-  TextEditingController _ordid = new TextEditingController();
-  TextEditingController _orddetid = new TextEditingController();
-  TextEditingController _discrate = new TextEditingController();
-  TextEditingController _discamt= new TextEditingController();
-  TextEditingController _addamt = new TextEditingController();
-  TextEditingController _texavalue = new TextEditingController();
-  TextEditingController _sgstrate= new TextEditingController();
-  TextEditingController _sgstamt= new TextEditingController();
-  TextEditingController _cgstrate= new TextEditingController();
-  TextEditingController _cgstamt= new TextEditingController();
-  TextEditingController _igstrate = new TextEditingController();
-  TextEditingController _igstamt = new TextEditingController();
-  TextEditingController _finalamt = new TextEditingController();
-
+  TextEditingController _ordid = new TextEditingController(text: '0');
+  TextEditingController _orddetid = new TextEditingController(text: '0');
+  TextEditingController _discrate = new TextEditingController(text: '0.00');
+  TextEditingController _discamt= new TextEditingController(text: '0.00');
+  TextEditingController _addamt = new TextEditingController(text: '0.00');
+  TextEditingController _texavalue = new TextEditingController(text: '0.00');
+  TextEditingController _sgstrate= new TextEditingController(text: '0.00');
+  TextEditingController _sgstamt= new TextEditingController(text: '0.00');
+  TextEditingController _cgstrate= new TextEditingController(text: '0.00');
+  TextEditingController _cgstamt= new TextEditingController(text: '0.00');
+  TextEditingController _igstrate = new TextEditingController(text: '0.00');
+  TextEditingController _igstamt = new TextEditingController(text: '0.00');
+  TextEditingController _finalamt = new TextEditingController(text: '0.00');
 
   double ordMeters = 0;
 
@@ -114,6 +109,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -122,19 +118,19 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
     List ItemDetails = widget.xItemDetails;
     int length = ItemDetails.length;
     print('Length :' + length.toString());
-    if (length > 0) {
-      setState(() {
-        _orderno.text = ItemDetails[length - 1]['orderno'].toString();
-        _folddate.text = ItemDetails[length - 1]['folddate'].toString();
-        _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
-        _ordid.text = ItemDetails[length - 1]['ordid'].toString();
-        _orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
-        _itemname.text = ItemDetails[length - 1]['itemname'].toString();
-        _hsncode.text = ItemDetails[length - 1]['hsncode'].toString();
-        dropdownUnitType = ItemDetails[length - 1]['unit'].toString();
-        _rate.text = ItemDetails[length - 1]['rate'].toString();
-      });
-    }
+    // if (length > 0) {
+    //   setState(() {
+    //     _orderno.text = ItemDetails[length - 1]['orderno'].toString();
+    //     _folddate.text = ItemDetails[length - 1]['folddate'].toString();
+    //     _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
+    //     _ordid.text = ItemDetails[length - 1]['ordid'].toString();
+    //     _orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
+    //     _itemname.text = ItemDetails[length - 1]['itemname'].toString();
+    //     _hsncode.text = ItemDetails[length - 1]['hsncode'].toString();
+    //     dropdownUnitType = ItemDetails[length - 1]['unit'].toString();
+    //     _rate.text = ItemDetails[length - 1]['rate'].toString();
+    //   });
+    // }
   }
 
   void gotoOrderScreen(BuildContext contex) async {
@@ -172,13 +168,11 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
       print('dhruv');
       print(result);
       setState(() {
-        _folddate.text = result[0]['date'];
         _itemname.text = result[0]['itemname'];
         _rate.text = result[0]['rate'];
         _ordid.text = result[0]['ordid'].toString();
         _orddetid.text = result[0]['orddetid'].toString();
         ordMeters = double.parse(result[0]['balmeters'].toString());
-        _ordbalmtrs.text = result[0]['balmeters'].toString();
       });
     });
   }
@@ -190,8 +184,8 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
     var id = widget.xid;
     var fromdate = widget.xfbeg;
     var todate = widget.xfend;
-    var takano = _takano.text;
-    var takachr = _takachr.text;
+    var orderno = _orderno.text;
+    var orderchr = _orderchr.text;
     var branch = widget.xbranchid;
 
     fromdate = retconvdate(fromdate);
@@ -205,12 +199,12 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
     print('Length :' + length.toString());
     if (length > 0) {
       for (int iCtr = 0; iCtr < length; iCtr++) {
-        if ((ItemDetails[iCtr]['takano'] == takano) &&
-            ((ItemDetails[iCtr]['takachr'] == takachr))) {
+        if ((ItemDetails[iCtr]['takano'] == orderno) &&
+            ((ItemDetails[iCtr]['takachr'] == orderchr))) {
           showAlertDialog(context, 'Taka No Already Exists...');
           setState(() {
-            _takano.text = '0';
-            _takachr.text = '';
+            _orderno.text = '0';
+            _orderchr.text = '';
           });
           return true;
         }
@@ -221,9 +215,9 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
         '${globals.cdomain}/api/commonapi_gettakastock2?dbname=' +
             db +
             '&partyfilter=N&takachr=' +
-            takachr +
+            orderchr +
             '&takano=' +
-            takano +
+            orderno +
             '&branchid=(' +
             branch +
             ')&getdata=Y';
@@ -263,9 +257,8 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                         subtitle: Text(_jsonData[index]['itemname'].toString()),
                         title: Text(_jsonData[index]['meters'].toString()),
                         onChanged: (bool? value) {
-                          _takachr.text = _jsonData[index]['takachr'].toString();
-                          _takano.text = _jsonData[index]['takano'].toString();
-                          _folddate.text = _jsonData[index]['date'].toString();
+                          _orderchr.text = _jsonData[index]['takachr'].toString();
+                          _orderno.text = _jsonData[index]['takano'].toString();
                           _itemname.text = _jsonData[index]['itemname'].toString();
                           _hsncode.text = _jsonData[index]['hsncode'].toString();
                           setState(() {
@@ -286,10 +279,9 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
       );
     } else {
       setState(() {
-        _takachr.text = _jsonData[0]['takachr'].toString();
-        _takano.text = _jsonData[0]['takano'].toString();
+        _orderchr.text = _jsonData[0]['takachr'].toString();
+        _orderno.text = _jsonData[0]['takano'].toString();
         _itemname.text = jsonData[0]['itemname'].toString();
-        _folddate.text = jsonData[0]['date'].toString();
         _hsncode.text = jsonData[0]['hsncode'].toString();
         setState(() {
           dropdownUnitType = jsonData[0]['unit'].toString();
@@ -325,11 +317,11 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
       print(splitted); // [Hello, world!];
       print(splitted.length);
       print('dhruv');
-      _takachr.text = splitted[0];
+      _orderchr.text = splitted[0];
       if (splitted.length > 1) {
-        _takano.text = splitted[1];
+        _orderno.text = splitted[1];
       } else {
-        _takano.text = '0';
+        _orderno.text = '0';
       }
 
       fetchdetails();
@@ -346,12 +338,8 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
       var cno = globals.companyid;
       var db = globals.dbname;
       var username = globals.username;
-      var folddate = _folddate.text;
-      var ordbalmtrs = _ordbalmtrs.text;
-      var takachr = _takachr.text;
-      var takano = _takano.text;
+      var orderchr = _orderchr.text;
       var orderno = _orderno.text;
-      var ctakano = _ctakano.text;
       var itemname = _itemname.text;
       var hsncode = _hsncode.text;
       var grade = _grade.text;
@@ -383,10 +371,7 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
 
       widget.xitemDet.add({
         'orderno': orderno,
-        'takachr': takachr,
-        'takano': takano,
-        'ordbalmtrs': ordbalmtrs,
-        'folddate': folddate,
+        'orderchr': orderchr,
         'itemname': itemname,
         'hsncode': hsncode,
         'grade': grade,
@@ -435,14 +420,14 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
           child: Icon(Icons.done),
           backgroundColor: Colors.green,
           onPressed: () => {
-                if (_formKey.currentState!.validate())
-                  {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Form submitted successfully')),
-                    ),
-                    saveData()
-                  },
-              }),
+            if (_formKey.currentState!.validate())
+              {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Form submitted successfully')),
+                ),
+                saveData()
+              },
+          }),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -454,96 +439,31 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _orderno,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Sales Order',
-                      labelText: 'Order No',
-                    ),
-                    onTap: () {
-                      gotoOrderScreen(context);
-                    },
-                    onChanged: (value) {},
-                    validator: (value) {
-                      print(widget.xtype);
-                      if (widget.xtype == 'PACKING') {
-                      } else if ('Delivery' == widget.xtype ||
-                          value == '0' ||
-                          value == '') {
-                        return 'Please enter order no';
-                      }
-                      // if (value == null ||
-                      //     value.isEmpty ||
-                      //     value == "0" ||
-                      //     'Delivery' == widget.xtype) {
-                      //   return 'Please enter order no';
-                      // }
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _folddate,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Fold Date',
-                      labelText: 'Fold Date',
-                    ),
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _ordbalmtrs,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Order Balance',
-                      labelText: 'Order Balance',
-                    ),
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _takachr,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Taka ',
-                      labelText: 'Takachr',
-                    ),
-                    onChanged: (value) {
-                      _takachr.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _takachr.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _takano,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
-                      hintText: 'Select Taka No',
-                      labelText: 'Taka No',
+                      hintText: 'Select Orderno',
+                      labelText: 'Orderno',
                     ),
-                    onTap: () {
-                      //gotoBranchScreen(context);
+                    onTap: () {},
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _orderchr,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Enter Orderchr ',
+                      labelText: 'Orderchr',
+                    ),
+                    onChanged: (value) {
+                      _orderchr.value = TextEditingValue(
+                          text: value.toUpperCase(),
+                          selection: _orderchr.selection);
                     },
                     validator: (value) {
                       return null;
@@ -739,6 +659,9 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                       //gotoBranchScreen(context);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter netwt';
+                      }
                       return null;
                     },
                   ),
@@ -800,6 +723,9 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                       //gotoBranchScreen(context);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return 'Please enter rate';
+                      }
                       return null;
                     },
                   ),
@@ -819,6 +745,12 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                         );
                       }).toList(),
                       icon: const Icon(Icons.arrow_drop_down_circle),
+                      validator: (value) {
+                        if (value == '') {
+                          return 'Please enter unit';
+                        }
+                        return null;
+                      },
                       onChanged: (String? newValue) {
                         setState(() {
                           dropdownUnitType = newValue!;

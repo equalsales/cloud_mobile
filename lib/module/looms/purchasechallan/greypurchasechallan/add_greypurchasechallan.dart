@@ -77,6 +77,7 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -847,44 +848,44 @@ class _GreyPurchaseChallanAddState extends State<GreyPurchaseChallanAdd> {
                 )
               ],
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                  enabled: false,
-                  controller: _tottaka,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Total Taka',
-                    labelText: 'Total Taka',
-                  ),
-                  onTap: () {
-                    //gotoBranchScreen(context);
-                  },
-                  validator: (value) {
-                    return null;
-                  },
-                )),
-                Expanded(
-                    child: TextFormField(
-                  enabled: false,
-                  controller: _totmtrs,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Total Meters',
-                    labelText: 'Total Meters',
-                  ),
-                  onTap: () {
-                    //gotoBranchScreen(context);
-                  },
-                  validator: (value) {
-                    return null;
-                  },
-                ))
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: TextFormField(
+            //       enabled: false,
+            //       controller: _tottaka,
+            //       keyboardType: TextInputType.number,
+            //       decoration: const InputDecoration(
+            //         icon: const Icon(Icons.person),
+            //         hintText: 'Total Taka',
+            //         labelText: 'Total Taka',
+            //       ),
+            //       onTap: () {
+            //         //gotoBranchScreen(context);
+            //       },
+            //       validator: (value) {
+            //         return null;
+            //       },
+            //     )),
+            //     Expanded(
+            //         child: TextFormField(
+            //       enabled: false,
+            //       controller: _totmtrs,
+            //       keyboardType: TextInputType.number,
+            //       decoration: const InputDecoration(
+            //         icon: const Icon(Icons.person),
+            //         hintText: 'Total Meters',
+            //         labelText: 'Total Meters',
+            //       ),
+            //       onTap: () {
+            //         //gotoBranchScreen(context);
+            //       },
+            //       validator: (value) {
+            //         return null;
+            //       },
+            //     ))
+            //   ],
+            // ),
             Padding(padding: EdgeInsets.all(5)),
             ElevatedButton(
               onPressed: () {
