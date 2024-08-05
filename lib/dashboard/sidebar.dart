@@ -2,6 +2,7 @@
 
 import 'package:cloud_mobile/module/looms/beamcard/beamcardlist.dart';
 import 'package:cloud_mobile/module/looms/customreport/customreportmenu.dart';
+import 'package:cloud_mobile/module/looms/machinecard/loomsmachinecardlist.dart';
 import 'package:cloud_mobile/module/looms/physicalstock/loomphysicalstocklist.dart';
 import 'package:cloud_mobile/module/looms/purchasechallan/beampurchasechallan/beampurchasechallanlist.dart';
 import 'package:cloud_mobile/module/looms/purchasechallan/greypurchasechallan/greypurchasechallanlist.dart';
@@ -38,7 +39,6 @@ import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
 //import 'package:myfirstapp/screens/saleos/osview_screen.dart';
 //import 'package:myfirstapp/screens/transaction/saleorder/saleorderview_screen.dart';
 //import 'package:myfirstapp/screens/saleos/saleosview_screen.dart';
-
 
 class SideDrawer extends StatelessWidget {
   var xcompanyid;
@@ -194,21 +194,21 @@ class SideDrawer extends StatelessWidget {
                           )))
             },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.shopping_cart),
-          //   title: Text('Machine Card'),
-          //   onTap: () => {
-          //     Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //             builder: (_) => MachinecardList(
-          //                   companyid: xcompanyid,
-          //                   companyname: xcompanyname,
-          //                   fbeg: xfbeg,
-          //                   fend: xfend,
-          //                 )))
-          //   },
-          // ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Machine Card'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => MachinecardList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Grey Job Issue'),

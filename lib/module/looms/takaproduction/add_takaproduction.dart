@@ -49,6 +49,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
   bool isButtonActive = true;
 
   String dropdownTrnType = 'REGULAR';
+  String CompletionDate = '';
 
   var branchid = 0;
   var partyid = 0;
@@ -84,6 +85,14 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
   final _formKey = GlobalKey<FormState>();
   var bmitem;
+
+  var localBeamNo = '';
+  var localTaka = '';
+  var localMtrs = '';
+  var localprodTata = '';
+  var localProdMtrs = '';
+  var localBeamInstall = '';
+  var localBalMtrs = '';
 
   @override
   void initState() {
@@ -202,30 +211,30 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     return true;
   }
 
-  Future<bool> fetchdjobissChallanno() async {
-    String uri = '';
-    var cno = globals.companyid;
-    var db = globals.dbname;
-    uri = '${globals.cdomain}/api/api_greyjobissChallanno?dbname=' +
-        db +
-        '&branch=' +
-        _branch.text +
-        '&cno=' +
-        cno.toString();
-    print(uri);
-    var response = await http.get(Uri.parse(uri));
-    var jsonData = jsonDecode(response.body);
-    print(jsonData);
-    jsonData = jsonData['Data'];
-    if (jsonData == null) {
-      showAlertDialog(context, 'Taka No Found...');
-      return true;
-    }
-    jsonData = jsonData[0];
-    print(jsonData);
-    print(jsonData);
-    return true;
-  }
+  // Future<bool> fetchdjobissChallanno() async {
+  //   String uri = '';
+  //   var cno = globals.companyid;
+  //   var db = globals.dbname;
+  //   uri = '${globals.cdomain}/api/api_greyjobissChallanno?dbname=' +
+  //       db +
+  //       '&branch=' +
+  //       _branch.text +
+  //       '&cno=' +
+  //       cno.toString();
+  //   print(uri);
+  //   var response = await http.get(Uri.parse(uri));
+  //   var jsonData = jsonDecode(response.body);
+  //   print(jsonData);
+  //   jsonData = jsonData['Data'];
+  //   if (jsonData == null) {
+  //     showAlertDialog(context, 'Taka No Found...');
+  //     return true;
+  //   }
+  //   jsonData = jsonData[0];
+  //   print(jsonData);
+  //   print(jsonData);
+  //   return true;
+  // }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -278,7 +287,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       });
     }
 
-    void gotoMachineScreen(BuildContext context) async {
+    gotoMachineScreen(BuildContext context) async {
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -299,218 +308,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
           selMachineno = selMachineno + retResult[0][ictr];
         }
         _machineno.text = selMachineno;
-      });
-    }
-
-    Future<bool> gotogetpendingbeamcard() async {
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var todate = retconvdate(widget.xfend);
-      var branch = _branch.text;
-      var machine = _machineno.text;
-      var beamid = _beamid.text;
-
-      String uri = '';
-
-      uri = '${globals.cdomain}/getpendingbeamcard?dbname=' +
-          db +
-          '&cno=' +
-          cno +
-          '&branch=' +
-          branch +
-          '&machine=' +
-          machine +
-          '&abeamid=' +
-          beamid +
-          '&enddate=' +
-          todate.toString();
-
-      print(" gotogetpendingbeamcard :" + uri);
-      var response = await http.get(Uri.parse(uri));
-      var jsonData = jsonDecode(response.body);
-      jsonData = jsonData['data'];
-
-      List<Map<String, dynamic>> pendingbeamlist = [];
-
-      pendingbeamlist = List<Map<String, dynamic>>.from(jsonData);
-
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Select Beam"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: double.maxFinite,
-                  height: MediaQuery.sizeOf(context).height / 2,
-                  child: ListView.builder(
-                    itemCount: pendingbeamlist.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          CheckboxListTile(
-                            value: false,
-                            subtitle: Text(
-                                "BeamChr : ${pendingbeamlist[index]['beamchr'].toString()}  Beamno : $pendingbeamlist[index]['beamno'].toString(), 'N')}  Beamid : ${pendingbeamlist[index]['beamid'].toString()}"),
-                            title: Text(
-                                "Ends : ${pendingbeamlist[index]['ends'].toString()}  Stdwt : ${pendingbeamlist[index]['stdwt'].toString()}"),
-                            onChanged: (bool? value) {
-                              _beamchr.text = pendingbeamlist[index]['beamchr'].toString();
-                              _beamno.text = pendingbeamlist[index]['beamno'].toString();
-                              _beamid.text = pendingbeamlist[index]['beamid'].toString();
-                              _ends.text = pendingbeamlist[index]['ends'].toString();
-                              _stdwt.text = pendingbeamlist[index]['stdwt'].toString();
-                              _quality.text = pendingbeamlist[index]['itemname'].toString();
-                              _foldmetrs.text = pendingbeamlist[index]['balbeammtrs'].toString();
-                              Navigator.pop(context);
-                            },
-                          ),
-                          Divider()
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-
-      if(pendingbeamlist.length > 1){
-        showDialog(
-          context: context, 
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Install Beam Date?"),
-              actions: [
-                Row(
-                  children: [
-                    TextButton(onPressed: () {
-                      _selectDate2(context);
-                    }, child: Text("Yes")),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }, 
-                      child: Text("No")
-                    ),
-                  ],
-                )
-              ],
-            );
-          },
-        );
-      }
-      return true;
-    }
-
-    Future<bool> getmaxtakano() async {
-      String uri = '';
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var id = widget.xid;
-      var fromdate = retconvdate(widget.xfbeg);
-      var todate = retconvdate(widget.xfend);
-
-      uri = "${globals.cdomain}/api/getmaxtakano?dbname=" +
-          db +
-          "&branchid=" +
-          "&serialfld=takano" +
-          "&srchrfld=" 
-          "&srchr=" +
-          "&mode&cTable=takaproductionmst" +
-          "&id=" +
-          id + 
-          "&open&ModType=T" +
-          "&cno=" +
-          cno +
-          "&fromdate=" +
-          fromdate.toString() +
-          "&todate=" +
-          toDate.toString();
-
-      print(" getmaxtakano : " + uri);
-
-      var response = await http.get(Uri.parse(uri));
-      var jsonData = jsonDecode(response.body);
-      jsonData = jsonData['Data'];
-      print(jsonData);
-
-      return true;
-    }
-  
-    void gotoItemnameScreen(BuildContext context) async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => item_list(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                  )));
-      setState(() {
-        var retResult = result;
-        var selItemname = '';
-        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-          if (ictr > 0) {
-            selItemname = selItemname + ',';
-          }
-          selItemname = selItemname + retResult[0][ictr];
-        }
-        _quality.text = selItemname;
-      });
-    }
-
-    void gotoDesignScreen(BuildContext context) async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => design_list(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                  )));
-      setState(() {
-        var retResult = result;
-        var selDesign = '';
-        for (var ictr = 0; ictr < retResult.length; ictr++) {
-          if (ictr > 0) {
-            selDesign = selDesign + ',';
-          }
-          selDesign = selDesign + retResult[ictr].toString();
-        }
-        _design.text = selDesign;
-      });
-    }
-
-    void gotoChallanItemDet(BuildContext contex) async {
-      var branch = _branch.text;
-      var branchid = _branchid.text;
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => TakaProductionDetAdd(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                    branch: branch,
-                    partyid: partyid,
-                    itemDet: ItemDetails,
-                    branchid: branchid,
-                  )));
-      //print('out');
-      //print(result);
-      //print(result[0]['takachr']);
-      setState(() {
-        ItemDetails.add(result[0]);
-        //ItemDetails = ItemDetails[0];
-        print(ItemDetails);
       });
     }
 
@@ -564,6 +361,14 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
       DateTime parsedDate4 = DateFormat("dd-MM-yyyy").parse(end);
       String newenddate = DateFormat("yyyy-MM-dd").format(parsedDate4);
+      String newCompletionDate = '';
+
+      if (CompletionDate.isEmpty) {
+        newCompletionDate = '';
+      } else {
+        DateTime parsedDate5 = DateFormat("dd-MM-yyyy").parse(CompletionDate);
+        newCompletionDate = DateFormat("yyyy-MM-dd").format(parsedDate5);
+      }
 
       uri = "${globals.cdomain}/api/api_storetakaproduction?dbname=" +
           db +
@@ -581,6 +386,8 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
           beamid +
           "&date=" +
           newfolddate.toString() +
+          "&beamcomplatedate=" +
+          newCompletionDate.toString() +
           "&machine=" +
           machineno +
           "&itemname=" +
@@ -659,16 +466,325 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       return true;
     }
 
+    void showCompleteBeamDialog() {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Do you want to Complete Beam.. ?"),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Cancel'),
+                onPressed: () async {
+                  CompletionDate = '';
+                  bool success = await saveData();
+                  setState(() {
+                    isButtonActive = success;
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('Ok'),
+                onPressed: () async {
+                  CompletionDate = _folddate.text;
+                  print(CompletionDate);
+                  bool success = await saveData();
+
+                  setState(() {
+                    isButtonActive = success;
+                  });
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    Future<bool> gotogetpendingbeamcard() async {
+      var cno = globals.companyid;
+      var db = globals.dbname;
+      var todate = retconvdate(widget.xfend);
+      var branch = _branch.text;
+      var machine = _machineno.text;
+      var beamid = _beamid.text;
+
+      String uri = '';
+
+      uri = '${globals.cdomain}/getpendingbeamcard?dbname=' +
+          db +
+          '&cno=' +
+          cno +
+          '&branch=' +
+          branch +
+          '&machine=' +
+          machine +
+          '&abeamid=' +
+          beamid +
+          '&enddate=' +
+          todate.toString();
+
+      print(" gotogetpendingbeamcard :" + uri);
+      var response = await http.get(Uri.parse(uri));
+      var jsonData = jsonDecode(response.body);
+      jsonData = jsonData['data'];
+
+      List<Map<String, dynamic>> pendingbeamlist = [];
+
+      pendingbeamlist = List<Map<String, dynamic>>.from(jsonData);
+
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Select Beam"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: double.maxFinite,
+                  height: MediaQuery.sizeOf(context).height / 2,
+                  child: ListView.builder(
+                    itemCount: pendingbeamlist.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          CheckboxListTile(
+                            value: false,
+                            subtitle: Text(
+                                "BeamChr : ${pendingbeamlist[index]['beamchr'].toString()}  Beamno : $pendingbeamlist[index]['beamno'].toString(), 'N')}  Beamid : ${pendingbeamlist[index]['beamid'].toString()}"),
+                            title: Text(
+                                "Ends : ${pendingbeamlist[index]['ends'].toString()}  Stdwt : ${pendingbeamlist[index]['stdwt'].toString()}"),
+                            onChanged: (bool? value) {
+                              _beamchr.text =
+                                  pendingbeamlist[index]['beamchr'].toString();
+                              _beamno.text =
+                                  pendingbeamlist[index]['beamno'].toString();
+                              _beamid.text =
+                                  pendingbeamlist[index]['beamid'].toString();
+                              _ends.text =
+                                  pendingbeamlist[index]['ends'].toString();
+                              _stdwt.text =
+                                  pendingbeamlist[index]['stdwt'].toString();
+                              _quality.text =
+                                  pendingbeamlist[index]['itemname'].toString();
+                              _foldmetrs.text = pendingbeamlist[index]
+                                      ['balbeammtrs']
+                                  .toString();
+                              localBeamNo =
+                                  pendingbeamlist[index]['beamno'].toString();
+                              localTaka =
+                                  pendingbeamlist[index]['beamtaka'].toString();
+                              localMtrs =
+                                  pendingbeamlist[index]['beammtrs'].toString();
+                              localprodTata =
+                                  pendingbeamlist[index]['prodtaka'].toString();
+                              localProdMtrs = pendingbeamlist[index]
+                                      ['productmtrs']
+                                  .toString();
+                              localBeamInstall = pendingbeamlist[index]
+                                      ['installdate']
+                                  .toString();
+                              localBalMtrs = pendingbeamlist[index]
+                                      ['balbeammtrs']
+                                  .toString();
+                              Navigator.pop(context);
+                            },
+                          ),
+                          Divider()
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      if (pendingbeamlist.length >= 1) {
+        await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Install Beam Date?"),
+              actions: [
+                Row(
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _selectDate2(context);
+                        },
+                        child: Text("Yes")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("No")),
+                  ],
+                )
+              ],
+            );
+          },
+        );
+      }
+      return true;
+    }
+
+    Future<bool> getmaxtakano() async {
+      String uri = '';
+      var cno = globals.companyid;
+      var db = globals.dbname;
+      var id = widget.xid;
+      var fromdate = retconvdate(widget.xfbeg);
+      var todate = retconvdate(widget.xfend);
+
+      uri = "${globals.cdomain}/api/getmaxtakano?dbname=" +
+          db +
+          "&branchid=" +
+          "&serialfld=takano" +
+          "&srchrfld="
+              "&srchr=" +
+          "&mode&cTable=takaproductionmst" +
+          "&id=" +
+          id +
+          "&open&ModType=T" +
+          "&cno=" +
+          cno +
+          "&fromdate=" +
+          fromdate.toString() +
+          "&todate=" +
+          toDate.toString();
+
+      print(" getmaxtakano : " + uri);
+
+      var response = await http.get(Uri.parse(uri));
+      var jsonData = jsonDecode(response.body);
+      jsonData = jsonData['Data'];
+      print(" chirag : ");
+      print(jsonData);
+
+      return true;
+    }
+
+    void gotoItemnameScreen(BuildContext context) async {
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => item_list(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                  )));
+      setState(() {
+        var retResult = result;
+        var selItemname = '';
+        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+          if (ictr > 0) {
+            selItemname = selItemname + ',';
+          }
+          selItemname = selItemname + retResult[0][ictr];
+        }
+        _quality.text = selItemname;
+      });
+    }
+
+    void gotoDesignScreen(BuildContext context) async {
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => design_list(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                  )));
+      setState(() {
+        var retResult = result;
+        var selDesign = '';
+        for (var ictr = 0; ictr < retResult.length; ictr++) {
+          if (ictr > 0) {
+            selDesign = selDesign + ',';
+          }
+          selDesign = selDesign + retResult[ictr].toString();
+        }
+        _design.text = selDesign;
+      });
+    }
+
+    void gotoChallanItemDet(BuildContext contex) async {
+      var branch = _branch.text;
+      var branchid = _branchid.text;
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => TakaProductionDetAdd(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                    branch: branch,
+                    partyid: partyid,
+                    itemDet: ItemDetails,
+                    branchid: branchid,
+                  )));
+      //print('out');
+      //print(result);
+      //print(result[0]['takachr']);
+      setState(() {
+        ItemDetails.add(result[0]);
+        //ItemDetails = ItemDetails[0];
+        print(ItemDetails);
+      });
+    }
+
     Future<void> _handleSaveData() async {
       setState(() {
         isButtonActive = false;
       });
 
-      bool success = await saveData();
-
-      setState(() {
-        isButtonActive = success;
-      });
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Confirm .."),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 500,
+                  height: 70,
+                  child: ListView.builder(
+                    itemCount: 1,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Text(
+                              " BeamNo : $localBeamNo Beam Taka : $localTaka  Beam Meters : $localMtrs   Prod. Taka  : $localprodTata   Prod. Meters : $localProdMtrs  Beam Install date : $localBeamInstall  Beam Meters : $localBalMtrs"),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  showCompleteBeamDialog();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
 
     void deleteRow(index) {
@@ -867,7 +983,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                   labelText: 'Beam Id',
                 ),
                 onTap: () {
-                  gotogetpendingbeamcard();
+                  // gotogetpendingbeamcard();
                 },
               )),
             ]),
@@ -901,8 +1017,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     hintText: 'Machine No',
                     labelText: 'Machine No',
                   ),
-                  onTap: () {
-                    gotoMachineScreen(context);
+                  onTap: () async {
+                    await gotoMachineScreen(context);
+                    gotogetpendingbeamcard();
                   },
                   validator: (value) {
                     if (value == '') {
@@ -1053,7 +1170,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                         selection: _takachr.selection);
                   },
                   onTap: () {
-                     getmaxtakano();
+                    getmaxtakano();
                   },
                   validator: (value) {
                     if (value == '') {
