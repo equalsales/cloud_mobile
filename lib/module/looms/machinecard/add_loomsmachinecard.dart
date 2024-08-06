@@ -12,7 +12,6 @@ import 'package:cloud_mobile/list/branch_list.dart';
 import 'package:cloud_mobile/common/bottombar.dart';
 import 'package:intl/intl.dart';
 
-
 class MachinecardAdd extends StatefulWidget {
   MachinecardAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
       : super(key: mykey) {
@@ -42,6 +41,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
   DateTime toDate = DateTime.now();
 
   List _branchlist = [];
+  // ignore: unused_field
   List _partylist = [];
 
   List ItemDetails = [];
@@ -91,7 +91,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
             '&id=' +
             id;
 
-    print(" loadDetData : " +uri);
+    print(" loadDetData : " + uri);
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
@@ -151,7 +151,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
             fromdate +
             '&enddate=' +
             todate;
-    print(" loadData :" +uri);
+    print(" loadData :" + uri);
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
@@ -244,8 +244,9 @@ class _MachinecardAddState extends State<MachinecardAdd> {
         });
       }
     }
-    
+
     void gotoChallanItemDet(BuildContext contex) async {
+      // ignore: unused_local_variable
       var branch = _branch.text;
       print('in');
       var result = await Navigator.push(
@@ -273,18 +274,20 @@ class _MachinecardAddState extends State<MachinecardAdd> {
       var srchr = _srchr.text;
       var branch = _branch.text;
       var date = _date.text;
+      // ignore: unused_local_variable
       var party = _party.text;
+      // ignore: unused_local_variable
       var beamstock = _beamstock.text;
+      // ignore: unused_local_variable
       var yarnstock = _yarnstock.text;
 
       var id = widget.xid;
       id = int.parse(id);
 
-
       print(jsonEncode(ItemDetails));
 
       DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
-      String newDate = DateFormat("yyyy-MM-dd").format(parsedDate); 
+      String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
 
       uri =
           "https://looms.equalsoftlink.com/api/api_storetakaadjustment?dbname=" +
@@ -417,9 +420,18 @@ class _MachinecardAddState extends State<MachinecardAdd> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.done),
-          backgroundColor: Colors.green,
-          onPressed: isButtonActive ? () => _handleSaveData() : null,
+        child: Icon(Icons.done),
+        backgroundColor: Colors.green,
+        onPressed: isButtonActive
+            ? () {
+                if (_formKey.currentState!.validate()) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Form submitted successfully')),
+                  );
+                  _handleSaveData();
+                }
+              }
+            : null,
       ),
       body: SingleChildScrollView(
           child: Form(
@@ -459,7 +471,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
             //     SizedBox(width: 20,)
             //   ],
             // ),
-            Row(children: [ 
+            Row(children: [
               Expanded(
                 child: TextFormField(
                   controller: _branch,
@@ -475,6 +487,9 @@ class _MachinecardAddState extends State<MachinecardAdd> {
                     gotoBranchScreen(context);
                   },
                   validator: (value) {
+                    if (value == '') {
+                      return "Please enter Branch";
+                    }
                     return null;
                   },
                 ),
@@ -498,8 +513,8 @@ class _MachinecardAddState extends State<MachinecardAdd> {
             Row(
               children: [
                 Expanded(
-                child: Visibility(
-                visible:true,
+                    child: Visibility(
+                  visible: true,
                   child: TextFormField(
                     controller: _party,
                     keyboardType: TextInputType.text,
