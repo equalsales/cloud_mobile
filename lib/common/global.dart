@@ -15,7 +15,7 @@ String companystate = '';
 // String cdomain2 = 'https://www.cloud.equalsoftlink.com';
 String cdomain = 'http://127.0.0.1:8000';
 String cdomain2 = 'http://127.0.0.1:8000';
-
+// hhhhh
 void alert(context, _title, _msg) {
   Alert(
     context: context,
