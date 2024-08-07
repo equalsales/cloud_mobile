@@ -176,11 +176,11 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
         'dsefficiency': dsefficiency,
         'dsname': dsname,
         'nsmeters': nsmeters,
-        'nefficiency': nefficiency,
+        'nsefficiency': nefficiency,
         'nsname': nsname,
         'totmeters': totmeters,
         'warplength': warplength,
-        'netoutmeterswt': netoutmeterswt,
+        'outmeters': netoutmeterswt,
         'remainmeters': remainmeters,
         'ends': ends,
         'reed': reed,        
@@ -233,6 +233,9 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       gotoMachineScreen(context);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return "Please enter Machine";
+                      }
                       return null;
                     },
                   ),
@@ -502,6 +505,9 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       gotoItemnameScreen(context);
                     },
                     validator: (value) {
+                      if (value == '') {
+                        return "Please enter itemname";
+                      }
                       return null;
                     },
                   ),

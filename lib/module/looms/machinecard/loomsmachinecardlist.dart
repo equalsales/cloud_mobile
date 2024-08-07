@@ -47,7 +47,7 @@ class _MachinecardListPageState extends State<MachinecardList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -73,7 +73,7 @@ class _MachinecardListPageState extends State<MachinecardList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -93,7 +93,7 @@ class _MachinecardListPageState extends State<MachinecardList> {
 
     print(globals.enddate);
 
-    String uri = 'https://www.looms.equalsoftlink.com/api/api_gettakaadjustmentlist?dbname=' +
+    String uri = '${globals.cdomain}/api/api_machinecardmstlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -123,7 +123,7 @@ class _MachinecardListPageState extends State<MachinecardList> {
     String uri = '';
 
     uri =
-        "https://www.cloud.equalsoftlink.com/checkautoeditdelete/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+        "${globals.cdomain2}/checkautoeditdelete/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -132,7 +132,7 @@ class _MachinecardListPageState extends State<MachinecardList> {
     if (jsonData['success'].toString() == 'true') {
       String uri = '';
       uri =
-          "https://www.cloud.equalsoftlink.com/deletemoddesignAPI/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+          "${globals.cdomain2}/deletemoddesignAPI/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
       var response = await http.get(Uri.parse(uri));
       print(uri);
       var jsonData = jsonDecode(response.body);
@@ -188,14 +188,15 @@ class _MachinecardListPageState extends State<MachinecardList> {
       body: Center(
           child: ListView.builder(
         itemCount: this._companydetails.length,
-        itemBuilder: (context, index) {
-          String date = this._companydetails[index]['date2'].toString();
-          //date = retconvdatestr(date);
-          String serial = this._companydetails[index]['serial'].toString();
+        itemBuilder: (context, index) {          
           String branch = this._companydetails[index]['branch'].toString();
+          String serial = this._companydetails[index]['serial'].toString();
           String srchr = this._companydetails[index]['srchr'].toString();
+          String date = this._companydetails[index]['date'].toString();
           String remarks = this._companydetails[index]['remarks'].toString();
-          String bookno = this._companydetails[index]['bookno'].toString();
+          String party = this._companydetails[index]['party'].toString();
+          String beamstock = this._companydetails[index]['beamstock'].toString();
+          String yarnstock = this._companydetails[index]['yarnstock'].toString();
           String id = this._companydetails[index]['id'].toString();
 
           int newid = 0;
@@ -329,24 +330,30 @@ class _MachinecardListPageState extends State<MachinecardList> {
                 child: Center(
                     child: ListTile(
               title: Text(
-                  'Dt :' +
-                      date +
-                      ' Branch : ' +
-                      branch +
-                      ' Serial No : ' +
-                      serial +
-                      ' [ ' +
-                      id +
-                      ' ]' +
-                      ' BookNo : ' +
-                      bookno,
+                  'Dt : ' +
+                  date +
+                  ' Serial No : ' +
+                  serial +
+                  ' [ ' +
+                  id +
+                  ' ]' +
+                  ' Branch : ' +
+                  branch +
+                  ' Party : ' +
+                  party,
                   style: TextStyle(
                       fontFamily: 'verdana',
                       fontSize: 10.0,
                       fontWeight: FontWeight.bold)),
               subtitle: Text(
-                  'Remarks :' +
-                      remarks ,
+                  'Srchr : ' +
+                  srchr +
+                  'Remarks : ' +
+                  remarks +
+                  'BeamStock : ' +
+                  beamstock + 
+                  'YarnStock : ' +
+                  yarnstock,
                   style: TextStyle(
                       fontFamily: 'verdana',
                       fontSize: 10.0,
@@ -390,7 +397,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             // var cno = globals.companyid;
 
             // var response = await http.post(Uri.parse(
-            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+            //     '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
             //         db +
             //         '&cno=' +
             //         cno +
@@ -398,7 +405,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             //         id.toString()));
 
             // print(
-            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+            //     '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
             //         db +
             //         '&id=' +
             //         id.toString());

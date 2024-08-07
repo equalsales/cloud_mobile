@@ -72,7 +72,6 @@ class _MachinecardAddState extends State<MachinecardAdd> {
     _date.text = DateFormat("dd-MM-yyyy").format(curDate);
     if (int.parse(widget.xid) > 0) {
       loadData();
-
       loadDetData();
     }
   }
@@ -84,7 +83,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
     var id = widget.xid;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_gettakaadjustmentdetlist?dbname=' +
+        '${globals.cdomain}/api/api_editmachinecardmst?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -107,22 +106,27 @@ class _MachinecardAddState extends State<MachinecardAdd> {
       ItemDet.add({
         "controlid": jsonData[iCtr]['controlid'].toString(),
         "id": jsonData[iCtr]['id'].toString(),
+        "itemname": jsonData[iCtr]['itemname'].toString(),
         "machine": jsonData[iCtr]['machine'].toString(),
+        "branch": jsonData[iCtr]['branch'].toString(),
+        "party": jsonData[iCtr]['party'].toString(),
+        "beamstock": jsonData[iCtr]['beamstock'].toString(),
+        "yarnstock": jsonData[iCtr]['yarnstock'].toString(),
+        "date": jsonData[iCtr]['date'].toString(),
         "rpm": jsonData[iCtr]['rpm'].toString(),
         "dsmeters": jsonData[iCtr]['dsmeters'].toString(),
         "dsefficiency": jsonData[iCtr]['dsefficiency'].toString(),
         "dsname": jsonData[iCtr]['dsname'].toString(),
         "nsmeters": jsonData[iCtr]['nsmeters'].toString(),
-        "nefficiency": jsonData[iCtr]['nefficiency'].toString(),
+        "nsefficiency": jsonData[iCtr]['nsefficiency'].toString(),
         "nsname": jsonData[iCtr]['nsname'].toString(),
         "totmeters": jsonData[iCtr]['totmeters'].toString(),
         "warplength": jsonData[iCtr]['warplength'].toString(),
-        "netoutmeterswt": jsonData[iCtr]['netoutmeterswt'].toString(),
+        "outmeters": jsonData[iCtr]['outmeters'].toString(),
         "remainmeters": jsonData[iCtr]['remainmeters'].toString(),
         "ends": jsonData[iCtr]['ends'].toString(),
         "reed": jsonData[iCtr]['reed'].toString(),
         "pick": jsonData[iCtr]['pick'].toString(),
-        "itemname": jsonData[iCtr]['itemname'].toString(),
         "remarks": jsonData[iCtr]['remarks'].toString(),
       });
     }
@@ -141,7 +145,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
     var todate = retconvdate(widget.xfend).toString();
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_gettakaadjustmentlist?dbname=' +
+        '${globals.cdomain}/api/api_machinecardmstlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -162,8 +166,8 @@ class _MachinecardAddState extends State<MachinecardAdd> {
     _branch.text = getValue(jsonData['branch'], 'C');
     _serial.text = getValue(jsonData['serial'], 'C');
     _srchr.text = getValue(jsonData['srchr'], 'C');
-    _date.text = getValue(jsonData['date2'], 'C');
-    _party.text = getValue(jsonData['bookno'], 'C');
+    _date.text = getValue(jsonData['date'], 'C');
+    _party.text = getValue(jsonData['party'], 'C');
     _beamstock.text = getValue(jsonData['beamstock'], 'C');
     _yarnstock.text = getValue(jsonData['yarnstock'], 'C');
 
@@ -274,11 +278,8 @@ class _MachinecardAddState extends State<MachinecardAdd> {
       var srchr = _srchr.text;
       var branch = _branch.text;
       var date = _date.text;
-      // ignore: unused_local_variable
       var party = _party.text;
-      // ignore: unused_local_variable
       var beamstock = _beamstock.text;
-      // ignore: unused_local_variable
       var yarnstock = _yarnstock.text;
 
       var id = widget.xid;
@@ -290,7 +291,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
       String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
 
       uri =
-          "https://looms.equalsoftlink.com/api/api_storetakaadjustment?dbname=" +
+          "${globals.cdomain}/api/api_storemachinecardmst?dbname=" +
               db +
               "&company=&cno=" +
               cno +
@@ -298,21 +299,21 @@ class _MachinecardAddState extends State<MachinecardAdd> {
               username +
               "&branch=" +
               branch +
-              "&type=" +
               "&party=" +
+              party +
               "&srchr=" +
               srchr +
               "&serial=" +
               serial +
               "&date=" +
               newDate +
-              "&book=" +
-              "&remarks=" +
-              "&chlnno=" +
-              "&chlnchr=" +
+              "&beamstock=" +
+              beamstock +
+              "&yarnstock=" +
+              yarnstock +
               "&id=" +
-              id.toString() +
-              "&parcel=1";
+              id.toString();
+              
       print(" SaveData " + uri);
 
       final headers = {
@@ -390,11 +391,11 @@ class _MachinecardAddState extends State<MachinecardAdd> {
           DataCell(Text(ItemDetails[iCtr]['dsefficiency'].toString())),
           DataCell(Text(ItemDetails[iCtr]['dsname'].toString())),
           DataCell(Text(ItemDetails[iCtr]['nsmeters'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['nefficiency'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['nsefficiency'].toString())),
           DataCell(Text(ItemDetails[iCtr]['nsname'].toString())),
           DataCell(Text(ItemDetails[iCtr]['totmeters'].toString())),
           DataCell(Text(ItemDetails[iCtr]['warplength'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['netoutmeterswt'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['outmeters'].toString())),
           DataCell(Text(ItemDetails[iCtr]['remainmeters'].toString())),
           DataCell(Text(ItemDetails[iCtr]['ends'].toString())),
           DataCell(Text(ItemDetails[iCtr]['reed'].toString())),
