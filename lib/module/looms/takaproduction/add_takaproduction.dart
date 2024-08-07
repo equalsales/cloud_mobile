@@ -541,24 +541,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       var jsonData = data['data'];
       print(jsonData);
       print("ABC");
-      // print(" chiagggg : " + jsonData[0]['itemname'].toString());
-
-      // _beamchr.text = jsonData[0]['beamchr'].toString();
-      // _beamno.text = jsonData[0]['beamno'].toString();
-      // _beamid.text = jsonData[0]['beamid'].toString();
-      // _ends.text = jsonData[0]['ends'].toString();
-      // _stdwt.text = jsonData[0]['stdwt'].toString();
-      // _quality.text = jsonData[0]['itemname'].toString();
-      // _foldmetrs.text = jsonData[0]['balbeammtrs'].toString();
-      // localBeamNo = jsonData[0]['beamno'].toString();
-      // localTaka = jsonData[0]['beamtaka'].toString();
-      // localMtrs = jsonData[0]['beammtrs'].toString();
-      // localprodTata = jsonData[0]['prodtaka'].toString();
-      // localProdMtrs = jsonData[0]['productmtrs'].toString();
-      // localBeamInstall = jsonData[0]['installdate'].toString();
-      // localBalMtrs = jsonData[0]['balbeammtrs'].toString();
-
-      // var jsonList;
       var jsonList = data['list'];
       print(jsonList);
 
@@ -611,13 +593,11 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     width: double.maxFinite,
                     height: MediaQuery.sizeOf(context).height / 2,
                     child: ListView.builder(
-                      itemCount: jsonData.length,
+                      itemCount: pendingbeamlist.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          subtitle: Text(
-                              "BeamChr : ${pendingbeamlist[index]['beamchr'].toString()}  Beamno : $pendingbeamlist[index]['beamno'].toString(), 'N')}  Beamid : ${pendingbeamlist[index]['beamid'].toString()}"),
-                          title: Text(
-                              "Ends : ${pendingbeamlist[index]['ends'].toString()}  Stdwt : ${pendingbeamlist[index]['stdwt'].toString()}"),
+                          title: Text("BeamChr :  ${pendingbeamlist[index]['beamchr']}  Beamno :  ${pendingbeamlist[index]['beamno']}  Beamid :  ${pendingbeamlist[index]['beamid']}"),
+                          subtitle: Text("Ends : ${pendingbeamlist[index]['ends']} Stdwt : ${pendingbeamlist[index]['stdwt']}"),
                           onTap: () {
                             _beamchr.text =
                                 pendingbeamlist[index]['beamchr'].toString();
