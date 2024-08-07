@@ -312,158 +312,163 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     }
 
     Future<bool> saveData() async {
+      if(ItemDetails.length == 0){
+        showAlertDialog(context, 'ItemDetails can be not blank.');
+        return true;
+      }else{
       String uri = '';
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var username = globals.username;
-      var start = widget.xfbeg;
-      var end = widget.xfend;
+        var cno = globals.companyid;
+        var db = globals.dbname;
+        var username = globals.username;
+        var start = widget.xfbeg;
+        var end = widget.xfend;
 
-      var serial = _serial.text;
-      var srchr = _srchr.text;
-      var branch = _branch.text;
-      var beamid = _beamid.text;
-      var folddate = _folddate.text;
-      var machineno = _machineno.text;
-      var quality = _quality.text;
-      var beamchr = _beamchr.text;
-      var beamno = _beamno.text;
-      var beaminstalldate = _beaminstalldate.text;
-      var ends = _ends.text;
-      var stdwt = _stdwt.text;
-      var takachr = _takachr.text;
-      var takano = _takano.text;
-      var design = _design.text;
-      var foldmetrs = _foldmetrs.text;
-      var extrameters = _extrameters.text;
-      var weight = _weight.text;
-      var avgwt = _avgwt.text;
-      var pcs = _pcs.text;
-      var cut = _cut.text;
-      var cutmeters = _cutmeters.text;
-      var remark = _remark.text;
-      var actwt = _actwt.text;
-      var diffwt = _diffwt.text;
+        var serial = _serial.text;
+        var srchr = _srchr.text;
+        var branch = _branch.text;
+        var beamid = _beamid.text;
+        var folddate = _folddate.text;
+        var machineno = _machineno.text;
+        var quality = _quality.text;
+        var beamchr = _beamchr.text;
+        var beamno = _beamno.text;
+        var beaminstalldate = _beaminstalldate.text;
+        var ends = _ends.text;
+        var stdwt = _stdwt.text;
+        var takachr = _takachr.text;
+        var takano = _takano.text;
+        var design = _design.text;
+        var foldmetrs = _foldmetrs.text;
+        var extrameters = _extrameters.text;
+        var weight = _weight.text;
+        var avgwt = _avgwt.text;
+        var pcs = _pcs.text;
+        var cut = _cut.text;
+        var cutmeters = _cutmeters.text;
+        var remark = _remark.text;
+        var actwt = _actwt.text;
+        var diffwt = _diffwt.text;
 
-      var id = widget.xid;
-      id = int.parse(id);
+        var id = widget.xid;
+        id = int.parse(id);
 
-      print(jsonEncode(ItemDetails));
+        print(jsonEncode(ItemDetails));
 
-      DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(folddate);
-      String newfolddate = DateFormat("yyyy-MM-dd").format(parsedDate);
+        DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(folddate);
+        String newfolddate = DateFormat("yyyy-MM-dd").format(parsedDate);
 
-      DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(beaminstalldate);
-      String newbeaminstalldate = DateFormat("yyyy-MM-dd").format(parsedDate2);
+        DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(beaminstalldate);
+        String newbeaminstalldate = DateFormat("yyyy-MM-dd").format(parsedDate2);
 
-      DateTime parsedDate3 = DateFormat("dd-MM-yyyy").parse(start);
-      String newstartdate = DateFormat("yyyy-MM-dd").format(parsedDate3);
+        DateTime parsedDate3 = DateFormat("dd-MM-yyyy").parse(start);
+        String newstartdate = DateFormat("yyyy-MM-dd").format(parsedDate3);
 
-      DateTime parsedDate4 = DateFormat("dd-MM-yyyy").parse(end);
-      String newenddate = DateFormat("yyyy-MM-dd").format(parsedDate4);
-      String newCompletionDate = '';
+        DateTime parsedDate4 = DateFormat("dd-MM-yyyy").parse(end);
+        String newenddate = DateFormat("yyyy-MM-dd").format(parsedDate4);
+        String newCompletionDate = '';
 
-      if (CompletionDate.isEmpty) {
-        newCompletionDate = '';
-      } else {
-        DateTime parsedDate5 = DateFormat("dd-MM-yyyy").parse(CompletionDate);
-        newCompletionDate = DateFormat("yyyy-MM-dd").format(parsedDate5);
+        if (CompletionDate.isEmpty) {
+          newCompletionDate = '';
+        } else {
+          DateTime parsedDate5 = DateFormat("dd-MM-yyyy").parse(CompletionDate);
+          newCompletionDate = DateFormat("yyyy-MM-dd").format(parsedDate5);
+        }
+
+        uri = "${globals.cdomain}/api/api_storetakaproduction?dbname=" +
+            db +
+            "&cno=" +
+            cno +
+            "&startdate=" +
+            newstartdate.toString() +
+            "&enddate=" +
+            newenddate.toString() +
+            "&user=" +
+            username +
+            "&branch=" +
+            branch +
+            "&beamid=" +
+            beamid +
+            "&date=" +
+            newfolddate.toString() +
+            "&beamcomplatedate=" +
+            newCompletionDate.toString() +
+            "&machine=" +
+            machineno +
+            "&itemname=" +
+            quality +
+            "&beamchr=" +
+            beamchr +
+            "&beamno=" +
+            beamno +
+            "&beaminstalldate=" +
+            newbeaminstalldate.toString() +
+            "&ends=" +
+            ends +
+            "&stdwt=" +
+            stdwt +
+            "&takachr=" +
+            takachr +
+            "&takano=" +
+            takano +
+            "&design=" +
+            design +
+            "&foldmtrs=" +
+            foldmetrs +
+            "&extrameters=" +
+            extrameters +
+            "&weight=" +
+            weight +
+            "&avgwt=" +
+            avgwt +
+            "&pcs=" +
+            pcs +
+            "&cut=" +
+            cut +
+            "&cutmeters=" +
+            cutmeters +
+            "&remarks=" +
+            remark +
+            "&actwt=" +
+            actwt +
+            "&diffwt=" +
+            diffwt +
+            "&srchr=" +
+            srchr +
+            "&serial=" +
+            serial +
+            "&id=" +
+            id.toString();
+
+        print(" SaveData " + uri);
+
+        final headers = {
+          'Content-Type': 'application/json',
+        };
+        print(ItemDetails);
+        var response = await http.post(Uri.parse(uri),
+            headers: headers, body: jsonEncode(ItemDetails));
+
+        var jsonData = jsonDecode(response.body);
+
+        var jsonCode = jsonData['Code'];
+        var jsonMsg = jsonData['Message'];
+
+        if (jsonCode == '500') {
+          showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+        } else {
+          Fluttertoast.showToast(
+            msg: "Saved !!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.white,
+            textColor: Colors.purple,
+            fontSize: 16.0,
+          );
+          Navigator.pop(context);
+        }
+        return true;
       }
-
-      uri = "${globals.cdomain}/api/api_storetakaproduction?dbname=" +
-          db +
-          "&cno=" +
-          cno +
-          "&startdate=" +
-          newstartdate.toString() +
-          "&enddate=" +
-          newenddate.toString() +
-          "&user=" +
-          username +
-          "&branch=" +
-          branch +
-          "&beamid=" +
-          beamid +
-          "&date=" +
-          newfolddate.toString() +
-          "&beamcomplatedate=" +
-          newCompletionDate.toString() +
-          "&machine=" +
-          machineno +
-          "&itemname=" +
-          quality +
-          "&beamchr=" +
-          beamchr +
-          "&beamno=" +
-          beamno +
-          "&beaminstalldate=" +
-          newbeaminstalldate.toString() +
-          "&ends=" +
-          ends +
-          "&stdwt=" +
-          stdwt +
-          "&takachr=" +
-          takachr +
-          "&takano=" +
-          takano +
-          "&design=" +
-          design +
-          "&foldmtrs=" +
-          foldmetrs +
-          "&extrameters=" +
-          extrameters +
-          "&weight=" +
-          weight +
-          "&avgwt=" +
-          avgwt +
-          "&pcs=" +
-          pcs +
-          "&cut=" +
-          cut +
-          "&cutmeters=" +
-          cutmeters +
-          "&remarks=" +
-          remark +
-          "&actwt=" +
-          actwt +
-          "&diffwt=" +
-          diffwt +
-          "&srchr=" +
-          srchr +
-          "&serial=" +
-          serial +
-          "&id=" +
-          id.toString();
-
-      print(" SaveData " + uri);
-
-      final headers = {
-        'Content-Type': 'application/json',
-      };
-      print(ItemDetails);
-      var response = await http.post(Uri.parse(uri),
-          headers: headers, body: jsonEncode(ItemDetails));
-
-      var jsonData = jsonDecode(response.body);
-
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
-
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else {
-        Fluttertoast.showToast(
-          msg: "Saved !!!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.white,
-          textColor: Colors.purple,
-          fontSize: 16.0,
-        );
-        Navigator.pop(context);
-      }
-      return true;
     }
 
     void showCompleteBeamDialog() {

@@ -390,104 +390,109 @@ class _BeamPurchaseChallanAddState extends State<BeamPurchaseChallanAdd> {
     }
 
     Future<bool> saveData() async {
-      String uri = '';
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var username = globals.username;
-      var serial = _serial.text;
-      var srchr = _srchr.text;
-      var book = _book.text;
-      var branch = _branch.text;
-      var date = _date.text;
-      var party = _party.text;
-      var chlndt = _chlndt.text;
-      var chlnno = _chlnno.text;
-      var rdurd = dropdownTrnType;
-      var remarks = _remarks.text;
+      if(ItemDetails.length == 0){
+        showAlertDialog(context, 'ItemDetails can be not blank.');
+        return true;
+      }else{
+        String uri = '';
+        var cno = globals.companyid;
+        var db = globals.dbname;
+        var username = globals.username;
+        var serial = _serial.text;
+        var srchr = _srchr.text;
+        var book = _book.text;
+        var branch = _branch.text;
+        var date = _date.text;
+        var party = _party.text;
+        var chlndt = _chlndt.text;
+        var chlnno = _chlnno.text;
+        var rdurd = dropdownTrnType;
+        var remarks = _remarks.text;
 
-      var id = widget.xid;
-      id = int.parse(id);
+        var id = widget.xid;
+        id = int.parse(id);
 
-      print('In Save....');
+        print('In Save....');
 
-      print(jsonEncode(ItemDetails));
+        print(jsonEncode(ItemDetails));
 
-      DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
-      String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
-      DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(chlndt);
-      String newchlndt = DateFormat("yyyy-MM-dd").format(parsedDate2);
+        DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
+        String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
+        DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(chlndt);
+        String newchlndt = DateFormat("yyyy-MM-dd").format(parsedDate2);
 
-      party = party.replaceAll('&', '_');
+        party = party.replaceAll('&', '_');
 
-      uri = "${globals.cdomain}/api/api_storebeampurchallan?dbname=" +
-          db +
-          "&company=&cno=" +
-          cno +
-          "&user=" +
-          username +
-          "&branch=" +
-          branch +
-          "&packingtype=" +
-          "&party=" +
-          party +
-          "&book=" +
-          book +
-          '&chlndt=' +
-          newchlndt +
-          '&chlnno=' +
-          chlnno +
-          '&rdurd=' +
-          rdurd.toString() +
-          "&haste=" +
-          '&salesman=' +
-          "&transport=" +
-          "&station=" +
-          "&packingsrchr=" +
-          "&packingserial=" +
-          "&bookno=" +
-          "&srchr=" +
-          srchr +
-          "&serial=" +
-          serial +
-          "&date=" +
-          newDate +
-          "&remarks=" +
-          remarks +
-          "&duedays=" +
-          "&id=" +
-          id.toString() +
-          "&parcel=1";
+        uri = "${globals.cdomain}/api/api_storebeampurchallan?dbname=" +
+            db +
+            "&company=&cno=" +
+            cno +
+            "&user=" +
+            username +
+            "&branch=" +
+            branch +
+            "&packingtype=" +
+            "&party=" +
+            party +
+            "&book=" +
+            book +
+            '&chlndt=' +
+            newchlndt +
+            '&chlnno=' +
+            chlnno +
+            '&rdurd=' +
+            rdurd.toString() +
+            "&haste=" +
+            '&salesman=' +
+            "&transport=" +
+            "&station=" +
+            "&packingsrchr=" +
+            "&packingserial=" +
+            "&bookno=" +
+            "&srchr=" +
+            srchr +
+            "&serial=" +
+            serial +
+            "&date=" +
+            newDate +
+            "&remarks=" +
+            remarks +
+            "&duedays=" +
+            "&id=" +
+            id.toString() +
+            "&parcel=1";
 
-      print(" saveData : " + uri);
+        print(" saveData : " + uri);
 
-      final headers = {
-        'Content-Type': 'application/json', // Set the appropriate content-type
-      };
+        final headers = {
+          'Content-Type': 'application/json', // Set the appropriate content-type
+        };
 
-      var response = await http.post(Uri.parse(uri),
-          headers: headers, body: jsonEncode(ItemDetails));
+        var response = await http.post(Uri.parse(uri),
+            headers: headers, body: jsonEncode(ItemDetails));
 
-      var jsonData = jsonDecode(response.body);
-      //print('4');
+        var jsonData = jsonDecode(response.body);
+        //print('4');
 
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
+        var jsonCode = jsonData['Code'];
+        var jsonMsg = jsonData['Message'];
 
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else {
-        Fluttertoast.showToast(
-          msg: "Saved !!!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.white,
-          textColor: Colors.purple,
-          fontSize: 16.0,
-        );
-        Navigator.pop(context);
+        if (jsonCode == '500') {
+          showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+        } else {
+          Fluttertoast.showToast(
+            msg: "Saved !!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.white,
+            textColor: Colors.purple,
+            fontSize: 16.0,
+          );
+          Navigator.pop(context);
+        }
+        return true;
       }
-      return true;
     }
 
     Future<void> _handleSaveData() async {

@@ -270,81 +270,98 @@ class _MachinecardAddState extends State<MachinecardAdd> {
     }
 
     Future<bool> saveData() async {
-      String uri = '';
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var username = globals.username;
-      var serial = _serial.text;
-      var srchr = _srchr.text;
-      var branch = _branch.text;
-      var date = _date.text;
-      var party = _party.text;
-      var beamstock = _beamstock.text;
-      var yarnstock = _yarnstock.text;
+      if(ItemDetails.length == 0){
+        showAlertDialog(context, 'ItemDetails can be not blank.');
+        return true;
+      }else{
+        String uri = '';
+        var cno = globals.companyid;
+        var db = globals.dbname;
+        var username = globals.username;
+        var fromdate = widget.xfbeg;
+        var enddate = widget.xfend;
+        var serial = _serial.text;
+        var srchr = _srchr.text;
+        var branch = _branch.text;
+        var date = _date.text;
+        var party = _party.text;
+        var beamstock = _beamstock.text;
+        var yarnstock = _yarnstock.text;
 
-      var id = widget.xid;
-      id = int.parse(id);
+        var id = widget.xid;
+        id = int.parse(id);
 
-      print(jsonEncode(ItemDetails));
+        print(jsonEncode(ItemDetails));
+        
+        DateTime parsedDate1 = DateFormat("dd-MM-yyyy").parse(fromdate);
+        String newfromdate = DateFormat("yyyy-MM-dd").format(parsedDate1);
 
-      DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
-      String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
+        DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(enddate);
+        String newenddate = DateFormat("yyyy-MM-dd").format(parsedDate2);
 
-      uri =
-          "${globals.cdomain}/api/api_storemachinecardmst?dbname=" +
-              db +
-              "&company=&cno=" +
-              cno +
-              "&user=" +
-              username +
-              "&branch=" +
-              branch +
-              "&party=" +
-              party +
-              "&srchr=" +
-              srchr +
-              "&serial=" +
-              serial +
-              "&date=" +
-              newDate +
-              "&beamstock=" +
-              beamstock +
-              "&yarnstock=" +
-              yarnstock +
-              "&id=" +
-              id.toString();
-              
-      print(" SaveData " + uri);
+        DateTime parsedDate3 = DateFormat("dd-MM-yyyy").parse(date);
+        String newDate = DateFormat("yyyy-MM-dd").format(parsedDate3);
 
-      final headers = {
-        'Content-Type': 'application/json',
-      };
-      print(ItemDetails);
-      var response = await http.post(Uri.parse(uri),
-          headers: headers, body: jsonEncode(ItemDetails));
+        uri =
+            "${globals.cdomain}/api/api_storemachinecardmst?dbname=" +
+                db +
+                "&cno=" +
+                cno +
+                "&user=" +
+                username +
+                "&startdate=" +
+                newfromdate +
+                "&enddate=" +
+                newenddate +
+                "&branch=" +
+                branch +
+                "&party=" +
+                party +
+                "&srchr=" +
+                srchr +
+                "&serial=" +
+                serial +
+                "&date=" +
+                newDate +
+                "&beamstock=" +
+                beamstock +
+                "&yarnstock=" +
+                yarnstock +
+                "&id=" +
+                id.toString();
+                
+        print(" SaveData " + uri);
 
-      var jsonData = jsonDecode(response.body);
+        final headers = {
+          'Content-Type': 'application/json',
+        };
+        print(ItemDetails);
+        var response = await http.post(Uri.parse(uri),
+            headers: headers, body: jsonEncode(ItemDetails));
 
-      //print('4');
+        var jsonData = jsonDecode(response.body);
 
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
+        //print('4');
 
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else {
-        Fluttertoast.showToast(
-          msg: "Saved !!!",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.white,
-          textColor: Colors.purple,
-          fontSize: 16.0,
-        );
-        Navigator.pop(context);
+        var jsonCode = jsonData['Code'];
+        var jsonMsg = jsonData['Message'];
+
+        if (jsonCode == '500') {
+          showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+        } else {
+          Fluttertoast.showToast(
+            msg: "Saved !!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.white,
+            textColor: Colors.purple,
+            fontSize: 16.0,
+          );
+          Navigator.pop(context);
+        }
+        return true;
       }
-      return true;
     }
 
     Future<void> _handleSaveData() async {
