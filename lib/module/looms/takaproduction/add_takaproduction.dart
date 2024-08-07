@@ -533,14 +533,15 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
       print(" gotogetpendingbeamcard :" + uri);
       var response = await http.get(Uri.parse(uri));
-      var jsonData = jsonDecode(response.body);
-      jsonData = jsonData['data'];
+      var data = jsonDecode(response.body);
+      var jsonData = data['data'];
       var jsonList = '';
       jsonList = jsonData['list'];
       print(jsonList);
 
       String uri2 = '';
-      if (jsonList == true) {
+      if (jsonList == "true") {
+
         uri2 = '${globals.cdomain}/getpendingbeamcard?dbname=' +
             db +
             '&cno=' +
@@ -548,18 +549,17 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
             '&branch=' +
             branch +
             '&ctable=beamjobissuemst' +
-            // machine +
             '&abeamid=' +
             beamid +
             '&enddate=' +
             todate.toString() +
             '&list=true';
 
-        print(" getpendingbeamcard :" + uri2);
+        print(" getpendingbeamcard22 :" + uri2);
         var response = await http.get(Uri.parse(uri2));
-        var jsonData = jsonDecode(response.body);
-        print(jsonData);
-
+        var data = jsonDecode(response.body);
+        jsonData = data['data'];
+        print("222");
         //127.0.0.1:9000/getpendingbeamcard?dbname=$db
         //&cno=$cno
         //&branch=$branch
