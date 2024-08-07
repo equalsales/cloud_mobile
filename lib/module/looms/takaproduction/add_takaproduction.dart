@@ -538,21 +538,22 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       var jsonData = data['data'];
       print(jsonData);
       print("ABC");
+      print(" chiagggg : " + jsonData[0]['itemname'].toString());
 
-      _beamchr.text = jsonData['beamchr'];
-      _beamno.text = jsonData['beamno'];
-      _beamid.text = jsonData['beamid'];
-      _ends.text = jsonData['ends'];
-      _stdwt.text = jsonData['stdwt'];
-      _quality.text = jsonData['itemname'];
-      _foldmetrs.text = jsonData['balbeammtrs'];
-      localBeamNo = jsonData['beamno'];
-      localTaka = jsonData['beamtaka'];
-      localMtrs = jsonData['beammtrs'];
-      localprodTata = jsonData['prodtaka'];
-      localProdMtrs = jsonData['productmtrs'];
-      localBeamInstall = jsonData['installdate'];
-      localBalMtrs = jsonData['balbeammtrs'];
+      _beamchr.text = jsonData[0]['beamchr'].toString();
+      _beamno.text = jsonData[0]['beamno'].toString();
+      _beamid.text = jsonData[0]['beamid'].toString();
+      _ends.text = jsonData[0]['ends'].toString();
+      _stdwt.text = jsonData[0]['stdwt'].toString();
+      _quality.text = jsonData[0]['itemname'].toString();
+      _foldmetrs.text = jsonData[0]['balbeammtrs'].toString();
+      localBeamNo = jsonData[0]['beamno'].toString();
+      localTaka = jsonData[0]['beamtaka'].toString();
+      localMtrs = jsonData[0]['beammtrs'].toString();
+      localprodTata = jsonData[0]['prodtaka'].toString();
+      localProdMtrs = jsonData[0]['productmtrs'].toString();
+      localBeamInstall = jsonData[0]['installdate'].toString();
+      localBalMtrs = jsonData[0]['balbeammtrs'].toString();
 
       // var jsonList = '';
       // jsonList = jsonData['list'];
@@ -675,6 +676,8 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       //     localBalMtrs = pendingbeamlist[0]['balbeammtrs'].toString();
       //   });
       // }
+
+
 
       // await showDialog(
       //   context: context,
