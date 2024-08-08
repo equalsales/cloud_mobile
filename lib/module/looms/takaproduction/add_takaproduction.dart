@@ -1,4 +1,5 @@
 // ignore_for_file: must_be_immutable
+
 import 'dart:convert';
 import 'package:cloud_mobile/list/design_list.dart';
 import 'package:cloud_mobile/list/item_list.dart';
@@ -40,9 +41,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
-  List _branchlist = [];
-  List _partylist = [];
-  List _designlist = [];
+  // List _branchlist = [];
+  // List _partylist = [];
+  // List _designlist = [];
 
   List ItemDetails = [];
 
@@ -53,7 +54,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
   var branchid = 0;
   var partyid = 0;
-
   var meters = 0.0;
 
   TextEditingController _serial = new TextEditingController();
@@ -84,8 +84,8 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
   TextEditingController _diffwt = new TextEditingController(text: '0.000');
 
   final _formKey = GlobalKey<FormState>();
-  var bmitem;
 
+  var bmitem;
   var localBeamNo = '';
   var localTaka = '';
   var localMtrs = '.';
@@ -155,8 +155,8 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
-    var fromdate = retconvdate(widget.xfbeg);
-    var todate = retconvdate(widget.xfend);
+    // var fromdate = retconvdate(widget.xfbeg);
+    // var todate = retconvdate(widget.xfend);
 
     uri = '${globals.cdomain}/api/api_edittakaproduction?dbname=' +
         db +
@@ -539,6 +539,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       var response = await http.get(Uri.parse(uri));
       var data = jsonDecode(response.body);
       var jsonData = data['data'];
+      print("111");
       print(jsonData);
       print("ABC");
       var jsonList = data['list'];
@@ -546,9 +547,10 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
       String uri2 = '';
       if (jsonList == true) {
-          print(localBalMtrs);
+        print("in true if : ");
+        print(localBalMtrs);
         print(localMtrs);
-        print("a");
+        print("XYZ");
         uri2 = '${globals.cdomain}/getpendingbeamcard?dbname=' +
             db +
             '&cno=' +
@@ -567,15 +569,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
         var data = jsonDecode(response.body);
         jsonData = data['data'];
         print("222");
-        //127.0.0.1:9000/getpendingbeamcard?dbname=$db
-        //&cno=$cno
-        //&branch=$branch
-        //&ctable=beamjobissuemst
-        //&abeamid=0
-        //&enddate=
-        //$todate
-        //&machineid=0
-        //&list=true
       }
 
       List<Map<String, dynamic>> pendingbeamlist = [];
@@ -583,7 +576,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       pendingbeamlist = List<Map<String, dynamic>>.from(jsonData);
 
       if (1 < pendingbeamlist.length) {
-        showDialog(
+        await showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
@@ -601,7 +594,8 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                           title: Text(
                               "BeamChr :  ${pendingbeamlist[index]['beamchr']}  Beamno :  ${pendingbeamlist[index]['beamno']}  Beamid :  ${pendingbeamlist[index]['beamid']}"),
                           subtitle: Text(
-                              "Ends : ${pendingbeamlist[index]['ends']} Stdwt : ${pendingbeamlist[index]['stdwt']}"),
+                              "Ends : ${pendingbeamlist[index]['ends']} Stdwt : ${pendingbeamlist[index]['stdwt']}" +
+                                  "\n Beammtrs : ${pendingbeamlist[index]['beammtrs'].toString()} Balbeammtrs : ${pendingbeamlist[index]['balbeammtrs'].toString()}"),
                           onTap: () {
                             setState(() {
                               _beamchr.text =
@@ -636,8 +630,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                               localBalMtrs = pendingbeamlist[index]
                                       ['balbeammtrs']
                                   .toString();
-                              print("++++++++++++++++" + localBalMtrs);
-                              print("/////////////////////" + localMtrs);
+                              print("in list : ");
+                              print(localBalMtrs);
+                              print(localMtrs);
                             });
                             Navigator.pop(context);
                           },
@@ -669,78 +664,15 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
         });
       }
 
-      // await showDialog(
-      //   context: context,
-      //   builder: (context) {
-      //     return AlertDialog(
-      //       title: Text("Select Beam"),
-      //       content: Column(
-      //         mainAxisSize: MainAxisSize.min,
-      //         children: [
-      //           Container(
-      //             width: double.maxFinite,
-      //             height: MediaQuery.sizeOf(context).height / 2,
-      //             child: ListView.builder(
-      //               itemCount: pendingbeamlist.length,
-      //               itemBuilder: (context, index) {
-      //                 return Column(
-      //                   children: [
-      //                     ListTile(
-      //                       subtitle: Text(
-      //                           "BeamChr : ${pendingbeamlist[index]['beamchr'].toString()}  Beamno : $pendingbeamlist[index]['beamno'].toString(), 'N')}  Beamid : ${pendingbeamlist[index]['beamid'].toString()}"),
-      //                       title: Text(
-      //                           "Ends : ${pendingbeamlist[index]['ends'].toString()}  Stdwt : ${pendingbeamlist[index]['stdwt'].toString()}"),
-      //                       onTap: () {
-      //                         _beamchr.text =
-      //                             pendingbeamlist[index]['beamchr'].toString();
-      //                         _beamno.text =
-      //                             pendingbeamlist[index]['beamno'].toString();
-      //                         _beamid.text =
-      //                             pendingbeamlist[index]['beamid'].toString();
-      //                         _ends.text =
-      //                             pendingbeamlist[index]['ends'].toString();
-      //                         _stdwt.text =
-      //                             pendingbeamlist[index]['stdwt'].toString();
-      //                         _quality.text =
-      //                             pendingbeamlist[index]['itemname'].toString();
-      //                         _foldmetrs.text = pendingbeamlist[index]
-      //                                 ['balbeammtrs']
-      //                             .toString();
-      //                         localBeamNo =
-      //                             pendingbeamlist[index]['beamno'].toString();
-      //                         localTaka =
-      //                             pendingbeamlist[index]['beamtaka'].toString();
-      //                         localMtrs =
-      //                             pendingbeamlist[index]['beammtrs'].toString();
-      //                         localprodTata =
-      //                             pendingbeamlist[index]['prodtaka'].toString();
-      //                         localProdMtrs = pendingbeamlist[index]
-      //                                 ['productmtrs']
-      //                             .toString();
-      //                         localBeamInstall = pendingbeamlist[index]
-      //                                 ['installdate']
-      //                             .toString();
-      //                         localBalMtrs = pendingbeamlist[index]
-      //                                 ['balbeammtrs']
-      //                             .toString();
-      //                         Navigator.pop(context);
-      //                       },
-      //                     ),
-      //                     Divider()
-      //                   ],
-      //                 );
-      //               },
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     );
-      //   },
-      // );
+      print("outside list : ");
+      print(localBalMtrs);
+      print(localMtrs);
 
-    
       if (localBalMtrs == localMtrs) {
-        showDialog(
+        print("in if : ");
+        print(localBalMtrs);
+        print(localMtrs);
+        await showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
@@ -775,7 +707,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       var db = globals.dbname;
       var id = widget.xid;
       var fromdate = retconvdate(widget.xfbeg);
-      var todate = retconvdate(widget.xfend);
+      // var todate = retconvdate(widget.xfend);
 
       uri = "${globals.cdomain}/api/getmaxtakano?dbname=" +
           db +
