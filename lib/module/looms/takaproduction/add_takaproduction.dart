@@ -88,7 +88,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
   var localBeamNo = '';
   var localTaka = '';
-  var localMtrs = '';
+  var localMtrs = '.';
   var localprodTata = '';
   var localProdMtrs = '';
   var localBeamInstall = '';
@@ -546,6 +546,8 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
       String uri2 = '';
       if (jsonList == true) {
+          print(localBalMtrs);
+        print(localMtrs);
         print("a");
         uri2 = '${globals.cdomain}/getpendingbeamcard?dbname=' +
             db +
@@ -596,40 +598,47 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       itemCount: pendingbeamlist.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text("BeamChr :  ${pendingbeamlist[index]['beamchr']}  Beamno :  ${pendingbeamlist[index]['beamno']}  Beamid :  ${pendingbeamlist[index]['beamid']}"),
-                          subtitle: Text("Ends : ${pendingbeamlist[index]['ends']} Stdwt : ${pendingbeamlist[index]['stdwt']}"),
+                          title: Text(
+                              "BeamChr :  ${pendingbeamlist[index]['beamchr']}  Beamno :  ${pendingbeamlist[index]['beamno']}  Beamid :  ${pendingbeamlist[index]['beamid']}"),
+                          subtitle: Text(
+                              "Ends : ${pendingbeamlist[index]['ends']} Stdwt : ${pendingbeamlist[index]['stdwt']}"),
                           onTap: () {
-                            _beamchr.text =
-                                pendingbeamlist[index]['beamchr'].toString();
-                            _beamno.text =
-                                pendingbeamlist[index]['beamno'].toString();
-                            _beamid.text =
-                                pendingbeamlist[index]['beamid'].toString();
-                            _ends.text =
-                                pendingbeamlist[index]['ends'].toString();
-                            _stdwt.text =
-                                pendingbeamlist[index]['stdwt'].toString();
-                            _quality.text =
-                                pendingbeamlist[index]['itemname'].toString();
-                            _foldmetrs.text = pendingbeamlist[index]
-                                    ['balbeammtrs']
-                                .toString();
-                            localBeamNo =
-                                pendingbeamlist[index]['beamno'].toString();
-                            localTaka =
-                                pendingbeamlist[index]['beamtaka'].toString();
-                            localMtrs =
-                                pendingbeamlist[index]['beammtrs'].toString();
-                            localprodTata =
-                                pendingbeamlist[index]['prodtaka'].toString();
-                            localProdMtrs = pendingbeamlist[index]
-                                    ['productmtrs']
-                                .toString();
-                            localBeamInstall = pendingbeamlist[index]
-                                    ['installdate']
-                                .toString();
-                            localBalMtrs = pendingbeamlist[index]['balbeammtrs']
-                                .toString();
+                            setState(() {
+                              _beamchr.text =
+                                  pendingbeamlist[index]['beamchr'].toString();
+                              _beamno.text =
+                                  pendingbeamlist[index]['beamno'].toString();
+                              _beamid.text =
+                                  pendingbeamlist[index]['beamid'].toString();
+                              _ends.text =
+                                  pendingbeamlist[index]['ends'].toString();
+                              _stdwt.text =
+                                  pendingbeamlist[index]['stdwt'].toString();
+                              _quality.text =
+                                  pendingbeamlist[index]['itemname'].toString();
+                              _foldmetrs.text = pendingbeamlist[index]
+                                      ['balbeammtrs']
+                                  .toString();
+                              localBeamNo =
+                                  pendingbeamlist[index]['beamno'].toString();
+                              localTaka =
+                                  pendingbeamlist[index]['beamtaka'].toString();
+                              localMtrs =
+                                  pendingbeamlist[index]['beammtrs'].toString();
+                              localprodTata =
+                                  pendingbeamlist[index]['prodtaka'].toString();
+                              localProdMtrs = pendingbeamlist[index]
+                                      ['productmtrs']
+                                  .toString();
+                              localBeamInstall = pendingbeamlist[index]
+                                      ['installdate']
+                                  .toString();
+                              localBalMtrs = pendingbeamlist[index]
+                                      ['balbeammtrs']
+                                  .toString();
+                              print("++++++++++++++++" + localBalMtrs);
+                              print("/////////////////////" + localMtrs);
+                            });
                             Navigator.pop(context);
                           },
                         );
@@ -729,8 +738,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       //   },
       // );
 
+    
       if (localBalMtrs == localMtrs) {
-        await showDialog(
+        showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
