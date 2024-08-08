@@ -857,10 +857,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
         isButtonActive = false;
       });
 
-      if (ItemDetails.length == 0) {
-        showAlertDialog(context, 'ItemDetails can be not blank.');
-        // return true;
-      } else {
         showDialog(
           context: context,
           builder: (context) {
@@ -898,7 +894,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
             );
           },
         );
-      }
     }
 
     void deleteRow(index) {
@@ -1020,7 +1015,12 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Form submitted successfully')),
                   );
-                  _handleSaveData();
+                  if (ItemDetails.length == 0) {
+                      showAlertDialog(context, 'ItemDetails can be not blank.');
+                      // return true;
+                  } else {
+                    _handleSaveData();
+                  }
                 }
               }
             : null,
