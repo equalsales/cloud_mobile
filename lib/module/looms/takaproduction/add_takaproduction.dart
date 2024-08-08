@@ -509,6 +509,43 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       );
     }
 
+    var num1;
+    var num2;
+    installBeamDate() {
+      print(".............. :  " + num1);
+      print("!!!!!!!!!!!!!! :  " + num2);
+      print("AAA");
+      if (localBalMtrs == localMtrs) {
+        print("BBBBB");
+        showDialog(
+          context: context,
+          builder: (context) {
+            print("CCCCCC");
+            return AlertDialog(
+              title: Text("Install Beam Date?"),
+              actions: [
+                Row(
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _selectDate2(context);
+                        },
+                        child: Text("Yes")),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("No")),
+                  ],
+                )
+              ],
+            );
+          },
+        );
+      }
+    }
+    
     Future<bool> gotogetpendingbeamcard() async {
       var cno = globals.companyid;
       var db = globals.dbname;
@@ -541,7 +578,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       var jsonData = data['data'];
       print("111");
       print(jsonData);
-      print("ABC");
       var jsonList = data['list'];
       print(jsonList);
 
@@ -633,6 +669,26 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                               print("in list : ");
                               print(localBalMtrs);
                               print(localMtrs);
+                              _beamchr.text = pendingbeamlist[index]['beamchr'].toString();
+                              _beamno.text = pendingbeamlist[index]['beamno'].toString();
+                              _beamid.text = pendingbeamlist[index]['beamid'].toString();
+                              _ends.text = pendingbeamlist[index]['ends'].toString();
+                              _stdwt.text = pendingbeamlist[index]['stdwt'].toString();
+                              _quality.text = pendingbeamlist[index]['itemname'].toString();
+                              _foldmetrs.text = pendingbeamlist[index]['balbeammtrs'].toString();
+                              localBeamNo = pendingbeamlist[index]['beamno'].toString();
+                              localTaka = pendingbeamlist[index]['beamtaka'].toString();
+                              localMtrs = pendingbeamlist[index]['beammtrs'].toString();
+                              localprodTata = pendingbeamlist[index]['prodtaka'].toString();
+                              localProdMtrs = pendingbeamlist[index]['productmtrs'].toString();
+                              localBeamInstall = pendingbeamlist[index]['installdate'].toString();
+                              localBalMtrs = pendingbeamlist[index]['balbeammtrs'].toString();
+
+                              num1 = localBalMtrs;
+                              num2 = localMtrs;
+
+                              print("1111111111111 :  " + num1);
+                              print("2222222222222 :  " + num2);
                             });
                             Navigator.pop(context);
                           },
@@ -661,6 +717,11 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
           localProdMtrs = pendingbeamlist[0]['productmtrs'].toString();
           localBeamInstall = pendingbeamlist[0]['installdate'].toString();
           localBalMtrs = pendingbeamlist[0]['balbeammtrs'].toString();
+
+          num1 = localBalMtrs;
+          num2 = localMtrs;
+          print("33333333333333 :  " + num1);
+          print("44444444444444 :  " + num2);
         });
       }
 
@@ -698,6 +759,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
           },
         );
       }
+      setState(() {
+        installBeamDate();
+      });
       return true;
     }
 
@@ -902,7 +966,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
       return _datarow;
     }
-
+    
     calweightactwt() {
       var stdwt = double.parse(_stdwt.text);
       var foldmetrs = double.parse(_foldmetrs.text);
