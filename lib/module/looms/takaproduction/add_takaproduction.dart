@@ -539,6 +539,19 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       var jsonList = data['list'];
       print(jsonList);
 
+      //  uri2 = '${globals.cdomain}/getpendingbeamcard?dbname=' +
+      //       db +
+      //       '&cno=' +
+      //       cno +
+      //       '&branch=' +
+      //       branch +
+      //       '&ctable=beamjobissuemst' +
+      //       '&abeamid=' +
+      //       beamid +
+      //       '&enddate=' +
+      //       newtodate.toString() +
+      //       '&list=true';
+
       String uri2 = '';
       if (jsonList == true) {
         print("in true if : ");
@@ -551,11 +564,11 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
             cno +
             '&branch=' +
             branch +
-            '&ctable=beamjobissuemst' +
             '&abeamid=' +
             beamid +
             '&enddate=' +
             newtodate.toString() +
+            '&machineid=0' +
             '&list=true';
 
         print(" getpendingbeamcard22 :" + uri2);
