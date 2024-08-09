@@ -857,43 +857,43 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
         isButtonActive = false;
       });
 
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text("Confirm .."),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 500,
-                    height: 70,
-                    child: ListView.builder(
-                      itemCount: 1,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            Text(
-                                " BeamNo : $localBeamNo Beam Taka : $localTaka  Beam Meters : $localMtrs   Prod. Taka  : $localprodTata   Prod. Meters : $localProdMtrs  Beam Install date : $localBeamInstall  Beam Meters : $localBalMtrs"),
-                          ],
-                        );
-                      },
-                    ),
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Confirm .."),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 500,
+                  height: 70,
+                  child: ListView.builder(
+                    itemCount: 1,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Text(
+                              " BeamNo : $localBeamNo Beam Taka : $localTaka  Beam Meters : $localMtrs   Prod. Taka  : $localprodTata   Prod. Meters : $localProdMtrs  Beam Install date : $localBeamInstall  Beam Meters : $localBalMtrs"),
+                        ],
+                      );
+                    },
                   ),
-                ],
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('Ok'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    showCompleteBeamDialog();
-                  },
                 ),
               ],
-            );
-          },
-        );
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  showCompleteBeamDialog();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
 
     void deleteRow(index) {
@@ -1016,8 +1016,8 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     SnackBar(content: Text('Form submitted successfully')),
                   );
                   if (ItemDetails.length == 0) {
-                      showAlertDialog(context, 'ItemDetails can be not blank.');
-                      // return true;
+                    showAlertDialog(context, 'ItemDetails can be not blank.');
+                    // return true;
                   } else {
                     _handleSaveData();
                   }

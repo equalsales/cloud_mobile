@@ -102,21 +102,41 @@ class BranchListState extends State<branch_list> {
                 tileColor: _selected[index] ? Colors.blue : null,
                 title: Text(account),
                 subtitle: Text(branch),
+                // onTap: () {
+                //   //print(account);
+                //   //setState(() => _selected[i] = !_selected[i])
+                //   _branchSelected.add(account);
+                //   _branchSelected2.add(id);
+                //   //setState(() => _selected[index] = !_selected[index]);
+                //   setState(() => _selected[index] = !_selected[index]);
+                //   //print(_selected);
+                //   //showAlertDialog(context, companyid);
+                //   // Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard(
+                //   //   companyid: companyid,
+                //   //   companyname: companyname,
+                //   //   fbeg: fbeg,
+                //   //   fend: fend
+                //   //   )));
+                // },
                 onTap: () {
-                  //print(account);
-                  //setState(() => _selected[i] = !_selected[i])
-                  _branchSelected.add(account);
-                  _branchSelected2.add(id);
-                  //setState(() => _selected[index] = !_selected[index]);
-                  setState(() => _selected[index] = !_selected[index]);
-                  //print(_selected);
-                  //showAlertDialog(context, companyid);
-                  // Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard(
-                  //   companyid: companyid,
-                  //   companyname: companyname,
-                  //   fbeg: fbeg,
-                  //   fend: fend
-                  //   )));
+                  setState(() {
+                    // Toggle selection state
+                    _selected[index] = !_selected[index];
+
+                    // Get the account and id for the current item
+                    String branch = _branchlist[index]['branch'];
+                    int id = _branchlist[index]['id'];
+
+                    if (_selected[index]) {
+                      // If selected, add to selected lists
+                      _branchSelected.add(branch);
+                      _branchSelected2.add(id);
+                    } else {
+                      // If deselected, remove from selected lists
+                      _branchSelected.remove(branch);
+                      _branchSelected2.remove(id);
+                    }
+                  });
                 },
               );
             },

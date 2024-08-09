@@ -86,10 +86,30 @@ class machineListState extends State<machine_list> {
                 tileColor: _selected[index] ? Colors.blue : null,
                 title: Text(account),
                 subtitle: Text(machine),
-                onTap: () {
-                  _machineSelected.add(account);
-                  _machineSelected2.add(id);
-                  setState(() => _selected[index] = !_selected[index]);
+                // onTap: () {
+                //   _machineSelected.add(account);
+                //   _machineSelected2.add(id);
+                //   setState(() => _selected[index] = !_selected[index]);
+                // },
+                  onTap: () {
+                  setState(() {
+                    // Toggle selection state
+                    _selected[index] = !_selected[index];
+
+                    // Get the account and id for the current item
+                    String account = _machinelist[index]['machine'];
+                    int id = _machinelist[index]['id'];
+
+                    if (_selected[index]) {
+                      // If selected, add to selected lists
+                      _machineSelected.add(account);
+                      _machineSelected2.add(id);
+                    } else {
+                      // If deselected, remove from selected lists
+                      _machineSelected.remove(account);
+                      _machineSelected2.remove(id);
+                    }
+                  });
                 },
               );
             },
@@ -103,6 +123,7 @@ class machineListState extends State<machine_list> {
         text: query,
         hintText: 'Search',
         onChanged: searchmachine,
+        
       );
   void searchmachine(String query) {
     if (query.length >= 2) {
