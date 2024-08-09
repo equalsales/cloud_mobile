@@ -211,31 +211,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     return true;
   }
 
-  // Future<bool> fetchdjobissChallanno() async {
-  //   String uri = '';
-  //   var cno = globals.companyid;
-  //   var db = globals.dbname;
-  //   uri = '${globals.cdomain}/api/api_greyjobissChallanno?dbname=' +
-  //       db +
-  //       '&branch=' +
-  //       _branch.text +
-  //       '&cno=' +
-  //       cno.toString();
-  //   print(uri);
-  //   var response = await http.get(Uri.parse(uri));
-  //   var jsonData = jsonDecode(response.body);
-  //   print(jsonData);
-  //   jsonData = jsonData['Data'];
-  //   if (jsonData == null) {
-  //     showAlertDialog(context, 'Taka No Found...');
-  //     return true;
-  //   }
-  //   jsonData = jsonData[0];
-  //   print(jsonData);
-  //   print(jsonData);
-  //   return true;
-  // }
-
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -1411,7 +1386,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                   ),
                   onTap: () {},
                   onChanged: (value) {
-                    // calweightactwt();
+                    _actwt.text = _weight.text;
                     calavgwt();
                     // calcutmeters();
                     caldiffwt();
