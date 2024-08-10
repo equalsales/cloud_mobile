@@ -10,6 +10,7 @@ import 'package:cloud_mobile/module/master/designmaster/designmasterlist.dart';
 import 'package:cloud_mobile/module/master/hsnmaster/hsnmasterlist.dart';
 import 'package:cloud_mobile/module/master/itemmaster/itemmasterlist.dart';
 import 'package:cloud_mobile/module/master/partymaster/partymasterlist.dart';
+import 'package:cloud_mobile/module/master/samplemaster/samplemasterlist.dart';
 import 'package:cloud_mobile/module/master/statemaster/statemasterlist.dart';
 import 'package:cloud_mobile/module/master/unitmaster/unitmasterlist.dart';
 import 'package:flutter/material.dart';
@@ -91,6 +92,10 @@ class _MasterMenuState extends State<MasterMenu> {
     MenuList.add({
       'name': 'Bank',
       'callback': (Context) => gotoBankMaster(context),
+    });
+    MenuList.add({
+      'name': 'Sample',
+      'callback': (Context) => gotoSampleMaster(context),
     });
   }
 
@@ -244,6 +249,18 @@ class _MasterMenuState extends State<MasterMenu> {
         context,
         MaterialPageRoute(
             builder: (_) => BankMasterList(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                )));
+  }
+
+  void gotoSampleMaster(BuildContext context) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => SampleMasterList(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,
