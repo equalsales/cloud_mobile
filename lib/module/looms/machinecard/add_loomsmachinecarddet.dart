@@ -42,20 +42,20 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
   DateTime toDate = DateTime.now();
 
   TextEditingController _machine	 = new TextEditingController();
-  TextEditingController _rpm = new TextEditingController();
-  TextEditingController _dsmeters = new TextEditingController();
+  TextEditingController _rpm = new TextEditingController(text: '0');
+  TextEditingController _dsmeters = new TextEditingController(text: '0.00');
   TextEditingController _dsefficiency = new TextEditingController();
   TextEditingController _dsname = new TextEditingController();
-  TextEditingController _nsmeters = new TextEditingController();
+  TextEditingController _nsmeters = new TextEditingController(text: '0.00');
   TextEditingController _nefficiency = new TextEditingController();
   TextEditingController _nsname = new TextEditingController();
-  TextEditingController _totmeters = new TextEditingController();
-  TextEditingController _warplength = new TextEditingController();
-  TextEditingController _outmeters= new TextEditingController();
-  TextEditingController _remainmeters = new TextEditingController();
-  TextEditingController _ends = new TextEditingController();
-  TextEditingController _reed = new TextEditingController();
-  TextEditingController _pick = new TextEditingController();
+  TextEditingController _totmeters = new TextEditingController(text: '0.00');
+  TextEditingController _warplength = new TextEditingController(text: '0');
+  TextEditingController _outmeters= new TextEditingController(text: '0.00');
+  TextEditingController _remainmeters = new TextEditingController(text: '0.00');
+  TextEditingController _ends = new TextEditingController(text: '0');
+  TextEditingController _reed = new TextEditingController(text: '0');
+  TextEditingController _pick = new TextEditingController(text: '0');
   TextEditingController _itemname = new TextEditingController();
   TextEditingController _remarks = new TextEditingController();
   
