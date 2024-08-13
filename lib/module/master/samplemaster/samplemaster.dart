@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:convert';
+import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/list/branch_list.dart';
 import 'package:cloud_mobile/list/item_list.dart';
 import 'package:cloud_mobile/list/party_list.dart';
@@ -12,7 +13,7 @@ import '../../../function.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
 import 'package:intl/intl.dart';
-
+//chirag
 
 class SampleMaster extends StatefulWidget {
   SampleMaster({Key? mykey, companyid, companyname, fbeg, fend, id})
@@ -109,9 +110,42 @@ class _SampleMasterState extends State<SampleMaster> {
     jsonData = jsonData['Data'];
     jsonData = jsonData[0];
     print(jsonData);
-    // _design.text = getValue(jsonData['design'], 'C');
-    // _itemname.text = getValue(jsonData['itemname'], 'C');
-    // _printname.text = getValue(jsonData['printname'], 'C');
+    _branch.text = getValue(jsonData['design'], 'C');
+    _sampleno.text = getValue(jsonData['itemname'], 'C');
+    _date.text = getValue(jsonData['printname'], 'C');
+    _reportbookno.text = getValue(jsonData['design'], 'C');
+    _dyeingname.text = getValue(jsonData['itemname'], 'C');
+    _fabricsname.text = getValue(jsonData['printname'], 'C');
+    _dyeingchallanno.text = getValue(jsonData['design'], 'C');
+    _takachr.text = getValue(jsonData['itemname'], 'C');
+    _takano.text = getValue(jsonData['printname'], 'C');
+    _fabricswidth.text = getValue(jsonData['design'], 'C');
+    _pick.text = getValue(jsonData['itemname'], 'C');
+    _fabricsweight.text = getValue(jsonData['printname'], 'C');
+    _totaltar.text = getValue(jsonData['design'], 'C');
+    _warpingwidth.text = getValue(jsonData['itemname'], 'C');
+    _weave.text = getValue(jsonData['printname'], 'C');
+    _fani.text = getValue(jsonData['design'], 'C');
+    _warpdenierandfilament1.text = getValue(jsonData['itemname'], 'C');
+    _warpdenierandfilament2.text = getValue(jsonData['printname'], 'C');
+    _warpdenierandfilament3.text = getValue(jsonData['design'], 'C');
+    _warpdenierandfilament4.text = getValue(jsonData['itemname'], 'C');
+    _warpdenierandfilament5.text = getValue(jsonData['printname'], 'C');
+    _warpdenierandfilament6.text = getValue(jsonData['design'], 'C');
+    _warptpm1.text = getValue(jsonData['itemname'], 'C');
+    _warptpm2.text = getValue(jsonData['printname'], 'C');
+    _warptpm3.text = getValue(jsonData['design'], 'C');
+    _warptpm4.text = getValue(jsonData['itemname'], 'C');
+    _warptpm5.text = getValue(jsonData['printname'], 'C');
+    _warptpm6.text = getValue(jsonData['design'], 'C');
+    _note1.text = getValue(jsonData['printname'], 'C');
+    _typeofyarnconame1.text = getValue(jsonData['design'], 'C');
+    _typeofyarnconame2.text = getValue(jsonData['itemname'], 'C');
+    _typeofyarnconame3.text = getValue(jsonData['printname'], 'C');
+    _typeofyarnconame4.text = getValue(jsonData['printname'], 'C');
+    _typeofyarnconame5.text = getValue(jsonData['printname'], 'C');
+    _typeofyarnconame2.text = getValue(jsonData['printname'], 'C');
+    _note2.text = getValue(jsonData['printname'], 'C');
     id = jsonData['id'].toString();
     return true;
   }
@@ -209,49 +243,85 @@ class _SampleMasterState extends State<SampleMaster> {
       }
     }
 
-    //  Future<bool> saveData() async {
-    //   String uri = '';
-    //   var companyid = widget.xcompanyid;
-    //   var clientid = globals.dbname;
-    //   var design = _design.text;
-    //   var itemname = _itemname.text;
-    //   var printname = _printname.text;
-    //   var id = widget.xid;
-    //   id = int.parse(id);
-    //   uri =
-    //       "${globals.cdomain2}/api/api_designstort?dbname=$clientid" +
-    //           "&design=" +
-    //           design +
-    //           "&itemname=" +
-    //           itemname +
-    //           "&printname=" +
-    //           printname +
-    //           "&id=" +
-    //           id.toString();
-    //   print(" SaveData : " + uri);
-    //   var response = await http.post(Uri.parse(uri));
-    //   var jsonData = jsonDecode(response.body);
-    //   var jsonCode = jsonData['Code'];
-    //   var jsonMsg = jsonData['Message'];
-    //   print(jsonCode);
-    //   if (jsonCode == '500') {
-    //     showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-    //   } else if (jsonCode == '100') {
-    //     showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
-    //   } else {
-    //     Navigator.pop(context);
-    //     Fluttertoast.showToast(
-    //     msg: "Saved !!!",
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.BOTTOM,
-    //     timeInSecForIosWeb: 1,
-    //     backgroundColor: Colors.white,
-    //     textColor: Colors.purple,
-    //     fontSize: 16.0,
-    //     );
-    //   }
-    //   return true;
-    // }
+    Future<bool> saveData() async {
+      String uri = '';
+      var companyid = widget.xcompanyid;
+      var clientid = globals.dbname;
+      var branch = _branch.text;
+      var sampleno = _sampleno.text;
+      var date = _date.text;
+      var reportbookno = _reportbookno.text;
+      var dyeingname = _dyeingname.text;
+      var fabricsname = _fabricsname.text;
+      var dyeingchallanno = _dyeingchallanno.text;
+      var takachr = _takachr.text;
+      var takano = _takano.text;
+      var fabricswidth = _fabricswidth.text;
+      var pick = _pick.text;
+      var fabricsweight = _fabricsweight.text;
+      var totaltar = _totaltar.text;
+      var warpingwidth = _warpingwidth.text;
+      var weave = _weave.text;
+      var fani = _fani.text;
+      var warpdenierandfilament1 = _warpdenierandfilament1.text;
+      var warpdenierandfilament2 = _warpdenierandfilament2.text;
+      var warpdenierandfilament3 = _warpdenierandfilament3.text;
+      var warpdenierandfilament4 = _warpdenierandfilament4.text;
+      var warpdenierandfilament5 = _warpdenierandfilament5.text;
+      var warpdenierandfilament6 = _warpdenierandfilament6.text;;
+      var warptpm1 = _warptpm1.text;
+      var warptpm2 = _warptpm2.text;
+      var warptpm3 = _warptpm3.text;
+      var warptpm4 = _warptpm4.text;
+      var warptpm5 = _warptpm5.text;
+      var warptpm6 = _warptpm6.text;
+      var note1 = _note1.text;
+      var typeofyarnconame1 = _typeofyarnconame1.text;
+      var typeofyarnconame2 = _typeofyarnconame2.text;
+      var typeofyarnconame3 = _typeofyarnconame3.text;
+      var typeofyarnconame4 = _typeofyarnconame4.text;
+      var typeofyarnconame5 = _typeofyarnconame5.text;
+      var typeofyarnconame6 = _typeofyarnconame6.text;
+      var note2 = _note2.text;
+    
+      var id = widget.xid;
+      id = int.parse(id);
+    
+      // uri =
+      //     "${globals.cdomain2}/api/api_designstort?dbname=$clientid" +
+      //         "&design=" +
+      //         // design +
+      //         "&itemname=" +
+      //         // itemname +
+      //         "&printname=" +
+      //         // printname +
+      //         "&id=" +
+      //         id.toString();
+      
+      print(" SaveData : " + uri);
+      var response = await http.post(Uri.parse(uri));
+      var jsonData = jsonDecode(response.body);
+      var jsonCode = jsonData['Code'];
+      var jsonMsg = jsonData['Message'];
+      print(jsonCode);
+      if (jsonCode == '500') {
+        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+      } else if (jsonCode == '100') {
+        showAlertDialog(context, 'Error While Saving !!! ' + jsonMsg);
+      } else {
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+        msg: "Saved !!!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white,
+        textColor: Colors.purple,
+        fontSize: 16.0,
+        );
+      }
+      return true;
+    }
 
     return Scaffold(
       appBar: EqAppBar(AppBarTitle: "Sample Master"),  
