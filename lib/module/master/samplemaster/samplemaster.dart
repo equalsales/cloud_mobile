@@ -13,7 +13,6 @@ import '../../../function.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
 import 'package:intl/intl.dart';
-//chirag
 
 class SampleMaster extends StatefulWidget {
   SampleMaster({Key? mykey, companyid, companyname, fbeg, fend, id})
