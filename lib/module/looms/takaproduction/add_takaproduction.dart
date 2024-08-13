@@ -1186,7 +1186,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                   ),
                   onTap: () {},
                   validator: (value) {
-                    if (value == '') {
+                    if (value == '' || value == '0') {
                       return "Please enter beamno";
                     }
                     return null;
@@ -1298,7 +1298,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                   ),
                   onTap: () {},
                   validator: (value) {
-                    if (value == '') {
+                    if (value == '' || value == '0') {
                       return "Please enter takano";
                     }
                     return null;
@@ -1347,7 +1347,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     // caldiffwt();
                   },
                   validator: (value) {
-                    if (value == '') {
+                    if (value == '' || value == '0.00') {
                       return "Please enter foldmeters";
                     }
                     return null;
@@ -1392,7 +1392,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     caldiffwt();
                   },
                   validator: (value) {
-                    if (value == '') {
+                    if (value == '0.000' || value == '') {
                       return "Please enter weight";
                     }
                     return null;

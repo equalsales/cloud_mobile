@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
+import 'package:intl/intl.dart';
 
 class SampleMasterList extends StatefulWidget {
   var xcompanyid;
@@ -39,11 +40,20 @@ class _SampleMasterListPageState extends State<SampleMasterList> {
 Future<bool> loaddetails() async {
     var companyid = widget.xcompanyid;
     var clientid = globals.dbname;
+    var startdate = globals.fbeg;
+    var enddate = globals.fend;
     print(globals.enddate);
+
+    DateTime parsedDate1 = DateFormat("dd-MM-yyyy").parse(startdate);
+    String newstartdate = DateFormat("yyyy-MM-dd").format(parsedDate1); 
+
+    DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(enddate);
+    String newenddate = DateFormat("yyyy-MM-dd").format(parsedDate2); 
 
     String uri = '';
     uri =
-        "${globals.cdomain2}/api/api_designlist?dbname=$clientid&cno=$companyid";
+        "${globals.cdomain2}/api/api_samplemasterlist?dbname=$clientid&cno=$companyid&startdate=$newstartdate&enddate=$newenddate&list=true";
+        
     var response = await http.get(Uri.parse(uri));
     print(' loaddetails : ' + uri);
     var jsonData = jsonDecode(response.body);
@@ -181,7 +191,7 @@ void onAdd() {
       fend: widget.xfend,
       Data: this._companydetails,
       Title: 'List Of Sample',
-      DataFormat: 'Design : #design#  ItemName : #itemname# ',
+      DataFormat: 'Date : #date#  Serial : #serial#  Branch : #branch#  Party : #party# ',
       onAdd: onAdd,
       onBack: onBack,
       onPDF: onPDF,
