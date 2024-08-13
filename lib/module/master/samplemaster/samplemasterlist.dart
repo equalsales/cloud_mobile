@@ -52,7 +52,7 @@ Future<bool> loaddetails() async {
 
     String uri = '';
     uri =
-        "${globals.cdomain2}/api/api_samplemasterlist?dbname=$clientid&cno=$companyid&startdate=$newstartdate&enddate=$newenddate&list=true";
+        "${globals.cdomain}/api/api_samplemasterlist?dbname=$clientid&cno=$companyid&startdate=$newstartdate&enddate=$newenddate&list=true";
         
     var response = await http.get(Uri.parse(uri));
     print(' loaddetails : ' + uri);
@@ -69,7 +69,7 @@ Future<bool> loaddetails() async {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "${globals.cdomain2}/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=designmst&id=$id";
+        "${globals.cdomain}/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=designmst&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);

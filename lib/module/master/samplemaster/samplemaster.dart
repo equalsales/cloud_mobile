@@ -38,15 +38,14 @@ class SampleMaster extends StatefulWidget {
 }
 
 class _SampleMasterState extends State<SampleMaster> {
-
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
   List ItemDetails = [];
- 
+
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController  _branch = new TextEditingController();
+  TextEditingController _branch = new TextEditingController();
   TextEditingController _sampleno = new TextEditingController();
   TextEditingController _date = new TextEditingController();
   TextEditingController _reportbookno = new TextEditingController();
@@ -102,7 +101,7 @@ class _SampleMasterState extends State<SampleMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "${globals.cdomain2}/api/api_samplemasterlist?dbname=$clientid&cno=$companyid&id=$id";
+        "${globals.cdomain}/api/api_samplemasterlist?dbname=$clientid&cno=$companyid&id=$id";
 
     print(" loadData : " + uri);
     var response = await http.get(Uri.parse(uri));
@@ -111,6 +110,8 @@ class _SampleMasterState extends State<SampleMaster> {
     jsonData = jsonData[0];
     print(jsonData);
     _branch.text = getValue(jsonData['branch'], 'C');
+    _reportbookno.text = getValue(jsonData['bookno'].toString(), 'C');
+    _dyeingchallanno.text = getValue(jsonData['chlnno'].toString(), 'C');
     _sampleno.text = getValue(jsonData['itemname'], 'C');
     _date.text = getValue(jsonData['date'], 'C');
     _reportbookno.text = getValue(jsonData['design'], 'C');
@@ -152,20 +153,18 @@ class _SampleMasterState extends State<SampleMaster> {
 
   @override
   Widget build(BuildContext context) {
-
     Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: getsystemdate(),
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != fromDate)
-      setState(() {
-        fromDate = picked;
-        _date.text = DateFormat("dd-MM-yyyy").format(picked);
-      });
-  }
-
+      final DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate: getsystemdate(),
+          firstDate: DateTime(2015),
+          lastDate: DateTime(2101));
+      if (picked != null && picked != fromDate)
+        setState(() {
+          fromDate = picked;
+          _date.text = DateFormat("dd-MM-yyyy").format(picked);
+        });
+    }
 
     void gotoBranchScreen(BuildContext contex) async {
       var result = await Navigator.push(
@@ -191,32 +190,32 @@ class _SampleMasterState extends State<SampleMaster> {
     }
 
     void gotoItemnameScreen(BuildContext context) async {
-    var result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => item_list(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend,
-                )));
-    setState(() {
-      var retResult = result;
-      var newResult = result[1];
-      var selItemname = '';
-      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-        if (ictr > 0) {
-          selItemname = selItemname + ',';
-        }
-        selItemname = selItemname + retResult[0][ictr];
-      }
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => item_list(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                  )));
       setState(() {
-        _dyeingname.text = newResult[0]['itemname'].toString();
+        var retResult = result;
+        var newResult = result[1];
+        var selItemname = '';
+        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+          if (ictr > 0) {
+            selItemname = selItemname + ',';
+          }
+          selItemname = selItemname + retResult[0][ictr];
+        }
+        setState(() {
+          _fabricsname.text = newResult[0]['itemname'].toString();
+        });
       });
-    });
-  }
+    }
 
-  void gotoDyeingnameScreen(BuildContext context) async {
+    void gotoDyeingnameScreen(BuildContext context) async {
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -247,6 +246,7 @@ class _SampleMasterState extends State<SampleMaster> {
       String uri = '';
       var companyid = widget.xcompanyid;
       var clientid = globals.dbname;
+      var user = globals.username;
       var branch = _branch.text;
       var sampleno = _sampleno.text;
       var date = _date.text;
@@ -268,7 +268,7 @@ class _SampleMasterState extends State<SampleMaster> {
       var warpdenierandfilament3 = _warpdenierandfilament3.text;
       var warpdenierandfilament4 = _warpdenierandfilament4.text;
       var warpdenierandfilament5 = _warpdenierandfilament5.text;
-      var warpdenierandfilament6 = _warpdenierandfilament6.text;;
+      var warpdenierandfilament6 = _warpdenierandfilament6.text;
       var warptpm1 = _warptpm1.text;
       var warptpm2 = _warptpm2.text;
       var warptpm3 = _warptpm3.text;
@@ -283,12 +283,32 @@ class _SampleMasterState extends State<SampleMaster> {
       var typeofyarnconame5 = _typeofyarnconame5.text;
       var typeofyarnconame6 = _typeofyarnconame6.text;
       var note2 = _note2.text;
-    
+
       var id = widget.xid;
       id = int.parse(id);
-    
-      // uri =
-      //     "${globals.cdomain2}/api/api_designstort?dbname=$clientid" +
+
+DateTime parsedstartDate = DateFormat("dd-MM-yyyy").parse(globals.startdate);
+      String newstartDate = DateFormat("yyyy-MM-dd").format(parsedstartDate);
+DateTime parsedEndDate = DateFormat("dd-MM-yyyy").parse(globals.enddate);
+      String newEndDate = DateFormat("yyyy-MM-dd").format(parsedEndDate);
+
+      DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(_date.text);
+      String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
+
+      uri = "${globals.cdomain}/api/api_storesamplemst?dbname=$clientid" +
+          "&cno=$companyid" +
+          "&id=${id.toString()}" +
+          "&startdate=$newstartDate" +
+          "&enddate=$newEndDate" +
+          "&branch=$branch" +
+          "&itemname=$fabricsname" +
+          "&party=$dyeingname" +
+          "&srchr&serial" +
+          "&user=$user" +
+          "&date=$newDate";
+
+      //127.0.0.1:8000/api/?dbname=admin_looms&
+      //cno=3&id=0&startdate=2024-04-01&enddate=2025-03-31&branch=5904&itemname=30*20 GERMAN&party=RAJ CREATION&srchr&serial&user=KRISHNA&date=2024-08-10
       //         "&design=" +
       //         // design +
       //         "&itemname=" +
@@ -297,7 +317,7 @@ class _SampleMasterState extends State<SampleMaster> {
       //         // printname +
       //         "&id=" +
       //         id.toString();
-      
+
       print(" SaveData : " + uri);
       var response = await http.post(Uri.parse(uri));
       var jsonData = jsonDecode(response.body);
@@ -311,20 +331,20 @@ class _SampleMasterState extends State<SampleMaster> {
       } else {
         Navigator.pop(context);
         Fluttertoast.showToast(
-        msg: "Saved !!!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.white,
-        textColor: Colors.purple,
-        fontSize: 16.0,
+          msg: "Saved !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
         );
       }
       return true;
     }
 
     return Scaffold(
-      appBar: EqAppBar(AppBarTitle: "Sample Master"),  
+      appBar: EqAppBar(AppBarTitle: "Sample Master"),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -827,29 +847,39 @@ class _SampleMasterState extends State<SampleMaster> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: const Color.fromARGB(231, 255, 255, 255),), // Text style
-                      backgroundColor: Colors.green, 
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: const Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
+                      backgroundColor: Colors.green,
                       // Background color
                     ),
                     onPressed: () {
-                      // saveData();
+                      saveData();
                     },
-                    child: const Text('SAVE',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'SAVE',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   )),
-                  SizedBox(
-                   width: 10
-                  ),
+                  SizedBox(width: 10),
                   Expanded(
-                    child: TextButton(
+                      child: TextButton(
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 25,color: Color.fromARGB(231, 255, 255, 255),), // Text style
+                      textStyle: TextStyle(
+                        fontSize: 25,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ), // Text style
                       backgroundColor: Colors.green, // Background color
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-                        Fluttertoast.showToast(
+                      Fluttertoast.showToast(
                         msg: "CANCEL !!!",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
@@ -857,9 +887,15 @@ class _SampleMasterState extends State<SampleMaster> {
                         backgroundColor: Colors.white,
                         textColor: Colors.purple,
                         fontSize: 16.0,
-                        );
+                      );
                     },
-                    child: const Text('CANCEL',style: TextStyle(fontSize: 20,color: Color.fromARGB(231, 255, 255, 255),),),
+                    child: const Text(
+                      'CANCEL',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(231, 255, 255, 255),
+                      ),
+                    ),
                   ))
                 ],
               ),
