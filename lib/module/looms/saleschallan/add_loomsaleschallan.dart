@@ -91,6 +91,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
   var _jsonData = [];
 
   bool isButtonActive = true;
+  bool hasteenabled = true;
   
    var validcity= '';
   var crlimit = 0.0;
@@ -103,6 +104,14 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
     var curDate = getsystemdate();
     _date.text = DateFormat("dd-MM-yyyy").format(curDate);
+
+    print("%%%%%%%%%%%%%%%%%%%% : " + globals.username); 
+
+    if(globals.username == 'SACHIN'){
+      hasteenabled = true;
+    }else{
+      hasteenabled = false;
+    }
 
     _book.text = 'SALES A/C';
     // dropdownTrnType = 'PACKING';
@@ -1049,7 +1058,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _haste,
-                    enabled: true,
+                    enabled: hasteenabled,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Select Haste',

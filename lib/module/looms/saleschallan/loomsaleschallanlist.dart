@@ -422,7 +422,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
 
             String uri = '';
 
-            uri = 'https://www.looms.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+            uri = '${globals.cdomain}/api/api_deletecashbook?dbname=' +
                   db +
                   '&id=' +
                   id.toString();
