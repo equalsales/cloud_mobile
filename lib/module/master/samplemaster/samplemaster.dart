@@ -396,6 +396,12 @@ class _SampleMasterState extends State<SampleMaster> {
                     onTap: () {
                       gotoBranchScreen(context);
                     },
+                    validator: (value) {
+                      if (value == '') {
+                        return "Please select branch";
+                      }
+                      return null;
+                    },
                     onChanged: (value) {},
                   ),
                 ),
@@ -889,7 +895,9 @@ class _SampleMasterState extends State<SampleMaster> {
                       // Background color
                     ),
                     onPressed: () {
-                      saveData();
+                      if (_formKey.currentState!.validate()) {
+                        saveData();
+                      } else {}
                     },
                     child: const Text(
                       'SAVE',

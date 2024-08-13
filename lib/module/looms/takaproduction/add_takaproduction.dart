@@ -87,6 +87,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
   var bmitem;
   var localBeamNo = '';
+  var localBeamChr = '';
   var localTaka = '';
   var localMtrs = '.';
   var localprodTata = '';
@@ -597,6 +598,9 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                                   .toString();
                               localBeamNo =
                                   pendingbeamlist[index]['beamno'].toString();
+                              localBeamChr =
+                                  pendingbeamlist[index]['beamchr'].toString();
+
                               localTaka =
                                   pendingbeamlist[index]['beamtaka'].toString();
                               localMtrs =
@@ -862,7 +866,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                       return Column(
                         children: [
                           Text(
-                              " BeamNo : $localBeamNo Beam Taka : $localTaka  Beam Meters : $localMtrs   Prod. Taka  : $localprodTata   Prod. Meters : $localProdMtrs  Beam Install date : $localBeamInstall  Beam Meters : $localBalMtrs"),
+                              " BeamNo : $localBeamNo - $localBeamChr Beam Taka : $localTaka  Beam Meters : $localMtrs   Prod. Taka  : $localprodTata   Prod. Meters : $localProdMtrs  Beam Install date : $localBeamInstall  Beam Meters : $localBalMtrs"),
                         ],
                       );
                     },
@@ -933,18 +937,18 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
       return _datarow;
     }
 
-    calweightactwt() {
-      var stdwt = double.parse(_stdwt.text);
-      var foldmetrs = double.parse(_foldmetrs.text);
-      var total = 0.0;
+    // calweightactwt() {
+    //   var stdwt = double.parse(_stdwt.text);
+    //   var foldmetrs = double.parse(_foldmetrs.text);
+    //   var total = 0.0;
 
-      total = (stdwt * foldmetrs) / 100;
+    //   total = (stdwt * foldmetrs) / 100;
 
-      setState(() {
-        _weight.text = total.toStringAsFixed(2);
-        _actwt.text = total.toStringAsFixed(0);
-      });
-    }
+    //   setState(() {
+    //     _weight.text = total.toStringAsFixed(2);
+    //     _actwt.text = total.toStringAsFixed(0);
+    //   });
+    // }
 
     calavgwt() {
       var weight = double.parse(_weight.text);
@@ -1246,7 +1250,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                   ),
                   onTap: () {},
                   onChanged: (value) {
-                    calweightactwt();
+                    // calweightactwt();
                     // calavgwt();
                     // calcutmeters();
                     // caldiffwt();
@@ -1341,7 +1345,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                   ),
                   onTap: () {},
                   onChanged: (value) {
-                    calweightactwt();
+                    // calweightactwt();
                     calavgwt();
                     // calcutmeters();
                     // caldiffwt();

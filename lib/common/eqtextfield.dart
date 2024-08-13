@@ -14,7 +14,7 @@ class EqTextField extends StatelessWidget {
 
   final VoidCallback onTap;
   final void Function(String) onChanged;
-  final String Function(String?)? validator;
+  final String? Function(String?)? validator;
 
   const EqTextField(
       {super.key,
