@@ -329,7 +329,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                     acctype: acctype,
                   )));
 
-      setState(() {
         var retResult = result;
         _partylist = result[1];
         result = result[1];
@@ -345,7 +344,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         obj.text = selParty;
         print("121212111111111111111");
         print(obj.text);
-      });
     }
 
     void gotoHasteScreen(
@@ -361,7 +359,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                     acctype: 'HASTE',
                   )));
 
-      setState(() {
         var retResult = result;
         _partylist = result[1];
         result = result[1];
@@ -374,7 +371,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
           selParty = selParty + retResult[0][ictr];
         }        
         _haste.text = selParty;
-      });
     }
 
     void gotoPartyScreen2(
@@ -391,7 +387,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                   )));
 
       if (result != null) {
-        setState(() {
+        // setState(() {
           var retResult = result;
           _partylist = result[1];
           result = result[1];
@@ -422,14 +418,11 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
             getPartyDetails(
                     obj.text, 0, crlimit, partyid, context, endDate, cno,startDate)
                 .then((value) {
-              setState(() {
                 clobl = value;
                 print("chirag");
                 print(clobl);
-              });
             });
           }
-        });
       }
     }
 
@@ -443,7 +436,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                   fbeg: widget.xfbeg,
                   fend: widget.xfend)));
 
-      setState(() {
         var retResult = result;
 
         print(retResult);
@@ -461,7 +453,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         }
         _branchid.text = branchid.toString();
         _branch.text = selBranch;
-      });
     }
 
     void gotoCityScreen(BuildContext contex) async {
@@ -474,7 +465,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                   fbeg: widget.xfbeg,
                   fend: widget.xfend)));
 
-      setState(() {
         var retResult = result;
         _stationlist = result[1];
         result = result[1];
@@ -488,7 +478,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         }
 
         _station.text = selStation;
-      });
     }
 
     void gotoSalesmanScreen(BuildContext contex) async {
@@ -501,7 +490,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                   fbeg: widget.xfbeg,
                   fend: widget.xfend)));
 
-      setState(() {
         var retResult = result;
 
         var selSalesman = '';
@@ -513,7 +501,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         }
 
         _salesman.text = selSalesman;
-      });
     }
 
     void gotoChallanItemDet(BuildContext contex) async {
@@ -534,6 +521,8 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                   partyid: partyid,
                   itemDet: ItemDetails,
                   branchid: branchid,
+                  haste:_haste.text,
+                  salesman:_salesman.text,
                   type: type)));
       //print('out');
       //print(result);
@@ -797,7 +786,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
           if (ItemDetails[iCtr]['salesman'] != null) {
             _salesman.text = ItemDetails[iCtr]['salesman'].toString();
           }
-
 
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(

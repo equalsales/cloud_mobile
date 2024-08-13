@@ -23,6 +23,8 @@ class LoomSalesChallanDetAdd extends StatefulWidget {
       itemDet,
       id,
       branchid,
+      haste,
+      salesman,
       ordno,
       type})
       : super(key: mykey) {
@@ -31,6 +33,8 @@ class LoomSalesChallanDetAdd extends StatefulWidget {
     xfbeg = fbeg;
     xfend = fend;
     xbranch = branch;
+    xhaste = haste;
+    xsalesman = salesman;
     xparty = partyid;
     xid = id;
     xbranchid = branchid;
@@ -53,6 +57,8 @@ class LoomSalesChallanDetAdd extends StatefulWidget {
   var xbranch;
   var xparty;
   var xbranchid;
+  var xhaste;
+  var xsalesman;
   var xordno;
   var xtype;
   List xitemDet = [];
@@ -179,11 +185,21 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         _itemname.text = result[0]['itemname'];
         _design.text = result[0]['design'];
         dropdownUnitType = result[0]['unit'];
-        _haste.text = result[0]['haste'].toString();
+        if(widget.xhaste == ''){
+          _haste.text = result[0]['haste'].toString();
+        }else{
+          _haste.text = widget.xhaste;
+        }
         if (_haste.text == "null") {
           _haste.text = '';
         }
-        _salesman.text = result[0]['salesman'].toString();
+
+        if(widget.xsalesman == ''){
+          _salesman.text = result[0]['salesman'].toString();
+        }else{
+          _salesman.text = widget.xsalesman;
+        }
+        
         if (_salesman.text == "null") {
           _salesman.text = '';
         }
