@@ -110,13 +110,11 @@ class _SampleMasterState extends State<SampleMaster> {
     jsonData = jsonData[0];
     print(jsonData);
     _branch.text = getValue(jsonData['branch'], 'C');
-    _reportbookno.text = getValue(jsonData['bookno'].toString(), 'C');
-    _dyeingchallanno.text = getValue(jsonData['chlnno'].toString(), 'C');
-    _sampleno.text = getValue(jsonData['itemname'], 'C');
+    _sampleno.text = getValue(jsonData[''], 'C');
     _date.text = getValue(jsonData['date'], 'C');
-    _reportbookno.text = getValue(jsonData['design'], 'C');
-    _dyeingname.text = getValue(jsonData['itemname'], 'C');
-    _fabricsname.text = getValue(jsonData['printname'], 'C');
+    _reportbookno.text = getValue(jsonData['bookno'], 'C');
+    _dyeingname.text = getValue(jsonData['party'], 'C');
+    _fabricsname.text = getValue(jsonData['itemname'], 'C');
     _dyeingchallanno.text = getValue(jsonData['chlnno'], 'C');
     _takachr.text = getValue(jsonData['takachr'], 'C');
     _takano.text = getValue(jsonData['takano'], 'C');
@@ -248,8 +246,8 @@ class _SampleMasterState extends State<SampleMaster> {
       var clientid = globals.dbname;
       var user = globals.username;
       var branch = _branch.text;
-      var sampleno = _sampleno.text;
-      var date = _date.text;
+      // var sampleno = _sampleno.text;
+      // var date = _date.text;
       var reportbookno = _reportbookno.text;
       var dyeingname = _dyeingname.text;
       var fabricsname = _fabricsname.text;
@@ -275,13 +273,13 @@ class _SampleMasterState extends State<SampleMaster> {
       var warptpm4 = _warptpm4.text;
       var warptpm5 = _warptpm5.text;
       var warptpm6 = _warptpm6.text;
-      var note1 = _note1.text;
       var typeofyarnconame1 = _typeofyarnconame1.text;
       var typeofyarnconame2 = _typeofyarnconame2.text;
       var typeofyarnconame3 = _typeofyarnconame3.text;
       var typeofyarnconame4 = _typeofyarnconame4.text;
       var typeofyarnconame5 = _typeofyarnconame5.text;
       var typeofyarnconame6 = _typeofyarnconame6.text;
+      var note1 = _note1.text;
       var note2 = _note2.text;
 
       var id = widget.xid;
@@ -290,11 +288,12 @@ class _SampleMasterState extends State<SampleMaster> {
       DateTime parsedstartDate =
           DateFormat("dd-MM-yyyy").parse(globals.startdate);
       String newstartDate = DateFormat("yyyy-MM-dd").format(parsedstartDate);
+
       DateTime parsedEndDate = DateFormat("dd-MM-yyyy").parse(globals.enddate);
       String newEndDate = DateFormat("yyyy-MM-dd").format(parsedEndDate);
 
       DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(_date.text);
-      String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
+      String date = DateFormat("yyyy-MM-dd").format(parsedDate);
 
       uri = "${globals.cdomain}/api/api_storesamplemst?" +
           "dbname=$clientid" +
@@ -307,38 +306,36 @@ class _SampleMasterState extends State<SampleMaster> {
           "&party=$dyeingname" +
           "&srchr&serial" +
           "&user=$user" +
-          "&date=$newDate" +
-          "bookno" +
-          "chlnno=$dyeingchallanno" +
-          "design" +
-          "printname" +
-          "takachr=$takachr" +
-          "takano=$takano" +
-          "fabricwidth=$warpingwidth" +
-          "pick=$pick" +
-          "weight=$fabricswidth" +
-          "tar=$totaltar" +
-          "worpingwidth=$fabricsweight" +
-          "weave=$weave" +
-          "fani=$fani" +
-          "denier1=$warpdenierandfilament1" +
-          "denier2=$warpdenierandfilament2" +
-          "denier3=$warpdenierandfilament3" +
-          "denier4=$warpdenierandfilament4" +
-          "denier5=$warpdenierandfilament5" +
-          "denier6=$warpdenierandfilament6" +
-          "tpm1=$warptpm1" +
-          "tpm2=$warptpm2" +
-          "tpm3=$warptpm3" +
-          "tpm4=$warptpm4" +
-          "tpm5=$warptpm5" +
-          "tpm6=$warptpm6" +
-          "yarn1=$typeofyarnconame1" +
-          "yarn2=$typeofyarnconame2" +
-          "yarn3=$typeofyarnconame3" +
-          "yarn4=$typeofyarnconame4" +
-          "yarn5=$typeofyarnconame5" +
-          "yarn6=$typeofyarnconame6" +
+          "&date=$date" +
+          "&bookno=$reportbookno" +
+          "&chlnno=$dyeingchallanno" +
+          "&takachr=$takachr" +
+          "&takano=$takano" +
+          "&fabricwidth=$warpingwidth" +
+          "&pick=$pick" +
+          "&weight=$fabricswidth" +
+          "&tar=$totaltar" +
+          "&worpingwidth=$fabricsweight" +
+          "&weave=$weave" +
+          "&fani=$fani" +
+          "&denier1=$warpdenierandfilament1" +
+          "&denier2=$warpdenierandfilament2" +
+          "&denier3=$warpdenierandfilament3" +
+          "&denier4=$warpdenierandfilament4" +
+          "&denier5=$warpdenierandfilament5" +
+          "&denier6=$warpdenierandfilament6" +
+          "&tpm1=$warptpm1" +
+          "&tpm2=$warptpm2" +
+          "&tpm3=$warptpm3" +
+          "&tpm4=$warptpm4" +
+          "&tpm5=$warptpm5" +
+          "&tpm6=$warptpm6" +
+          "&yarn1=$typeofyarnconame1" +
+          "&yarn2=$typeofyarnconame2" +
+          "&yarn3=$typeofyarnconame3" +
+          "&yarn4=$typeofyarnconame4" +
+          "&yarn5=$typeofyarnconame5" +
+          "&yarn6=$typeofyarnconame6" +
           "&note=$note1" +
           "&note1=$note2";
 
@@ -406,17 +403,17 @@ class _SampleMasterState extends State<SampleMaster> {
             ),
             Row(
               children: [
-                Expanded(
-                  child: EqTextField(
-                    controller: _sampleno,
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    hintText: 'Sampleno',
-                    labelText: 'Sampleno',
-                    onTap: () {},
-                    onChanged: (value) {},
-                  ),
-                ),
+                // Expanded(
+                //   child: EqTextField(
+                //     controller: _sampleno,
+                //     keyboardType: TextInputType.number,
+                //     textInputAction: TextInputAction.next,
+                //     hintText: 'Sampleno',
+                //     labelText: 'Sampleno',
+                //     onTap: () {},
+                //     onChanged: (value) {},
+                //   ),
+                // ),
                 Expanded(
                   child: EqTextField(
                     controller: _date,
