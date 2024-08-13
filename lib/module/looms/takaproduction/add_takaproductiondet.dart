@@ -63,10 +63,12 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
 
   TextEditingController _date = new TextEditingController();
   TextEditingController _worker = new TextEditingController();
-  TextEditingController _meters = new TextEditingController(text: 0.00.toString());
-  TextEditingController _rate = new TextEditingController(text: 0.00.toString());
-  TextEditingController _amount = new TextEditingController(text: 0.00.toString());
-
+  TextEditingController _meters =
+      new TextEditingController(text: 0.00.toString());
+  TextEditingController _rate =
+      new TextEditingController(text: 0.00.toString());
+  TextEditingController _amount =
+      new TextEditingController(text: 0.00.toString());
 
   double ordMeters = 0;
 
@@ -126,7 +128,7 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
     });
   }
 
-  calamount(){
+  calamount() {
     var rate = double.parse(_rate.text);
     var meters = double.parse(_meters.text);
     var amount = 0.0;
@@ -156,18 +158,17 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
       DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
       String newdate = DateFormat("yyyy-MM-dd").format(parsedDate);
 
-
       widget.xitemDet.add({
         'date': newdate,
         'worker': worker,
         'meters': meters,
         'rate': rate,
-        'amount': amount,        
+        'amount': amount,
       });
       Navigator.pop(context, widget.xitemDet);
       return true;
     }
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -179,13 +180,14 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
           child: Icon(Icons.done),
           backgroundColor: Colors.green,
           onPressed: () => {
-            if(_formKey.currentState!.validate()){
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Form submitted successfully')),
-              ),
-              saveData()
-            }
-          }),
+                if (_formKey.currentState!.validate())
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Form submitted successfully')),
+                    ),
+                    saveData()
+                  }
+              }),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -228,7 +230,7 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
                       gotoWorkerScreen(context);
                     },
                     validator: (value) {
-                      if(value == ''){
+                      if (value == '') {
                         return "Please enter worker";
                       }
                       return null;
@@ -255,7 +257,12 @@ class _TakaProductionDetAddState extends State<TakaProductionDetAdd> {
                       calamount();
                     },
                     validator: (value) {
-                      if(value == ''){
+                      if (value == '' ||
+                          value == '0' ||
+                          value == '0.' ||
+                          value == '0.000' ||
+                          value == '0.00' ||
+                          value == '0.0') {
                         return "Please enter Meter";
                       }
                       return null;

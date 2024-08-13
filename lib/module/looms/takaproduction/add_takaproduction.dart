@@ -1347,7 +1347,12 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     // caldiffwt();
                   },
                   validator: (value) {
-                    if (value == '' || value == '0.00') {
+                    if (value == '' ||
+                        value == '0' ||
+                        value == '0.' ||
+                        value == '0.000' ||
+                        value == '0.00' ||
+                        value == '0.0') {
                       return "Please enter foldmeters";
                     }
                     return null;
@@ -1392,7 +1397,12 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     caldiffwt();
                   },
                   validator: (value) {
-                    if (value == '0.000' || value == '') {
+                    if (value == '' ||
+                        value == '0' ||
+                        value == '0.' ||
+                        value == '0.000' ||
+                        value == '0.00' ||
+                        value == '0.0') {
                       return "Please enter weight";
                     }
                     return null;
