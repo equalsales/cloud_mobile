@@ -287,15 +287,17 @@ class _SampleMasterState extends State<SampleMaster> {
       var id = widget.xid;
       id = int.parse(id);
 
-DateTime parsedstartDate = DateFormat("dd-MM-yyyy").parse(globals.startdate);
+      DateTime parsedstartDate =
+          DateFormat("dd-MM-yyyy").parse(globals.startdate);
       String newstartDate = DateFormat("yyyy-MM-dd").format(parsedstartDate);
-DateTime parsedEndDate = DateFormat("dd-MM-yyyy").parse(globals.enddate);
+      DateTime parsedEndDate = DateFormat("dd-MM-yyyy").parse(globals.enddate);
       String newEndDate = DateFormat("yyyy-MM-dd").format(parsedEndDate);
 
       DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(_date.text);
       String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
 
-      uri = "${globals.cdomain}/api/api_storesamplemst?dbname=$clientid" +
+      uri = "${globals.cdomain}/api/api_storesamplemst?" +
+          "dbname=$clientid" +
           "&cno=$companyid" +
           "&id=${id.toString()}" +
           "&startdate=$newstartDate" +
@@ -305,7 +307,40 @@ DateTime parsedEndDate = DateFormat("dd-MM-yyyy").parse(globals.enddate);
           "&party=$dyeingname" +
           "&srchr&serial" +
           "&user=$user" +
-          "&date=$newDate";
+          "&date=$newDate" +
+          "bookno" +
+          "chlnno=$dyeingchallanno" +
+          "design" +
+          "printname" +
+          "takachr=$takachr" +
+          "takano=$takano" +
+          "fabricwidth=$warpingwidth" +
+          "pick=$pick" +
+          "weight=$fabricswidth" +
+          "tar=$totaltar" +
+          "worpingwidth=$fabricsweight" +
+          "weave=$weave" +
+          "fani=$fani" +
+          "denier1=$warpdenierandfilament1" +
+          "denier2=$warpdenierandfilament2" +
+          "denier3=$warpdenierandfilament3" +
+          "denier4=$warpdenierandfilament4" +
+          "denier5=$warpdenierandfilament5" +
+          "denier6=$warpdenierandfilament6" +
+          "tpm1=$warptpm1" +
+          "tpm2=$warptpm2" +
+          "tpm3=$warptpm3" +
+          "tpm4=$warptpm4" +
+          "tpm5=$warptpm5" +
+          "tpm6=$warptpm6" +
+          "yarn1=$typeofyarnconame1" +
+          "yarn2=$typeofyarnconame2" +
+          "yarn3=$typeofyarnconame3" +
+          "yarn4=$typeofyarnconame4" +
+          "yarn5=$typeofyarnconame5" +
+          "yarn6=$typeofyarnconame6" +
+          "&note=$note1" +
+          "&note1=$note2";
 
       //127.0.0.1:8000/api/?dbname=admin_looms&
       //cno=3&id=0&startdate=2024-04-01&enddate=2025-03-31&branch=5904&itemname=30*20 GERMAN&party=RAJ CREATION&srchr&serial&user=KRISHNA&date=2024-08-10
