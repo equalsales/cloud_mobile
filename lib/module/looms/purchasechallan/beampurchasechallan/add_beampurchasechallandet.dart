@@ -522,7 +522,12 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                       });
                     },
                     validator: (value) {
-                      if (value == '') {
+                      if (value == '' || 
+                      value == '0' || 
+                      value == '0.' || 
+                      value == '0.0' || 
+                      value == '0.00') 
+                      {
                         return 'Please enter meters';
                       }
                       return null;
@@ -551,7 +556,12 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                       });
                     },
                     validator: (value) {
-                      if (value == '') {
+                      if (value == '' || 
+                      value == '0' || 
+                      value == '0.' || 
+                      value == '0.0' || 
+                      value == '0.00') 
+                      {
                         return 'Please enter Beamwt';
                       }
                       return null;
@@ -632,7 +642,12 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
                       });
                     },
                     validator: (value) {
-                      if (value == '') {
+                      if (value == '' || 
+                      value == '0' || 
+                      value == '0.' || 
+                      value == '0.0' || 
+                      value == '0.00')
+                      {
                         return 'Please enter rate';
                       }
                       return null;
