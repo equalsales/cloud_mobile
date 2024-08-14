@@ -1,15 +1,9 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:convert';
 import 'package:cloud_mobile/list/order_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-import 'package:cloud_mobile/common/alert.dart';
-import 'package:cloud_mobile/common/global.dart' as globals;
 import 'package:cloud_mobile/common/bottombar.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class BeamJobworkReceiveDetAdd extends StatefulWidget {
   BeamJobworkReceiveDetAdd(
@@ -66,36 +60,34 @@ class _BeamJobworkReceiveDetAddState extends State<BeamJobworkReceiveDetAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
 
-  TextEditingController _orderno = new TextEditingController();
-  TextEditingController _issno = new TextEditingController();
+  TextEditingController _issno = new TextEditingController(text: '0');
   TextEditingController _isschr = new TextEditingController();
-  TextEditingController _beamno = new TextEditingController();
+  TextEditingController _beamno = new TextEditingController(text: '0');
   TextEditingController _beamchr = new TextEditingController();
-  TextEditingController _taka = new TextEditingController();
+  TextEditingController _taka = new TextEditingController(text: '0');
   TextEditingController _itemid = new TextEditingController();
-  TextEditingController _meters = new TextEditingController();
-  TextEditingController _ends = new TextEditingController();
+  TextEditingController _meters = new TextEditingController(text: '0.00');
+  TextEditingController _ends = new TextEditingController(text: '0.000');
   TextEditingController _pipeno = new TextEditingController();
-  TextEditingController _weight = new TextEditingController();
-  TextEditingController _shtwt = new TextEditingController();
-  TextEditingController _rate = new TextEditingController();
-  TextEditingController _amount = new TextEditingController();
-  TextEditingController _actwt = new TextEditingController();
-  TextEditingController _actmeters = new TextEditingController();
-  TextEditingController _lnkid = new TextEditingController();
-  TextEditingController _lnkdetid = new TextEditingController();
-  TextEditingController _lnkdettkid = new TextEditingController();
+  TextEditingController _weight = new TextEditingController(text: '0.00');
+  TextEditingController _shtwt = new TextEditingController(text: '0.00');
+  TextEditingController _rate = new TextEditingController(text: '0.00');
+  TextEditingController _amount = new TextEditingController(text: '0.00');
+  TextEditingController _actwt = new TextEditingController(text: '0.000');
+  TextEditingController _actmeters = new TextEditingController(text: '0.00');
+  TextEditingController _lnkid = new TextEditingController(text: '0');
+  TextEditingController _lnkdetid = new TextEditingController(text: '0');
+  TextEditingController _lnkdettkid = new TextEditingController(text: '0');
   TextEditingController _fmode = new TextEditingController();
-  TextEditingController _beamid = new TextEditingController();
+  TextEditingController _beamid = new TextEditingController(text: '0');
   TextEditingController _creelno = new TextEditingController();
   TextEditingController _machine = new TextEditingController();
-  TextEditingController _cone = new TextEditingController();
+  TextEditingController _cone = new TextEditingController(text: '0');
 
   double ordMeters = 0;
 
   final _formKey = GlobalKey<FormState>();
 
-  List<Map<String, dynamic>> _jsonData = [];
 
   String? dropdownUnitType;
 
@@ -106,6 +98,7 @@ class _BeamJobworkReceiveDetAddState extends State<BeamJobworkReceiveDetAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -419,8 +412,8 @@ class _BeamJobworkReceiveDetAddState extends State<BeamJobworkReceiveDetAdd> {
                     onTap: () {},
                     onChanged: (value) {},
                     validator: (value) {
-                      if (value == ' ') {
-                        return 'Please enter order no';
+                      if (value == '' || value == '0') {
+                        return 'Please enter issno';
                       } 
                       return null;
                     },
@@ -554,7 +547,7 @@ class _BeamJobworkReceiveDetAddState extends State<BeamJobworkReceiveDetAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
-                      if (value == ' ') {
+                      if (value == '') {
                         return 'Please enter ItemId';
                       } 
                       return null;
@@ -633,7 +626,12 @@ class _BeamJobworkReceiveDetAddState extends State<BeamJobworkReceiveDetAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
-                      if (value == ' ') {
+                      if (value == '' ||
+                      value == '0' || 
+                      value == '0.' || 
+                      value == '0.0' || 
+                      value == '0.00') 
+                      {
                         return 'Please enter weight';
                       } 
                       return null;

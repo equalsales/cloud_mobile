@@ -158,7 +158,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                     onTap: () {},
                     onChanged: (value) {},
                     validator: (value) {
-                      if (value == '') {
+                      if (value == '' || value == '0') {
                         return 'Please enter takano';
                       }
                       return null;
@@ -205,7 +205,12 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
-                      if (value == '') {
+                      if (value == '' || 
+                      value == '0' || 
+                      value == '0.' || 
+                      value == '0.0' || 
+                      value == '0.00')
+                      {
                         return 'Please enter meters';
                       }
                       return null;
@@ -225,7 +230,12 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
-                      if (value == '') {
+                      if (value == '' || 
+                      value == '0' || 
+                      value == '0.' || 
+                      value == '0.0' || 
+                      value == '0.00')
+                      {
                         return 'Please enter foldmtrs';
                       }
                       return null;

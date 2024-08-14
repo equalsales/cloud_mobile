@@ -659,7 +659,13 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                       //gotoBranchScreen(context);
                     },
                     validator: (value) {
-                      if (value == '') {
+                      if (value == '' || 
+                      value == '0' || 
+                      value == '0.' || 
+                      value == '0.0' || 
+                      value == '0.00' || 
+                      value == '0.000')
+                      {
                         return 'Please enter netwt';
                       }
                       return null;
@@ -723,7 +729,12 @@ class _YarnJobworkReceiveDetAddState extends State<YarnJobworkReceiveDetAdd> {
                       //gotoBranchScreen(context);
                     },
                     validator: (value) {
-                      if (value == '') {
+                      if (value == '' || 
+                      value == '0' || 
+                      value == '0.' || 
+                      value == '0.0' || 
+                      value == '0.00')
+                      {
                         return 'Please enter rate';
                       }
                       return null;

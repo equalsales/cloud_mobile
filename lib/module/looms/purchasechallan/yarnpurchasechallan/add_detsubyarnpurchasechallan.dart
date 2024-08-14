@@ -192,7 +192,13 @@ class _YarnPurchaseChallanDetAddState extends State<YarnPurchaseChallanDetAdd> {
                     ),
                     onTap: () {},
                     validator: (value) {
-                      if (value == '') {
+                      if (value == '' || 
+                      value == '0' || 
+                      value == '0.' || 
+                      value == '0.0' || 
+                      value == '0.00' ||
+                      value == '0.000')
+                      {
                         return 'Please enter netwt';
                       }
                       return null;

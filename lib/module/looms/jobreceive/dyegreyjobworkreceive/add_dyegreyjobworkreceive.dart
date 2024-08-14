@@ -181,7 +181,6 @@ class _DyegreyJobworkReceivedAddState extends State<DyegreyJobworkReceivedAdd> {
               //     SizedBox(width: 20,)
               //   ],
               // ),
-
               Row(children: [
                 //..
                 Expanded(
@@ -318,184 +317,13 @@ class _DyegreyJobworkReceivedAddState extends State<DyegreyJobworkReceivedAdd> {
                   return null;
                 },
               ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: TextFormField(
-              //         controller: _book,
-              //         decoration: const InputDecoration(
-              //           icon: const Icon(Icons.person),
-              //           hintText: 'Select Book',
-              //           labelText: 'Book',
-              //         ),
-              //         onTap: () {
-              //           gotoPartyScreen(context, 'SALE BOOK', _book);
-              //         },
-              //         validator: (value) {
-              //           return null;
-              //         },
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: TextFormField(
-              //         controller: _party,
-              //         decoration: const InputDecoration(
-              //           icon: const Icon(Icons.person),
-              //           hintText: 'Select Party',
-              //           labelText: 'Party',
-              //         ),
-              //         onTap: () {
-              //           gotoPartyScreen2(context, 'SALE PARTY', _party);
-              //         },
-              //         validator: (value) {
-              //           return null;
-              //         },
-              //       ),
-              //     )
-              //   ],
-              // ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: TextFormField(
-              //         controller: _chlnno,
-              //         keyboardType: TextInputType.number,
-              //         decoration: const InputDecoration(
-              //           icon: const Icon(Icons.person),
-              //           hintText: 'Challan No',
-              //           labelText: 'Challan No',
-              //         ),
-              //         onTap: () {},
-              //         validator: (value) {
-              //           return null;
-              //         },
-              //       ),
-              //     ),
-              //     Expanded(
-              //       child: TextFormField(
-              //         controller: _folddate,
-              //         decoration: const InputDecoration(
-              //           icon: const Icon(Icons.person),
-              //           hintText: 'Challan Date',
-              //           labelText: 'Challan Date',
-              //         ),
-              //         onTap: () {
-              //           _selectDate2(context);
-              //         },
-              //         validator: (value) {
-              //           return null;
-              //         },
-              //       ),
-              //     )
-              //   ],
-              // ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: DropdownButtonFormField(
-              //           value: dropdownTrnType,
-              //           decoration: const InputDecoration(
-              //               icon: const Icon(Icons.person),
-              //               labelText: 'RD/URD',
-              //               hintText: 'RD/URD'),
-              //           items: items.map((String items) {
-              //             return DropdownMenuItem(
-              //               value: items,
-              //               child: Text(items),
-              //             );
-              //           }).toList(),
-              //           icon: const Icon(Icons.arrow_drop_down_circle),
-              //           onChanged: (String? newValue) {
-              //             setState(() {
-              //               dropdownTrnType = newValue!;
-              //               print(dropdownTrnType);
-              //             });
-              //           }),
-              //     ),
-              //     Expanded(
-              //       child: TextFormField(
-              //         textCapitalization: TextCapitalization.characters,
-              //         controller: _remarks,
-              //         decoration: const InputDecoration(
-              //           icon: const Icon(Icons.person),
-              //           hintText: 'Remarks',
-              //           labelText: 'Remarks',
-              //         ),
-              //         onChanged: (value) {
-              //           _remarks.value = TextEditingValue(
-              //               text: value.toUpperCase(),
-              //               selection: _remarks.selection);
-              //         },
-              //         onTap: () {},
-              //         validator: (value) {
-              //           return null;
-              //         },
-              //       ),
-              //     )
-              //   ],
-              // ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //         child: TextFormField(
-              //       enabled: false,
-              //       controller: _tottaka,
-              //       keyboardType: TextInputType.number,
-              //       decoration: const InputDecoration(
-              //         icon: const Icon(Icons.person),
-              //         hintText: 'Total Taka',
-              //         labelText: 'Total Taka',
-              //       ),
-              //       onTap: () {
-              //         //gotoBranchScreen(context);
-              //       },
-              //       validator: (value) {
-              //         return null;
-              //       },
-              //     )),
-              //     Expanded(
-              //         child: TextFormField(
-              //       enabled: false,
-              //       controller: _totmtrs,
-              //       keyboardType: TextInputType.number,
-              //       decoration: const InputDecoration(
-              //         icon: const Icon(Icons.person),
-              //         hintText: 'Total Meters',
-              //         labelText: 'Total Meters',
-              //       ),
-              //       onTap: () {
-              //         //gotoBranchScreen(context);
-              //       },
-              //       validator: (value) {
-              //         return null;
-              //       },
-              //     ))
-              //   ],
-              // ),
-              // Padding(padding: EdgeInsets.all(5)),
               Align(
                 alignment: AlignmentDirectional.center,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      print("clobl");
-                      print(clobl);
-                      print("crlimit");
-                      print(crlimit);
-                      if (crlimit < clobl) {
-                        Fluttertoast.showToast(
-                          msg: "Crlimit exceed!!!.",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 3,
-                          backgroundColor: Colors.white,
-                          textColor: Colors.purple,
-                          fontSize: 16.0,
-                        );
-                      } else {
-                        dyegreyJobworkReceivedItemDet(context);
-                      }
+                      dyegreyJobworkReceivedItemDet(context);
                     },
                     child: Text('Add Item Details',
                         style: TextStyle(

@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
 import 'package:cloud_mobile/module/looms/jobreceive/beamjobworkreceive/add_detbeamjobworkreceive.dart';
-import 'package:cloud_mobile/module/looms/purchasechallan/yarnpurchasechallan/add_yarnpurchasechallandet.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -618,7 +617,7 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                     gotoBranchScreen(context);
                   },
                   validator: (value) {
-                    if (value == ' ') {
+                    if (value == '') {
                       return 'Please enter branch';
                     } 
                     return null;
@@ -637,6 +636,9 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                 _selectDate(context);
               },
               validator: (value) {
+                if (value == '') {
+                  return 'Please enter date';
+                } 
                 return null;
               },
             ),
@@ -654,7 +656,7 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                       gotoPartyScreen2(context, 'SALE PARTY', _party);
                     },
                     validator: (value) {
-                      if (value == ' ') {
+                      if (value == '') {
                         return 'Please enter party';
                       } 
                       return null;
@@ -678,7 +680,7 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                      
                     },
                     validator: (value) {
-                      if (value == ' ') {
+                      if (value == '') {
                         return 'Please enter challanno';
                       } 
                       return null;
@@ -728,7 +730,7 @@ class _BeamJobworkReceiveAddState extends State<BeamJobworkReceiveAdd> {
                     },
                     onTap: () {},
                     validator: (value) {
-                      if (value == ' ') {
+                      if (value == '') {
                         return 'Please enter remarks';
                       } 
                       return null;
