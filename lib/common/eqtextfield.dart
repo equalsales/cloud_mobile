@@ -4,6 +4,7 @@ class EqTextField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType? keyboardType;
   final bool? autofocus;
+  final FocusNode? focusNode;
   final bool? isobsecureText;
   final String? obsecureCharacter;
   final String hintText;
@@ -25,6 +26,7 @@ class EqTextField extends StatelessWidget {
       this.obsecureCharacter = '*',
       required this.hintText,
       required this.labelText,
+      this.focusNode,
       this.prefixIcon,
       this.suffixIcon,
       this.textInputAction,
@@ -44,6 +46,7 @@ class EqTextField extends StatelessWidget {
         child: TextFormField(
           textInputAction: TextInputAction.next,
           autofocus: autofocus!,
+          focusNode: focusNode,
           textAlign: TextAlign.center,
           controller: controller,
           keyboardType: keyboardType,

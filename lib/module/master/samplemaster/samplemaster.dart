@@ -82,6 +82,8 @@ class _SampleMasterState extends State<SampleMaster> {
   TextEditingController _typeofyarnconame6 = new TextEditingController();
   TextEditingController _note2 = new TextEditingController();
 
+  final FocusNode _BranchFocusNode = FocusNode();
+
   @override
   void initState() {
     fromDate = retconvdate(widget.xfbeg);
@@ -388,6 +390,7 @@ class _SampleMasterState extends State<SampleMaster> {
                 Expanded(
                   child: EqTextField(
                     controller: _branch,
+                    focusNode: _BranchFocusNode,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     autofocus: true,
@@ -398,6 +401,7 @@ class _SampleMasterState extends State<SampleMaster> {
                     },
                     validator: (value) {
                       if (value == '') {
+                        _BranchFocusNode.requestFocus();
                         return "Please select branch";
                       }
                       return null;
@@ -405,6 +409,19 @@ class _SampleMasterState extends State<SampleMaster> {
                     onChanged: (value) {},
                   ),
                 ),
+                Expanded(
+                  child: EqTextField(
+                    controller: _date,
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    hintText: 'Date',
+                    labelText: 'Date',
+                    onTap: () {
+                      _selectDate(context);
+                    },
+                    onChanged: (value) {},
+                  ),
+                )
               ],
             ),
             Row(
@@ -420,19 +437,6 @@ class _SampleMasterState extends State<SampleMaster> {
                 //     onChanged: (value) {},
                 //   ),
                 // ),
-                Expanded(
-                  child: EqTextField(
-                    controller: _date,
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    hintText: 'Date',
-                    labelText: 'Date',
-                    onTap: () {
-                      _selectDate(context);
-                    },
-                    onChanged: (value) {},
-                  ),
-                )
               ],
             ),
             Row(
@@ -522,11 +526,7 @@ class _SampleMasterState extends State<SampleMaster> {
                     onTap: () {},
                     onChanged: (value) {},
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: EqTextField(
                     controller: _fabricswidth,
@@ -538,6 +538,13 @@ class _SampleMasterState extends State<SampleMaster> {
                     onChanged: (value) {},
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: EqTextField(
                     controller: _pick,
@@ -548,11 +555,7 @@ class _SampleMasterState extends State<SampleMaster> {
                     onTap: () {},
                     onChanged: (value) {},
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: EqTextField(
                     controller: _fabricsweight,
@@ -600,11 +603,7 @@ class _SampleMasterState extends State<SampleMaster> {
                     onTap: () {},
                     onChanged: (value) {},
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: EqTextField(
                     controller: _fani,
@@ -615,7 +614,11 @@ class _SampleMasterState extends State<SampleMaster> {
                     onTap: () {},
                     onChanged: (value) {},
                   ),
-                ),
+                )
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: EqTextField(
                     controller: _warpdenierandfilament1,
@@ -626,11 +629,7 @@ class _SampleMasterState extends State<SampleMaster> {
                     onTap: () {},
                     onChanged: (value) {},
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: EqTextField(
                     controller: _warpdenierandfilament2,
@@ -678,11 +677,7 @@ class _SampleMasterState extends State<SampleMaster> {
                     onTap: () {},
                     onChanged: (value) {},
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: EqTextField(
                     controller: _warpdenierandfilament6,
@@ -694,6 +689,10 @@ class _SampleMasterState extends State<SampleMaster> {
                     onChanged: (value) {},
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: EqTextField(
                     controller: _warptpm1,
@@ -704,11 +703,7 @@ class _SampleMasterState extends State<SampleMaster> {
                     onTap: () {},
                     onChanged: (value) {},
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: EqTextField(
                     controller: _warptpm2,
@@ -756,11 +751,7 @@ class _SampleMasterState extends State<SampleMaster> {
                     onTap: () {},
                     onChanged: (value) {},
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
+                ),
                 Expanded(
                   child: EqTextField(
                     controller: _warptpm6,
@@ -772,17 +763,6 @@ class _SampleMasterState extends State<SampleMaster> {
                     onChanged: (value) {},
                   ),
                 ),
-                Expanded(
-                  child: EqTextField(
-                    controller: _note1,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    hintText: 'Note',
-                    labelText: 'Note',
-                    onTap: () {},
-                    onChanged: (value) {},
-                  ),
-                )
               ],
             ),
             Row(
@@ -809,10 +789,6 @@ class _SampleMasterState extends State<SampleMaster> {
                     onChanged: (value) {},
                   ),
                 ),
-              ],
-            ),
-            Row(
-              children: [
                 Expanded(
                   child: EqTextField(
                     controller: _typeofyarnconame3,
@@ -824,6 +800,10 @@ class _SampleMasterState extends State<SampleMaster> {
                     onChanged: (value) {},
                   ),
                 ),
+              ],
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: EqTextField(
                     controller: _typeofyarnconame4,
@@ -835,10 +815,6 @@ class _SampleMasterState extends State<SampleMaster> {
                     onChanged: (value) {},
                   ),
                 ),
-              ],
-            ),
-            Row(
-              children: [
                 Expanded(
                   child: EqTextField(
                     controller: _typeofyarnconame5,
@@ -865,6 +841,17 @@ class _SampleMasterState extends State<SampleMaster> {
             ),
             Row(
               children: [
+                Expanded(
+                  child: EqTextField(
+                    controller: _note1,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    hintText: 'Note',
+                    labelText: 'Note',
+                    onTap: () {},
+                    onChanged: (value) {},
+                  ),
+                ),
                 Expanded(
                   child: EqTextField(
                     controller: _note2,

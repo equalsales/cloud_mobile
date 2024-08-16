@@ -1116,7 +1116,6 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                 Expanded(
                     child: TextFormField(
                   controller: _machineno,
-                  keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(
                     icon: const Icon(Icons.person),
@@ -1362,6 +1361,41 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                     return null;
                   },
                 )),
+              ],
+            ),
+
+            Padding(padding: EdgeInsets.all(5)),
+            ElevatedButton(
+              onPressed: () => {gotoChallanItemDet(context)},
+              child: Text('Add Item Details',
+                  style:
+                      TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            ),
+            SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: DataTable(columns: [
+                  DataColumn(
+                    label: Text("Action"),
+                  ),
+                  DataColumn(
+                    label: Text("Date"),
+                  ),
+                  DataColumn(
+                    label: Text("Worker"),
+                  ),
+                  DataColumn(
+                    label: Text("Meters"),
+                  ),
+                  DataColumn(
+                    label: Text("Rate"),
+                  ),
+                  DataColumn(
+                    label: Text("Amount"),
+                  ),
+                ], rows: _createRows())),
+            SizedBox(height: 30),
+            Row(
+              children: [
                 Expanded(
                     child: TextFormField(
                   enabled: false,
@@ -1377,7 +1411,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                   validator: (value) {
                     return null;
                   },
-                ))
+                )),
               ],
             ),
             Row(
@@ -1558,35 +1592,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                 ))
               ],
             ),
-            Padding(padding: EdgeInsets.all(5)),
-            ElevatedButton(
-              onPressed: () => {gotoChallanItemDet(context)},
-              child: Text('Add Item Details',
-                  style:
-                      TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
-            ),
-            SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(columns: [
-                  DataColumn(
-                    label: Text("Action"),
-                  ),
-                  DataColumn(
-                    label: Text("Date"),
-                  ),
-                  DataColumn(
-                    label: Text("Worker"),
-                  ),
-                  DataColumn(
-                    label: Text("Meters"),
-                  ),
-                  DataColumn(
-                    label: Text("Rate"),
-                  ),
-                  DataColumn(
-                    label: Text("Amount"),
-                  ),
-                ], rows: _createRows())),
+
             SizedBox(
               height: 50,
             )
