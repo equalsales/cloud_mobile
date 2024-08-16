@@ -88,38 +88,6 @@ class _DyegreyJobworkReceivedDetAddState
   TextEditingController _netWt = new TextEditingController();
   TextEditingController _avgWt = new TextEditingController();
 
-  // TextEditingController _folddate = new TextEditingController();
-  // TextEditingController _takachr = new TextEditingController();
-  // TextEditingController _takano = new TextEditingController();
-  // TextEditingController _ctakano = new TextEditingController();
-  // TextEditingController _ordbalmtrs = new TextEditingController();
-  // TextEditingController itemanme = new TextEditingController();
-  // TextEditingController _hsncode = new TextEditingController();
-  // TextEditingController _grade = new TextEditingController();
-  // TextEditingController _lotno = new TextEditingController();
-  // TextEditingController _cops = new TextEditingController();
-  // TextEditingController _totcrtn = new TextEditingController();
-  // TextEditingController _actnetwt = new TextEditingController();
-  // TextEditingController _netwt = new TextEditingController();
-  // TextEditingController _cone = new TextEditingController();
-  // TextEditingController _rate = new TextEditingController();
-  // TextEditingController _amount = new TextEditingController();
-  // TextEditingController _fmode = new TextEditingController();
-  // TextEditingController _ordid = new TextEditingController();
-  // TextEditingController _orddetid = new TextEditingController();
-  // TextEditingController _discrate = new TextEditingController();
-  // TextEditingController _discamt = new TextEditingController();
-  // TextEditingController _addamt = new TextEditingController();
-  // TextEditingController _texavalue = new TextEditingController();
-  // TextEditingController _sgstrate = new TextEditingController();
-  // TextEditingController _sgstamt = new TextEditingController();
-  // TextEditingController _cgstrate = new TextEditingController();
-  // TextEditingController _cgstamt = new TextEditingController();
-  // TextEditingController _igstrate = new TextEditingController();
-  // TextEditingController _igstamt = new TextEditingController();
-  // TextEditingController _finalamt = new TextEditingController();
-
-  // double ordMeters = 0;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -142,31 +110,24 @@ class _DyegreyJobworkReceivedDetAddState
     print('Length :' + length.toString());
     if (length > 0) {
       setState(() {
-        _issno.text = ItemDetails[length - 1]['orderno'].toString();
-        _isschr.text = ItemDetails[length - 1]['orderno'].toString();
-        _takachr.text = ItemDetails[length - 1]['orderno'].toString();
-        _takano.text = ItemDetails[length - 1]['orderno'].toString();
-        _itemname.text = ItemDetails[length - 1]['orderno'].toString();
-        _takaPcs.text = ItemDetails[length - 1]['orderno'].toString();
-        _issmtr.text = ItemDetails[length - 1]['orderno'].toString();
-        _meters.text = ItemDetails[length - 1]['orderno'].toString();
-        _foldmtr.text = ItemDetails[length - 1]['orderno'].toString();
-        _tpmtrs.text = ItemDetails[length - 1]['orderno'].toString();
-        _shtmtrs.text = ItemDetails[length - 1]['orderno'].toString();
-        _shtPer.text = ItemDetails[length - 1]['orderno'].toString();
-        _design.text = ItemDetails[length - 1]['orderno'].toString();
-        _beamItem.text = ItemDetails[length - 1]['orderno'].toString();
-        _beamNo.text = ItemDetails[length - 1]['orderno'].toString();
-        _netWt.text = ItemDetails[length - 1]['orderno'].toString();
-        _avgWt.text = ItemDetails[length - 1]['orderno'].toString();
-        dropdownUnitType = ItemDetails[length - 1]['unit'].toString();
-        // _folddate.text = ItemDetails[length - 1]['folddate'].toString();
-        // _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
-        // _ordid.text = ItemDetails[length - 1]['ordid'].toString();
-        // _orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
-        // itemanme.text = ItemDetails[length - 1]['itemname'].toString();
-        // _hsncode.text = ItemDetails[length - 1]['hsncode'].toString();
-        // _rate.text = ItemDetails[length - 1]['rate'].toString();
+        // _issno.text = ItemDetails[length - 1]['orderno'].toString();
+        // _isschr.text = ItemDetails[length - 1]['orderno'].toString();
+        // _takachr.text = ItemDetails[length - 1]['orderno'].toString();
+        // _takano.text = ItemDetails[length - 1]['orderno'].toString();
+        // _itemname.text = ItemDetails[length - 1]['orderno'].toString();
+        // _takaPcs.text = ItemDetails[length - 1]['orderno'].toString();
+        // _issmtr.text = ItemDetails[length - 1]['orderno'].toString();
+        // _meters.text = ItemDetails[length - 1]['orderno'].toString();
+        // _foldmtr.text = ItemDetails[length - 1]['orderno'].toString();
+        // _tpmtrs.text = ItemDetails[length - 1]['orderno'].toString();
+        // _shtmtrs.text = ItemDetails[length - 1]['orderno'].toString();
+        // _shtPer.text = ItemDetails[length - 1]['orderno'].toString();
+        // _design.text = ItemDetails[length - 1]['orderno'].toString();
+        // _beamItem.text = ItemDetails[length - 1]['orderno'].toString();
+        // _beamNo.text = ItemDetails[length - 1]['orderno'].toString();
+        // _netWt.text = ItemDetails[length - 1]['orderno'].toString();
+        // _avgWt.text = ItemDetails[length - 1]['orderno'].toString();
+        // dropdownUnitType = ItemDetails[length - 1]['unit'].toString();
       });
     }
   }
@@ -217,6 +178,9 @@ class _DyegreyJobworkReceivedDetAddState
                             selection: _takachr.selection);
                       },
                       validator: (value) {
+                        if (value == '' || value == '0') {
+                          return 'Please enter issno';
+                        } 
                         return null;
                       },
                     ),
@@ -419,9 +383,14 @@ class _DyegreyJobworkReceivedDetAddState
                       ),
                       onTap: () {},
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter Meters";
-                        }
+                        if (value == '' ||
+                        value == '0' || 
+                        value == '0.' || 
+                        value == '0.0' || 
+                        value == '0.00') 
+                        {
+                          return 'Please enter meters';
+                        } 
                         return null;
                       },
                     ),
