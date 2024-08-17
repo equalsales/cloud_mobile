@@ -1,7 +1,10 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:convert';
+import 'package:cloud_mobile/list/design_list.dart';
+import 'package:cloud_mobile/list/item_list.dart';
 import 'package:cloud_mobile/list/order_list.dart';
+import 'package:cloud_mobile/module/looms/purchasechallan/greypurchasechallan/add_detsubgreypurchasechallan.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:flutter/services.dart';
@@ -93,6 +96,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
   final _formKey = GlobalKey<FormState>();
 
   List<Map<String, dynamic>> _jsonData = [];
+
+  List SubItemDetails = [];
 
   String? dropdownUnitType;
 
@@ -326,6 +331,55 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
 
   @override
   Widget build(BuildContext context) {
+
+  void gotoItemnameScreen(BuildContext context) async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => item_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                )));
+    setState(() {
+      var retResult = result;
+      var newResult = result[1];
+      var selItemname = '';
+      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+        if (ictr > 0) {
+          selItemname = selItemname + ',';
+        }
+        selItemname = selItemname + retResult[0][ictr];
+      }
+        _itemname.text = newResult[0]['itemname'].toString();
+    });
+  }
+
+  void gotoDesignScreen(BuildContext context) async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => design_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                )));
+    setState(() {
+      var retResult = result;
+      var selDesign = '';
+      for (var ictr = 0; ictr < retResult.length; ictr++) {
+        if (ictr > 0) {
+          selDesign = selDesign + ',';
+        }
+        selDesign = selDesign + retResult[ictr].toString();
+      }
+      _design.text = selDesign;
+    });
+  }
+
+
     Future<bool> saveData() async {
       var cno = globals.companyid;
       var db = globals.dbname;
@@ -395,6 +449,25 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
       Navigator.pop(context, widget.xitemDet);
 
       return true;
+    }
+
+    void gotoChallanItemSubDet(BuildContext contex) async {    
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => GreyPurchaseChallanSubDetAdd(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  subitemDet: SubItemDetails,
+              )
+          )
+      );
+      setState(() {
+        SubItemDetails.add(result[0]);
+        print(" ########################## : " + SubItemDetails.toString());
+      });
     }
 
     return Scaffold(
@@ -524,7 +597,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                       hintText: 'Item Name',
                       labelText: 'Item Name',
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      gotoItemnameScreen(context);
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -540,7 +615,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                       hintText: 'Design',
                       labelText: 'Design',
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      gotoDesignScreen(context);
+                    },
                     validator: (value) {
                       return null;
                     },
@@ -560,7 +637,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                       hintText: 'Pcs / Taka',
                       labelText: 'Pcs',
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      gotoChallanItemSubDet(context);
+                    },
                     onChanged: (value) {},
                     validator: (value) {
                       return null;

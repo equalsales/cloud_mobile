@@ -5,32 +5,22 @@ import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/common/global.dart' as globals;
 import 'package:cloud_mobile/common/bottombar.dart';
 
-class GreyPurchaseChallanDetAdd extends StatefulWidget {
-  GreyPurchaseChallanDetAdd(
+class GreyPurchaseChallanSubDetAdd extends StatefulWidget {
+  GreyPurchaseChallanSubDetAdd(
       {Key? mykey,
       companyid,
       companyname,
       fbeg,
       fend,
-      branch,
-      partyid,
-      itemDet,
-      id,
-      branchid,
-      ordno,
-      type})
+      subitemDet,
+      id,})
       : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
     xfend = fend;
-    xbranch = branch;
-    xparty = partyid;
     xid = id;
-    xbranchid = branchid;
-    xordno = ordno;
-    xItemDetails = itemDet;
-    xtype = type;
+    xSubItemDetails = subitemDet;
   }
 
   var xcompanyid;
@@ -38,19 +28,14 @@ class GreyPurchaseChallanDetAdd extends StatefulWidget {
   var xfbeg;
   var xfend;
   var xid;
-  var xbranch;
-  var xparty;
-  var xbranchid;
-  var xordno;
-  var xtype;
-  List xitemDet = [];
-  List xItemDetails = [];
+  List xsubitemDet = [];
+  List xSubItemDetails = [];
 
   @override
-  _GreyPurchaseChallanDetAddState createState() => _GreyPurchaseChallanDetAddState();
+  _GreyPurchaseChallanSubDetAddState createState() => _GreyPurchaseChallanSubDetAddState();
 }
 
-class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
+class _GreyPurchaseChallanSubDetAddState extends State<GreyPurchaseChallanSubDetAdd> {
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
    
@@ -79,7 +64,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
-    List ItemDetails = widget.xItemDetails;
+    List ItemDetails = widget.xSubItemDetails;
     int length = ItemDetails.length;
     print('Length :' + length.toString());
   }
@@ -100,7 +85,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
       var weight = _weight.text;
       var avgwt = _avgwt.text;
 
-      widget.xitemDet.add({
+      widget.xsubitemDet.add({
         'takno': takno,
         'takachr': takachr,
         'meters': meters,
@@ -112,7 +97,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
         'avgwt': avgwt,
       });
 
-      Navigator.pop(context, widget.xitemDet);
+      Navigator.pop(context, widget.xsubitemDet);
 
       return true;
     }
