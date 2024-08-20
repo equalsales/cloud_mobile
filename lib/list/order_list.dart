@@ -112,7 +112,11 @@ class order_ListState extends State<order_list> {
               if(salesman == 'null'){
                 salesman = '';
               }
-              String design = this._orderlist[index]['design'];
+              String haste = this._orderlist[index]['haste'].toString();
+              if(haste == 'null'){
+                haste = '';
+              }
+              String design = this._orderlist[index]['design'].toString();
               String meters = this._orderlist[index]['balmeters'].toString();
               String taka = this._orderlist[index]['baltaka'].toString();
               String rate = this._orderlist[index]['rate'].toString();
@@ -126,7 +130,9 @@ class order_ListState extends State<order_list> {
                     ' Item Name : ' +
                     itemname +
                     ' Salesman : ' +
-                    salesman),
+                    salesman +
+                    ' Haste : ' +
+                    haste),
                 subtitle: Text('Pending Mts : ' +
                     meters +
                     ' Pending Taka :' +

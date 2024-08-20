@@ -99,13 +99,13 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
     var curDate = getsystemdate();
     _date.text = DateFormat("dd-MM-yyyy").format(curDate);
 
-    print("%%%%%%%%%%%%%%%%%%%% : " + globals.username); 
 
     if(globals.username == 'SACHIN'){
       hasteenabled = true;
@@ -114,7 +114,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     }
 
     _book.text = 'SALES A/C';
-    // dropdownTrnType = 'PACKING';
 
     if (int.parse(widget.xid) > 0) {
       loadData();
@@ -312,23 +311,75 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       });
   }
 
-  void setDefValue() {}
+  void gotoPartyScreen(acctype, TextEditingController obj) async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => party_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  acctype: acctype,
+                )));
 
-  @override
-  Widget build(BuildContext context) {
-    void gotoPartyScreen(
-        BuildContext context, acctype, TextEditingController obj) async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => party_list(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                    acctype: acctype,
-                  )));
+      var retResult = result;
+      _partylist = result[1];
+      result = result[1];
 
+      var selParty = '';
+      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+        if (ictr > 0) {
+          selParty = selParty + ',';
+        }
+        selParty = selParty + retResult[0][ictr];
+      }
+
+      obj.text = selParty;
+      print("121212111111111111111");
+      print(obj.text);
+  }
+
+  void gotoHasteScreen() async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => party_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  acctype: 'HASTE',
+                )));
+
+      var retResult = result;
+      _partylist = result[1];
+      result = result[1];
+
+      var selParty = '';
+      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+        if (ictr > 0) {
+          selParty = selParty + ',';
+        }
+        selParty = selParty + retResult[0][ictr];
+      }        
+      _haste.text = selParty;
+  }
+
+  void gotoPartyScreen2(acctype, TextEditingController obj) async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => party_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  acctype: acctype,
+                )));
+
+    if (result != null) {
+      // setState(() {
         var retResult = result;
         _partylist = result[1];
         result = result[1];
@@ -342,201 +393,143 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         }
 
         obj.text = selParty;
-        print("121212111111111111111");
-        print(obj.text);
+        _delparty.text = selParty;
+        
+        validcity = result[0]['city'].toString();
+        crlimit = double.parse(result[0]['crlimit'].toString());
+        partyid = int.parse(result[0]['id'].toString());
+        _agent.text = result[0]['agent'].toString();
+        _transport.text = result[0]['transport'].toString();
+        var endDate = retconvdate(widget.xfend).toString();
+        var startDate = retconvdate(widget.xfbeg).toString();
+        var cno = int.parse(globals.companyid.toString());
+
+        print("/////////////// validcity " + validcity.toString());
+
+        if (selParty != '') {
+          getPartyDetails(
+                  obj.text, 0, crlimit, partyid, context, endDate, cno,startDate)
+              .then((value) {
+              clobl = value;
+              print("chirag");
+              print(clobl);
+          });
+        }
     }
+  }
 
-    void gotoHasteScreen(
-        BuildContext context) async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => party_list(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                    acctype: 'HASTE',
-                  )));
+  void gotoBranchScreen() async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => branch_list(
+                companyid: widget.xcompanyid,
+                companyname: widget.xcompanyname,
+                fbeg: widget.xfbeg,
+                fend: widget.xfend)));
 
-        var retResult = result;
-        _partylist = result[1];
-        result = result[1];
+      var retResult = result;
 
-        var selParty = '';
-        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-          if (ictr > 0) {
-            selParty = selParty + ',';
-          }
-          selParty = selParty + retResult[0][ictr];
-        }        
-        _haste.text = selParty;
-    }
+      print(retResult);
+      _branchlist = result[1];
+      result = result[1];
+      branchid = _branchlist[0];
+      print(branchid);
 
-    void gotoPartyScreen2(
-        BuildContext context, acctype, TextEditingController obj) async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => party_list(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                    acctype: acctype,
-                  )));
-
-      if (result != null) {
-        // setState(() {
-          var retResult = result;
-          _partylist = result[1];
-          result = result[1];
-
-          var selParty = '';
-          for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-            if (ictr > 0) {
-              selParty = selParty + ',';
-            }
-            selParty = selParty + retResult[0][ictr];
-          }
-
-          obj.text = selParty;
-          _delparty.text = selParty;
-          
-          validcity = result[0]['city'].toString();
-          crlimit = double.parse(result[0]['crlimit'].toString());
-          partyid = int.parse(result[0]['id'].toString());
-          _agent.text = result[0]['agent'].toString();
-          _transport.text = result[0]['transport'].toString();
-          var endDate = retconvdate(widget.xfend).toString();
-          var startDate = retconvdate(widget.xfbeg).toString();
-          var cno = int.parse(globals.companyid.toString());
-
-          print("/////////////// validcity " + validcity.toString());
-
-          if (selParty != '') {
-            getPartyDetails(
-                    obj.text, 0, crlimit, partyid, context, endDate, cno,startDate)
-                .then((value) {
-                clobl = value;
-                print("chirag");
-                print(clobl);
-            });
-          }
+      var selBranch = '';
+      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+        if (ictr > 0) {
+          selBranch = selBranch + ',';
+        }
+        selBranch = selBranch + retResult[0][ictr];
       }
-    }
+      _branchid.text = branchid.toString();
+      _branch.text = selBranch;
+  }
 
-    void gotoBranchScreen(BuildContext contex) async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => branch_list(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend)));
+  void gotoCityScreen() async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => city_list(
+                companyid: widget.xcompanyid,
+                companyname: widget.xcompanyname,
+                fbeg: widget.xfbeg,
+                fend: widget.xfend)));
 
-        var retResult = result;
+      var retResult = result;
+      _stationlist = result[1];
+      result = result[1];
 
-        print(retResult);
-        _branchlist = result[1];
-        result = result[1];
-        branchid = _branchlist[0];
-        print(branchid);
-
-        var selBranch = '';
-        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-          if (ictr > 0) {
-            selBranch = selBranch + ',';
-          }
-          selBranch = selBranch + retResult[0][ictr];
+      var selStation = '';
+      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+        if (ictr > 0) {
+          selStation = selStation + ',';
         }
-        _branchid.text = branchid.toString();
-        _branch.text = selBranch;
-    }
+        selStation = selStation + retResult[0][ictr];
+      }
 
-    void gotoCityScreen(BuildContext contex) async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => city_list(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend)));
+      _station.text = selStation;
+  }
 
-        var retResult = result;
-        _stationlist = result[1];
-        result = result[1];
+  void gotoSalesmanScreen() async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => salesman_list(
+                companyid: widget.xcompanyid,
+                companyname: widget.xcompanyname,
+                fbeg: widget.xfbeg,
+                fend: widget.xfend)));
 
-        var selStation = '';
-        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-          if (ictr > 0) {
-            selStation = selStation + ',';
-          }
-          selStation = selStation + retResult[0][ictr];
+      var retResult = result;
+
+      var selSalesman = '';
+      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+        if (ictr > 0) {
+          selSalesman = selSalesman + ',';
         }
+        selSalesman = selSalesman + retResult[0][ictr];
+      }
 
-        _station.text = selStation;
-    }
+      _salesman.text = selSalesman;
+  }
 
-    void gotoSalesmanScreen(BuildContext contex) async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => salesman_list(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend)));
+  void gotoChallanItemDet() async {
+    var branch = _branch.text;
+    var branchid = _branchid.text;
+    var type = _packingtype.text;
+    print("type : $type");
+    print('in');
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => LoomSalesChallanDetAdd(
+                companyid: widget.xcompanyid,
+                companyname: widget.xcompanyname,
+                fbeg: widget.xfbeg,
+                fend: widget.xfend,
+                branch: branch,
+                partyid: partyid,
+                itemDet: ItemDetails,
+                branchid: branchid,
+                haste:_haste.text,
+                salesman:_salesman.text,
+                type: type)));
+    //print('out');
+    //print(result);
+    //print(result[0]['takachr']);
+    setState(() {
+      ItemDetails.add(result[0]);
+      _remarks.text = result[0]['remarks'];
+      _duedays.text = result[0]['duedays'];
+      // ItemDetails = ItemDetails[0];
+      print(ItemDetails);
+    });
+  }
 
-        var retResult = result;
 
-        var selSalesman = '';
-        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-          if (ictr > 0) {
-            selSalesman = selSalesman + ',';
-          }
-          selSalesman = selSalesman + retResult[0][ictr];
-        }
-
-        _salesman.text = selSalesman;
-    }
-
-    void gotoChallanItemDet(BuildContext contex) async {
-      var branch = _branch.text;
-      var branchid = _branchid.text;
-      var type = _packingtype.text;
-      print("type : $type");
-      print('in');
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => LoomSalesChallanDetAdd(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend,
-                  branch: branch,
-                  partyid: partyid,
-                  itemDet: ItemDetails,
-                  branchid: branchid,
-                  haste:_haste.text,
-                  salesman:_salesman.text,
-                  type: type)));
-      //print('out');
-      //print(result);
-      //print(result[0]['takachr']);
-      setState(() {
-        ItemDetails.add(result[0]);
-        _remarks.text = result[0]['remarks'];
-        _duedays.text = result[0]['duedays'];
-        // ItemDetails = ItemDetails[0];
-        print(ItemDetails);
-      });
-    }
-
-    Future<bool> saveData() async {
+  Future<bool> saveData() async {
       if(ItemDetails.length == 0){
         showAlertDialog(context, 'ItemDetails can not be blank.');
         return true;
@@ -626,45 +619,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
             "&parcel=" +
             parcel;
 
-        // uri = "http://127.0.0.1:8000/api/api_storeloomssalechln?dbname=" +
-        //     db +
-        //     "&company=&cno=" +
-        //     cno +
-        //     "&user=" +
-        //     username +
-        //     "&branch=" +
-        //     branch +
-        //     "&packingtype=" +
-        //     packingtype +
-        //     "&party=" +
-        //     party +
-        //     "&book=" +
-        //     book +
-        //     "&haste=" +
-        //     haste +
-        //     "&transport=" +
-        //     transport +
-        //     "&station=" +
-        //     station +
-        //     "&packingsrchr=" +
-        //     packingsrchr +
-        //     "&packingserial=" +
-        //     packingserial +
-        //     "&bookno=" +
-        //     bookno +
-        //     "&srchr=" +
-        //     srchr +
-        //     "&serial=" +
-        //     serial +
-        //     "&date=" +
-        //     newDate +
-        //     "&remarks=" +
-        //     remarks +
-        //     "&duedays=" +
-        //     duedays.toString() +
-        //     "&id=" +
-        //     id.toString() +
-        //     "&parcel=1";
         print("/////////////////////////////////////////////" + uri);
 
         final headers = {
@@ -686,15 +640,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         if (jsonCode == '500') {
           showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
         } else {
-          // var url = 'https://looms.equalsoftlink.com/printsaleorderdf/' +
-          //     id.toString() +
-          //     '?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
-
-          //  var url = 'http://127.0.0.1:8000/printsaleorderdf/' +
-          //     id.toString() +
-          //     '?fromserial=0&toserial=0&srchr=&formatid=55&printid=49&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=2';
-          // final response = await http.get(Uri.parse(url));
-
           Fluttertoast.showToast(
             msg: "Saved !!!",
             toastLength: Toast.LENGTH_SHORT,
@@ -705,15 +650,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
             fontSize: 16.0,
           );
           Navigator.pop(context);
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (_) => LoomSalesChallanList(
-          //               companyid: widget.xcompanyid,
-          //               companyname: widget.xcompanyname,
-          //               fbeg: widget.xfbeg,
-          //               fend: widget.xfend,
-          //             )));
         }
         return true;
       }
@@ -728,12 +664,8 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       setState(() {
         isButtonActive = success;
       });
-    }    
-
-    setState(() {
-      //_packingtype.text = 'PACKING';
-    });
-
+    }   
+     
     void deleteRow(index) {
       setState(() {
         ItemDetails.removeAt(index);
@@ -742,7 +674,8 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
     List<DataRow> _createRows() {
       List<DataRow> _datarow = [];
-      print(ItemDetails);
+      print("!!!!!!!!!!!!!!!!!!!!!! : " + ItemDetails.toString());
+
 
       widget.tottaka = 0;
       widget.totmtrs = 0;
@@ -777,15 +710,18 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         } else {
           print('Error: Invalid format for ordmtr');
         }
-
-        
-          if (ItemDetails[iCtr]['haste'] != null) {
+       
+          // if (ItemDetails[iCtr]['haste'] != null) {
             _haste.text = ItemDetails[iCtr]['haste'].toString();
-          }
+            print("hastehastehastehastehaste");
+            print(_haste.text);
+          // }
           
-          if (ItemDetails[iCtr]['salesman'] != null) {
+          // if (ItemDetails[iCtr]['salesman'] != null) {
             _salesman.text = ItemDetails[iCtr]['salesman'].toString();
-          }
+            print("salesmansalesmansalesmansalesman");
+            print(_salesman.text);
+          // }
 
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
@@ -830,8 +766,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
       return _datarow;
     }
 
-    setDefValue();
-
+  
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -924,7 +861,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                     labelText: 'Branch',
                   ),
                   onTap: () {
-                    gotoBranchScreen(context);
+                    gotoBranchScreen();
                   },
                   validator: (value) {
                     return null;
@@ -979,7 +916,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                       labelText: 'Book',
                     ),
                     onTap: () {
-                      gotoPartyScreen(context, 'SALE BOOK', _book);
+                      gotoPartyScreen('SALE BOOK', _book);
                     },
                     validator: (value) {
                       return null;
@@ -995,7 +932,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                       labelText: 'Party',
                     ),
                     onTap: () {
-                      gotoPartyScreen2(context, 'SALE PARTY', _party);
+                      gotoPartyScreen2('SALE PARTY', _party);
                     },
                     validator: (value) {
                       return null;
@@ -1015,7 +952,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                       labelText: 'Delv Party',
                     ),
                     onTap: () {
-                      gotoPartyScreen(context, 'SALE PARTY', _delparty);
+                      gotoPartyScreen('SALE PARTY', _delparty);
                     },
                     validator: (value) {
                       return null;
@@ -1032,7 +969,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                       labelText: 'Agent',
                     ),
                     onTap: () {
-                      gotoPartyScreen(context, 'AGENT', _party);
+                      gotoPartyScreen('AGENT', _party);
                     },
                     validator: (value) {
                       return null;
@@ -1053,7 +990,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                       labelText: 'Haste',
                     ),
                     onTap: () {
-                      gotoHasteScreen(context);
+                      gotoHasteScreen();
                     },
                     validator: (value) {
                       return null;
@@ -1070,7 +1007,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                       labelText: 'Transport',
                     ),
                     onTap: () {
-                      gotoPartyScreen(context, 'TRANSPORT', _transport);
+                      gotoPartyScreen('TRANSPORT', _transport);
                     },
                     validator: (value) {
                       return null;
@@ -1090,7 +1027,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                       labelText: 'Salesman',
                     ),
                     onTap: () {
-                      gotoSalesmanScreen(context);
+                      gotoSalesmanScreen();
                     },
                     validator: (value) {
                       return null;
@@ -1233,7 +1170,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                     fontSize: 16.0,
                   );
                 } else {
-                  gotoChallanItemDet(context);
+                  gotoChallanItemDet();
                 }
               },
               child: Text('Add Item Details',

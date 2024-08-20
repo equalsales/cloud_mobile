@@ -182,29 +182,45 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
       print(result);
       setState(() {
         _folddate.text = result[0]['date'];
-        _itemname.text = result[0]['itemname'];
-        _design.text = result[0]['design'];
-        dropdownUnitType = result[0]['unit'];
-        if(widget.xhaste == ''){
-          _haste.text = result[0]['haste'].toString();
-        }else{
-          _haste.text = widget.xhaste;
-        }
+        _itemname.text = result[0]['itemname'].toString();
+        _design.text = result[0]['design'].toString();
+        dropdownUnitType = result[0]['unit'].toString();
+        _haste.text = result[0]['haste'].toString();
+        _salesman.text = result[0]['salesman'].toString();
+
+        // if(widget.xhaste == ''){
+        //   _haste.text = result[0]['haste'].toString();
+        //   print("11111111111111111");
+        //   print(_haste.text);
+        // } else {
+        //   _haste.text = widget.xhaste;
+        //   print("2222222222222");
+        //   print(_haste.text);
+        // }
+        
         if (_haste.text == "null") {
           _haste.text = '';
+          print("3333333333333");
+          print(_haste.text);
         }
 
-        if(widget.xsalesman == ''){
-          _salesman.text = result[0]['salesman'].toString();
-        }else{
-          _salesman.text = widget.xsalesman;
-        }
+        // if(widget.xsalesman == ''){
+        //   _salesman.text = result[0]['salesman'].toString();
+        //   print("AAAAAAAAAAA");
+        //   print(_salesman.text);
+        // }else {
+        //   _salesman.text = widget.xsalesman;
+        //   print("BBBBBBBBBBBBBBB");
+        //   print(_salesman.text);
+        // }
         
         if (_salesman.text == "null") {
           _salesman.text = '';
+          print("CCCCCCCCCCCCCC");
+          print(_salesman.text);
         }
-        print(_haste.text);
-        _rate.text = result[0]['rate'];
+
+        _rate.text = result[0]['rate'].toString();
         _ordid.text = result[0]['ordid'].toString();
         _orddetid.text = result[0]['orddetid'].toString();
         ordMeters = double.parse(result[0]['balmeters'].toString());
