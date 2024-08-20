@@ -188,15 +188,15 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         _haste.text = result[0]['haste'].toString();
         _salesman.text = result[0]['salesman'].toString();
 
-        // if(widget.xhaste == ''){
-        //   _haste.text = result[0]['haste'].toString();
-        //   print("11111111111111111");
-        //   print(_haste.text);
-        // } else {
-        //   _haste.text = widget.xhaste;
-        //   print("2222222222222");
-        //   print(_haste.text);
-        // }
+        if(widget.xhaste == ''){
+          _haste.text = result[0]['haste'].toString();
+          print("11111111111111111");
+          print(_haste.text);
+        } else {
+          _haste.text = widget.xhaste;
+          print("2222222222222");
+          print(_haste.text);
+        }
         
         if (_haste.text == "null") {
           _haste.text = '';
@@ -204,15 +204,15 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
           print(_haste.text);
         }
 
-        // if(widget.xsalesman == ''){
-        //   _salesman.text = result[0]['salesman'].toString();
-        //   print("AAAAAAAAAAA");
-        //   print(_salesman.text);
-        // }else {
-        //   _salesman.text = widget.xsalesman;
-        //   print("BBBBBBBBBBBBBBB");
-        //   print(_salesman.text);
-        // }
+        if(widget.xsalesman == ''){
+          _salesman.text = result[0]['salesman'].toString();
+          print("AAAAAAAAAAA");
+          print(_salesman.text);
+        }else {
+          _salesman.text = widget.xsalesman;
+          print("BBBBBBBBBBBBBBB");
+          print(_salesman.text);
+        }
         
         if (_salesman.text == "null") {
           _salesman.text = '';

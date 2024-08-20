@@ -159,7 +159,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
     var ctakano = _takano.text;
 
     uri2 =
-        'https://www.looms.equalsoftlink.com/api/api_getphysicalstocktakavid?dbname=' +
+        '${globals.cdomain}/api/api_getphysicalstocktakavid?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -653,7 +653,14 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
               children: [
                 Padding(padding: EdgeInsets.all(2)),
                 ElevatedButton(
-                  onPressed: () => {fetchdetails()},
+                  onPressed: () => {
+                    if(_formKey.currentState!.validate()){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Form submitted successfully')),
+                      ),
+                      fetchdetails()
+                    }
+                  },
                   child: Text('Fetch Details',
                       style: TextStyle(
                           fontSize: 15.0, fontWeight: FontWeight.bold)),

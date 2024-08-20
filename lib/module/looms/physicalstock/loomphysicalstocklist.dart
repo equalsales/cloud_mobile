@@ -51,7 +51,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -77,7 +77,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -98,7 +98,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     print(globals.enddate);
 
     var response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/api_getphysicalstocklist?dbname=' +
+        '${globals.cdomain}/api/api_getphysicalstocklist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -108,7 +108,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
             enddate));
 
     print(
-        'https://www.looms.equalsoftlink.com/api/api_getphysicalstocklist?dbname=' +
+        '"${globals.cdomain}/api/api_getphysicalstocklist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -133,7 +133,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     var cno = globals.companyid;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/checkautoeditdelete/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+        "${globals.cdomain2}/checkautoeditdelete/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
     print("uri : " + uri);
     var response = await http.get(Uri.parse(uri));
     print('kii');
@@ -145,7 +145,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     if (jsonData['success'].toString() == 'true') {
       String uri = '';
       uri =
-          "https://www.cloud.equalsoftlink.com/deletemoddesignAPI/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+          "${globals.cdomain2}/deletemoddesignAPI/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
       var response = await http.get(Uri.parse(uri));
       print(uri);
       print("llll");
@@ -196,7 +196,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                         fbeg: widget.xfbeg,
                         fend: widget.xfend,
                         id: '0',
-                      )))
+                      ))).then((value) => loaddetails())
         },
       ),
       body: Center(
@@ -423,7 +423,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                               fbeg: widget.xfbeg,
                               fend: widget.xfend,
                               id: id,
-                            )));
+                            ))).then((value) => loaddetails());
               },
             ))),
           );
@@ -450,7 +450,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             // var cno = globals.companyid;
 
             // var response = await http.post(Uri.parse(
-            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+            //     '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
             //         db +
             //         '&cno=' +
             //         cno +
@@ -458,7 +458,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             //         id.toString()));
 
             // print(
-            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+            //     '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
             //         db +
             //         '&id=' +
             //         id.toString());

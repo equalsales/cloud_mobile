@@ -682,21 +682,17 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
 
+        // if(_haste.text != '' || _salesman.text != ''){
+        //   ItemDetails[iCtr]['haste'] = _haste.text;
+        //   ItemDetails[iCtr]['salesman'] = _salesman.text;
+        // }
+
         double nMeters = 0;
         if (ItemDetails[iCtr]['meters'] != '') {
           nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
           widget.tottaka += 1;          
           widget.totmtrs += nMeters;
         }
-        print(nMeters);
-
-        // var tot;
-        
-        // tot = (double.parse(ItemDetails[iCtr]['ordmtr'].toString())) - nMeters;
-        // print(tot);
-        // ItemDetails[iCtr]['ordbalmtrs'] = tot;
-        // print(ItemDetails[iCtr]['ordbalmtrs']);
-  
 
         var tot;
         var ordmtr = ItemDetails[iCtr]['ordmtr'].toString();
