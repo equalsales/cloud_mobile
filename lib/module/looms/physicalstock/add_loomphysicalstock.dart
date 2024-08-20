@@ -7,6 +7,7 @@ import 'package:cloud_mobile/module/looms/physicalstock/add_loomphysicalstockdet
 import 'package:cloud_mobile/module/looms/physicalstock/loomphysicalstocklist.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //import 'dart:convert';
 
@@ -82,6 +83,7 @@ class _physicalstockAddState extends State<physicalstockAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -102,7 +104,7 @@ class _physicalstockAddState extends State<physicalstockAdd> {
     var id = widget.xid;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getphysicalstockdetlist?dbname=' +
+        '${globals.cdomain}/api/api_getphysicalstockdetlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -164,7 +166,7 @@ class _physicalstockAddState extends State<physicalstockAdd> {
     var todate = retconvdate(widget.xfend).toString();
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getphysicalstocklist?dbname=' +
+        '${globals.cdomain}/api/api_getphysicalstocklist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -213,7 +215,7 @@ class _physicalstockAddState extends State<physicalstockAdd> {
     var cno = globals.companyid;
     var db = globals.dbname;
     uri =
-        'https://looms.equalsoftlink.com/api/api_greyjobissChallanno?dbname=' +
+        '${globals.cdomain}/api/api_greyjobissChallanno?dbname=' +
             db +
             '&branch='+
             _branch.text  +
@@ -387,93 +389,99 @@ class _physicalstockAddState extends State<physicalstockAdd> {
     }
 
     Future<bool> saveData() async {
-      String uri = '';
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var username = globals.username;
+      if(ItemDetails.length == 0){
+        showAlertDialog(context, 'ItemDetails can not be blank.');
+        return true;
+      }else{
+        String uri = '';
+        var cno = globals.companyid;
+        var db = globals.dbname;
+        var username = globals.username;
 
-      var type = _type.text;
-      var serial = _serial.text;
-      var srchr = _srchr.text;
-      var branch = _branch.text;
-      var date = _date.text;
-      var party = _party.text;
-      var remarks = _remarks.text;
-      var chlnno = _chlnno.text;
-      var chlnchr = _chlnchr.text;
+        var type = _type.text;
+        var serial = _serial.text;
+        var srchr = _srchr.text;
+        var branch = _branch.text;
+        var date = _date.text;
+        var party = _party.text;
+        var remarks = _remarks.text;
+        var chlnno = _chlnno.text;
+        var chlnchr = _chlnchr.text;
 
-      var id = widget.xid;
-      id = int.parse(id);
+        var id = widget.xid;
+        id = int.parse(id);
 
-      print('In Save....');
+        print('In Save....');
 
-      print(jsonEncode(ItemDetails));
+        print(jsonEncode(ItemDetails));
 
-      uri =
-          "https://looms.equalsoftlink.com/api/api_storeloomsphysicalstock?dbname=" +
-              db +
-              "&company=&cno=" +
-              cno +
-              "&user=" +
-              username +
-              "&branch=" +
-              branch +
-              "&type=" +
-              type +
-              "&party=" +
-              party +
-              "&srchr=" +
-              srchr +
-              "&serial=" +
-              serial +
-              "&date=" +
-              date +
-              "&remarks=" +
-              remarks +
-              "&chlnno=" +
-              chlnno +
-              "&chlnchr=" +
-              chlnchr +
-              "&id=" +
-              id.toString() +
-              "&parcel=1";
-      print(uri);
+        uri =
+            "${globals.cdomain}/api/api_storeloomsphysicalstock?dbname=" +
+                db +
+                "&company=&cno=" +
+                cno +
+                "&user=" +
+                username +
+                "&branch=" +
+                branch +
+                "&type=" +
+                type +
+                "&party=" +
+                party +
+                "&srchr=" +
+                srchr +
+                "&serial=" +
+                serial +
+                "&date=" +
+                date +
+                "&remarks=" +
+                remarks +
+                "&chlnno=" +
+                chlnno +
+                "&chlnchr=" +
+                chlnchr +
+                "&id=" +
+                id.toString() +
+                "&parcel=1";
+        print(uri);
 
-      final headers = {
-        'Content-Type': 'application/json', // Set the appropriate content-type
-        // Add any other headers required by your API
-      };
-      print(ItemDetails);
-      var response = await http.post(Uri.parse(uri),
-          headers: headers, body: jsonEncode(ItemDetails));
+        final headers = {
+          'Content-Type': 'application/json', // Set the appropriate content-type
+          // Add any other headers required by your API
+        };
+        print(ItemDetails);
+        var response = await http.post(Uri.parse(uri),
+            headers: headers, body: jsonEncode(ItemDetails));
 
-      var jsonData = jsonDecode(response.body);
+        var jsonData = jsonDecode(response.body);
 
-      //print('4');
+        //print('4');
 
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
+        var jsonCode = jsonData['Code'];
+        var jsonMsg = jsonData['Message'];
 
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else {
-        showAlertDialog(context, 'Saved !!!');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => LoomphysicalstockList(
-                      companyid: widget.xcompanyid,
-                      companyname: widget.xcompanyname,
-                      fbeg: widget.xfbeg,
-                      fend: widget.xfend,
-                    )));
+        if (jsonCode == '500') {
+          showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+        } else {
+          Fluttertoast.showToast(
+            msg: "Saved !!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.white,
+            textColor: Colors.purple,
+            fontSize: 16.0,
+          );
+          Navigator.pop(context);
+        }
+        return true;
       }
-      return true;
     }
 
     Future<void> _handleSaveData() async {
+      print("hasdgasdjbhds");
       setState(() {
-        isButtonActive = false; // Disable the button
+        isButtonActive = false;
       });
 
       bool success = await saveData();
@@ -573,13 +581,19 @@ class _physicalstockAddState extends State<physicalstockAdd> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.done),
           backgroundColor: Colors.green,
-          onPressed: () => {
-            isButtonActive
-            ? () {                
-                  _handleSaveData();
+          enableFeedback: isButtonActive,
+          onPressed:isButtonActive
+            ? () {  
+              print("HIIIIIIIIIIIII");              
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Data saving progressing...')),
+                    );
+                    _handleSaveData();
+                  }
               }
             : null,
-          }),
+          ),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
