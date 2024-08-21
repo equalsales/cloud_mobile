@@ -211,7 +211,40 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
 
     return true;
   }
+  
+  Future<bool> lastQuality() async {
+    String uri = '';
+    var cno = globals.companyid;
+    var db = globals.dbname;
+    var branch = _branch.text;
+    var machineno = _machineno.text;
+    // var fromdate = retconvdate(widget.xfbeg);
+    // var todate = retconvdate(widget.xfend);
 
+    uri = '${globals.cdomain}/gettakaprodquality?dbname=' +
+        db +
+        '&cno=' +
+        cno +
+        '&branch=' +
+        branch +
+        '&machine=' +
+        machineno; 
+    print(" lastQuality :" + uri);
+    var response = await http.get(Uri.parse(uri));
+
+    var jsonData = jsonDecode(response.body);
+
+    jsonData = jsonData['data'];
+    jsonData = jsonData[0];
+    
+    _quality.text = getValue(jsonData['itemname'].toString(), 'C');
+    if(_quality.text == 'null'){
+      _quality.text = '';
+    }
+
+    return true;
+  }
+  
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
@@ -941,9 +974,7 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
     //   var stdwt = double.parse(_stdwt.text);
     //   var foldmetrs = double.parse(_foldmetrs.text);
     //   var total = 0.0;
-
     //   total = (stdwt * foldmetrs) / 100;
-
     //   setState(() {
     //     _weight.text = total.toStringAsFixed(2);
     //     _actwt.text = total.toStringAsFixed(0);
@@ -1124,7 +1155,8 @@ class _TakaProductionAddState extends State<TakaProductionAdd> {
                   ),
                   onTap: () async {
                     await gotoMachineScreen(context);
-                    gotogetpendingbeamcard();
+                    await gotogetpendingbeamcard();
+                    lastQuality();
                   },
                   validator: (value) {
                     if (value == '') {
