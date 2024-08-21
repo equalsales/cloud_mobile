@@ -703,7 +703,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         }
 
         if(_haste.text != ''){
-          print("1");
+          print("1");                           
           ItemDetails[iCtr]['haste'] = _haste.text;
         } else if(_haste.text == '') {
           print("22");
