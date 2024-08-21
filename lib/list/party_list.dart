@@ -73,7 +73,7 @@ class PartyListState extends State<party_list> {
     var jsonData = jsonDecode(response.body);
 
     jsonData = jsonData['Data'];
-    print(jsonData);
+    // print(jsonData);
 
     this.setState(() {
       _partylist = jsonData;
@@ -185,8 +185,8 @@ class PartyListState extends State<party_list> {
         onChanged: searchParty,
       );
   void searchParty(String query) {
-    print('xx');
-    if (query.length >= 2) {
+    if (query.length >= 5) {
+      print("ghanshyam");
       final partys = _orgpartylist.where((party) {
         final titlelower = party.toString().toLowerCase();
         final searchlower = query.toLowerCase();

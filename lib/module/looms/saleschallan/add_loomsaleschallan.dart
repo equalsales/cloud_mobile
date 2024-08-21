@@ -682,11 +682,6 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
       for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
 
-        // if(_haste.text != '' || _salesman.text != ''){
-        //   ItemDetails[iCtr]['haste'] = _haste.text;
-        //   ItemDetails[iCtr]['salesman'] = _salesman.text;
-        // }
-
         double nMeters = 0;
         if (ItemDetails[iCtr]['meters'] != '') {
           nMeters = nMeters + double.parse(ItemDetails[iCtr]['meters']);
@@ -706,18 +701,33 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         } else {
           print('Error: Invalid format for ordmtr');
         }
+
+        if(_haste.text != ''){
+          print("1");
+          ItemDetails[iCtr]['haste'] = _haste.text;
+        } else if(_haste.text == '') {
+          print("22");
+          _haste.text = ItemDetails[iCtr]['haste'].toString();
+          print(_haste.text);
+          // ItemDetails[iCtr]['haste'] = '';
+        }
+        if(_salesman.text != ''){
+          print("333");
+          ItemDetails[iCtr]['salesman'] = _salesman.text;
+        } else if(_salesman.text == '') {
+          print("4");
+          _salesman.text = ItemDetails[iCtr]['salesman'].toString();
+          print(_salesman.text);
+          // ItemDetails[iCtr]['salesman'] = '';
+        }
        
-          // if (ItemDetails[iCtr]['haste'] != null) {
-            _haste.text = ItemDetails[iCtr]['haste'].toString();
-            print("hastehastehastehastehaste");
-            print(_haste.text);
-          // }
-          
-          // if (ItemDetails[iCtr]['salesman'] != null) {
-            _salesman.text = ItemDetails[iCtr]['salesman'].toString();
-            print("salesmansalesmansalesmansalesman");
-            print(_salesman.text);
-          // }
+          // _haste.text = ItemDetails[iCtr]['haste'].toString();
+          // print("hastehastehastehastehaste");
+          // print(_haste.text);
+        
+          // _salesman.text = ItemDetails[iCtr]['salesman'].toString();
+          // print("salesmansalesmansalesmansalesman");
+          // print(_salesman.text);
 
         _datarow.add(DataRow(cells: [
           DataCell(ElevatedButton.icon(
