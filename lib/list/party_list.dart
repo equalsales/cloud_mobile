@@ -154,10 +154,19 @@ class PartyListState extends State<party_list> {
                 onTap: () {
                   //print(account);
                   //setState(() => _selected[i] = !_selected[i])
-                  _partySelected.add(account);
+
+                  if (!_selected[index]) {
+                    // If selected, add to selected lists
+                    _partySelected.add(account);
+                    _partySelected2.add(this._partylist[index]);
+                    _partySelected2.add(id);
+                  } else {
+                    // If deselected, remove from selected lists
+                    _partySelected.remove(account);
+                    _partySelected2.remove(id);
+                  }
                   // _partySelected2.add(this._partylist[index]);
-                  _partySelected2..add(this._partylist[index]);
-                  _partySelected2.add(id);
+
                   //setState(() => _selected[index] = !_selected[index]);
                   setState(() => _selected[index] = !_selected[index]);
                   //print(_selected);
