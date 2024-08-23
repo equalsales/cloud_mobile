@@ -68,9 +68,31 @@ class _GreyPurchaseChallanSubDetAddState extends State<GreyPurchaseChallanSubDet
     int length = ItemDetails.length;
     print('Length :' + length.toString());
   }
+  
+  void caldiffmtrs(){
+    double meters = getValueN(_meters.text);
+    double foldmtrs = getValueN(_foldmtrs.text);
+    double diffmtrs = 0;
+
+    diffmtrs = meters - foldmtrs;
+
+    _diffmtrs.text = diffmtrs.toString();
+  }
+
+  void calshtper(){
+    double meters = getValueN(_meters.text);
+    double diffmtrs = getValueN(_diffmtrs.text);
+    double shtper = 0;
+
+    shtper = (diffmtrs * 100) / meters;
+
+    _shtperc.text = shtper.toStringAsFixed(2);
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    
     Future<bool> saveData() async {
       var cno = globals.companyid;
       var db = globals.dbname;
@@ -189,6 +211,10 @@ class _GreyPurchaseChallanSubDetAddState extends State<GreyPurchaseChallanSubDet
                       labelText: 'Meters',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      caldiffmtrs();
+                      calshtper();
+                    },
                     validator: (value) {
                       if (value == '' || 
                       value == '0' || 
@@ -214,6 +240,10 @@ class _GreyPurchaseChallanSubDetAddState extends State<GreyPurchaseChallanSubDet
                       labelText: 'Foldmtrs',
                     ),
                     onTap: () {},
+                    onChanged: (value) {
+                      caldiffmtrs();
+                      calshtper();
+                    },
                     validator: (value) {
                       if (value == '' || 
                       value == '0' || 
@@ -233,7 +263,7 @@ class _GreyPurchaseChallanSubDetAddState extends State<GreyPurchaseChallanSubDet
               children: [
                 Expanded(
                   child: TextFormField(
-                    enabled: true,
+                    enabled: false,
                     controller: _diffmtrs,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
@@ -251,7 +281,7 @@ class _GreyPurchaseChallanSubDetAddState extends State<GreyPurchaseChallanSubDet
                 Expanded(
                   child: TextFormField(
                     controller: _shtperc,
-                    enabled: true,
+                    enabled: false,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(

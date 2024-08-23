@@ -99,7 +99,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
 
   List SubItemDetails = [];
 
-  String? dropdownUnitType;
+  String dropdownUnitType = 'M';
 
   var UnitType = [
     'M',
