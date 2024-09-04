@@ -107,7 +107,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     _date.text = DateFormat("dd-MM-yyyy").format(curDate);
 
 
-    if(globals.username == 'SACHIN'){
+    if(globals.username == 'SACHIN' || globals.username == 'sachin'){
       hasteenabled = true;
     }else{
       hasteenabled = false;
@@ -635,11 +635,21 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
         var jsonCode = jsonData['Code'];
         var jsonMsg = jsonData['Message'];
+        var jsonid = jsonData['id']; 
         DialogBuilder(context).hideOpenDialog();
 
         if (jsonCode == '500') {
           showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
         } else {
+          print("....................");
+          print("id : " + id.toString());
+          if(id == 0){
+            uri = "${globals.cdomain}/sendmodulesms/$jsonid?WATxtApi=639b127a08175a3ef38f4367&call=4&email=&formatid=3&fromserial=0&mobile=&printid=49&srchr=&toserial=0&dbname=admin_looms&cno=3&user=KRISHNA";
+            print("------------------- : " + uri);
+            var response = await http.get(Uri.parse(uri));
+            // var jsonData = jsonDecode(response.body);
+            // jsonData = jsonData['data'];
+          }
           Fluttertoast.showToast(
             msg: "Saved !!!",
             toastLength: Toast.LENGTH_SHORT,
@@ -708,6 +718,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         } else if(_haste.text == '') {
           print("22");
           _haste.text = ItemDetails[iCtr]['haste'].toString();
+          if(_haste.text == 'null'){
+            _haste.text = '';
+          }
           print(_haste.text);
           // ItemDetails[iCtr]['haste'] = '';
         }
@@ -717,6 +730,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         } else if(_salesman.text == '') {
           print("4");
           _salesman.text = ItemDetails[iCtr]['salesman'].toString();
+          if(_salesman.text == 'null'){
+            _salesman.text = '';
+          }
           print(_salesman.text);
           // ItemDetails[iCtr]['salesman'] = '';
         }

@@ -212,6 +212,11 @@ class _MyHomePage extends State<MyHomePage> {
                       fontWeight: FontWeight.bold,
                       fontFamily: 'verdana',
                     )),
+                onChanged: (value) {
+                  nameController.value = TextEditingValue(
+                      text: value.toUpperCase(),
+                      selection: nameController.selection);
+                },
               ),
             ),
             Container(
