@@ -286,7 +286,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     _parcel.text = getValue(jsonData['parcel'], 'C');
     _duedays.text = getValue(jsonData['duedays'], 'C');
     _station.text = getValue(jsonData['station'], 'C');
-    _branchid.text = getValue(jsonData['branchid'], 'C');
+    _branchid.text = getValue(jsonData['branchid'].toString(), 'N');
 
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
@@ -499,7 +499,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     var branch = _branch.text;
     var branchid = _branchid.text;
     var type = _packingtype.text;
-    print("type : $type");
+    print("------------------------------------------------------------- : $branchid");
     print('in');
     var result = await Navigator.push(
         context,

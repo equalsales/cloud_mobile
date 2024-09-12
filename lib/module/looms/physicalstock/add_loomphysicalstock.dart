@@ -159,6 +159,7 @@ class _physicalstockAddState extends State<physicalstockAdd> {
 
   Future<bool> loadData() async {
     String uri = '';
+    String uri2 = '';
     var cno = globals.companyid;
     var db = globals.dbname;
     var id = widget.xid;
@@ -176,7 +177,7 @@ class _physicalstockAddState extends State<physicalstockAdd> {
             fromdate +
             '&enddate=' +
             todate;
-    print(uri);
+    print("loadData : "+ uri);
     var response = await http.get(Uri.parse(uri));
 
     var jsonData = jsonDecode(response.body);
@@ -184,10 +185,9 @@ class _physicalstockAddState extends State<physicalstockAdd> {
     jsonData = jsonData['Data'];
     jsonData = jsonData[0];
 
-    print(jsonData);
-    print("jatin" + getValue(jsonData['type'], 'C'));
     _branch.text = getValue(jsonData['branch'], 'C');
-    _branchid.text = getValue(jsonData['branchid'], 'C');
+    _branchid.text = getValue(jsonData['branchid'].toString(), 'N');
+    print("????????????????????????????? : " + _branchid.text.toString());
     _type.text = getValue(jsonData['type'], 'C');
     _serial.text = getValue(jsonData['serial'], 'C');
     _srchr.text = getValue(jsonData['srchr'], 'C');
@@ -206,7 +206,6 @@ class _physicalstockAddState extends State<physicalstockAdd> {
     setState(() {
       dropdownTrnType = _type.text;
     });
-
     return true;
   }
 
@@ -364,7 +363,7 @@ class _physicalstockAddState extends State<physicalstockAdd> {
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
       var branchid = _branchid.text;
-      print('in');
+      print('branchid : ' +branchid);
       var result = await Navigator.push(
           context,
           MaterialPageRoute(
