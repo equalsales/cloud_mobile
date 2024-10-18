@@ -7,6 +7,7 @@ import 'package:cloud_mobile/module/master/citymaster/citymasterlist.dart';
 import 'package:cloud_mobile/module/master/colormaster/colormasterlist.dart';
 import 'package:cloud_mobile/module/master/country/countrymasterlist.dart';
 import 'package:cloud_mobile/module/master/designmaster/designmasterlist.dart';
+import 'package:cloud_mobile/module/master/drivermaster/drivermasterlist.dart';
 import 'package:cloud_mobile/module/master/hsnmaster/hsnmasterlist.dart';
 import 'package:cloud_mobile/module/master/itemmaster/itemmasterlist.dart';
 import 'package:cloud_mobile/module/master/partymaster/partymasterlist.dart';
@@ -96,6 +97,10 @@ class _MasterMenuState extends State<MasterMenu> {
     MenuList.add({
       'name': 'Sample',
       'callback': (Context) => gotoSampleMaster(context),
+    });
+    MenuList.add({
+      'name': 'Driver',
+      'callback': (Context) => gotoDriverMaster(context),
     });
   }
 
@@ -261,6 +266,18 @@ class _MasterMenuState extends State<MasterMenu> {
         context,
         MaterialPageRoute(
             builder: (_) => SampleMasterList(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                )));
+  }
+
+  void gotoDriverMaster(BuildContext context) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => DriverMasterList(
                   companyid: widget.xcompanyid,
                   companyname: widget.xcompanyname,
                   fbeg: widget.xfbeg,

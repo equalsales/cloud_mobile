@@ -47,7 +47,7 @@ class _BeamPurchaseChallanDetAddState extends State<BeamPurchaseChallanDetAdd> {
   TextEditingController _hsncode = new TextEditingController();
   TextEditingController _beamchr = new TextEditingController();
   TextEditingController _beamno = new TextEditingController(text: '0');
-  TextEditingController _beammtrs = new TextEditingController(text: '0.00');
+  TextEditingController _beammtrs = new TextEditingController(text: '0.00');  
   TextEditingController _beamwt = new TextEditingController(text: '0.00');
   TextEditingController _ends = new TextEditingController(text: '0.000');
   TextEditingController _rate = new TextEditingController(text: '0.00');
