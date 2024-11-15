@@ -231,7 +231,7 @@ class _MachinecardAddState extends State<MachinecardAdd> {
                     companyname: widget.xcompanyname,
                     fbeg: widget.xfbeg,
                     fend: widget.xfend,
-                    acctype: 'SALE PARTY',
+                    acctype: '',
                   )));
 
       if (result != null) {

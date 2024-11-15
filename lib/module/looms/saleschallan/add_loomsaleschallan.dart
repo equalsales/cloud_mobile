@@ -1,18 +1,23 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
+import 'dart:io';
+import 'package:cloud_mobile/common/PdfPreviewPagePrint.dart';
 import 'package:cloud_mobile/list/salesman_list.dart';
 import 'package:cloud_mobile/module/looms/saleschallan/add_loomsaleschallandet.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_mobile/common/alert.dart';
 import 'package:cloud_mobile/list/party_list.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../common/global.dart' as globals;
 import 'package:cloud_mobile/list/city_list.dart';
 import 'package:cloud_mobile/list/branch_list.dart';
 import 'package:cloud_mobile/common/bottombar.dart';
 import 'package:intl/intl.dart';
+// import 'package:path/path.dart';
 
 class LoomSalesChallanAdd extends StatefulWidget {
   LoomSalesChallanAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
@@ -92,6 +97,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
   bool isButtonActive = true;
   bool hasteenabled = true;
+
+  late File Pfile;
+  bool isLoading = false;
   
    var validcity= '';
   var crlimit = 0.0;
@@ -107,7 +115,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     _date.text = DateFormat("dd-MM-yyyy").format(curDate);
 
 
-    if(globals.username == 'SACHIN'){
+    if(globals.username == 'SACHIN' || globals.username == 'sachin'){
       hasteenabled = true;
     }else{
       hasteenabled = false;
@@ -260,6 +268,11 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
     _branch.text = getValue(jsonData['branch'], 'C');
     _packingtype.text = getValue(jsonData['packingtype'], 'C');
+    if(_packingtype.text == 'null'){
+      _packingtype.text = 'DELIVERY';
+    } else if(_packingtype.text == ''){
+      _packingtype.text = 'DELIVERY';
+    }
     _packingsrchr.text = getValue(jsonData['packingsrchr'], 'C');
     _packingserial.text = getValue(jsonData['packingserial'], 'C');
     _serial.text = getValue(jsonData['serial'], 'C');
@@ -286,7 +299,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     _parcel.text = getValue(jsonData['parcel'], 'C');
     _duedays.text = getValue(jsonData['duedays'], 'C');
     _station.text = getValue(jsonData['station'], 'C');
-    _branchid.text = getValue(jsonData['branchid'], 'C');
+    _branchid.text = getValue(jsonData['branchid'].toString(), 'N');
 
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
@@ -499,7 +512,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     var branch = _branch.text;
     var branchid = _branchid.text;
     var type = _packingtype.text;
-    print("type : $type");
+    print("------------------------------------------------------------- : $branchid");
     print('in');
     var result = await Navigator.push(
         context,
@@ -635,11 +648,22 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
         var jsonCode = jsonData['Code'];
         var jsonMsg = jsonData['Message'];
+        var jsonid = jsonData['id']; 
         DialogBuilder(context).hideOpenDialog();
 
         if (jsonCode == '500') {
           showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
         } else {
+          print("....................");
+          print("id : " + id.toString());
+          if(id == 0){
+            uri = "${globals.cdomain}/sendmodulesms/$jsonid?WATxtApi=639b127a08175a3ef38f4367&call=4&email=&formatid=3&fromserial=0&mobile=&printid=49&srchr=&toserial=0&dbname=admin_looms&cno=3&user=KRISHNA";
+            print("------------------- : " + uri);
+            var response = await http.get(Uri.parse(uri));
+            // var jsonData = jsonDecode(response.body);
+            // jsonData = jsonData['data'];
+            SendWhatAppnwork(jsonid);
+          }
           Fluttertoast.showToast(
             msg: "Saved !!!",
             toastLength: Toast.LENGTH_SHORT,
@@ -654,6 +678,37 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         return true;
       }
     }
+
+  Future<void> SendWhatAppnwork(int id) async {
+    setState(() {
+      //setprintformet();
+      isLoading = true;
+    });
+    // print("jatin"+formatid.toString());
+    var companyid = globals.companyid;
+    // var id = id;
+    var formatid = 55;
+    var printid = 49;
+    // var url =
+    //     'https://vansh.equalsoftlink.com/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=10&printid=1&call=1&mobile=&email=&noofcopy=1&cWAApi=&cEmail=&sendwhatsapp=PARTY&nemailtemplate=0&cno=$companyid';
+    var url =
+        '${globals.cdomain}/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=$formatid&printid=$printid&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=$companyid';
+        print("SendWhatAppnwork : " + url);
+    final response = await http.get(Uri.parse(url));
+    final bytes = response.bodyBytes;
+    final filename = (url);
+    final dir = await getApplicationDocumentsDirectory();
+    var file = File('${dir.path}/$filename.pdf');
+    await file.writeAsBytes(bytes, flush: true);
+    setState(() {
+      Pfile = file;
+    });
+    print(Pfile);
+    setState(() {
+      isLoading = false;
+    });
+  }
+    
 
     Future<void> _handleSaveData() async {
       setState(() {
@@ -708,6 +763,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         } else if(_haste.text == '') {
           print("22");
           _haste.text = ItemDetails[iCtr]['haste'].toString();
+          if(_haste.text == 'null'){
+            _haste.text = '';
+          }
           print(_haste.text);
           // ItemDetails[iCtr]['haste'] = '';
         }
@@ -717,6 +775,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         } else if(_salesman.text == '') {
           print("4");
           _salesman.text = ItemDetails[iCtr]['salesman'].toString();
+          if(_salesman.text == 'null'){
+            _salesman.text = '';
+          }
           print(_salesman.text);
           // ItemDetails[iCtr]['salesman'] = '';
         }

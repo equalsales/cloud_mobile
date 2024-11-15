@@ -141,7 +141,43 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
       _machine.text = selMachine;
     });
   }
+  
+  caltotmeter() {
+    var dsmeters = double.parse(_dsmeters.text);
+    var nsmeters = double.parse(_nsmeters.text);
+    var totmeters = 0.0;
 
+    totmeters = dsmeters + nsmeters;
+
+    setState(() {
+      _totmeters.text = totmeters.toStringAsFixed(2);
+    });
+  }
+
+  calremainmeters() {
+    var warplength = double.parse(_warplength.text);
+    var outmeters = double.parse(_outmeters.text);
+    var remainmeters = 0.0;
+
+    remainmeters = warplength - outmeters;
+
+    setState(() {
+      _remainmeters.text = remainmeters.toStringAsFixed(2);
+    });
+  }
+
+  caloutmeter() {
+    var totmeter = double.parse(_totmeters.text);
+    var outmeters = double.parse(_outmeters.text);
+    var totoutmeters = 0.0;
+
+    totoutmeters = outmeters + totmeter;
+
+    setState(() {
+      _outmeters.text = totoutmeters.toStringAsFixed(2);
+    });
+    calremainmeters();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -272,6 +308,11 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                     validator: (value) {
                       return null;
                     },
+                    onChanged: (value) {
+                      setState(() {
+                        caltotmeter();
+                      });
+                    },
                   ),
                 ),
               ],
@@ -327,6 +368,11 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                     onTap: () {},
                     validator: (value) {
                       return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        caltotmeter();
+                      });
                     },
                   ),
                 ),
@@ -397,6 +443,11 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                     validator: (value) {
                       return null;
                     },
+                    onChanged: (value) {
+                      setState(() {
+                        calremainmeters();
+                      });
+                    },
                   ),
                 ),
                 Expanded(
@@ -409,10 +460,17 @@ class _LoomMachinecardDetAddState extends State<LoomMachinecardDetAdd> {
                       hintText: 'Outmeters',
                       labelText: 'Outmeters',
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      caloutmeter();
+                    },
                     validator: (value) {
                       return null;
                     },
+                    // onChanged: (value) {
+                    //   setState((){
+                    //     caloutmeter();
+                    //   });
+                    // },
                   ),
                 ),
               ],

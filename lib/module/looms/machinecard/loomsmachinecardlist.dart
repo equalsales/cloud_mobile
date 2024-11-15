@@ -2,6 +2,7 @@
 
 import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/module/looms/machinecard/add_loomsmachinecard.dart';
+import 'package:cloud_mobile/module/looms/machinecard/pdf_print_machinecard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'dart:convert';
@@ -46,10 +47,12 @@ class _MachinecardListPageState extends State<MachinecardList> {
     var companyid = widget.xcompanyid;
     var db = globals.dbname;
     String uri = '';
-    uri =
-        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
+    // uri =
+    //     "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
+
+    uri = "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&modulename=machinecardmst";
     var response = await http.get(Uri.parse(uri));
-    print(uri);
+    print("loadprintformet : " + uri);
     var jsonData = jsonDecode(response.body);
     jsonData = jsonData['Data'];
     print(jsonData);
@@ -72,10 +75,13 @@ class _MachinecardListPageState extends State<MachinecardList> {
     var companyid = widget.xcompanyid;
     var db = globals.dbname;
     String uri = '';
-    uri =
-        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
+    // uri =
+        // "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
+
+    uri = '${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&modulename=machinecardmst&printformet=$printformet';
+
     var response = await http.get(Uri.parse(uri));
-    print(uri);
+    print("setprintformet : " + uri);
     var jsonData = jsonDecode(response.body);
     jsonData = jsonData['Data'];
     this.setState(() {
@@ -257,23 +263,25 @@ class _MachinecardListPageState extends State<MachinecardList> {
                                     ),
                                     child: Text('PDF'),
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                PdfViewerPagePrint(
-                                              companyid: widget.xcompanyid,
-                                              companyname: widget.xcompanyname,
-                                              fbeg: widget.xfbeg,
-                                              fend: widget.xfend,
-                                              id: id.toString(),
-                                              cPW: "PDF",
-                                              formatid: PrintidDetails[0]
-                                                  ['formatid'],
-                                              printid: PrintidDetails[0]
-                                                  ['printid'],
-                                            ),
-                                          ));
+                                      if(PrintidDetails.isNotEmpty){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                MachinePdfViewerPagePrint(
+                                                companyid: widget.xcompanyid,
+                                                companyname: widget.xcompanyname,
+                                                fbeg: widget.xfbeg,
+                                                fend: widget.xfend,
+                                                id: id.toString(),
+                                                cPW: "PDF",
+                                                formatid: PrintidDetails[0]
+                                                    ['formatid'],
+                                                printid: PrintidDetails[0]
+                                                    ['printid'],
+                                              ),
+                                            ));
+                                      }
                                     }),
                                 TextButton(
                                     style: TextButton.styleFrom(
@@ -283,23 +291,25 @@ class _MachinecardListPageState extends State<MachinecardList> {
                                     ),
                                     child: Text('WhatsApp'),
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                PdfViewerPagePrint(
-                                              companyid: widget.xcompanyid,
-                                              companyname: widget.xcompanyname,
-                                              fbeg: widget.xfbeg,
-                                              fend: widget.xfend,
-                                              id: id.toString(),
-                                              cPW: "WhatsApp",
-                                              formatid: PrintidDetails[0]
-                                                  ['formatid'],
-                                              printid: PrintidDetails[0]
-                                                  ['printid'],
-                                            ),
-                                          ));
+                                      if(PrintidDetails.isNotEmpty){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  MachinePdfViewerPagePrint(
+                                                companyid: widget.xcompanyid,
+                                                companyname: widget.xcompanyname,
+                                                fbeg: widget.xfbeg,
+                                                fend: widget.xfend,
+                                                id: id.toString(),
+                                                cPW: "WhatsApp",
+                                                formatid: PrintidDetails[0]
+                                                    ['formatid'],
+                                                printid: PrintidDetails[0]
+                                                    ['printid'],
+                                              ),
+                                            ));
+                                      }
                                     }),
                                 TextButton(
                                   style: TextButton.styleFrom(

@@ -49,7 +49,6 @@ class LoomphysicalstockDetAdd extends StatefulWidget {
     xItemDetails = itemDet;
     //xitemDet = itemDet;
 
-    print('in Item Details');
     print(xbranch);
     print(xparty);
     print(xItemDetails);
@@ -111,7 +110,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
   List<Map<String, dynamic>> _jsonData = [];
   //TextEditingController _fromdatecontroller = new TextEditingController(text: 'dhaval');
 
-  String? dropdownUnitType;
+  String dropdownUnitType = 'M';
 
   var UnitType = [
     'M',
@@ -120,6 +119,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -151,33 +151,61 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
   }
 
   Future<bool> takavldData() async {
-    String uri2 = '';
+    String uri = '';
     var cno = globals.companyid;
     var db = globals.dbname;
-    var id = widget.xid;
-    var ctakachr = _takachr.text;
-    var ctakano = _takano.text;
-
-    uri2 =
-        '${globals.cdomain}/api/api_getphysicalstocktakavid?dbname=' +
+    var takachr = _takachr.text;
+    var takano = _takano.text;
+    var branchid = widget.xbranchid;
+    
+    uri =
+        '${globals.cdomain}/api/api_checktakano?dbname=' +
             db +
             '&cno=' +
             cno +
+            '&branchid=' +
+            branchid +
             '&takachr=' +
-            ctakachr +
+            takachr +
             '&takano=' +
-            ctakano;
-    print(uri2);
-    var response1 = await http.get(Uri.parse(uri2));
-    var jsonData1 = jsonDecode(response1.body);
-    jsonData1 = jsonData1['Data'];
+            takano;
 
-    if (jsonData1.length > 0) {
-      showAlertDialog(context, 'Taka No all ready exit in old Entry');
-      return false;
-    } else {
-      return true;
-    }
+    print(" api_checktakano : " +uri);
+    var response = await http.get(Uri.parse(uri));
+    var jsonData = jsonDecode(response.body);
+    var Data = jsonData['Data'];
+    print("11111111");
+    print(Data[0]['serial']);
+    var serial = Data[0]['serial'].toString();
+    var jtakano = Data[0]['takano'].toString();
+    var jtakachr = Data[0]['takachr'].toString();
+
+    showAlertDialog(context, 'Taka No Already Exists Serial : $serial, Takano : $jtakano, Takachr : $jtakachr');
+    setState(() {
+      _takachr.text = '';
+      _takano.text = '';
+      _itemname.text = '';
+      _folddate.text = '';
+      _design.text = '';
+      _pcs.text = '';
+      _meters.text = '';
+      _tpmeters.text = '';
+      _hsncode.text = '';
+      // _unit.text = jsonData[0]['unit'].toString();
+      setState(() {
+        dropdownUnitType = 'M';
+      });
+      _machine.text = '';
+      _inwid.text = '';
+      _inwdetid.text = '';
+      _inwdettkid.text = '';
+      _fmode.text = '';
+      _avgwt.text = '';
+      _beamno.text = '';
+      _beamitem.text = '';
+    });
+    
+    return true;
   }
 
   Future<bool> fetchdetails() async {
@@ -257,9 +285,9 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
                     itemBuilder: (context, index) {
                       return CheckboxListTile(
                         value: false,
-                        subtitle: Text(_jsonData[index]['itemname'].toString()),
-                        title: Text(_jsonData[index]['meters'].toString()),
-                        onChanged: (bool? value) {
+                        title: Text("Serial: ${_jsonData[index]['serial'].toString()} Takano: ${_jsonData[index]['takano'].toString()}"),
+                        subtitle: Text("Takachr: ${_jsonData[index]['takachr'].toString()} Itemname: ${_jsonData[index]['itemname'].toString()}"),
+                        onChanged: (bool? value) async {
                           print('changed');
                           print(_jsonData[index]['itemname'].toString());
 
@@ -303,6 +331,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
                           _amount.text = amount.toString();
                           print(jsonData);
                           Navigator.pop(context);
+                          await takavldData();
                         },
                       );
                     },
@@ -354,8 +383,7 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
         print("=================" + _amount.text);
       }
       _amount.text = amount.toString();
-
-      print(jsonData);
+      await takavldData();
     }
     return true;
   }
@@ -428,8 +456,6 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
       //_scanBarcode = barcodeScanRes;
     });
   }
-
-  void setDefValue() {}
 
   @override
   Widget build(BuildContext context) {
@@ -520,13 +546,6 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
 
       return true;
     }
-
-    var items = [
-      'PACKING',
-      'DELIVERY',
-    ];
-
-    setDefValue();
 
     return Scaffold(
       appBar: AppBar(
@@ -648,6 +667,9 @@ class _LoomphysicalstockDetAddState extends State<LoomphysicalstockDetAdd> {
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: 10,
             ),
             Row(
               children: [

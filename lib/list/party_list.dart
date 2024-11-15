@@ -194,19 +194,21 @@ class PartyListState extends State<party_list> {
         onChanged: searchParty,
       );
   void searchParty(String query) {
-    if (query.length >= 5) {
-      print("ghanshyam");
-      final partys = _orgpartylist.where((party) {
-        final titlelower = party.toString().toLowerCase();
-        final searchlower = query.toLowerCase();
+    setState(() {
+      this.query = query;
+      if (query.isEmpty) {
+        _partylist = _orgpartylist;
+      } else {
+        final partys = _orgpartylist.where((party) {
+          final titleLower = party['party'].toString().toLowerCase();
+          final cityLower = party['city'].toString().toLowerCase();
+          final searchLower = query.toLowerCase();
 
-        return titlelower.contains(searchlower);
-      }).toList();
+          return titleLower.contains(searchLower) || cityLower.contains(searchLower);
+        }).toList();
 
-      setState(() {
-        this.query = query;
-        this._partylist = partys;
-      });
-    }
+        _partylist = partys;
+      }
+    });
   }
 }

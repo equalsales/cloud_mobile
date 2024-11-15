@@ -9,8 +9,8 @@ import 'package:path_provider/path_provider.dart';
 //import 'package:myfirstapp/globals.dart' as globals;
 import 'package:share_extend/share_extend.dart';
 
-class PdfViewerPagePrint extends StatefulWidget {
-  PdfViewerPagePrint(
+class MachinePdfViewerPagePrint extends StatefulWidget {
+  MachinePdfViewerPagePrint(
       {Key? mykey,
       companyid,
       companyname,
@@ -46,10 +46,10 @@ class PdfViewerPagePrint extends StatefulWidget {
   double formatid2 = 0;
 
   @override
-  _PdfViewerPagePrintState createState() => _PdfViewerPagePrintState();
+  _MachinePdfViewerPagePrintState createState() => _MachinePdfViewerPagePrintState();
 }
 
-class _PdfViewerPagePrintState extends State<PdfViewerPagePrint> {
+class _MachinePdfViewerPagePrintState extends State<MachinePdfViewerPagePrint> {
   late File Pfile;
   bool isLoading = false;
 
@@ -59,14 +59,16 @@ class _PdfViewerPagePrintState extends State<PdfViewerPagePrint> {
       isLoading = true;
     });
     var companyid = globals.companyid;
+    var db = globals.dbname;
     var id = widget.xid;
     var formatid = widget.xformatid;
     var printid = widget.xprintid;
 
     // var url =
-    //     'https://vansh.equalsoftlink.com/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=10&printid=1&call=1&mobile=&email=&noofcopy=1&cWAApi=&cEmail=&sendwhatsapp=PARTY&nemailtemplate=0&cno=$companyid';
-    var url =
-        '${globals.cdomain}/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=$formatid&printid=$printid&call=1&mobile=&email=&noofcopy=1&cWAApi=&sendwhatsapp=&cno=$companyid';
+    //     '${globals.cdomain}/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=$formatid&printid=$printid&call=1&mobile=&email=&noofcopy=1&cWAApi=&sendwhatsapp=&cno=$companyid';
+
+    var url = '${globals.cdomain}/machinecardprint/2?fromserial=0&toserial=0&srchr=&formatid=$formatid&printid=$printid&call=1&mobile=&email=&noofcopy=1&cWAApi=&sendwhatsapp=&cno=$companyid&dbname=$db';
+
     print(" loadNetwork : " +  url);
     final response = await http.get(Uri.parse(url));
     final bytes = response.bodyBytes;

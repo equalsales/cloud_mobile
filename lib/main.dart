@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: _title,
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -212,6 +213,11 @@ class _MyHomePage extends State<MyHomePage> {
                       fontWeight: FontWeight.bold,
                       fontFamily: 'verdana',
                     )),
+                onChanged: (value) {
+                  nameController.value = TextEditingValue(
+                      text: value.toUpperCase(),
+                      selection: nameController.selection);
+                },
               ),
             ),
             Container(

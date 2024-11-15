@@ -184,8 +184,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
     var id = widget.xid;
     var fromdate = widget.xfbeg;
     var todate = widget.xfend;
-    var orderno = _orderno.text;
-    var orderchr = _orderchr.text;
+    var takano = _orderno.text;
+    var takachr = _orderchr.text;
     var branch = widget.xbranchid;
 
     fromdate = retconvdate(fromdate);
@@ -199,8 +199,8 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
     print('Length :' + length.toString());
     if (length > 0) {
       for (int iCtr = 0; iCtr < length; iCtr++) {
-        if ((ItemDetails[iCtr]['takano'] == orderno) &&
-            ((ItemDetails[iCtr]['takachr'] == orderchr))) {
+        if ((ItemDetails[iCtr]['takano'] == takano) &&
+            ((ItemDetails[iCtr]['takachr'] == takachr))) {
           showAlertDialog(context, 'Taka No Already Exists...');
           setState(() {
             _orderno.text = '0';
@@ -215,9 +215,9 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
         '${globals.cdomain}/api/commonapi_gettakastock2?dbname=' +
             db +
             '&partyfilter=N&takachr=' +
-            orderchr +
+            takachr +
             '&takano=' +
-            orderno +
+            takano +
             '&branchid=(' +
             branch +
             ')&getdata=Y';
@@ -253,20 +253,61 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
                     itemCount: _jsonData.length,
                     itemBuilder: (context, index) {
                       return CheckboxListTile(
-                        value: true,
+                        value: false,
                         subtitle: Text(_jsonData[index]['itemname'].toString()),
                         title: Text(_jsonData[index]['meters'].toString()),
-                        onChanged: (bool? value) {                        
+                        onChanged: (bool? value) {
+                          print('changed');
                           _orderchr.text = _jsonData[index]['takachr'].toString();
                           _orderno.text = _jsonData[index]['takano'].toString();
-                          _itemname.text = _jsonData[index]['itemname'].toString();
-                          _design.text = _jsonData[index]['design'].toString();
-                          _pcs.text = _jsonData[index]['pcs'].toString();
-                          _meters.text = _jsonData[index]['meters'].toString();
+                          _itemname.text = jsonData[index]['itemname'].toString();
+                          _design.text = jsonData[index]['design'].toString();
+                          _pcs.text = jsonData[index]['pcs'].toString();
+                          _meters.text = jsonData[index]['meters'].toString();
+                          _weight.text = jsonData[index]['weight'].toString();
+                          _rate.text = jsonData[index]['rate'].toString();
+                          _stdwt.text = jsonData[index]['stdwt'].toString();
                           setState(() {
-                            dropdownUnitType = _jsonData[index]['unit'].toString();
-                          });                    
-                          _fmode.text = _jsonData[index]['fmode'].toString();
+                            dropdownUnitType = jsonData[index]['unit'].toString();
+                          });
+                          _amount.text = jsonData[index]['amount'].toString();
+                          _fmode.text = jsonData[index]['fmode'].toString();
+                          _foldmtrs.text = jsonData[index]['foldmtrs'].toString();
+                          _shtmtrs.text = jsonData[index]['shtmtrs'].toString();
+                          _shtrate.text = jsonData[index]['shtrate'].toString();
+                          _ordid.text = jsonData[index]['ordid'].toString();
+                          _orddetid.text = jsonData[index]['orddetid'].toString();
+                          _discrate.text = jsonData[index]['discrate'].toString();
+                          _discamt.text = jsonData[index]['discamt'].toString();
+                          _addamt.text = jsonData[index]['addamt'].toString();
+                          _texavalue.text = jsonData[index]['texavalue'].toString();
+                          _sgstrate.text = jsonData[index]['sgstrate'].toString();
+                          _sgstamt.text = jsonData[index]['sgstamt'].toString();
+                          _cgstrate.text = jsonData[index]['cgstrate'].toString();
+                          _cgstamt.text = jsonData[index]['cgstamt'].toString();
+                          _igstrate.text = jsonData[index]['igstrate'].toString();
+                          _igstamt.text = jsonData[index]['igstamt'].toString();
+                          _finalamt.text = jsonData[index]['finalamt'].toString();
+
+
+                          double pcs = double.parse(_pcs.text);
+                          double meters = double.parse(_meters.text);
+                          // String unit = _unit.text;
+                          String unit = dropdownUnitType.toString();
+                          double rate = 0;
+                          if (_rate.text != '') {
+                            rate = double.parse(_rate.text);
+                          }
+                          double amount = 0;
+                          if ((unit == 'P') || (unit == 'T')) {
+                            amount = pcs * rate;
+                            print("amount $amount");
+                          } else {
+                            amount = meters * rate;
+                            print("=================" + _amount.text);
+                          }
+                          _amount.text = amount.toString();
+                          print(jsonData);
                           Navigator.pop(context);
                         },
                       );
@@ -286,12 +327,51 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
         _design.text = jsonData[0]['design'].toString();
         _pcs.text = jsonData[0]['pcs'].toString();
         _meters.text = jsonData[0]['meters'].toString();
+        _weight.text = jsonData[0]['weight'].toString();
+        _rate.text = jsonData[0]['rate'].toString();
+        _stdwt.text = jsonData[0]['stdwt'].toString();
         setState(() {
           dropdownUnitType = jsonData[0]['unit'].toString();
         });
+        _amount.text = jsonData[0]['amount'].toString();
         _fmode.text = jsonData[0]['fmode'].toString();
+        _foldmtrs.text = jsonData[0]['foldmtrs'].toString();
+        _shtmtrs.text = jsonData[0]['shtmtrs'].toString();
+        _shtrate.text = jsonData[0]['shtrate'].toString();
+        _ordid.text = jsonData[0]['ordid'].toString();
+        _orddetid.text = jsonData[0]['orddetid'].toString();
+        _discrate.text = jsonData[0]['discrate'].toString();
+        _discamt.text = jsonData[0]['discamt'].toString();
+        _addamt.text = jsonData[0]['addamt'].toString();
+        _texavalue.text = jsonData[0]['texavalue'].toString();
+        _sgstrate.text = jsonData[0]['sgstrate'].toString();
+        _sgstamt.text = jsonData[0]['sgstamt'].toString();
+        _cgstrate.text = jsonData[0]['cgstrate'].toString();
+        _cgstamt.text = jsonData[0]['cgstamt'].toString();
+        _igstrate.text = jsonData[0]['igstrate'].toString();
+        _igstamt.text = jsonData[0]['igstamt'].toString();
+        _finalamt.text = jsonData[0]['finalamt'].toString();
       });
-      Navigator.pop(context);
+
+      double pcs = double.parse(_pcs.text);
+      double meters = double.parse(_meters.text);
+      // String unit = _unit.text;
+      String unit = dropdownUnitType.toString();
+      double rate = 0;
+      if (_rate.text != '') {
+        rate = double.parse(_rate.text);
+      }
+      double amount = 0;
+      if (unit == 'P') {
+        amount = pcs * rate;
+        print("amount $amount");
+      } else {
+        amount = meters * rate;
+        print("=================" + _amount.text);
+      }
+      _amount.text = amount.toString();
+
+      print(jsonData);
     }
     return true;
   }
@@ -466,7 +546,7 @@ class _GreyPurchaseChallanDetAddState extends State<GreyPurchaseChallanDetAdd> {
       );
       setState(() {
         SubItemDetails.add(result[0]);
-        print(" ########################## : " + SubItemDetails.toString());
+        print(" SubItemDetails : " + SubItemDetails.toString());
       });
     }
 
