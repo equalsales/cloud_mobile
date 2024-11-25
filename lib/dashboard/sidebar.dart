@@ -10,6 +10,7 @@ import 'package:cloud_mobile/module/looms/takaadjustment/loomstakaadjustmentlist
 import 'package:cloud_mobile/module/looms/takaproduction/takaproductionlist.dart';
 import 'package:cloud_mobile/module/looms/yarnphysicalstock/loomyarnphysicalstocklist.dart';
 import 'package:cloud_mobile/module/master/master.dart';
+import 'package:cloud_mobile/report/deliveryReport/deliveryReport.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/module/enq/enqlist.dart';
 import 'package:cloud_mobile/module/bankbook/bankbooklist.dart';
@@ -440,6 +441,21 @@ class SideDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (_) => EnqList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.report),
+            title: Text('Delivery Report'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => DeliveryReport(
                             companyid: xcompanyid,
                             companyname: xcompanyname,
                             fbeg: xfbeg,

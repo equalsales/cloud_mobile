@@ -969,7 +969,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
                 _selectDate(context);
               },
               validator: (value) {
-                return null;
+                if(value == null || value.isEmpty){
+                  return 'Please enter date.';
+                }
               },
             ),
             Row(

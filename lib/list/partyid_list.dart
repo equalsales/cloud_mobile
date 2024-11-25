@@ -8,9 +8,15 @@ import '../common/global.dart' as globals;
 class partyid_list extends StatefulWidget {
   var xcompanyid, xcompanyname, xfbeg, xfend, xacctype;
   var Title = 'Party List';
-  partyid_list(
-      {Key? mykey, companyid, companyname, fbeg, fend, acctype, caption = ''})
-      : super(key: mykey) {
+  partyid_list({
+    Key? mykey,
+    companyid,
+    companyname,
+    fbeg,
+    fend,
+    acctype,
+    caption = '',
+  }) : super(key: mykey) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
@@ -18,11 +24,12 @@ class partyid_list extends StatefulWidget {
     xacctype = acctype;
     Title = caption;
   }
+
   @override
-  PartyListIdState createState() => PartyListIdState();
+  partyid_listState createState() => partyid_listState();
 }
 
-class PartyListIdState extends State<partyid_list> {
+class partyid_listState extends State<partyid_list> {
   List _partylist = [];
   List _orgpartylist = [];
   List _partySelected = [];
@@ -32,54 +39,38 @@ class PartyListIdState extends State<partyid_list> {
 
   @override
   void initState() {
-    getpartylist();
+    super.initState();
+    getPartyList();
   }
 
-  Future<bool> getpartylist() async {
-    //String username = userController.text;
-    //String pwd = pwdController.text;
-
-    //print('http://116.72.16.74:5000/api/usrcompanylist/admin&a');
-    //print('http://116.72.16.74:5000/api/usrcompanylist/'+_user+'&'+_pwd);
-
-    //var response  = await http.get(Uri.parse('http://116.72.16.74:5000/api/partylist/'+widget.xcompanyid));
-    var response;
+  Future<bool> getPartyList() async {
     var db = globals.dbname;
-
+    var response;
     String uri = '';
     if (widget.xacctype != '') {
       response = await http.get(Uri.parse(
-          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
-              db +
-              '&acctype=' +
-              widget.xacctype));
+          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=$db&acctype=${widget.xacctype}'));
     } else {
       response = await http.get(Uri.parse(
-          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
-              db +
-              '&acctype='));
+          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=$db&acctype='));
     }
-    print('https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
-        db +
-        '&acctype=' +
-        widget.xacctype);
 
-    var jsonData = jsonDecode(response.body);
-
-    jsonData = jsonData['Data'];
-    print(jsonData);
-
-    this.setState(() {
-      _partylist = jsonData;
-      _orgpartylist = jsonData;
-      _selected = List.generate(jsonData.length, (i) => false);
-    });
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body)['Data'];
+      setState(() {
+        _partylist = jsonData;
+        _orgpartylist = jsonData;
+        _selected = List.generate(jsonData.length, (i) => false);
+      });
+      print("Fetched Party List: $_partylist");
+    } else {
+      print("Failed to fetch data.");
+    }
     return true;
   }
 
-  Widget add() {
-    if (query.length >= 1) {
-      print("Add");
+  Widget addButton() {
+    if (query.isNotEmpty) {
       return Padding(
         padding: const EdgeInsets.only(left: 20),
         child: Row(
@@ -107,16 +98,12 @@ class PartyListIdState extends State<partyid_list> {
         ),
       );
     } else {
-      print("Not add");
-      return Container();
+      return SizedBox();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.Title == '') {
-      widget.Title = 'Party List';
-    }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.Title),
@@ -124,45 +111,41 @@ class PartyListIdState extends State<partyid_list> {
       body: Column(
         children: <Widget>[
           buildSearch(),
-          add(),
+          addButton(),
           Text("${_partySelected}"),
           ElevatedButton(
             onPressed: () {
-              // Navigate back to first route when tapped.
               Navigator.pop(context, _partySelected);
             },
             child: Text('Select'),
           ),
           Expanded(
-              child: ListView.builder(
-            itemCount: this._partylist.length,
-            itemBuilder: (context, index) {
-              String account = this._partylist[index]['party'];
-              String aid = this._partylist[index]['id'].toString();
-              return ListTile(
-                tileColor: _selected[index] ? Colors.blue : null,
-                title: Text(account),
-                subtitle: Text('id :' + aid.toString()),
-                onTap: () {
-                  _partyIdSelected.add(_partylist[index]['id'].toString());
-                  _partyIdSelected.add(_partylist[index]['party']);
-                  if (_selected[index]) {
-                    _partySelected.remove(aid);
-                    _partySelected.remove(account);
-                  } else {
-                    _partySelected.add(aid);
-                    _partySelected.add(account);
-                  }
-                   setState(() => _selected[index] = !_selected[index]);
-
-                  print(_selected);
-                },
-              );
-            },
-          ))
+            child: ListView.builder(
+              itemCount: _partylist.length,
+              itemBuilder: (context, index) {
+                String account = _partylist[index]['party'];
+                String aid = _partylist[index]['id'].toString();
+                return ListTile(
+                  tileColor: _selected[index] ? Colors.blue : null,
+                  title: Text(account),
+                  subtitle: Text('id: $aid'),
+                  onTap: () {
+                    setState(() {
+                      if (_selected[index]) {
+                        _partySelected.remove(aid);
+                        _partySelected.remove(account);
+                      } else {
+                        _partySelected.add(aid);
+                        _partySelected.add(account);
+                      }
+                      _selected[index] = !_selected[index];
+                    });
+                  },
+                );
+              },
+            ),
+          ),
         ],
-
-        //child: JobsListView()
       ),
     );
   }
@@ -172,19 +155,24 @@ class PartyListIdState extends State<partyid_list> {
         hintText: 'Search',
         onChanged: searchParty,
       );
-  void searchParty(String query) {
-    print('xx');
-    if (query.length >= 2) {
-      final partys = _orgpartylist.where((party) {
-        final titlelower = party.toString().toLowerCase();
-        final searchlower = query.toLowerCase();
 
-        return titlelower.contains(searchlower);
+  void searchParty(String query) {
+    if (query.isNotEmpty) {
+      final filteredParties = _orgpartylist.where((party) {
+        final partyName = party['party'].toString().toLowerCase();
+        final searchLower = query.toLowerCase();
+        return partyName.contains(searchLower);
       }).toList();
 
       setState(() {
         this.query = query;
-        this._partylist = partys;
+        this._partylist = filteredParties;
+      });
+      print("Search Results: $filteredParties");
+    } else {
+      // Reset the party list if search query is empty
+      setState(() {
+        _partylist = _orgpartylist;
       });
     }
   }
