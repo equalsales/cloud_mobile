@@ -136,9 +136,7 @@ class order_ListState extends State<order_list> {
                 subtitle: Text('Pending Mts : ' +
                     meters +
                     ' Pending Taka :' +
-                    taka +
-                    ' Rate :' +
-                    rate),
+                    taka),
                 onTap: () {
                   //print(account);
                   //setState(() => _selected[i] = !_selected[i])

@@ -738,38 +738,41 @@ class _SaleOrderPendingReportState extends State<SaleOrderPendingReport> {
                                   padding:
                                       const EdgeInsets.only(left: 6, right: 6),
                                   child: ListTile(
-                                    title: Row(
-                                      children: [
-                                        Padding(
+                                    title: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.only(right: 8),
+                                              child: InkWell(
+                                                  onTap: () {
+                                                    print(retResultparty[
+                                                        listIndex]);
+                                                  },
+                                                  child: Text(
+                                                      "${retResultparty[listIndex].toString()} "))),
+                                          Padding(
                                             padding:
                                                 const EdgeInsets.only(right: 8),
-                                            child: InkWell(
-                                                onTap: () {
-                                                  print(retResultparty[
-                                                      listIndex]);
-                                                },
-                                                child: Text(
-                                                    "${retResultparty[listIndex].toString()} "))),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: Text(
-                                            "|",
-                                            style: TextStyle(
-                                                color: Colors.grey.shade400),
-                                          ),
-                                        ),
-                                        InkWell(
-                                            onTap: () {
-                                              print(retResultparty[
-                                                  listIndex + 1]);
-                                              print(
-                                                  "${listIndex} + ${listIndex + 2}");
-                                            },
                                             child: Text(
-                                                retResultparty[listIndex + 1]
-                                                    .toString())),
-                                      ],
+                                              "|",
+                                              style: TextStyle(
+                                                  color: Colors.grey.shade400),
+                                            ),
+                                          ),
+                                          InkWell(
+                                              onTap: () {
+                                                print(retResultparty[
+                                                    listIndex + 1]);
+                                                print(
+                                                    "${listIndex} + ${listIndex + 2}");
+                                              },
+                                              child: Text(
+                                                  retResultparty[listIndex + 1]
+                                                      .toString())),
+                                        ],
+                                      ),
                                     ),
                                     trailing: IconButton(
                                         onPressed: () {
@@ -813,38 +816,41 @@ class _SaleOrderPendingReportState extends State<SaleOrderPendingReport> {
                                   padding:
                                       const EdgeInsets.only(left: 6, right: 6),
                                   child: ListTile(
-                                    title: Row(
-                                      children: [
-                                        Padding(
+                                    title: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.only(right: 8),
+                                              child: InkWell(
+                                                  onTap: () {
+                                                    print(retResultagent[
+                                                        listIndex]);
+                                                  },
+                                                  child: Text(
+                                                      "${retResultagent[listIndex].toString()} "))),
+                                          Padding(
                                             padding:
                                                 const EdgeInsets.only(right: 8),
-                                            child: InkWell(
-                                                onTap: () {
-                                                  print(retResultagent[
-                                                      listIndex]);
-                                                },
-                                                child: Text(
-                                                    "${retResultagent[listIndex].toString()} "))),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: Text(
-                                            "|",
-                                            style: TextStyle(
-                                                color: Colors.grey.shade400),
-                                          ),
-                                        ),
-                                        InkWell(
-                                            onTap: () {
-                                              print(retResultagent[
-                                                  listIndex + 1]);
-                                              print(
-                                                  "${listIndex} + ${listIndex + 2}");
-                                            },
                                             child: Text(
-                                                retResultagent[listIndex + 1]
-                                                    .toString())),
-                                      ],
+                                              "|",
+                                              style: TextStyle(
+                                                  color: Colors.grey.shade400),
+                                            ),
+                                          ),
+                                          InkWell(
+                                              onTap: () {
+                                                print(retResultagent[
+                                                    listIndex + 1]);
+                                                print(
+                                                    "${listIndex} + ${listIndex + 2}");
+                                              },
+                                              child: Text(
+                                                  retResultagent[listIndex + 1]
+                                                      .toString())),
+                                        ],
+                                      ),
                                     ),
                                     trailing: IconButton(
                                         onPressed: () {
@@ -887,38 +893,41 @@ class _SaleOrderPendingReportState extends State<SaleOrderPendingReport> {
                                   padding:
                                       const EdgeInsets.only(left: 6, right: 6),
                                   child: ListTile(
-                                    title: Row(
-                                      children: [
-                                        Padding(
+                                    title: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.only(right: 8),
+                                              child: InkWell(
+                                                  onTap: () {
+                                                    print(
+                                                        retResultitem[listIndex]);
+                                                  },
+                                                  child: Text(
+                                                      "${retResultitem[listIndex].toString()} "))),
+                                          Padding(
                                             padding:
                                                 const EdgeInsets.only(right: 8),
-                                            child: InkWell(
-                                                onTap: () {
-                                                  print(
-                                                      retResultitem[listIndex]);
-                                                },
-                                                child: Text(
-                                                    "${retResultitem[listIndex].toString()} "))),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: Text(
-                                            "|",
-                                            style: TextStyle(
-                                                color: Colors.grey.shade400),
-                                          ),
-                                        ),
-                                        InkWell(
-                                            onTap: () {
-                                              print(
-                                                  retResultitem[listIndex + 1]);
-                                              print(
-                                                  "${listIndex} + ${listIndex + 2}");
-                                            },
                                             child: Text(
-                                                retResultitem[listIndex + 1]
-                                                    .toString())),
-                                      ],
+                                              "|",
+                                              style: TextStyle(
+                                                  color: Colors.grey.shade400),
+                                            ),
+                                          ),
+                                          InkWell(
+                                              onTap: () {
+                                                print(
+                                                    retResultitem[listIndex + 1]);
+                                                print(
+                                                    "${listIndex} + ${listIndex + 2}");
+                                              },
+                                              child: Text(
+                                                  retResultitem[listIndex + 1]
+                                                      .toString())),
+                                        ],
+                                      ),
                                     ),
                                     trailing: IconButton(
                                         onPressed: () {
@@ -961,38 +970,41 @@ class _SaleOrderPendingReportState extends State<SaleOrderPendingReport> {
                                   padding:
                                       const EdgeInsets.only(left: 6, right: 6),
                                   child: ListTile(
-                                    title: Row(
-                                      children: [
-                                        Padding(
+                                    title: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.only(right: 8),
+                                              child: InkWell(
+                                                  onTap: () {
+                                                    print(retResultdesign[
+                                                        listIndex]);
+                                                  },
+                                                  child: Text(
+                                                      "${retResultdesign[listIndex].toString()} "))),
+                                          Padding(
                                             padding:
                                                 const EdgeInsets.only(right: 8),
-                                            child: InkWell(
-                                                onTap: () {
-                                                  print(retResultdesign[
-                                                      listIndex]);
-                                                },
-                                                child: Text(
-                                                    "${retResultdesign[listIndex].toString()} "))),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: Text(
-                                            "|",
-                                            style: TextStyle(
-                                                color: Colors.grey.shade400),
-                                          ),
-                                        ),
-                                        InkWell(
-                                            onTap: () {
-                                              print(retResultdesign[
-                                                  listIndex + 1]);
-                                              print(
-                                                  "${listIndex} + ${listIndex + 2}");
-                                            },
                                             child: Text(
-                                                retResultdesign[listIndex + 1]
-                                                    .toString())),
-                                      ],
+                                              "|",
+                                              style: TextStyle(
+                                                  color: Colors.grey.shade400),
+                                            ),
+                                          ),
+                                          InkWell(
+                                              onTap: () {
+                                                print(retResultdesign[
+                                                    listIndex + 1]);
+                                                print(
+                                                    "${listIndex} + ${listIndex + 2}");
+                                              },
+                                              child: Text(
+                                                  retResultdesign[listIndex + 1]
+                                                      .toString())),
+                                        ],
+                                      ),
                                     ),
                                     trailing: IconButton(
                                         onPressed: () {
@@ -1035,38 +1047,41 @@ class _SaleOrderPendingReportState extends State<SaleOrderPendingReport> {
                                   padding:
                                       const EdgeInsets.only(left: 6, right: 6),
                                   child: ListTile(
-                                    title: Row(
-                                      children: [
-                                        Padding(
+                                    title: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.only(right: 8),
+                                              child: InkWell(
+                                                  onTap: () {
+                                                    print(retResultsalesman[
+                                                        listIndex]);
+                                                  },
+                                                  child: Text(
+                                                      "${retResultsalesman[listIndex].toString()} "))),
+                                          Padding(
                                             padding:
                                                 const EdgeInsets.only(right: 8),
-                                            child: InkWell(
-                                                onTap: () {
-                                                  print(retResultsalesman[
-                                                      listIndex]);
-                                                },
-                                                child: Text(
-                                                    "${retResultsalesman[listIndex].toString()} "))),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: Text(
-                                            "|",
-                                            style: TextStyle(
-                                                color: Colors.grey.shade400),
-                                          ),
-                                        ),
-                                        InkWell(
-                                            onTap: () {
-                                              print(retResultsalesman[
-                                                  listIndex + 1]);
-                                              print(
-                                                  "${listIndex} + ${listIndex + 2}");
-                                            },
                                             child: Text(
-                                                retResultsalesman[listIndex + 1]
-                                                    .toString())),
-                                      ],
+                                              "|",
+                                              style: TextStyle(
+                                                  color: Colors.grey.shade400),
+                                            ),
+                                          ),
+                                          InkWell(
+                                              onTap: () {
+                                                print(retResultsalesman[
+                                                    listIndex + 1]);
+                                                print(
+                                                    "${listIndex} + ${listIndex + 2}");
+                                              },
+                                              child: Text(
+                                                  retResultsalesman[listIndex + 1]
+                                                      .toString())),
+                                        ],
+                                      ),
                                     ),
                                     trailing: IconButton(
                                         onPressed: () {

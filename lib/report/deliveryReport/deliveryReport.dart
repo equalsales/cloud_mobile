@@ -321,32 +321,35 @@ class _DeliveryReportState extends State<DeliveryReport> {
                                   padding:
                                       const EdgeInsets.only(left: 6, right: 6),
                                   child: ListTile(
-                                    title: Row(
-                                      children: [
-                                        Padding(
+                                    title: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.only(right: 8),
+                                              child: InkWell(
+                                                  onTap: () {
+                                                    print(
+                                                        retResultParty[listIndex]);
+                                                  },
+                                                  child: Text(
+                                                      "${retResultParty[listIndex].toString()} ",overflow: TextOverflow.ellipsis))),
+                                          Padding(
                                             padding:
                                                 const EdgeInsets.only(right: 8),
-                                            child: InkWell(
-                                                onTap: () {
-                                                  print(
-                                                      retResultParty[listIndex]);
-                                                },
-                                                child: Text(
-                                                    "${retResultParty[listIndex].toString()} "))),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: Text(
-                                            "|",
-                                            style: TextStyle(
-                                                color: Colors.grey.shade400),
-                                          ),
-                                        ),
-                                        InkWell(
                                             child: Text(
-                                                retResultParty[listIndex + 1]
-                                                    .toString())),
-                                      ],
+                                              "|",
+                                              style: TextStyle(
+                                                  color: Colors.grey.shade400),
+                                            ),
+                                          ),
+                                          InkWell(
+                                              child: Text(
+                                                  retResultParty[listIndex + 1]
+                                                      .toString(),overflow: TextOverflow.ellipsis)),
+                                        ],
+                                      ),
                                     ),
                                     trailing: IconButton(
                                         onPressed: () {
@@ -390,38 +393,41 @@ class _DeliveryReportState extends State<DeliveryReport> {
                                   padding:
                                       const EdgeInsets.only(left: 6, right: 6),
                                   child: ListTile(
-                                    title: Row(
-                                      children: [
-                                        Padding(
+                                    title: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.only(right: 8),
+                                              child: InkWell(
+                                                  onTap: () {
+                                                    print(retResultDriver[
+                                                        listIndex]);
+                                                  },
+                                                  child: Text(
+                                                      "${retResultDriver[listIndex].toString()} ",overflow: TextOverflow.ellipsis))),
+                                          Padding(
                                             padding:
                                                 const EdgeInsets.only(right: 8),
-                                            child: InkWell(
-                                                onTap: () {
-                                                  print(retResultDriver[
-                                                      listIndex]);
-                                                },
-                                                child: Text(
-                                                    "${retResultDriver[listIndex].toString()} "))),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 8),
-                                          child: Text(
-                                            "|",
-                                            style: TextStyle(
-                                                color: Colors.grey.shade400),
-                                          ),
-                                        ),
-                                        InkWell(
-                                            onTap: () {
-                                              print(retResultDriver[
-                                                  listIndex + 1]);
-                                              print(
-                                                  "${listIndex} + ${listIndex + 2}");
-                                            },
                                             child: Text(
-                                                retResultDriver[listIndex + 1]
-                                                    .toString())),
-                                      ],
+                                              "|",
+                                              style: TextStyle(
+                                                  color: Colors.grey.shade400),
+                                            ),
+                                          ),
+                                          InkWell(
+                                              onTap: () {
+                                                print(retResultDriver[
+                                                    listIndex + 1]);
+                                                print(
+                                                    "${listIndex} + ${listIndex + 2}");
+                                              },
+                                              child: Text(
+                                                  retResultDriver[listIndex + 1]
+                                                      .toString(),overflow: TextOverflow.ellipsis)),
+                                        ],
+                                      ),
                                     ),
                                     trailing: IconButton(
                                         onPressed: () {
