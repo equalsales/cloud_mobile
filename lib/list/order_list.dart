@@ -49,13 +49,26 @@ class order_ListState extends State<order_list> {
 
 
     String uri = '';
-
-     uri =
+     
+     if(globals.username == 'SACHIN'){
+      print("-------------------------------------------------");
+        print(globals.username);
+       uri =
         '${globals.cdomain}/api/commonapi_getsaleordpendinglist?dbname=' +
             db +
             '&partyid=' +
-            partyid.toString();
-    
+            partyid.toString() +
+            '&user=SACHIN'; 
+     } else {
+      print("-------------------------------------------------");
+        print(globals.username);
+       uri =
+        '${globals.cdomain}/api/commonapi_getsaleordpendinglist?dbname=' +
+            db +
+            '&partyid=' +
+            partyid.toString() +
+            '&user=KRISHNA';  
+     }
 
     // uri =
     //     'http://127.0.0.1:8000/api/commonapi_getsaleordpendinglist?dbname=' +
@@ -127,13 +140,23 @@ class order_ListState extends State<order_list> {
                     orderno +
                     ' Dt : ' +
                     date +
+                    ' Design : ' +
+                    design +
                     ' Item Name : ' +
                     itemname +
                     ' Salesman : ' +
                     salesman +
                     ' Haste : ' +
                     haste),
-                subtitle: Text('Pending Mts : ' +
+                subtitle: globals.username == 'SACHIN' || globals.username == 'SALE' 
+                ?
+                Text('Pending Mts : ' +
+                    meters +
+                    ' Pending Taka :' +
+                    taka +
+                    ' Rate' +
+                    rate) 
+                : Text('Pending Mts : ' +
                     meters +
                     ' Pending Taka :' +
                     taka),

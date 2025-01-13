@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_mobile/module/looms/greyjobissue/orderlist_greyjobissue.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
 import 'package:flutter/services.dart';
@@ -36,7 +37,14 @@ class LoomGreyJobIssueDetAdd extends StatefulWidget {
       partyid,
       itemDet,
       id,
-      branchid
+      branchid,
+      orderno,
+      orderChr,
+      ordid,
+      orddetid,
+      orditem,
+      orddesign,
+      ordmtrs,
       })
       : super(key: mykey) {
     xcompanyid = companyid;
@@ -47,6 +55,13 @@ class LoomGreyJobIssueDetAdd extends StatefulWidget {
     xparty = partyid;
     xid = id;
     xbranchid = branchid;
+    xorderno = orderno;
+    xorderchr = orderChr;
+    xordid = ordid;
+    xorddetid = orddetid;
+    xorditem = orditem;
+    xorddesign = orddesign;
+    xordmtrs = ordmtrs;
     xItemDetails = itemDet;
     //xitemDet = itemDet;
 
@@ -64,6 +79,13 @@ class LoomGreyJobIssueDetAdd extends StatefulWidget {
   var xid;
   var xbranch;
   var xbranchid;
+  var xorderno;
+  var xorderchr;
+  var xordid;
+  var xorddetid;
+  var xorditem;
+  var xorddesign;
+  var xordmtrs;
   var xparty;
   List xitemDet = [];
   List xItemDetails = [];
@@ -77,7 +99,8 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
   DateTime toDate = DateTime.now();
 
   TextEditingController _orderno = new TextEditingController();
-  TextEditingController _folddate = new TextEditingController();
+  TextEditingController _orderChr = new TextEditingController();
+  TextEditingController _ordDate = new TextEditingController();
   TextEditingController _takachr = new TextEditingController();
   TextEditingController _takano = new TextEditingController();
   TextEditingController _ctakano = new TextEditingController();
@@ -96,6 +119,9 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
   TextEditingController _inwdettkid = new TextEditingController();
   TextEditingController _ordid = new TextEditingController();
   TextEditingController _orddetid = new TextEditingController();
+  TextEditingController _ordMtrs = new TextEditingController();
+  TextEditingController _ordItem = new TextEditingController();
+  TextEditingController _ordDesign = new TextEditingController();
   TextEditingController _fmode = new TextEditingController();
   TextEditingController _ordbalmtrs = new TextEditingController();
   TextEditingController _weight = new TextEditingController();
@@ -103,16 +129,22 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
   TextEditingController _beamno = new TextEditingController();
   TextEditingController _beamitem = new TextEditingController();
 
-  //var ordTaka = 0;
   double ordMeters = 0;
 
   final _formKey = GlobalKey<FormState>();
 
-  var _jsonData = [];
-  //TextEditingController _fromdatecontroller = new TextEditingController(text: 'dhaval');
-
   @override
   void initState() {
+    super.initState();
+     
+    _orderno.text = widget.xorderno;
+    _orderChr.text = widget.xorderchr;
+    _ordid.text = widget.xordid;
+    _orddetid.text = widget.xorddetid;
+    _ordItem.text = widget.xorditem;
+    _ordDesign.text = widget.xorddesign;
+    _ordMtrs.text = widget.xordmtrs;
+
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -124,6 +156,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
     if (length > 0) {
       setState(() {
         _orderno.text = ItemDetails[length - 1]['orderno'].toString();
+        _orderChr.text = ItemDetails[length - 1]['orderchr'].toString();
         //_folddate.text = ItemDetails[length - 1]['folddate'].toString();
         _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
         _ordid.text = ItemDetails[length - 1]['ordid'].toString();
@@ -143,53 +176,52 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
     // }
   }
 
-  void gotoOrderScreen(BuildContext contex) async {
-    // var result = await Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (_) => loomsalesorder_list(
-    //               companyid: widget.xcompanyid,
-    //               companyname: widget.xcompanyname,
-    //               fbeg: widget.xfbeg,
-    //               fend: widget.xfend,
-    //               partyid: widget.xparty,
-    //             )));
+  // void gotoOrderScreen(BuildContext contex) async {
+  //   var result = await Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (_) => greyorder_list(
+  //                 companyid: widget.xcompanyid,
+  //                 companyname: widget.xcompanyname,
+  //                 fbeg: widget.xfbeg,
+  //                 fend: widget.xfend,
+  //                 branch: widget.xbranch,
+  //                 orderno: widget.xorderno,
+  //               )));
 
-    // setState(() {
-    //   var retResult = result;
+  //   setState(() {
+  //     var retResult = result;
 
-    //   print(retResult);
-    //   var _orderlist = result[1];
-    //   result = result[1];
-    //   var orderid = _orderlist[0];
+  //     print(retResult);
+  //     var _orderlist = result[1];
+  //     result = result[1];
+  //     var orderid = _orderlist[0];
 
-    //   print(orderid);
+  //     print(orderid);
 
-    //   var selOrder = '';
-    //   for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-    //     if (ictr > 0) {
-    //       selOrder = selOrder + ',';
-    //     }
-    //     selOrder = selOrder + retResult[0][ictr];
-    //   }
+  //     var selOrder = '';
+  //     for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+  //       if (ictr > 0) {
+  //         selOrder = selOrder + ',';
+  //       }
+  //       selOrder = selOrder + retResult[0][ictr];
+  //     }
 
-    //   _orderno.text = selOrder;
+  //     _orderno.text = selOrder;
 
-    //   print('dhruv');
-    //   print(result);
-    //   setState(() {
-    //     _folddate.text = result[0]['date'];
-    //     _itemname.text = result[0]['itemname'];
-    //     _design.text = result[0]['design'];
-    //     _unit.text = result[0]['unit'];
-    //     _rate.text = result[0]['rate'];
-    //     _ordid.text = result[0]['ordid'].toString();
-    //     _orddetid.text = result[0]['orddetid'].toString();
-    //     ordMeters = double.parse(result[0]['balmeters'].toString());
-    //     _ordbalmtrs.text = result[0]['balmeters'].toString();
-    //   });
-    // });
-  }
+  //     setState(() {
+  //       _orderno.text = result[0]['orderno'];
+  //       _orderChr.text = result[0]['orderchr'];
+  //       _itemname.text = result[0]['itemname'];
+  //       _design.text = result[0]['design'];
+  //       _unit.text = result[0]['unit'];
+  //       _ordid.text = result[0]['ordid'].toString();
+  //       _orddetid.text = result[0]['orddetid'].toString();
+  //       ordMeters = double.parse(result[0]['balmeters'].toString());
+  //       _ordbalmtrs.text = result[0]['balmeters'].toString();
+  //     });
+  //   });
+  // }
 
   Future<bool> fetchdetails() async {
     String uri = '';
@@ -227,14 +259,14 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
       }
     }
 //commonapi_gettakastock?partyfilter=N&takano=28430&takachr=AJ&branchid=(2)&getdata=Y&dbname=admin_looms
-    uri = 'https://looms.equalsoftlink.com/api/commonapi_gettakastock2?dbname=' +
+    uri = '${globals.cdomain}/api/commonapi_gettakastock2?dbname=' +
         db +
         '&partyfilter=N&takachr=' +
         takachr +
         '&takano=' +
         takano +
         '&branchid=('+ branch +')&getdata=Y&itemname=$cItem';
-    // 'https://www.cloud.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
+    // '${globals.cdomain2}/api/api_getsalechallanlist?dbname=' +
     //     db +
     //     '&cno=' +
     //     cno +
@@ -261,11 +293,12 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
 
     setState(() {
       _itemname.text = jsonData['itemname'].toString();
-      _folddate.text = jsonData['date'].toString();
+      _ordDate.text = jsonData['date'].toString();
       _design.text = jsonData['design'].toString();
       _machine.text = jsonData['machine'].toString();
       _pcs.text = jsonData['pcs'].toString();
       _meters.text = jsonData['meters'].toString();
+      _ordMtrs.text = _meters.text;
       _tpmeters.text = jsonData['tpmtrs'].toString();
       _unit.text = jsonData['unit'].toString();
       _hsncode.text = jsonData['hsncode'].toString();
@@ -369,11 +402,15 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
       var inwdettkid = _inwdettkid.text;
       var fmode = _fmode.text;
       var orderno = _orderno.text;
+      var orderChr = _orderChr.text;
       var ordid = _ordid.text;
       var orddetid = _orddetid.text;
+      var orditem = _ordItem.text;
+      var orddesign= _ordDesign.text;
+      var ordmtr = _ordMtrs.text;
       var ordbalmtrs = _ordbalmtrs.text;
       var hsncode = _hsncode.text;
-      var folddate = _folddate.text;
+      var folddate = _ordDate.text;
       var weight = _weight.text;
       var avgwt = _avgwt.text;
       var beamno = _beamno.text;
@@ -381,6 +418,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
 
       widget.xitemDet.add({
         'orderno': orderno,
+        'orderchr': orderChr,
         'takachr': takachr,
         'takano': takano,
         'pcs': pcs,
@@ -394,11 +432,14 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
         'design': design,
         'machine': machine,
         'ordid': ordid,
+        'orddetid': orddetid,
+        'orditem': orditem,
+        'orddesign': orddesign,
+        'ordmtr': ordmtr,
         'fmode': fmode,
         'inwid': inwid,
         'inwdettkid': inwdettkid,
         'inwdetid': inwdetid,
-        'orddetid': orddetid,
         'ordbalmtrs': ordbalmtrs,
         'weight': weight,
         'avgwt': avgwt,
@@ -459,58 +500,6 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _orderno,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Job Order',
-                      labelText: 'Order No',
-                    ),
-                    onTap: () {
-                      gotoOrderScreen(context);
-                    },
-                    onChanged: (value) {
-                      ;
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _folddate,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Fold Date',
-                      labelText: 'Fold Date',
-                    ),
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _ordbalmtrs,
-                    enabled: false,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Order Balance',
-                      labelText: 'Order Balance',
-                    ),
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
             Row(
               children: [
                 Expanded(
@@ -898,6 +887,116 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
                     },
                   ),
                 )
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _orderno,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'OrderNo',
+                      labelText: 'OrderNo',
+                    ),
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _orderChr,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'OrderChr',
+                      labelText: 'OrderChr',
+                    ),
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _ordid,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'OrdId',
+                      labelText: 'OrdId',
+                    ),
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _orddetid,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'OrdDetId',
+                      labelText: 'OrdDetId',
+                    ),
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _ordItem,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'OrdItem',
+                      labelText: 'OrdItem',
+                    ),
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _ordDesign,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'OrdDesign',
+                      labelText: 'OrdDesign',
+                    ),
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    controller: _ordMtrs,
+                    enabled: false,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'OrdMtrs',
+                      labelText: 'OrdMtrs',
+                    ),
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
               ],
             ),
           ],

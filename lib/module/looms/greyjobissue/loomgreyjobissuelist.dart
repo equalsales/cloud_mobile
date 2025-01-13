@@ -37,6 +37,7 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
   String dropdownPrintFormat = 'Print Format';
   @override
   void initState() {
+    super.initState();
     loaddetails();
     loadprintformet();
   }
@@ -46,7 +47,7 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -72,7 +73,7 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -96,7 +97,7 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
     print(globals.enddate);
 
     var response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuelist?dbname=' +
+        '${globals.cdomain}/api/api_getgreyjobissuelist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -106,7 +107,7 @@ class _LoomGreyJobIssueListPageState extends State<LoomGreyJobIssueList> {
             enddate));
 
     print(
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuelist?dbname=' +
+        '${globals.cdomain}/api/api_getgreyjobissuelist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -361,7 +362,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             // var cno = globals.companyid;
 
             // var response = await http.post(Uri.parse(
-            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+            //     '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
             //         db +
             //         '&cno=' +
             //         cno +
@@ -369,7 +370,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             //         id.toString()));
 
             // print(
-            //     'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+            //     '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
             //         db +
             //         '&id=' +
             //         id.toString());

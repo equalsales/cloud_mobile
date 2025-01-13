@@ -541,143 +541,337 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     });
   }
 
-
   Future<bool> saveData() async {
-      if(ItemDetails.length == 0){
-        showAlertDialog(context, 'ItemDetails can not be blank.');
-        return true;
-      }else{
-        DialogBuilder(context).showLoadingIndicator('');
-        String uri = '';
-        var cno = globals.companyid;
-        var db = globals.dbname;
-        var username = globals.username;
-        var packingtype = _packingtype.text;
-        var packingsrchr = _packingsrchr.text;
-        var packingserial = _packingserial.text;
-        var serial = _serial.text;
-        var srchr = _srchr.text;
-        var book = _book.text;
-        var bookno = _bookno.text;
-        var branch = _branch.text;
-        var date = _date.text;
-        var party = _party.text;
-        var agent = _agent.text;
-        var delparty = _delparty.text;
-        var haste = _haste.text;
-        var salesman = _salesman.text;
-        var transport = _transport.text;
-        var remarks = _remarks.text;
-        var parcel = _parcel.text;
-        var duedays = _duedays.text;
-        var station = _station.text;
+    if (ItemDetails.isEmpty) {
+      isButtonActive = true;
+      showAlertDialog(context, 'ItemDetails cannot be blank.');
+      // Return false if validation fails
+      return true;
+    }
 
-        if (parcel == ' ') {
-          parcel = ' ';
-        }
+     if (globals.username == 'SACHIN') {
+      print("----------------------------------");
 
-        var id = widget.xid;
-        id = int.parse(id);
-
-        print(packingtype);
-        print('In Save....');
-
-        print(jsonEncode(ItemDetails));
-
-        DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
-        String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
-
-        party = party.replaceAll('&', '_');
-
-        uri = "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
-            db +
-            "&company=&cno=" +
-            cno +
-            "&user=" +
-            username +
-            "&branch=" +
-            branch +
-            "&packingtype=" +
-            packingtype +
-            "&party=" +
-            party +
-            "&book=" +
-            book +
-            "&haste=" +
-            haste +
-            '&salesman=' +
-            salesman +
-            "&transport=" +
-            transport +
-            "&station=" +
-            station +
-            "&packingsrchr=" +
-            packingsrchr +
-            "&packingserial=" +
-            packingserial +
-            "&bookno=" +
-            bookno +
-            "&srchr=" +
-            srchr +
-            "&serial=" +
-            serial +
-            "&date=" +
-            newDate +
-            "&remarks=" +
-            remarks +
-            "&duedays=" +
-            duedays.toString() +
-            "&id=" +
-            id.toString() +
-            "&parcel=" +
-            parcel;
-
-        print("/////////////////////////////////////////////" + uri);
-
-        final headers = {
-          'Content-Type':
-              'application/json', // Set the appropriate content-type
-          // Add any other headers required by your API
-        };
-
-        var response = await http.post(Uri.parse(uri),
-            headers: headers, body: jsonEncode(ItemDetails));
-
-        var jsonData = jsonDecode(response.body);
-        //print('4');
-
-        var jsonCode = jsonData['Code'];
-        var jsonMsg = jsonData['Message'];
-        var jsonid = jsonData['id']; 
-        DialogBuilder(context).hideOpenDialog();
-
-        if (jsonCode == '500') {
-          showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-        } else {
-          print("....................");
-          print("id : " + id.toString());
-          if(id == 0){
-            uri = "${globals.cdomain}/sendmodulesms/$jsonid?WATxtApi=639b127a08175a3ef38f4367&call=4&email=&formatid=3&fromserial=0&mobile=&printid=49&srchr=&toserial=0&dbname=admin_looms&cno=3&user=KRISHNA";
-            print("------------------- : " + uri);
-            var response = await http.get(Uri.parse(uri));
-            // var jsonData = jsonDecode(response.body);
-            // jsonData = jsonData['data'];
-            SendWhatAppnwork(jsonid);
+      // Check for duplicate item names
+      for (int i = 0; i < ItemDetails.length; i++) {
+        for (int j = i + 1; j < ItemDetails.length; j++) {
+          if (ItemDetails[i]['itemname'] != ItemDetails[j]['itemname']) {
+            isButtonActive = true;
+            print("Duplicate item name found.");
+            showAlertDialog(context,'ItemName can not be different.',);
+            return true; // Exit if duplicates are found
           }
-          Fluttertoast.showToast(
-            msg: "Saved !!!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.white,
-            textColor: Colors.purple,
-            fontSize: 16.0,
-          );
-          Navigator.pop(context);
         }
+      }
+
+      DialogBuilder(context).showLoadingIndicator('');
+      String uri = await buildUri();
+      print("/////////////////////////////////////////////" + uri);
+
+      final headers = {
+        'Content-Type': 'application/json', // Set the appropriate content-type
+      };
+
+      var response = await http.post(Uri.parse(uri), headers: headers, body: jsonEncode(ItemDetails));
+      var jsonData = jsonDecode(response.body);
+      var jsonCode = jsonData['Code'];
+      var jsonMsg = jsonData['Message'];
+      var jsonid = jsonData['id'];
+
+      DialogBuilder(context).hideOpenDialog();
+
+      if (jsonCode == '500') {
+        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+        return false;
+      } else {
+        print("id : " + jsonid.toString());
+        if (globals.username == 'SACHIN') {
+          if (jsonid == 0) {
+            await sendSmsAndNotification(jsonid);
+          }
+        }
+
+        Fluttertoast.showToast(
+          msg: "Saved !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
+        );
+        Navigator.pop(context);
+        return true;
+      }
+    } else {
+      DialogBuilder(context).showLoadingIndicator('');
+      String uri = await buildUri();
+      print("/////////////////////////////////////////////" + uri);
+
+      final headers = {
+        'Content-Type': 'application/json',
+      };
+
+      var response = await http.post(Uri.parse(uri), headers: headers, body: jsonEncode(ItemDetails));
+      var jsonData = jsonDecode(response.body);
+      var jsonCode = jsonData['Code'];
+      var jsonMsg = jsonData['Message'];
+      var jsonid = jsonData['id'];
+
+      DialogBuilder(context).hideOpenDialog();
+
+      if (jsonCode == '500') {
+        isButtonActive = true;
+        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+        return false;
+      } else {
+        print("id : " + jsonid.toString());
+        if (globals.username == 'SACHIN') {
+          if (jsonid == 0) {
+            await sendSmsAndNotification(jsonid);
+          }
+        }
+
+        Fluttertoast.showToast(
+          msg: "Saved !!!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.purple,
+          fontSize: 16.0,
+        );
+        Navigator.pop(context);
         return true;
       }
     }
+  }
+
+  Future<String> buildUri() async {
+    var cno = globals.companyid;
+    var db = globals.dbname;
+    var username = globals.username;
+    var packingtype = _packingtype.text;
+    var packingsrchr = _packingsrchr.text;
+    var packingserial = _packingserial.text;
+    var serial = _serial.text;
+    var srchr = _srchr.text;
+    var book = _book.text;
+    var bookno = _bookno.text;
+    var branch = _branch.text;
+    var date = _date.text;
+    var party = _party.text;
+    var agent = _agent.text;
+    var delparty = _delparty.text;
+    var haste = _haste.text;
+    var salesman = _salesman.text;
+    var transport = _transport.text;
+    var remarks = _remarks.text;
+    var parcel = _parcel.text;
+    var duedays = _duedays.text;
+    var station = _station.text;
+
+    if (parcel == ' ') {
+      parcel = ' ';
+    }
+
+    var id = widget.xid;
+    id = int.parse(id);
+
+    DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
+    String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
+
+    party = party.replaceAll('&', '_');
+
+    return "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
+        db +
+        "&company=&cno=" +
+        cno +
+        "&user=" +
+        username +
+        "&branch=" +
+        branch +
+        "&packingtype=" +
+        packingtype +
+        "&party=" +
+        party +
+        "&book=" +
+        book +
+        "&haste=" +
+        haste +
+        '&salesman=' +
+        salesman +
+        "&transport=" +
+        transport +
+        "&station=" +
+        station +
+        "&packingsrchr=" +
+        packingsrchr +
+        "&packingserial=" +
+        packingserial +
+        "&bookno=" +
+        bookno +
+        "&srchr=" +
+        srchr +
+        "&serial=" +
+        serial +
+        "&date=" +
+        newDate +
+        "&remarks=" +
+        remarks +
+        "&duedays=" +
+        duedays.toString() +
+        "&id=" +
+        id.toString() +
+        "&parcel=" +
+        parcel;
+  }
+
+  Future<void> sendSmsAndNotification(int jsonid) async {
+    String uri = "${globals.cdomain}/sendmodulesms/$jsonid?WATxtApi=639b127a08175a3ef38f4367&call=4&email=&formatid=3&fromserial=0&mobile=&printid=49&srchr=&toserial=0&dbname=admin_looms&cno=3&user=KRISHNA";
+    print("------------------- : " + uri);
+    await http.get(Uri.parse(uri));
+    SendWhatAppnwork(jsonid);
+  }
+
+// Future<bool> saveData() async {
+  //     if(ItemDetails.length == 0){
+  //       showAlertDialog(context, 'ItemDetails can not be blank.');
+  //       return false;
+  //     }else{
+  //       DialogBuilder(context).showLoadingIndicator('');
+  //       String uri = '';
+  //       var cno = globals.companyid;
+  //       var db = globals.dbname;
+  //       var username = globals.username;
+  //       var packingtype = _packingtype.text;
+  //       var packingsrchr = _packingsrchr.text;
+  //       var packingserial = _packingserial.text;
+  //       var serial = _serial.text;
+  //       var srchr = _srchr.text;
+  //       var book = _book.text;
+  //       var bookno = _bookno.text;
+  //       var branch = _branch.text;
+  //       var date = _date.text;
+  //       var party = _party.text;
+  //       var agent = _agent.text;
+  //       var delparty = _delparty.text;
+  //       var haste = _haste.text;
+  //       var salesman = _salesman.text;
+  //       var transport = _transport.text;
+  //       var remarks = _remarks.text;
+  //       var parcel = _parcel.text;
+  //       var duedays = _duedays.text;
+  //       var station = _station.text;
+
+  //       if (parcel == ' ') {
+  //         parcel = ' ';
+  //       }
+
+  //       var id = widget.xid;
+  //       id = int.parse(id);
+
+  //       print(packingtype);
+  //       print('In Save....');
+
+  //       print(jsonEncode(ItemDetails));
+
+  //       DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(date);
+  //       String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
+
+  //       party = party.replaceAll('&', '_');
+
+  //       uri = "${globals.cdomain}/api/api_storeloomssalechln?dbname=" +
+  //           db +
+  //           "&company=&cno=" +
+  //           cno +
+  //           "&user=" +
+  //           username +
+  //           "&branch=" +
+  //           branch +
+  //           "&packingtype=" +
+  //           packingtype +
+  //           "&party=" +
+  //           party +
+  //           "&book=" +
+  //           book +
+  //           "&haste=" +
+  //           haste +
+  //           '&salesman=' +
+  //           salesman +
+  //           "&transport=" +
+  //           transport +
+  //           "&station=" +
+  //           station +
+  //           "&packingsrchr=" +
+  //           packingsrchr +
+  //           "&packingserial=" +
+  //           packingserial +
+  //           "&bookno=" +
+  //           bookno +
+  //           "&srchr=" +
+  //           srchr +
+  //           "&serial=" +
+  //           serial +
+  //           "&date=" +
+  //           newDate +
+  //           "&remarks=" +
+  //           remarks +
+  //           "&duedays=" +
+  //           duedays.toString() +
+  //           "&id=" +
+  //           id.toString() +
+  //           "&parcel=" +
+  //           parcel;
+
+  //       print("/////////////////////////////////////////////" + uri);
+
+  //       final headers = {
+  //         'Content-Type':
+  //             'application/json', // Set the appropriate content-type
+  //         // Add any other headers required by your API
+  //       };
+
+  //       var response = await http.post(Uri.parse(uri),
+  //           headers: headers, body: jsonEncode(ItemDetails));
+
+  //       var jsonData = jsonDecode(response.body);
+  //       //print('4');
+
+  //       var jsonCode = jsonData['Code'];
+  //       var jsonMsg = jsonData['Message'];
+  //       var jsonid = jsonData['id']; 
+  //       DialogBuilder(context).hideOpenDialog();
+
+  //       if (jsonCode == '500') {
+  //         showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+  //       } else {
+  //         print("....................");
+  //         print("id : " + id.toString());
+  //         if(globals.username == 'SACHIN'){
+  //           if(id == 0){
+  //             uri = "${globals.cdomain}/sendmodulesms/$jsonid?WATxtApi=639b127a08175a3ef38f4367&call=4&email=&formatid=3&fromserial=0&mobile=&printid=49&srchr=&toserial=0&dbname=admin_looms&cno=3&user=KRISHNA";
+  //             print("------------------- : " + uri);
+  //             var response = await http.get(Uri.parse(uri));
+  //             // var jsonData = jsonDecode(response.body);
+  //             // jsonData = jsonData['data'];
+  //             SendWhatAppnwork(jsonid);
+  //           }
+  //         }
+  //         Fluttertoast.showToast(
+  //           msg: "Saved !!!",
+  //           toastLength: Toast.LENGTH_SHORT,
+  //           gravity: ToastGravity.BOTTOM,
+  //           timeInSecForIosWeb: 1,
+  //           backgroundColor: Colors.white,
+  //           textColor: Colors.purple,
+  //           fontSize: 16.0,
+  //         );
+  //         Navigator.pop(context);
+  //       }
+  //       return true;
+  //     }
+  //   }
 
   Future<void> SendWhatAppnwork(int id) async {
     setState(() {

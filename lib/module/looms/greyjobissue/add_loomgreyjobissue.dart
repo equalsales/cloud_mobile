@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
+import 'package:cloud_mobile/list/orderno_list.dart';
 import 'package:cloud_mobile/module/looms/greyjobissue/loomgreyjobissuelist.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_mobile/function.dart';
@@ -60,6 +61,14 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
   TextEditingController _date = new TextEditingController();
   TextEditingController _party = new TextEditingController();
   TextEditingController _remarks = new TextEditingController();
+  TextEditingController _ordid = new TextEditingController();
+  TextEditingController _orddetid = new TextEditingController();
+  TextEditingController _orderNo = new TextEditingController();
+  TextEditingController _orderChr = new TextEditingController();
+  TextEditingController _orditem = new TextEditingController();
+  TextEditingController _orddesign = new TextEditingController();
+  TextEditingController _ordmtrs = new TextEditingController();
+  TextEditingController _itemname = new TextEditingController();
   TextEditingController _tottaka = new TextEditingController();
   TextEditingController _totmtrs = new TextEditingController();
   TextEditingController _branchid = new TextEditingController();
@@ -68,6 +77,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -88,7 +98,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     var id = widget.xid;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuedetlist?dbname=' +
+        '${globals.cdomain}/api/api_getgreyjobissuedetlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -110,7 +120,6 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       ItemDet.add({
         "controlid": jsonData[iCtr]['controlid'].toString(),
         "id": jsonData[iCtr]['id'].toString(),
-        "orderno": jsonData[iCtr]['ordno'].toString(),
         "takano": jsonData[iCtr]['takano'].toString(),
         "takachr": jsonData[iCtr]['takachr'].toString(),
         "pcs": jsonData[iCtr]['pcs'].toString(),
@@ -124,7 +133,13 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         "amount": jsonData[iCtr]['amount'].toString(),
         "design": jsonData[iCtr]['design'].toString(),
         "machine": jsonData[iCtr]['machine'].toString(),
+        "orderno": jsonData[iCtr]['orderno'].toString(),
+        "orderchr": jsonData[iCtr]['orderchr'].toString(),
         "ordid": jsonData[iCtr]['ordid'].toString(),
+        "orddetid": jsonData[iCtr]['orddetid'].toString(),
+        "orditem": jsonData[iCtr]['orditem'].toString(),
+        "orddesign": jsonData[iCtr]['orddesign'].toString(),
+        "ordmtr": jsonData[iCtr]['ordmtr'].toString(),
         "fmode": jsonData[iCtr]['fmode'].toString(),
         "inwid": jsonData[iCtr]['inwid'].toString(),
         "inwdetid": jsonData[iCtr]['inwdetid'].toString(),
@@ -150,7 +165,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     var todate = retconvdate(widget.xfend).toString();
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getgreyjobissuelist?dbname=' +
+        '${globals.cdomain}/api/api_getgreyjobissuelist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -183,6 +198,10 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     _remarks.text = getValue(jsonData['remarks'], 'C');
     _chlnno.text = getValue(jsonData['chlnno'], 'N');
     _chlnchr.text = getValue(jsonData['chlnchr'], 'C');
+    _orderNo.text = getValue(jsonData['orderno'], 'C');
+    _orderChr.text = getValue(jsonData['orderchr'], 'C');
+    _ordid.text = getValue(jsonData['ordid'], 'C');
+    _itemname.text = getValue(jsonData['itemname'], 'C');
 
     widget.serial = jsonData['serial'].toString();
     widget.srchr = jsonData['srchr'].toString();
@@ -199,7 +218,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     var cno = globals.companyid;
     var db = globals.dbname;
     uri =
-        'https://looms.equalsoftlink.com/api/api_greyjobissChallanno?dbname=' +
+        '${globals.cdomain}/api/api_greyjobissChallanno?dbname=' +
             db +
             '&branch=' +
             _branch.text +
@@ -240,7 +259,74 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       });
   }
 
-  void setDefValue() {}
+  void gotoOrderScreen(BuildContext contex) async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => orderno_list(
+                  companyid: widget.xcompanyid,
+                  companyname: widget.xcompanyname,
+                  fbeg: widget.xfbeg,
+                  fend: widget.xfend,
+                  branch: _branch.text,
+                )));
+
+    setState(() {
+      var retResult = result;
+
+      print(retResult);
+      var _orderlist = result[1];
+      result = result[1];
+      var orderid = _orderlist[0];
+
+      print(orderid);
+
+      var selOrder = '';
+      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+        if (ictr > 0) {
+          selOrder = selOrder + ',';
+        }
+        selOrder = selOrder + retResult[0][ictr];
+      }
+
+      _orderNo.text = selOrder;
+
+      setState(() {
+        _orderNo.text = result[0]['orderno'];
+        _orderChr.text = result[0]['orderchr'];
+        _itemname.text = result[0]['itemname'];
+        _orddesign.text = result[0]['design'];
+        _ordmtrs.text = result[0]['meters'];
+        _ordid.text = result[0]['ordid'].toString();
+      });
+    });
+    
+    DialogBuilder(context).showLoadingIndicator('');
+    var response;
+    var db = globals.dbname;
+    var branch = _branch.text;
+    var user = globals.username;
+    var orddetid = _ordid.text;
+
+    String uri = '';
+     
+    uri = '${globals.cdomain}/getgreyjoborderlist/?branch=$branch&dbname=$db&user=$user&aorddetid=0&ordid=$orddetid';
+
+    print(" orderdetidlist "+uri);
+    response = await http.get(Uri.parse(uri));
+    print("1");
+
+    var jsonData = jsonDecode(response.body);
+    print("2");
+
+    jsonData = jsonData['data'];
+
+    _orddetid.text = jsonData[0]['orddetid'].toString();
+
+    print("/////////////////////////");
+    print(_orddetid.text);
+    DialogBuilder(context).hideOpenDialog();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -363,6 +449,13 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     partyid: partyid,
                     itemDet: ItemDetails,
                     branchid: branchid,
+                    orderno: _orderNo.text,
+                    orderChr: _orderChr.text,
+                    ordid: _ordid.text,
+                    orddetid: _orddetid.text,
+                    orditem: _itemname.text,
+                    orddesign: _orddesign.text,
+                    ordmtrs: _ordmtrs.text,
                   )));
       //print('out');
       //print(result);
@@ -375,6 +468,14 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     }
 
     Future<bool> saveData() async {
+      for (int i = 0; i < ItemDetails.length; i++) {
+        if (ItemDetails[i]['itemname'] != _itemname.text) {
+          isButtonActive = true;
+          print("Item name not same.");
+          showAlertDialog(context,'ItemName can not be different.',);
+          return true; // Exit if duplicates are found
+        }
+      }
       String uri = '';
       var cno = globals.companyid;
       var db = globals.dbname;
@@ -389,6 +490,10 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       var remarks = _remarks.text;
       var chlnno = _chlnno.text;
       var chlnchr = _chlnchr.text;
+      var orderno = _orderNo.text;
+      var orderchr = _orderChr.text;
+      var ordid = _ordid.text;
+      var itemname = _itemname.text;
 
       var id = widget.xid;
       id = int.parse(id);
@@ -398,7 +503,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       print(jsonEncode(ItemDetails));
 
       uri =
-          "https://looms.equalsoftlink.com/api/api_storeloomsgreyjobissue?dbname=" +
+          "${globals.cdomain}/api/api_storeloomsgreyjobissue?dbname=" +
               db +
               "&company=&cno=" +
               cno +
@@ -422,6 +527,14 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
               chlnno +
               "&chlnchr=" +
               chlnchr +
+              "&orderno=" +
+              orderno +
+              "&orderchr=" +
+              orderchr +
+              "&ordid=" +
+              ordid +
+              "&itemname=" +
+              itemname +
               "&id=" +
               id.toString() +
               "&parcel=1";
@@ -526,8 +639,13 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
           DataCell(Text(ItemDetails[iCtr]['inwdetid'])),
           DataCell(Text(ItemDetails[iCtr]['inwdettkid'])),
           DataCell(Text(ItemDetails[iCtr]['fmode'])),
+          DataCell(Text(ItemDetails[iCtr]['orderno'])),
+          DataCell(Text(ItemDetails[iCtr]['orderchr'].toString())),
           DataCell(Text(ItemDetails[iCtr]['ordid'].toString())),
           DataCell(Text(ItemDetails[iCtr]['orddetid'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['orditem'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['orddesign'].toString())),
+          DataCell(Text(ItemDetails[iCtr]['ordmtr'].toString())),
           DataCell(Text(ItemDetails[iCtr]['machine'].toString())),
           DataCell(Text(ItemDetails[iCtr]['weight'].toString())),
           DataCell(Text(ItemDetails[iCtr]['avgwt'].toString())),
@@ -543,8 +661,6 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
 
       return _datarow;
     }
-
-    setDefValue();
 
     return Scaffold(
       appBar: AppBar(
@@ -752,6 +868,53 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                 ))
               ],
             ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _orderNo,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Order',
+                      labelText: 'Order No',
+                    ),
+                    onTap: () {
+                      if(_branch.text == ''){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text('Please select branch',style: TextStyle(color: Colors.white),)),
+                        );
+                      } else {
+                        gotoOrderScreen(context);
+                      }
+                    },
+                    onChanged: (value) {
+                      ;
+                    },
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: TextFormField(
+                    enabled: true,
+                    controller: _itemname,
+                    decoration: const InputDecoration(
+                      icon: const Icon(Icons.person),
+                      hintText: 'Item Name',
+                      labelText: 'Item Name',
+                    ),
+                    onTap: () {},
+                    validator: (value) {
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
             Padding(padding: EdgeInsets.all(5)),
             ElevatedButton(
               onPressed: () => {gotoChallanItemDet(context)},
@@ -805,10 +968,25 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     label: Text("FMode"),
                   ),
                   DataColumn(
+                    label: Text("OrdNo"),
+                  ),
+                  DataColumn(
+                    label: Text("OrdChr"),
+                  ),
+                  DataColumn(
                     label: Text("OrdId"),
                   ),
                   DataColumn(
                     label: Text("OrdDetId"),
+                  ),
+                  DataColumn(
+                    label: Text("OrdItem"),
+                  ),
+                  DataColumn(
+                    label: Text("OrdDesign"),
+                  ),
+                  DataColumn(
+                    label: Text("OrdMtrs"),
                   ),
                   DataColumn(
                     label: Text("machine"),
