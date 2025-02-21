@@ -5,6 +5,7 @@ import 'package:cloud_mobile/module/looms/customreport/customreportmenu.dart';
 import 'package:cloud_mobile/module/looms/delivery_salechallan/salechallan_delivery.dart';
 import 'package:cloud_mobile/module/looms/machinecard/loomsmachinecardlist.dart';
 import 'package:cloud_mobile/module/looms/physicalstock/loomphysicalstocklist.dart';
+import 'package:cloud_mobile/module/looms/saleorder/saleorderlist.dart';
 import 'package:cloud_mobile/module/looms/stockreport/stockreportmenu.dart';
 import 'package:cloud_mobile/module/looms/takaadjustment/loomstakaadjustmentlist.dart';
 import 'package:cloud_mobile/module/looms/takaproduction/takaproductionlist.dart';
@@ -103,6 +104,21 @@ class SideDrawer extends StatelessWidget {
           //                 )))
           //   },
           // ),
+          ListTile(
+            leading: Icon(Icons.shopping_cart),
+            title: Text('Sale Order'),
+            onTap: () => {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => SaleOrderList(
+                            companyid: xcompanyid,
+                            companyname: xcompanyname,
+                            fbeg: xfbeg,
+                            fend: xfend,
+                          )))
+            },
+          ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
             title: Text('Sale Bill'),

@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
+import 'package:cloud_mobile/list/item_list.dart';
 import 'package:cloud_mobile/list/orderno_list.dart';
 import 'package:cloud_mobile/module/looms/greyjobissue/loomgreyjobissuelist.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
   TextEditingController _orddetid = new TextEditingController();
   TextEditingController _orderNo = new TextEditingController();
   TextEditingController _orderChr = new TextEditingController();
-  TextEditingController _orditem = new TextEditingController();
+  TextEditingController _itemid = new TextEditingController();
   TextEditingController _orddesign = new TextEditingController();
   TextEditingController _ordmtrs = new TextEditingController();
   TextEditingController _itemname = new TextEditingController();
@@ -133,8 +134,8 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         "amount": jsonData[iCtr]['amount'].toString(),
         "design": jsonData[iCtr]['design'].toString(),
         "machine": jsonData[iCtr]['machine'].toString(),
-        "orderno": jsonData[iCtr]['orderno'].toString(),
-        "orderchr": jsonData[iCtr]['orderchr'].toString(),
+        "orderno": jsonData[iCtr]['ordno'].toString(),
+        "orderchr": jsonData[iCtr]['ordchr'].toString(),
         "ordid": jsonData[iCtr]['ordid'].toString(),
         "orddetid": jsonData[iCtr]['orddetid'].toString(),
         "orditem": jsonData[iCtr]['orditem'].toString(),
@@ -200,7 +201,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     _chlnchr.text = getValue(jsonData['chlnchr'], 'C');
     _orderNo.text = getValue(jsonData['orderno'], 'C');
     _orderChr.text = getValue(jsonData['orderchr'], 'C');
-    _ordid.text = getValue(jsonData['ordid'], 'C');
+    _ordid.text = getValue(jsonData['ordid'].toString(), 'C');
     _itemname.text = getValue(jsonData['itemname'], 'C');
 
     widget.serial = jsonData['serial'].toString();
@@ -297,6 +298,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
         _itemname.text = result[0]['itemname'];
         _orddesign.text = result[0]['design'];
         _ordmtrs.text = result[0]['meters'];
+        _itemid.text = result[0]['itemid'].toString();
         _ordid.text = result[0]['ordid'].toString();
       });
     });
@@ -433,6 +435,32 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
       });
     }
 
+    void gotoItemnameScreen(BuildContext context) async {
+      var result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (_) => item_list(
+                    companyid: widget.xcompanyid,
+                    companyname: widget.xcompanyname,
+                    fbeg: widget.xfbeg,
+                    fend: widget.xfend,
+                  )));
+      setState(() {
+        var retResult = result;
+        var newResult = result[1];
+        var selItemname = '';
+        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+          if (ictr > 0) {
+            selItemname = selItemname + ',';
+          }
+          selItemname = selItemname + retResult[0][ictr];
+        }
+        setState(() {
+          _itemname.text = newResult[0]['itemname'].toString();
+        });
+      });
+    }
+    
     void gotoChallanItemDet(BuildContext contex) async {
       var branch = _branch.text;
       var branchid = _branchid.text;
@@ -456,6 +484,7 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                     orditem: _itemname.text,
                     orddesign: _orddesign.text,
                     ordmtrs: _ordmtrs.text,
+                    itemname: _itemname.text
                   )));
       //print('out');
       //print(result);
@@ -468,108 +497,109 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
     }
 
     Future<bool> saveData() async {
-      for (int i = 0; i < ItemDetails.length; i++) {
-        if (ItemDetails[i]['itemname'] != _itemname.text) {
-          isButtonActive = true;
-          print("Item name not same.");
-          showAlertDialog(context,'ItemName can not be different.',);
-          return true; // Exit if duplicates are found
+      // for (int i = 0; i < ItemDetails.length; i++) {
+      //     if (ItemDetails[i]['itemname'] != _itemname.text) {
+      //       isButtonActive = true;
+      //       print("Item name not same.");
+      //       showAlertDialog(context,'ItemName can not be different.',);
+      //       // Exit if duplicates are found
+      //     }
+      //   }
+      //   return true;
+        String uri = '';
+        var cno = globals.companyid;
+        var db = globals.dbname;
+        var username = globals.username;
+
+        var type = _type.text;
+        var serial = _serial.text;
+        var srchr = _srchr.text;
+        var branch = _branch.text;
+        var date = _date.text;
+        var party = _party.text;
+        var remarks = _remarks.text;
+        var chlnno = _chlnno.text;
+        var chlnchr = _chlnchr.text;
+        var orderno = _orderNo.text;
+        var orderchr = _orderChr.text;
+        var ordid = _ordid.text;
+        var itemname = _itemname.text;
+
+        var id = widget.xid;
+        id = int.parse(id);
+
+        print('In Save....');
+
+        print(jsonEncode(ItemDetails));
+
+        uri =
+            "${globals.cdomain}/api/api_storeloomsgreyjobissue?dbname=" +
+                db +
+                "&company=&cno=" +
+                cno +
+                "&user=" +
+                username +
+                "&branch=" +
+                branch +
+                "&type=" +
+                type +
+                "&party=" +
+                party +
+                "&srchr=" +
+                srchr +
+                "&serial=" +
+                serial +
+                "&date=" +
+                date +
+                "&remarks=" +
+                remarks +
+                "&chlnno=" +
+                chlnno +
+                "&chlnchr=" +
+                chlnchr +
+                "&orderno=" +
+                orderno +
+                "&orderchr=" +
+                orderchr +
+                "&ordid=" +
+                ordid +
+                "&itemname=" +
+                itemname +
+                "&id=" +
+                id.toString() +
+                "&parcel=1";
+        print(uri);
+
+        final headers = {
+          'Content-Type': 'application/json', // Set the appropriate content-type
+          // Add any other headers required by your API
+        };
+        print(ItemDetails);
+        var response = await http.post(Uri.parse(uri),
+            headers: headers, body: jsonEncode(ItemDetails));
+
+        var jsonData = jsonDecode(response.body);
+
+        //print('4');
+
+        var jsonCode = jsonData['Code'];
+        var jsonMsg = jsonData['Message'];
+
+        if (jsonCode == '500') {
+          showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
+        } else {
+          showAlertDialog(context, 'Saved !!!');
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => LoomGreyJobIssueList(
+                        companyid: widget.xcompanyid,
+                        companyname: widget.xcompanyname,
+                        fbeg: widget.xfbeg,
+                        fend: widget.xfend,
+                      )));
         }
-      }
-      String uri = '';
-      var cno = globals.companyid;
-      var db = globals.dbname;
-      var username = globals.username;
-
-      var type = _type.text;
-      var serial = _serial.text;
-      var srchr = _srchr.text;
-      var branch = _branch.text;
-      var date = _date.text;
-      var party = _party.text;
-      var remarks = _remarks.text;
-      var chlnno = _chlnno.text;
-      var chlnchr = _chlnchr.text;
-      var orderno = _orderNo.text;
-      var orderchr = _orderChr.text;
-      var ordid = _ordid.text;
-      var itemname = _itemname.text;
-
-      var id = widget.xid;
-      id = int.parse(id);
-
-      print('In Save....');
-
-      print(jsonEncode(ItemDetails));
-
-      uri =
-          "${globals.cdomain}/api/api_storeloomsgreyjobissue?dbname=" +
-              db +
-              "&company=&cno=" +
-              cno +
-              "&user=" +
-              username +
-              "&branch=" +
-              branch +
-              "&type=" +
-              type +
-              "&party=" +
-              party +
-              "&srchr=" +
-              srchr +
-              "&serial=" +
-              serial +
-              "&date=" +
-              date +
-              "&remarks=" +
-              remarks +
-              "&chlnno=" +
-              chlnno +
-              "&chlnchr=" +
-              chlnchr +
-              "&orderno=" +
-              orderno +
-              "&orderchr=" +
-              orderchr +
-              "&ordid=" +
-              ordid +
-              "&itemname=" +
-              itemname +
-              "&id=" +
-              id.toString() +
-              "&parcel=1";
-      print(uri);
-
-      final headers = {
-        'Content-Type': 'application/json', // Set the appropriate content-type
-        // Add any other headers required by your API
-      };
-      print(ItemDetails);
-      var response = await http.post(Uri.parse(uri),
-          headers: headers, body: jsonEncode(ItemDetails));
-
-      var jsonData = jsonDecode(response.body);
-
-      //print('4');
-
-      var jsonCode = jsonData['Code'];
-      var jsonMsg = jsonData['Message'];
-
-      if (jsonCode == '500') {
-        showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-      } else {
-        showAlertDialog(context, 'Saved !!!');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => LoomGreyJobIssueList(
-                      companyid: widget.xcompanyid,
-                      companyname: widget.xcompanyname,
-                      fbeg: widget.xfbeg,
-                      fend: widget.xfend,
-                    )));
-      }
-      return true;
+        return true;
     }
 
     Future<void> _handleSaveData() async {
@@ -678,7 +708,28 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
           child: Icon(Icons.done),
           enableFeedback: isButtonActive,
           backgroundColor: Colors.green,
-          onPressed: isButtonActive ? () => _handleSaveData() : null),
+          onPressed: isButtonActive 
+          ? () async {
+          if (ItemDetails.isNotEmpty) {
+            for (int i = 0; i < ItemDetails.length; i++) {
+              if (ItemDetails[i]['itemname'] != _itemname.text) {
+                setState(() {
+                  isButtonActive = true;
+                });
+                showAlertDialog(context, 'Item Name cannot be different.');
+                return;
+              }
+            }
+          } 
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.black,
+              content: Text('Data saving in progress...', style: TextStyle(color: Colors.white)),
+            ),
+          );
+          await _handleSaveData();
+        }
+        : null),
       body: SingleChildScrollView(
           child: Form(
         key: _formKey,
@@ -907,7 +958,9 @@ class _GreyJobIssueAddState extends State<GreyJobIssueAdd> {
                       hintText: 'Item Name',
                       labelText: 'Item Name',
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      gotoItemnameScreen(context);
+                    },
                     validator: (value) {
                       return null;
                     },

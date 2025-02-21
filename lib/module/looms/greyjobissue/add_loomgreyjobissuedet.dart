@@ -45,6 +45,7 @@ class LoomGreyJobIssueDetAdd extends StatefulWidget {
       orditem,
       orddesign,
       ordmtrs,
+      itemname
       })
       : super(key: mykey) {
     xcompanyid = companyid;
@@ -62,6 +63,7 @@ class LoomGreyJobIssueDetAdd extends StatefulWidget {
     xorditem = orditem;
     xorddesign = orddesign;
     xordmtrs = ordmtrs;
+    xitemname = itemname;
     xItemDetails = itemDet;
     //xitemDet = itemDet;
 
@@ -86,6 +88,7 @@ class LoomGreyJobIssueDetAdd extends StatefulWidget {
   var xorditem;
   var xorddesign;
   var xordmtrs;
+  var xitemname;
   var xparty;
   List xitemDet = [];
   List xItemDetails = [];
@@ -133,6 +136,8 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
 
   final _formKey = GlobalKey<FormState>();
 
+  var visible = true;
+
   @override
   void initState() {
     super.initState();
@@ -155,17 +160,17 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
     print('Length :' + length.toString());
     if (length > 0) {
       setState(() {
-        _orderno.text = ItemDetails[length - 1]['orderno'].toString();
-        _orderChr.text = ItemDetails[length - 1]['orderchr'].toString();
+        // _orderno.text = ItemDetails[length - 1]['orderno'].toString();
+        // _orderChr.text = ItemDetails[length - 1]['orderchr'].toString();
         //_folddate.text = ItemDetails[length - 1]['folddate'].toString();
-        _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
-        _ordid.text = ItemDetails[length - 1]['ordid'].toString();
-        _orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
-        _itemname.text = ItemDetails[length - 1]['itemname'].toString();
-        _design.text = ItemDetails[length - 1]['design'].toString();
-        _hsncode.text = ItemDetails[length - 1]['hsncode'].toString();
-        _unit.text = ItemDetails[length - 1]['unit'].toString();
-        _rate.text = ItemDetails[length - 1]['rate'].toString();
+        // _ordbalmtrs.text = ItemDetails[length - 1]['ordbalmtrs'].toString();
+        // _ordid.text = ItemDetails[length - 1]['ordid'].toString();
+        // _orddetid.text = ItemDetails[length - 1]['orddetid'].toString();
+        // _itemname.text = ItemDetails[length - 1]['itemname'].toString();
+        // _design.text = ItemDetails[length - 1]['design'].toString();
+        // _hsncode.text = ItemDetails[length - 1]['hsncode'].toString();
+        // _unit.text = ItemDetails[length - 1]['unit'].toString();
+        // _rate.text = ItemDetails[length - 1]['rate'].toString();
       });
     }
 
@@ -258,24 +263,22 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
         }
       }
     }
-//commonapi_gettakastock?partyfilter=N&takano=28430&takachr=AJ&branchid=(2)&getdata=Y&dbname=admin_looms
     uri = '${globals.cdomain}/api/commonapi_gettakastock2?dbname=' +
         db +
         '&partyfilter=N&takachr=' +
         takachr +
         '&takano=' +
         takano +
-        '&branchid=('+ branch +')&getdata=Y&itemname=$cItem';
-    // '${globals.cdomain2}/api/api_getsalechallanlist?dbname=' +
+        '&branchid=('+ branch +')&getdata=Y&itemname=${widget.xitemname}';
+
+    // uri = '${globals.cdomain}/api/commonapi_gettakastock2?dbname=' +
     //     db +
-    //     '&cno=' +
-    //     cno +
-    //     '&id=' +
-    //     id +
-    //     '&startdate=' +
-    //     fromdate +
-    //     '&enddate=' +
-    //     todate;
+    //     '&partyfilter=N&takachr=' +
+    //     takachr +
+    //     '&takano=' +
+    //     takano +
+    //     '&branchid=('+ branch +')&getdata=Y&itemfilter=Y&itemid=$cItem';
+
     print(uri);
     var response = await http.get(Uri.parse(uri));
 
@@ -292,6 +295,9 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
     print(jsonData);
 
     setState(() {
+      visible = false;
+      _takano.text = jsonData['takano'].toString();
+      _takachr.text = jsonData['takachr'].toString();
       _itemname.text = jsonData['itemname'].toString();
       _ordDate.text = jsonData['date'].toString();
       _design.text = jsonData['design'].toString();
@@ -504,6 +510,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    enabled: visible,
                     controller: _takachr,
                     autofocus: true,
                     decoration: const InputDecoration(
@@ -523,6 +530,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
                 ),
                 Expanded(
                   child: TextFormField(
+                    enabled: visible,
                     controller: _takano,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -748,6 +756,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
                 Expanded(
                   child: TextFormField(
                     controller: _weight,
+                    enabled: false,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
                       hintText: 'Weight',
@@ -784,6 +793,7 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    enabled: false,
                     controller: _beamno,
                     decoration: const InputDecoration(
                       icon: const Icon(Icons.person),
