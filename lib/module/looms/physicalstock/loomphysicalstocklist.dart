@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/module/looms/physicalstock/add_loomphysicalstock.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=physicalstockmst";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -77,7 +78,7 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=GREYJOBISSUEMST&printformet=$printformet";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=physicalstockmst&printformet=PHYSICALSTOCKPRINT";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -109,13 +110,13 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
 
     print(
         '"${globals.cdomain}/api/api_getphysicalstocklist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&startdate=' +
-            startdate +
-            '&enddate=' +
-            enddate);
+        db +
+        '&cno=' +
+        cno +
+        '&startdate=' +
+        startdate +
+        '&enddate=' +
+        enddate);
 
     var jsonData = jsonDecode(response.body);
 
@@ -257,6 +258,9 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                                               dropdownPrintFormat = newValue!;
                                               setprintformet(
                                                   dropdownPrintFormat);
+                                              // Timer(Duration(seconds: 2), () {
+                                              //   CircularProgressIndicator();
+                                              // });
                                             });
                                           }),
                                     )
@@ -272,23 +276,26 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                                     ),
                                     child: Text('PDF'),
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                PdfViewerPagePrint(
-                                              companyid: widget.xcompanyid,
-                                              companyname: widget.xcompanyname,
-                                              fbeg: widget.xfbeg,
-                                              fend: widget.xfend,
-                                              id: id.toString(),
-                                              cPW: "PDF",
-                                              formatid: PrintidDetails[0]
-                                                  ['formatid'],
-                                              printid: PrintidDetails[0]
-                                                  ['printid'],
-                                            ),
-                                          ));
+                                      if (PrintidDetails.isNotEmpty) {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PdfViewerPagePrint(
+                                                companyid: widget.xcompanyid,
+                                                companyname:
+                                                    widget.xcompanyname,
+                                                fbeg: widget.xfbeg,
+                                                fend: widget.xfend,
+                                                id: id.toString(),
+                                                cPW: "PDF",
+                                                formatid: PrintidDetails[0]
+                                                    ['formatid'],
+                                                printid: PrintidDetails[0]
+                                                    ['printid'],
+                                              ),
+                                            ));
+                                      }
                                     }),
                                 TextButton(
                                     style: TextButton.styleFrom(
@@ -342,7 +349,8 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                       builder: (BuildContext context) {
                         //saveData();
                         return AlertDialog(
-                          title: const Text('Do You Want To Delete Physical Stock !!??'),
+                          title: const Text(
+                              'Do You Want To Delete Physical Stock !!??'),
                           content: Container(
                             height: 10,
                             child: Column(
@@ -353,19 +361,21 @@ class _LoomphysicalstockListPageState extends State<LoomphysicalstockList> {
                           actions: <Widget>[
                             TextButton(
                               style: TextButton.styleFrom(
-                                textStyle: Theme.of(context).textTheme.labelLarge,
+                                textStyle:
+                                    Theme.of(context).textTheme.labelLarge,
                               ),
                               child: const Text('YES'),
                               onPressed: () {
                                 setState(() {
                                   DeleteData(id);
-                                Navigator.pop(context);
+                                  Navigator.pop(context);
                                 });
                               },
                             ),
                             TextButton(
                               style: TextButton.styleFrom(
-                                textStyle: Theme.of(context).textTheme.labelLarge,
+                                textStyle:
+                                    Theme.of(context).textTheme.labelLarge,
                               ),
                               child: const Text('NO'),
                               onPressed: () {

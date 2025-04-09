@@ -62,12 +62,13 @@ class _PdfViewerPagePrintState extends State<PdfViewerPagePrint> {
     var id = widget.xid;
     var formatid = widget.xformatid;
     var printid = widget.xprintid;
+    var db = globals.dbname;
 
     // var url =
     //     'https://vansh.equalsoftlink.com/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=10&printid=1&call=1&mobile=&email=&noofcopy=1&cWAApi=&cEmail=&sendwhatsapp=PARTY&nemailtemplate=0&cno=$companyid';
     var url =
-        '${globals.cdomain}/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=$formatid&printid=$printid&call=1&mobile=&email=&noofcopy=1&cWAApi=&sendwhatsapp=&cno=$companyid';
-    print(" loadNetwork : " +  url);
+        '${globals.cdomain}/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=$formatid&printid=$printid&call=1&mobile=&email=&noofcopy=1&cWAApi=&sendwhatsapp=&cno=$companyid&dbname=$db';
+    print(" loadNetwork : " + url);
     final response = await http.get(Uri.parse(url));
     final bytes = response.bodyBytes;
     final filename = basename(url);
@@ -117,7 +118,7 @@ class _PdfViewerPagePrintState extends State<PdfViewerPagePrint> {
     //     'https://vansh.equalsoftlink.com/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=10&printid=1&call=1&mobile=&email=&noofcopy=1&cWAApi=&cEmail=&sendwhatsapp=PARTY&nemailtemplate=0&cno=$companyid';
     var url =
         '${globals.cdomain}/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=$formatid&printid=$printid&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&sendwhatsapp=BOTH&cno=$companyid';
-        print("SendWhatAppnwork : " + url);
+    print("SendWhatAppnwork : " + url);
     final response = await http.get(Uri.parse(url));
     final bytes = response.bodyBytes;
     final filename = basename(url);

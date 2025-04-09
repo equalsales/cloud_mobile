@@ -543,6 +543,10 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
   }
 
   Future<bool> saveData() async {
+
+    var id = widget.xid;
+    id = int.parse(id);
+
     if (ItemDetails.isEmpty) {
       isButtonActive = true;
       showAlertDialog(context, 'ItemDetails cannot be blank.');
@@ -551,7 +555,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     }
 
      if (globals.username == 'SACHIN') {
-      print("----------------------------------");
+      print("111111111111111111111111111111111111111");
 
       // Check for duplicate item names
       for (int i = 0; i < ItemDetails.length; i++) {
@@ -567,7 +571,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
       DialogBuilder(context).showLoadingIndicator('');
       String uri = await buildUri();
-      print("/////////////////////////////////////////////" + uri);
+      print("2222222222222222222222222222222" + uri);
 
       final headers = {
         'Content-Type': 'application/json', // Set the appropriate content-type
@@ -585,9 +589,9 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
         return false;
       } else {
-        print("id : " + jsonid.toString());
+        print("id : " + id.toString());
         if (globals.username == 'SACHIN') {
-          if (jsonid == 0) {
+          if (id == 0) {
             await sendSmsAndNotification(jsonid);
           }
         }
@@ -607,7 +611,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
     } else {
       DialogBuilder(context).showLoadingIndicator('');
       String uri = await buildUri();
-      print("/////////////////////////////////////////////" + uri);
+      print("3333333333333333333333333333" + uri);
 
       final headers = {
         'Content-Type': 'application/json',
@@ -626,9 +630,10 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
         showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
         return false;
       } else {
-        print("id : " + jsonid.toString());
+        print("44444444444444444444444444 id : " + id.toString());
         if (globals.username == 'SACHIN') {
-          if (jsonid == 0) {
+          if (id == 0) {
+            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             await sendSmsAndNotification(jsonid);
           }
         }
@@ -639,7 +644,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.white,
-          textColor: Colors.purple,
+          textColor: Colors.green,
           fontSize: 16.0,
         );
         Navigator.pop(context);
@@ -730,7 +735,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
 
   Future<void> sendSmsAndNotification(int jsonid) async {
     String uri = "${globals.cdomain}/sendmodulesms/$jsonid?WATxtApi=639b127a08175a3ef38f4367&call=4&email=&formatid=3&fromserial=0&mobile=&printid=49&srchr=&toserial=0&dbname=admin_looms&cno=3&user=KRISHNA";
-    print("------------------- : " + uri);
+    print("55555555555555555555555555  sendSmsAndNotification : " + uri);
     await http.get(Uri.parse(uri));
     SendWhatAppnwork(jsonid);
   }
@@ -851,7 +856,7 @@ class _LoomSalesChallanAddState extends State<LoomSalesChallanAdd> {
   //         print("id : " + id.toString());
   //         if(globals.username == 'SACHIN'){
   //           if(id == 0){
-  //             uri = "${globals.cdomain}/sendmodulesms/$jsonid?WATxtApi=639b127a08175a3ef38f4367&call=4&email=&formatid=3&fromserial=0&mobile=&printid=49&srchr=&toserial=0&dbname=admin_looms&cno=3&user=KRISHNA";
+              // uri = "${globals.cdomain}/sendmodulesms/$jsonid?WATxtApi=639b127a08175a3ef38f4367&call=4&email=&formatid=3&fromserial=0&mobile=&printid=49&srchr=&toserial=0&dbname=admin_looms&cno=3&user=KRISHNA";
   //             print("------------------- : " + uri);
   //             var response = await http.get(Uri.parse(uri));
   //             // var jsonData = jsonDecode(response.body);
