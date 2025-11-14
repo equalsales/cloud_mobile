@@ -42,7 +42,7 @@ class _AccountHeadListPageState extends State<AccountHeadList> {
 
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_accheadlist?dbname=$clientid&cno=$companyid";
+        "${globals.cdomain2}/api/api_accheadlist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -61,7 +61,7 @@ class _AccountHeadListPageState extends State<AccountHeadList> {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=headmst&id=$id";
+        "${globals.cdomain2}/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=headmst&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);

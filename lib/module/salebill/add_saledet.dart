@@ -164,7 +164,7 @@ class _SaleBillDetAddAddState extends State<SaleBillDetAdd> {
     var clientid = globals.dbname;
     var companystate = globals.companystate;
     uri =
-        'https://www.cloud.equalsoftlink.com/api/api_gethsndet?dbname=$clientid&hsncode=${_hsncode.text}&rate=${_rate.text}&statename=${widget.xpartystate}&costatename=GUJARAT';
+        '${globals.cdomain2}/api/api_gethsndet?dbname=$clientid&hsncode=${_hsncode.text}&rate=${_rate.text}&statename=${widget.xpartystate}&costatename=GUJARAT';
     print(uri);
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);

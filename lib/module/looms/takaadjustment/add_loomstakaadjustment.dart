@@ -87,7 +87,7 @@ class _TakaAdjustmentAddState extends State<TakaAdjustmentAdd> {
     var id = widget.xid;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_gettakaadjustmentdetlist?dbname=' +
+        '${globals.cdomain}/api/api_gettakaadjustmentdetlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -150,7 +150,7 @@ class _TakaAdjustmentAddState extends State<TakaAdjustmentAdd> {
     var todate = retconvdate(widget.xfend).toString();
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_gettakaadjustmentlist?dbname=' +
+        '${globals.cdomain}/api/api_gettakaadjustmentlist?dbname=' +
             db +
             '&cno=' +
             cno +

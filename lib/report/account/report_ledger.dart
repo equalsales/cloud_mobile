@@ -125,7 +125,7 @@ class _LedgerReport extends State<LedgerReport> {
 
     print('1');
     var db = globals.dbname;
-    uri = 'https://www.cloud.equalsoftlink.com/api/api_genledger?dbname=' +
+    uri = '${globals.cdomain2}/api/api_genledger?dbname=' +
         db +
         '&party=6288&fromdate=2022-04-01&todate=2023-03-31&cfromdate=2022-04-01&ctodate=2023-03-31&cno=1';
     print('2');

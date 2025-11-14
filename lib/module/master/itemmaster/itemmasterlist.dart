@@ -35,7 +35,7 @@ class _ItemMasterListPageState extends State<ItemMasterList> {
     print(globals.enddate);
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_itemlist?dbname=$clientid&cno=$companyid";
+        "${globals.cdomain2}/api/api_itemlist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -51,7 +51,7 @@ class _ItemMasterListPageState extends State<ItemMasterList> {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=itemmst&id=$id";
+        "${globals.cdomain2}/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=itemmst&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);

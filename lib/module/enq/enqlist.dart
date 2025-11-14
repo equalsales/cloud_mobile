@@ -41,9 +41,9 @@ class _EnqListPageState extends State<EnqList> {
   Future<bool> loaddetails() async {
     var db = globals.dbname;
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_enqlist?dbname=' + db));
+        '${globals.cdomain2}/api/api_enqlist?dbname=' + db));
 
-    print('https://www.cloud.equalsoftlink.com/api/api_enqlist?dbname=' + db);
+    print('${globals.cdomain2}/api/api_enqlist?dbname=' + db);
     var jsonData = jsonDecode(response.body);
 
     jsonData = jsonData['Data'];

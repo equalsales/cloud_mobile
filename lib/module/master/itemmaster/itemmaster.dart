@@ -101,7 +101,7 @@ class _ItemMasterState extends State<ItemMaster> {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_unitlist?dbname=$clientid&cno=$companyid";
+        "${globals.cdomain2}/api/api_unitlist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -128,7 +128,7 @@ class _ItemMasterState extends State<ItemMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_itemlist?dbname=$clientid&cno=$companyid&id= " +
+        "${globals.cdomain2}/api/api_itemlist?dbname=$clientid&cno=$companyid&id= " +
             id;
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
@@ -166,7 +166,7 @@ class _ItemMasterState extends State<ItemMaster> {
     //print(dropdownItemtype);
     //print(dropdownUNIT);
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_itemststort?dbname=$clientid" +
+        "${globals.cdomain2}/api/api_itemststort?dbname=$clientid" +
             "&itemname=" +
             itemname +
             "&type=" +

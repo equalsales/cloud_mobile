@@ -69,7 +69,7 @@ class _StateMasterState extends State<StateMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_statelist?dbname=$clientid&cno=$companyid&id=$id";
+        "${globals.cdomain2}/api/api_statelist?dbname=$clientid&cno=$companyid&id=$id";
     print(uri);
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
@@ -95,7 +95,7 @@ class _StateMasterState extends State<StateMaster> {
     id = int.parse(id);
     //print('In Save....');
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_statestort?dbname=$clientid" +
+        "${globals.cdomain2}/api/api_statestort?dbname=$clientid" +
             "&state=" +
             statename +
             "&statecode=" +

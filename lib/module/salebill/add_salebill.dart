@@ -78,7 +78,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        'https://www.cloud.equalsoftlink.com/api/api_salebilldetlist?dbname=$clientid&cno=$companyid&id=$id';
+        '${globals.cdomain2}/api/api_salebilldetlist?dbname=$clientid&cno=$companyid&id=$id';
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
     print(uri);
@@ -125,7 +125,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        'https://www.cloud.equalsoftlink.com/api/api_getsalebilllist?dbname=$clientid&cno=$companyid&id=$id&startdate=${fromDate.toString()}&enddate=${toDate.toString()}';
+        '${globals.cdomain2}/api/api_getsalebilllist?dbname=$clientid&cno=$companyid&id=$id&startdate=${fromDate.toString()}&enddate=${toDate.toString()}';
     print(uri);
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
@@ -190,7 +190,7 @@ class _SalesBillAddState extends State<SalesBillAdd> {
         var companyid = widget.xcompanyid;
         var clientid = globals.dbname;
         uri =
-            'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
+            '${globals.cdomain2}/api/api_getpartylist?dbname=' +
                 clientid +
                 '&party=' +
                 _party.text.toString() +

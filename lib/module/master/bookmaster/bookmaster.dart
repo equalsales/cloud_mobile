@@ -80,7 +80,7 @@ class _BookMasterState extends State<BookMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_acctypeheadvld?dbname=$clientid&cno=$companyid&acctype=$dropdownAcctype";
+        "${globals.cdomain2}/api/api_acctypeheadvld?dbname=$clientid&cno=$companyid&acctype=$dropdownAcctype";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -96,7 +96,7 @@ class _BookMasterState extends State<BookMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_booklist?dbname=$clientid&cno=$companyid&id=$id";
+        "${globals.cdomain2}/api/api_booklist?dbname=$clientid&cno=$companyid&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -131,7 +131,7 @@ class _BookMasterState extends State<BookMaster> {
       id = int.parse(id);
       //print('In Save....');
       uri =
-          "https://www.cloud.equalsoftlink.com/api/api_bookstort?dbname=$clientid" +
+          "${globals.cdomain2}/api/api_bookstort?dbname=$clientid" +
               "&party=" +
               partyname +
               "&acchead=" +

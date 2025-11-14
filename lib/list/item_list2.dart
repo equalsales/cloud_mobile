@@ -40,13 +40,13 @@ class ItemList2State extends State<item_list2> {
     var response;
     String uri = '';
     if (widget.xitemtype != '') {
-      uri = "https://www.cloud.equalsoftlink.com/api/api_getitemlist?dbname=" +
+      uri = "${globals.cdomain2}/api/api_getitemlist?dbname=" +
           clientid +
           '&itemtype=' +
           widget.xitemtype;
       response = await http.get(Uri.parse(uri));
     } else {
-      uri = "https://www.cloud.equalsoftlink.com/api/api_getitemlist?dbname=" +
+      uri = "${globals.cdomain2}/api/api_getitemlist?dbname=" +
           clientid;
       response = await http.get(Uri.parse(uri));
     }
@@ -67,13 +67,13 @@ class ItemList2State extends State<item_list2> {
     var response;
     String uri = '';
     if (widget.xitemtype != '') {
-      uri = "https://www.cloud.equalsoftlink.com/api/api_getitemlist?dbname=" +
+      uri = "${globals.cdomain2}/api/api_getitemlist?dbname=" +
           clientid +
           '&itemtype=' +
           widget.xitemtype;
       response = await http.get(Uri.parse(uri));
     } else {
-      uri = "https://www.cloud.equalsoftlink.com/api/api_getitemlist?dbname=" +
+      uri = "${globals.cdomain2}/api/api_getitemlist?dbname=" +
           clientid;
       response = await http.get(Uri.parse(uri));
     }

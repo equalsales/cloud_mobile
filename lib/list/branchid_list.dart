@@ -46,10 +46,10 @@ class BranchListIdState extends State<branchid_list> {
     var db = globals.dbname;
 
     print(
-        'https://www.looms.equalsoftlink.com/api/commonapi_getbranchlist?dbname=' +
+        '${globals.cdomain}/api/commonapi_getbranchlist?dbname=' +
             db);
     response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/commonapi_getbranchlist?dbname=' +
+        '${globals.cdomain}/api/commonapi_getbranchlist?dbname=' +
             db));
 
     var jsonData = jsonDecode(response.body);

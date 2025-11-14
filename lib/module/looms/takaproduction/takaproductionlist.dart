@@ -123,7 +123,7 @@ class _TakaProductionListPageState extends State<TakaProductionList> {
     String uri = '';
 
     uri =
-        "https://www.cloud.equalsoftlink.com/checkautoeditdelete/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+        "${globals.cdomain2}/checkautoeditdelete/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -132,7 +132,7 @@ class _TakaProductionListPageState extends State<TakaProductionList> {
     if (jsonData['success'].toString() == 'true') {
       String uri = '';
       uri =
-          "https://www.cloud.equalsoftlink.com/deletemoddesignAPI/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
+          "${globals.cdomain2}/deletemoddesignAPI/$id?tablename=physicalstockmst&id=$id&dbname=$db&cno=$cno";
       var response = await http.get(Uri.parse(uri));
       print(uri);
       var jsonData = jsonDecode(response.body);

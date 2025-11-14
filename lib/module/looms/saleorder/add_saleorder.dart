@@ -1,18 +1,19 @@
 // ignore_for_file: must_be_immutable
+
 import 'dart:convert';
-import 'package:cloud_mobile/list/party_list.dart';
-import 'package:cloud_mobile/list/salesman_list.dart';
-import 'package:cloud_mobile/module/looms/machinecard/add_loomsmachinecarddet.dart';
-import 'package:cloud_mobile/module/looms/saleorder/add_saleorderdet.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_mobile/function.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_mobile/function.dart';
+import 'package:cloud_mobile/projFunction.dart';
 import 'package:cloud_mobile/common/alert.dart';
-import '../../../common/global.dart' as globals;
+import 'package:cloud_mobile/list/party_list.dart';
 import 'package:cloud_mobile/list/branch_list.dart';
 import 'package:cloud_mobile/common/bottombar.dart';
-import 'package:intl/intl.dart';
+import 'package:cloud_mobile/list/salesman_list.dart';
+import 'package:cloud_mobile/common/global.dart' as globals;
+import 'package:cloud_mobile/module/looms/saleorder/add_saleorderdet.dart';
 
 class SaleOrderAdd extends StatefulWidget {
   SaleOrderAdd({Key? mykey, companyid, companyname, fbeg, fend, id})
@@ -29,7 +30,7 @@ class SaleOrderAdd extends StatefulWidget {
   var xfbeg;
   var xfend;
   var xid;
-  var serial;
+  var serial = '';
   var srchr;
   double tottaka = 0;
   double totmtrs = 0;
@@ -39,250 +40,685 @@ class SaleOrderAdd extends StatefulWidget {
 }
 
 class _SaleOrderAddState extends State<SaleOrderAdd> {
-  DateTime fromDate = DateTime.now();
-  DateTime toDate = DateTime.now();
+  final _formKey = GlobalKey<FormState>();
 
-  List _branchlist = [];
-  List _partylist = [];
+  // DateTime fromDate = DateTime.now();
+  // DateTime toDate = DateTime.now();
 
-  List ItemDetails = [];
+  final _branchCtrl = new TextEditingController(),
+      _orderNoCtrl = new TextEditingController(),
+      _orderChrCtrl = new TextEditingController(),
+      _dateCtrl = new TextEditingController(),
+      _partyCtrl = new TextEditingController(),
+      _agentCtrl = new TextEditingController(),
+      _hasteCtrl = new TextEditingController(),
+      _salesmanCtrl = new TextEditingController(),
+      _dharaCtrl = new TextEditingController(),
+      _duedaysCtrl = new TextEditingController(),
+      _paytermsCtrl = new TextEditingController(),
+      _stationCtrl = new TextEditingController(),
+      _transportCtrl = new TextEditingController(),
+      _remarksCtrl = new TextEditingController();
+
+  // List _branchlist = [];
+  // List _partylist = [];
+
+  List gridItems = [];
 
   bool isButtonActive = true;
 
   var branchid = 0;
   var partyid = 0;
-
-  TextEditingController _branch = new TextEditingController();
-  TextEditingController _serial = new TextEditingController();
-  TextEditingController _srchr = new TextEditingController();
-  TextEditingController _date = new TextEditingController();
-  TextEditingController _party = new TextEditingController();
-  TextEditingController _agent = new TextEditingController();
-  TextEditingController _haste = new TextEditingController();
-  TextEditingController _salesman = new TextEditingController();
-  TextEditingController _dhara = new TextEditingController();
-  TextEditingController _duedays = new TextEditingController();
-  TextEditingController _payterms = new TextEditingController();
-  TextEditingController _station = new TextEditingController();
-  TextEditingController _transport = new TextEditingController();
-  TextEditingController _remarks = new TextEditingController();
-  
-  final _formKey = GlobalKey<FormState>();
-  var bmitem;
+  var ptyState = "";
+  var recordId;
 
   @override
   void initState() {
     super.initState();
-    fromDate = retconvdate(widget.xfbeg);
-    toDate = retconvdate(widget.xfend);
+    recordId = widget.xid;
+    // fromDate = retconvdate(widget.xfbeg);
+    // toDate = retconvdate(widget.xfend);
 
     var curDate = getsystemdate();
-    _date.text = DateFormat("dd-MM-yyyy").format(curDate);
-    if (int.parse(widget.xid) > 0) {
+
+    _dateCtrl.text = DateFormat("dd-MM-yyyy").format(curDate);
+    if (int.parse(recordId.toString()) > 0) {
       loadData();
       loadDetData();
     }
   }
 
-  Future<bool> loadDetData() async {
-    String uri = '';
-    var cno = globals.companyid;
-    var db = globals.dbname;
-    var id = widget.xid;
-
-    uri =
-        '${globals.cdomain}/api/api_editmachinecardmst?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&id=' +
-            id;
-
-    print(" loadDetData : " + uri);
-    var response = await http.get(Uri.parse(uri));
-
-    var jsonData = jsonDecode(response.body);
-
-    jsonData = jsonData['Data'];
-    //jsonData = jsonData[0];
-
-    print(jsonData);
-    List ItemDet = [];
-    ItemDetails = [];
-
-    for (var iCtr = 0; iCtr < jsonData.length; iCtr++) {
-      ItemDet.add({
-        "controlid": jsonData[iCtr]['controlid'].toString(),
-        "id": jsonData[iCtr]['id'].toString(),
-        "itemname": jsonData[iCtr]['itemname'].toString(),
-        "machine": jsonData[iCtr]['machine'].toString(),
-        "branch": jsonData[iCtr]['branch'].toString(),
-        "party": jsonData[iCtr]['party'].toString(),
-        "beamstock": jsonData[iCtr]['beamstock'].toString(),
-        "yarnstock": jsonData[iCtr]['yarnstock'].toString(),
-        "date": jsonData[iCtr]['date'].toString(),
-        "rpm": jsonData[iCtr]['rpm'].toString(),
-        "dsmeters": jsonData[iCtr]['dsmeters'].toString(),
-        "dsefficiency": jsonData[iCtr]['dsefficiency'].toString(),
-        "dsname": jsonData[iCtr]['dsname'].toString(),
-        "nsmeters": jsonData[iCtr]['nsmeters'].toString(),
-        "nsefficiency": jsonData[iCtr]['nsefficiency'].toString(),
-        "nsname": jsonData[iCtr]['nsname'].toString(),
-        "totmeters": jsonData[iCtr]['totmeters'].toString(),
-        "warplength": jsonData[iCtr]['warplength'].toString(),
-        "outmeters": jsonData[iCtr]['outmeters'].toString(),
-        "remainmeters": jsonData[iCtr]['remainmeters'].toString(),
-        "ends": jsonData[iCtr]['ends'].toString(),
-        "reed": jsonData[iCtr]['reed'].toString(),
-        "pick": jsonData[iCtr]['pick'].toString(),
-        "remarks": jsonData[iCtr]['remarks'].toString(),
-      });
-    }
-    setState(() {
-      ItemDetails = ItemDet;
-    });
-    return true;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Sale Order [ ' +
+                (int.parse(recordId.toString()) > 0 ? 'EDIT' : 'ADD') +
+                ' ] ' +
+                (int.parse(recordId.toString()) > 0
+                    ? 'Serial No : ' + widget.serial.toString()
+                    : ''),
+            style:
+                const TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.done),
+            backgroundColor: Colors.green,
+            onPressed: isButtonActive
+                ? () {
+                    if (_formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content:
+                              const Text('Form submitted successfully !!')));
+                      _handleSaveData();
+                    }
+                  }
+                : null),
+        body: SingleChildScrollView(
+            child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     int.parse(widget.xid) > 0
+              //         ? Expanded(
+              //             child: Center(
+              //                 child: Text(
+              //             'Challan No : ' + widget.serial.toString(),
+              //             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              //           )))
+              //         : Container(),
+              //     Container(
+              //       width: 300,
+              //       child: TextFormField(
+              //         textAlign: TextAlign.center,
+              //         controller: _date,
+              //         decoration: const InputDecoration(
+              //           icon: const Icon(Icons.person),
+              //           hintText: 'Date',
+              //           labelText: 'Date',
+              //         ),
+              //         onTap: () {
+              //           _selectDate(context);
+              //         },
+              //         validator: (value) {
+              //           return null;
+              //         },
+              //       ),
+              //     ),
+              //     SizedBox(width: 20,)
+              //   ],
+              // ),
+              Row(children: [
+                Expanded(
+                  child: TextFormField(
+                    autofocus: true,
+                    controller: _branchCtrl,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    decoration: const InputDecoration(
+                        icon: const Icon(Icons.person),
+                        hintText: 'Select Branch',
+                        labelText: 'Branch'),
+                    onTap: openBranchList,
+                    validator: (value) {
+                      if (value == '') {
+                        return "Please enter Branch";
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ]),
+              TextFormField(
+                controller: _dateCtrl,
+                textInputAction: TextInputAction.next,
+                decoration: const InputDecoration(
+                    icon: const Icon(Icons.person),
+                    hintText: 'Date',
+                    labelText: 'Date'),
+                onTap: _selectDate,
+                validator: (value) {
+                  return null;
+                },
+              ),
+              Row(
+                children: [
+                  Expanded(
+                      child: Visibility(
+                    visible: true,
+                    child: TextFormField(
+                      controller: _partyCtrl,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.next,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Select Party',
+                          labelText: 'Party'),
+                      onTap: () {
+                        openPartyList('SALE PARTY', _partyCtrl);
+                      },
+                      onChanged: (value) {
+                        _partyCtrl.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: _partyCtrl.selection);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  )),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _agentCtrl,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Select Agent',
+                          labelText: 'Agent'),
+                      onTap: () {
+                        openPartyList('AGENT', _agentCtrl);
+                      },
+                      onChanged: (value) {
+                        _agentCtrl.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: _agentCtrl.selection);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _hasteCtrl,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Select Haste',
+                          labelText: 'Haste'),
+                      onTap: openHasteList,
+                      onChanged: (value) {
+                        _hasteCtrl.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: _hasteCtrl.selection);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _salesmanCtrl,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Select Salesman',
+                          labelText: 'Salesman'),
+                      onTap: openSalesmanList,
+                      onChanged: (value) {
+                        _salesmanCtrl.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: _salesmanCtrl.selection);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _dharaCtrl,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Enter dhara',
+                          labelText: 'Dhara'),
+                      onChanged: (value) {
+                        _dharaCtrl.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: _dharaCtrl.selection);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _duedaysCtrl,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Enter duedays',
+                          labelText: 'Duedays'),
+                      keyboardType: TextInputType.number,
+                      onChanged: (value) {
+                        _duedaysCtrl.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: _duedaysCtrl.selection);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _paytermsCtrl,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Enter Payterms',
+                          labelText: 'Payterms'),
+                      onChanged: (value) {
+                        _paytermsCtrl.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: _paytermsCtrl.selection);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _stationCtrl,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Select Station',
+                          labelText: 'Station'),
+                      onTap: gotoStationScreen,
+                      onChanged: (value) {
+                        _stationCtrl.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: _stationCtrl.selection);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _transportCtrl,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Select Transport',
+                          labelText: 'Transport'),
+                      onTap: () {
+                        openPartyList('TRANSPORT', _transportCtrl);
+                      },
+                      onChanged: (value) {
+                        _transportCtrl.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: _transportCtrl.selection);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _remarksCtrl,
+                      decoration: const InputDecoration(
+                          icon: const Icon(Icons.person),
+                          hintText: 'Select Remarks',
+                          labelText: 'Remarks'),
+                      onChanged: (value) {
+                        _remarksCtrl.value = TextEditingValue(
+                            text: value.toUpperCase(),
+                            selection: _remarksCtrl.selection);
+                      },
+                      validator: (value) {
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: ElevatedButton(
+                      onPressed: AddSaleOrderGrid,
+                      child: const Text('Add Item Details',
+                          style: TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold)))),
+              SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(columns: [
+                    const DataColumn(label: Text("Action")),
+                    const DataColumn(label: Text("Itemname")),
+                    const DataColumn(label: Text("Hsncode")),
+                    const DataColumn(label: Text("Design")),
+                    const DataColumn(label: Text("Pcs")),
+                    const DataColumn(label: Text("Meters")),
+                    const DataColumn(label: Text("Rate")),
+                    const DataColumn(label: Text("Amount")),
+                    const DataColumn(label: Text("Unit")),
+                    const DataColumn(label: Text("Discper")),
+                    const DataColumn(label: Text("DiscAmt")),
+                    const DataColumn(label: Text("AddAmt")),
+                    const DataColumn(label: Text("TaxableValue")),
+                    const DataColumn(label: Text("SGST %")),
+                    const DataColumn(label: Text("SGST")),
+                    const DataColumn(label: Text("CGST %")),
+                    const DataColumn(label: Text("CGST")),
+                    const DataColumn(label: Text("IGST %")),
+                    const DataColumn(label: Text("IGST")),
+                    const DataColumn(label: Text("FinalAmt")),
+                    const DataColumn(label: Text("_gst")),
+                  ], rows: _createRows())),
+            ],
+          ),
+        )),
+        bottomNavigationBar: BottomBar(
+            companyname: widget.xcompanyname,
+            fbeg: widget.xfbeg,
+            fend: widget.xfend));
   }
 
   Future<bool> loadData() async {
-    String uri = '';
-    var cno = globals.companyid;
-    var db = globals.dbname;
-    var id = widget.xid;
-    var fromdate = retconvdate(widget.xfbeg).toString();
-    var todate = retconvdate(widget.xfend).toString();
+    String formattedStartDate = getYMD(widget.xfbeg);
+    String formattedEndDate = getYMD(widget.xfend);
 
-    uri =
-        '${globals.cdomain}/api/api_machinecardmstlist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&id=' +
-            id +
-            '&startdate=' +
-            fromdate +
-            '&enddate=' +
-            todate;
-    print(" loadData :" + uri);
-    var response = await http.get(Uri.parse(uri));
+    String url = "${globals.cdomain}/api/api_getsaleorderlist?1=1"
+            "&dbname=${globals.dbname}" +
+        "&cno=${globals.companyid}" +
+        '&startdate=$formattedStartDate' +
+        '&enddate=$formattedEndDate' +
+        '&id=$recordId';
 
-    var jsonData = jsonDecode(response.body);
+    print("mst url => " + url);
 
-    jsonData = jsonData['Data'];
-    jsonData = jsonData[0];
+    var response = await http.get(Uri.parse(url));
 
-    _branch.text = getValue(jsonData['branch'], 'C');
-    _serial.text = getValue(jsonData['serial'], 'C');
-    _srchr.text = getValue(jsonData['srchr'], 'C');
-    _date.text = getValue(jsonData['date'], 'C');
-    _party.text = getValue(jsonData['party'], 'C');
+    var mstData = jsonDecode(response.body);
 
-    widget.serial = jsonData['serial'].toString();
-    widget.srchr = jsonData['srchr'].toString();
+    if (mstData['Code'] == "200") {
+      mstData = mstData['Data'][0];
+
+      _branchCtrl.text = getValue(mstData['branch'], 'C');
+      _orderNoCtrl.text = getValue(mstData['orderno'], 'C');
+      _orderChrCtrl.text = getValue(mstData['orderchr'], 'C');
+
+      String inputDateString = getValue(mstData['date'], 'C');
+      List<String> parts = inputDateString.split(' ')[0].split('-');
+      String formattedDate = "${parts[2]}-${parts[1]}-${parts[0]}";
+      _dateCtrl.text = formattedDate.toString();
+
+      _partyCtrl.text = getValue(mstData['party'], 'C');
+      _agentCtrl.text = getValue(mstData['agent'], 'C');
+      _hasteCtrl.text = getValue(mstData['haste'], 'C');
+      _salesmanCtrl.text = getValue(mstData['salesman'], 'C');
+      _dharaCtrl.text = getValue(mstData['dhara'], 'N');
+      _duedaysCtrl.text = getValue(mstData['duedays'], 'C');
+      _paytermsCtrl.text = getValue(mstData['payterms'], 'C');
+      _stationCtrl.text = getValue(mstData['city'], 'C');
+      _transportCtrl.text = getValue(mstData['transport'], 'C');
+      _remarksCtrl.text = getValue(mstData['remarks'], 'C');
+
+      widget.serial = mstData['orderno'].toString();
+      widget.srchr = mstData['orderchr'].toString();
+    }
 
     return true;
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: getsystemdate(),
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != fromDate)
+  Future<bool> loadDetData() async {
+    String url = "${globals.cdomain}/api/api_getsaleorderdetlist?1=1"
+            "&dbname=${globals.dbname}" +
+        "&cno=${globals.companyid}" +
+        '&id=$recordId';
+
+    print("det url => " + url);
+    var response = await http.get(Uri.parse(url));
+
+    var gridData = jsonDecode(response.body);
+
+    if (gridData['Code'] == "200") {
+      gridData = gridData['Data'];
+
+      print('gridData => ${gridData}');
+
+      List ItemDet = [];
+      gridItems = [];
+
+      for (var i = 0; i < gridData.length; i++) {
+        ItemDet.add({
+          "controlid": gridData[i]['controlid'].toString(),
+          "id": gridData[i]['id'].toString(),
+          "itemname": gridData[i]['itemname'].toString(),
+          "hsncode": gridData[i]['hsncode'].toString(),
+          "design": gridData[i]['design'].toString(),
+          "pcs": gridData[i]['pcs'].toString(),
+          "meters": gridData[i]['meters'].toString(),
+          "rate": gridData[i]['rate'].toString(),
+          "amount": gridData[i]['amount'].toString(),
+          "unit": gridData[i]['unit'].toString(),
+          "discper": gridData[i]['discper'].toString(),
+          "discamt": gridData[i]['discamt'].toString(),
+          "addamt": gridData[i]['addamt'].toString(),
+          "taxablevalue": gridData[i]['taxablevalue'].toString(),
+          "sgstrate": gridData[i]['sgstrate'].toString(),
+          "sgstamt": gridData[i]['sgstamt'].toString(),
+          "cgstrate": gridData[i]['cgstrate'].toString(),
+          "cgstamt": gridData[i]['cgstamt'].toString(),
+          "igstrate": gridData[i]['igstrate'].toString(),
+          "igstamt": gridData[i]['igstamt'].toString(),
+          "finalamt": gridData[i]['finalamt'].toString(),
+          "_gst": gridData[i]['_gst'].toString(),
+        });
+      }
+
       setState(() {
-        fromDate = picked;
-        _date.text = DateFormat("dd-MM-yyyy").format(picked);
+        gridItems = ItemDet;
       });
+    }
+    return true;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    void gotoBranchScreen(BuildContext contex) async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => branch_list(
-                  companyid: widget.xcompanyid,
-                  companyname: widget.xcompanyname,
-                  fbeg: widget.xfbeg,
-                  fend: widget.xfend)));
+  Future<bool> saveData() async {
+    if (gridItems.length == 0) {
+      showAlertDialog(context, "ItemDetails can't be not blank !!");
+      return true;
+    } else {
+      var cno = globals.companyid;
+      var db = globals.dbname;
+      var username = globals.username;
 
-      setState(() {
-        var retResult = result;
+      // var serial = _serialCtrl.text;
+      // var srchr = _srchrCtrl.text;
+      var branch = _branchCtrl.text;
+      // var date = _dateCtrl.text;
+      var party = _partyCtrl.text;
+      var agent = _agentCtrl.text;
+      var duedays = _duedaysCtrl.text;
+      var haste = _hasteCtrl.text;
+      var dhara = _dharaCtrl.text;
+      var salesman = _salesmanCtrl.text;
+      var station = _stationCtrl.text;
+      var transport = _transportCtrl.text;
+      var payterms = _paytermsCtrl.text;
+      var remarks = _remarksCtrl.text;
 
-        print(retResult);
-        _branchlist = result[1];
-        result = result[1];
-        branchid = _branchlist[0];
-        print(branchid);
+      DateTime parsedDate = DateFormat("dd-MM-yyyy").parse(_dateCtrl.text);
+      String newDate = DateFormat("yyyy-MM-dd").format(parsedDate);
 
-        var selBranch = '';
-        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-          if (ictr > 0) {
-            selBranch = selBranch + ',';
-          }
-          selBranch = selBranch + retResult[0][ictr];
-        }
-        _branch.text = selBranch;
-      });
+      recordId = int.parse(recordId.toString());
+
+      print(jsonEncode(gridItems));
+
+      // DateTime parsedDate1 = DateFormat("dd-MM-yyyy").parse(widget.xfbeg);
+      // String newfromdate = DateFormat("yyyy-MM-dd").format(parsedDate1);
+
+      // DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(widget.xfend);
+      // String newenddate = DateFormat("yyyy-MM-dd").format(parsedDate2);
+
+      // DateTime parsedDate3 = DateFormat("dd-MM-yyyy").parse(date);
+      // String newDate = DateFormat("yyyy-MM-dd").format(parsedDate3);
+
+      String url = "${globals.cdomain}/api/api_storesaleorder?" +
+          "dbname=$db" +
+          "&cno=$cno" +
+          "&id=${recordId.toString()}" +
+          "&branch=$branch" +
+          "&date=$newDate" +
+          "&party=$party" +
+          "&agent=$agent" +
+          "&haste=$haste" +
+          "&salesman=$salesman" +
+          "&dhara=$dhara" +
+          "&duedays=$duedays" +
+          "&payterms=$payterms" +
+          "&station=$station" +
+          "&transport=$transport" +
+          "&remarks=$remarks" +
+          "&user=$username" +
+          "&GridData=[{}]";
+
+      print("Save url => " + url);
+
+      final headers = {
+        'Content-Type': 'application/json',
+      };
+
+      var response = await http.post(Uri.parse(url),
+          headers: headers, body: jsonEncode(gridItems));
+
+      var jsonData = jsonDecode(response.body);
+      print('jsonres: ${jsonData}');
+
+      if (jsonData['Code'] == '500') {
+        showAlertDialog(
+            context, 'Error While Saving Data !!! ' + jsonData['Message']);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Saved !!!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.white,
+            textColor: Colors.purple,
+            fontSize: 16.0);
+        Navigator.pop(context);
+      }
+
+      return true;
+    }
+  }
+
+  void openBranchList() async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => branch_list(
+                companyid: widget.xcompanyid,
+                companyname: widget.xcompanyname,
+                fbeg: widget.xfbeg,
+                fend: widget.xfend)));
+
+    var retResult = result;
+
+    print('result: ${result}');
+    // _branchlist = result[1];
+    result = result[1];
+    // branchid = _branchlist[0];
+    // print(branchid);
+
+    var selBranch = '';
+    for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+      if (ictr > 0) {
+        selBranch = selBranch + ',';
+      }
+      selBranch = selBranch + retResult[0][ictr];
+    }
+    // setState(() {
+    _branchCtrl.text = selBranch;
+    // });
+  }
+
+  void openPartyList(acctype, TextEditingController obj) async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => party_list(
+                companyid: widget.xcompanyid,
+                companyname: widget.xcompanyname,
+                fbeg: widget.xfbeg,
+                fend: widget.xfend,
+                acctype: acctype)));
+
+    print('result: ${result}');
+
+    var retResult = result;
+    // _partylist = result[1];
+    result = result[1];
+
+    var selParty = '';
+    for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+      if (ictr > 0) {
+        selParty = selParty + ',';
+      }
+      selParty = selParty + retResult[0][ictr];
     }
 
-    void gotoPartyScreen(acctype, TextEditingController obj) async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => party_list(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                    acctype: acctype,
-                  )));
-
-        var retResult = result;
-        _partylist = result[1];
-        result = result[1];
-
-        var selParty = '';
-        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-          if (ictr > 0) {
-            selParty = selParty + ',';
-          }
-          selParty = selParty + retResult[0][ictr];
-        }
-
-        obj.text = selParty;
+    obj.text = selParty;
+    if (acctype == 'SALE PARTY') {
+      // setState(() {
+      ptyState = result[0]['state']?.toString() ?? "";
+      _agentCtrl.text = result[0]['agent']?.toString() ?? "";
+      _transportCtrl.text = result[0]['transport']?.toString() ?? "";
+      _salesmanCtrl.text = result[0]['salesman']?.toString() ?? "";
+      // });
     }
+  }
 
-    void gotoHasteScreen() async {
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => party_list(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                    acctype: 'HASTE',
-                  )));
+  void openHasteList() async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => party_list(
+                companyid: widget.xcompanyid,
+                companyname: widget.xcompanyname,
+                fbeg: widget.xfbeg,
+                fend: widget.xfend,
+                acctype: 'HASTE')));
 
-        var retResult = result;
-        _partylist = result[1];
-        result = result[1];
+    print('result: ${result}');
+    var retResult = result;
+    // _partylist = result[1];
+    result = result[1];
 
-        var selParty = '';
-        for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-          if (ictr > 0) {
-            selParty = selParty + ',';
-          }
-          selParty = selParty + retResult[0][ictr];
-        }        
-        _haste.text = selParty;
+    var selParty = '';
+    for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+      if (ictr > 0) {
+        selParty = selParty + ',';
+      }
+      selParty = selParty + retResult[0][ictr];
     }
-    
-    void gotoSalesmanScreen() async {
-      var result = await Navigator.push(
+    _hasteCtrl.text = selParty;
+  }
+
+  void openSalesmanList() async {
+    var result = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (_) => salesman_list(
@@ -291,591 +727,133 @@ class _SaleOrderAddState extends State<SaleOrderAdd> {
                 fbeg: widget.xfbeg,
                 fend: widget.xfend)));
 
-      var retResult = result;
+    print('result: ${result}');
+    var retResult = result;
 
-      var selSalesman = '';
-      for (var ictr = 0; ictr < retResult[0].length; ictr++) {
-        if (ictr > 0) {
-          selSalesman = selSalesman + ',';
-        }
-        selSalesman = selSalesman + retResult[0][ictr];
+    var selSalesman = '';
+    for (var ictr = 0; ictr < retResult[0].length; ictr++) {
+      if (ictr > 0) {
+        selSalesman = selSalesman + ',';
       }
-
-      _salesman.text = selSalesman;
+      selSalesman = selSalesman + retResult[0][ictr];
     }
 
-    void gotoChallanItemDet(BuildContext contex) async {
-      // ignore: unused_local_variable
-      var branch = _branch.text;
-      print('in');
-      var result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (_) => SaleOrderDetAdd(
-                    companyid: widget.xcompanyid,
-                    companyname: widget.xcompanyname,
-                    fbeg: widget.xfbeg,
-                    fend: widget.xfend,
-                    itemDet: ItemDetails,
-                  )));
-      setState(() {
-        ItemDetails.add(result[0]);
-        print(ItemDetails);
-      });
-    }
-
-    Future<bool> saveData() async {
-      if(ItemDetails.length == 0){
-        showAlertDialog(context, 'ItemDetails can be not blank.');
-        return true;
-      }else{
-        String uri = '';
-        var cno = globals.companyid;
-        var db = globals.dbname;
-        var username = globals.username;
-        var fromdate = widget.xfbeg;
-        var enddate = widget.xfend;
-        var serial = _serial.text;
-        var srchr = _srchr.text;
-        var branch = _branch.text;
-        var date = _date.text;
-        var party = _party.text;
-
-        var id = widget.xid;
-        id = int.parse(id);
-
-        print(jsonEncode(ItemDetails));
-        
-        DateTime parsedDate1 = DateFormat("dd-MM-yyyy").parse(fromdate);
-        String newfromdate = DateFormat("yyyy-MM-dd").format(parsedDate1);
-
-        DateTime parsedDate2 = DateFormat("dd-MM-yyyy").parse(enddate);
-        String newenddate = DateFormat("yyyy-MM-dd").format(parsedDate2);
-
-        DateTime parsedDate3 = DateFormat("dd-MM-yyyy").parse(date);
-        String newDate = DateFormat("yyyy-MM-dd").format(parsedDate3);
-
-        uri =
-            "${globals.cdomain}/api/api_storemachinecardmst?dbname=" +
-                db +
-                "&cno=" +
-                cno +
-                "&user=" +
-                username +
-                "&startdate=" +
-                newfromdate +
-                "&enddate=" +
-                newenddate +
-                "&branch=" +
-                branch +
-                "&party=" +
-                party +
-                "&srchr=" +
-                srchr +
-                "&serial=" +
-                serial +
-                "&date=" +
-                newDate +
-                "&id=" +
-                id.toString();
-                
-        print(" SaveData " + uri);
-
-        final headers = {
-          'Content-Type': 'application/json',
-        };
-        print(ItemDetails);
-        var response = await http.post(Uri.parse(uri),
-            headers: headers, body: jsonEncode(ItemDetails));
-
-        var jsonData = jsonDecode(response.body);
-
-        //print('4');
-
-        var jsonCode = jsonData['Code'];
-        var jsonMsg = jsonData['Message'];
-
-        if (jsonCode == '500') {
-          showAlertDialog(context, 'Error While Saving Data !!! ' + jsonMsg);
-        } else {
-          Fluttertoast.showToast(
-            msg: "Saved !!!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.white,
-            textColor: Colors.purple,
-            fontSize: 16.0,
-          );
-          Navigator.pop(context);
-        }
-        return true;
-      }
-    }
-
-    Future<void> _handleSaveData() async {
-      setState(() {
-        isButtonActive = false; // Disable the button
-      });
-
-      bool success = await saveData();
-
-      setState(() {
-        isButtonActive = success;
-      });
-    }
-
-    void deleteRow(index) {
-      setState(() {
-        ItemDetails.removeAt(index);
-      });
-    }
-
-    List<DataRow> _createRows() {
-      List<DataRow> _datarow = [];
-      print(ItemDetails);
-
-      widget.tottaka = 0;
-      widget.totmtrs = 0;
-
-      for (int iCtr = 0; iCtr < ItemDetails.length; iCtr++) {
-        print(ItemDetails[iCtr]);
-        _datarow.add(DataRow(cells: [
-          DataCell(ElevatedButton.icon(
-            onPressed: () => {deleteRow(iCtr)},
-            icon: Icon(
-              // <-- Icon
-              Icons.delete,
-              size: 24.0,
-            ),
-            label: Text('',
-                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
-          )),
-          DataCell(Text(ItemDetails[iCtr]['machine'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['rpm'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['dsmeters'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['dsefficiency'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['dsname'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['nsmeters'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['nsefficiency'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['nsname'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['totmeters'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['warplength'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['outmeters'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['remainmeters'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['ends'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['reed'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['pick'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['itemname'].toString())),
-          DataCell(Text(ItemDetails[iCtr]['remarks'].toString())),
-        ]));
-      }
-      setState(() {});
-      return _datarow;
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Sale Order [ ' +
-              (int.parse(widget.xid) > 0 ? 'EDIT' : 'ADD') +
-              ' ] ' +
-              (int.parse(widget.xid) > 0
-                  ? 'Serial No : ' + widget.serial.toString()
-                  : ''),
-          style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.done),
-        backgroundColor: Colors.green,
-        onPressed: isButtonActive
-            ? () {
-                if (_formKey.currentState!.validate()) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Form submitted successfully')),
-                  );
-                  _handleSaveData();
-                }
-              }
-            : null,
-      ),
-      body: SingleChildScrollView(
-          child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     int.parse(widget.xid) > 0
-            //         ? Expanded(
-            //             child: Center(
-            //                 child: Text(
-            //             'Challan No : ' + widget.serial.toString(),
-            //             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            //           )))
-            //         : Container(),
-            //     Container(
-            //       width: 300,
-            //       child: TextFormField(
-            //         textAlign: TextAlign.center,
-            //         controller: _date,
-            //         decoration: const InputDecoration(
-            //           icon: const Icon(Icons.person),
-            //           hintText: 'Date',
-            //           labelText: 'Date',
-            //         ),
-            //         onTap: () {
-            //           _selectDate(context);
-            //         },
-            //         validator: (value) {
-            //           return null;
-            //         },
-            //       ),
-            //     ),
-            //     SizedBox(width: 20,)
-            //   ],
-            // ),
-            Row(children: [
-              Expanded(
-                child: TextFormField(
-                  controller: _branch,
-                  autofocus: true,
-                  keyboardType: TextInputType.text,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    icon: const Icon(Icons.person),
-                    hintText: 'Select Branch',
-                    labelText: 'Branch',
-                  ),
-                  onTap: () {
-                    gotoBranchScreen(context);
-                  },
-                  validator: (value) {
-                    if (value == '') {
-                      return "Please enter Branch";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-            ]),
-            TextFormField(
-              controller: _date,
-              textInputAction: TextInputAction.next,
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.person),
-                hintText: 'Date',
-                labelText: 'Date',
-              ),
-              onTap: () {
-                _selectDate(context);
-              },
-              validator: (value) {
-                return null;
-              },
-            ),
-            Row(
-              children: [
-                Expanded(
-                    child: Visibility(
-                  visible: true,
-                  child: TextFormField(
-                    controller: _party,
-                    keyboardType: TextInputType.text,
-                    textInputAction: TextInputAction.next,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Party',
-                      labelText: 'Party',
-                    ),
-                    onTap: () {
-                      gotoPartyScreen('PARTY', _party);
-                    },
-                    onChanged: (value) {
-                      _party.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _party.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )),
-                Expanded(
-                  child: TextFormField(
-                    controller: _agent,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Agent',
-                      labelText: 'Agent',
-                    ),
-                    onTap: () {
-                      gotoPartyScreen('AGENT', _agent);
-                    },
-                    onChanged: (value) {
-                      _agent.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _agent.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _haste,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Haste',
-                      labelText: 'Haste',
-                    ),
-                    onTap: () {
-                      gotoHasteScreen();
-                    },
-                    onChanged: (value) {
-                      _haste.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _haste.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _salesman,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Salesman',
-                      labelText: 'Salesman',
-                    ),
-                    onTap: () {
-                      gotoSalesmanScreen();
-                    },
-                    onChanged: (value) {
-                      _salesman.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _salesman.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _dhara,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Enter dhara',
-                      labelText: 'Dhara',
-                    ),
-                    onTap: () {},
-                    onChanged: (value) {
-                      _dhara.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _dhara.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _duedays,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Enter duedays',
-                      labelText: 'Duedays',
-                    ),
-                    onTap: () {},
-                    onChanged: (value) {
-                      _duedays.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _duedays.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _payterms,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Enter payterms',
-                      labelText: 'Payterms',
-                    ),
-                    onTap: () {},
-                    onChanged: (value) {
-                      _payterms.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _payterms.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _station,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Station',
-                      labelText: 'Station',
-                    ),
-                    onTap: () {
-                      gotoSalesmanScreen();
-                    },
-                    onChanged: (value) {
-                      _station.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _station.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _transport,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Transport',
-                      labelText: 'transport',
-                    ),
-                    onTap: () {
-                      gotoHasteScreen();
-                    },
-                    onChanged: (value) {
-                      _transport.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _transport.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: _remarks,
-                    decoration: const InputDecoration(
-                      icon: const Icon(Icons.person),
-                      hintText: 'Select Remarks',
-                      labelText: 'Remarks',
-                    ),
-                    onTap: () {},
-                    onChanged: (value) {
-                      _remarks.value = TextEditingValue(
-                          text: value.toUpperCase(),
-                          selection: _remarks.selection);
-                    },
-                    validator: (value) {
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Padding(padding: EdgeInsets.all(5)),
-            ElevatedButton(
-              onPressed: () => {gotoChallanItemDet(context)},
-              child: Text('Add Item Details',
-                  style:
-                      TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
-            ),
-            SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(columns: [
-                  DataColumn(
-                    label: Text("Action"),
-                  ),
-                  DataColumn(
-                    label: Text("Machine"),
-                  ),
-                  DataColumn(
-                    label: Text("Rpm"),
-                  ),
-                  DataColumn(
-                    label: Text("Dsmeters"),
-                  ),
-                  DataColumn(
-                    label: Text("Dsefficiency"),
-                  ),
-                  DataColumn(
-                    label: Text("Dsname"),
-                  ),
-                  DataColumn(
-                    label: Text("Nsmeters"),
-                  ),
-                  DataColumn(
-                    label: Text("Nsefficiency"),
-                  ),
-                  DataColumn(
-                    label: Text("Nsname"),
-                  ),
-                  DataColumn(
-                    label: Text("Totmeters"),
-                  ),
-                  DataColumn(
-                    label: Text("Warplength"),
-                  ),
-                  DataColumn(
-                    label: Text("Outmeters"),
-                  ),
-                  DataColumn(
-                    label: Text("Remainmeters"),
-                  ),
-                  DataColumn(
-                    label: Text("Ends"),
-                  ),
-                  DataColumn(
-                    label: Text("Reed"),
-                  ),
-                  DataColumn(
-                    label: Text("Pick"),
-                  ),
-                  DataColumn(
-                    label: Text("Itemname"),
-                  ),
-                  DataColumn(
-                    label: Text("Remarks"),
-                  ),
-                ], rows: _createRows())),
-          ],
-        ),
-      )),
-      bottomNavigationBar: BottomBar(
-        companyname: widget.xcompanyname,
-        fbeg: widget.xfbeg,
-        fend: widget.xfend,
-      ),
-    );
+    _salesmanCtrl.text = selSalesman;
   }
+
+  void gotoStationScreen() async {
+    var result = await openCity_List(context, widget.xcompanyid,
+        widget.xcompanyname, widget.xfbeg, widget.xfend);
+
+    print('result: ${result}');
+    var retResult = result[0];
+    var selCity = '';
+
+    for (var ictr = 0; ictr < retResult.length; ictr++) {
+      if (ictr > 0) {
+        selCity = selCity + ',';
+      }
+      selCity = selCity + retResult[ictr];
+    }
+    print(selCity);
+
+    // setState(() {
+    _stationCtrl.text = selCity;
+    // });
+  }
+
+  void AddSaleOrderGrid() async {
+    var result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => SaleOrderDetAdd(
+                companyid: widget.xcompanyid,
+                companyname: widget.xcompanyname,
+                fbeg: widget.xfbeg,
+                fend: widget.xfend,
+                ptyState: ptyState,
+                itemDet: gridItems)));
+    print('result: ${result}');
+    setState(() {
+      gridItems.add(result[0]);
+    });
+  }
+
+  Future<void> _handleSaveData() async {
+    setState(() {
+      isButtonActive = false;
+    });
+
+    bool success = await saveData();
+
+    setState(() {
+      isButtonActive = success;
+    });
+  }
+
+  void deleteRow(index) {
+    setState(() {
+      gridItems.removeAt(index);
+    });
+  }
+
+  List<DataRow> _createRows() {
+    List<DataRow> _datarow = [];
+
+    widget.tottaka = 0;
+    widget.totmtrs = 0;
+
+    for (int i = 0; i < gridItems.length; i++) {
+      _datarow.add(DataRow(cells: [
+        DataCell(ElevatedButton.icon(
+            onPressed: () => {deleteRow(i)},
+            icon: const Icon(Icons.delete, size: 24.0),
+            label: const Text('',
+                style: const TextStyle(
+                    fontSize: 15.0, fontWeight: FontWeight.bold)))),
+        DataCell(Text(gridItems[i]['itemname'].toString())),
+        DataCell(Text(gridItems[i]['hsncode'].toString())),
+        DataCell(Text(gridItems[i]['design'].toString())),
+        DataCell(Text(gridItems[i]['pcs'].toString())),
+        DataCell(Text(gridItems[i]['meters'].toString())),
+        DataCell(Text(gridItems[i]['rate'].toString())),
+        DataCell(Text(gridItems[i]['amount'].toString())),
+        DataCell(Text(gridItems[i]['unit'].toString())),
+        DataCell(Text(gridItems[i]['discper'].toString())),
+        DataCell(Text(gridItems[i]['discamt'].toString())),
+        DataCell(Text(gridItems[i]['addamt'].toString())),
+        DataCell(Text(gridItems[i]['taxablevalue'].toString())),
+        DataCell(Text(gridItems[i]['sgstrate'].toString())),
+        DataCell(Text(gridItems[i]['sgstamt'].toString())),
+        DataCell(Text(gridItems[i]['cgstrate'].toString())),
+        DataCell(Text(gridItems[i]['cgstamt'].toString())),
+        DataCell(Text(gridItems[i]['igstrate'].toString())),
+        DataCell(Text(gridItems[i]['igstamt'].toString())),
+        DataCell(Text(gridItems[i]['finalamt'].toString())),
+        DataCell(Text(gridItems[i]['_gst'].toString())),
+      ]));
+    }
+    setState(() {});
+    return _datarow;
+  }
+
+  Future<void> _selectDate() async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: getsystemdate(),
+        firstDate: DateTime(2015),
+        lastDate: DateTime(2101));
+    if (picked != null)
+      setState(() {
+        _dateCtrl.text = DateFormat("dd-MM-yyyy").format(picked);
+      });
+  }
+
+  // void setDates() {
+  //   DateTime date = DateTime.now();
+  //   _dateController.text = DateFormat("dd-MM-yyyy").format(date);
+  //   strDate = DateFormat("yyyy-MM-dd").format(date);
+  //   _ptyOrdDateController.text = DateFormat("dd-MM-yyyy").format(date);
+  //   strPtyOrdDate = DateFormat("yyyy-MM-dd").format(date);
+  // }
 }

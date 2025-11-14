@@ -40,7 +40,7 @@ class design_listState extends State<design_list> {
     var response;
     var db = globals.dbname;
     
-    String uri = 'https://www.looms.equalsoftlink.com/api/api_getdesignlist?dbname=' + db;
+    String uri = '${globals.cdomain}/api/api_getdesignlist?dbname=' + db;
      
     print(" getdesignlist :" + uri);
     response = await http.get(Uri.parse(uri));

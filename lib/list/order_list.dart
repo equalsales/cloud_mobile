@@ -67,7 +67,8 @@ class order_ListState extends State<order_list> {
             db +
             '&partyid=' +
             partyid.toString() +
-            '&user=KRISHNA';  
+            '&user=${globals.username}';  
+            // '&user=KRISHNA';  
      }
 
     // uri =

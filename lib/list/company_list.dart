@@ -38,7 +38,7 @@ class companyid_listState extends State<companyid_list> {
     var response;
     var db = globals.dbname;
     
-    String uri = 'https://www.looms.equalsoftlink.com/api/api_companylist?dbname=' + db ;
+    String uri = '${globals.cdomain}/api/api_companylist?dbname=' + db ;
      
     print(" getcompanylist :" + uri);
     response = await http.get(Uri.parse(uri));

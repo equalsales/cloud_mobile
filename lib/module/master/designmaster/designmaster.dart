@@ -61,7 +61,7 @@ class _DesignMasterState extends State<DesignMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_designlist?dbname=$clientid&cno=$companyid&id=$id";
+        "${globals.cdomain2}/api/api_designlist?dbname=$clientid&cno=$companyid&id=$id";
     print(uri);
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
@@ -92,7 +92,7 @@ class _DesignMasterState extends State<DesignMaster> {
       id = int.parse(id);
       //print('In Save....');
       uri =
-          "https://www.cloud.equalsoftlink.com/api/api_designstort?dbname=$clientid" +
+          "${globals.cdomain2}/api/api_designstort?dbname=$clientid" +
               "&design=" +
               design +
               "&itemname=" +

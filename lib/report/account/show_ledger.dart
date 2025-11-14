@@ -84,7 +84,7 @@ class _ShowLedgerListPageState extends State<ShowLedgerList> {
 
     print(partylist); //6288
 
-    uri = 'https://www.cloud.equalsoftlink.com/api/api_genledger?dbname=' +
+    uri = '${globals.cdomain2}/api/api_genledger?dbname=' +
         db +
         '&party=' +
         partylist +

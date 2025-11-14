@@ -223,7 +223,7 @@ class _LedgerviewState extends State<Ledgerview> {
       var cno = globals.companyid;
       var db = globals.dbname;
       print(partylist); //6288
-      uri = 'https://www.cloud.equalsoftlink.com/api/api_genledger?dbname=' +
+      uri = '${globals.cdomain2}/api/api_genledger?dbname=' +
           db +
           '&party=' +
           partylist +

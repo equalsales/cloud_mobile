@@ -41,7 +41,7 @@ class _PartyGroupMasterListPageState extends State<PartyGroupMasterList> {
     var db = globals.dbname;
 
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/getpartygrplist?dbname=' +
+        '${globals.cdomain2}/api/getpartygrplist?dbname=' +
             db));
 
     var jsonData = jsonDecode(response.body);
@@ -154,7 +154,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             var db = globals.dbname;
 
             var response = await http.post(Uri.parse(
-                'https://www.cloud.equalsoftlink.com/api/api_delpartygrp?dbname=' +
+                '${globals.cdomain2}/api/api_delpartygrp?dbname=' +
                     db +
                     '&id=' +
                     id.toString()));

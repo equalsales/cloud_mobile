@@ -77,7 +77,7 @@ class _CountryMasterAddState extends State<CountryMasterAdd> {
     var db = globals.dbname;
     var id = widget.xid;
 
-    uri = 'https://www.cloud.equalsoftlink.com/api/getcountrylist?dbname=' +
+    uri = '${globals.cdomain2}/api/getcountrylist?dbname=' +
         db +
         '&id=' +
         id;
@@ -111,7 +111,7 @@ class _CountryMasterAddState extends State<CountryMasterAdd> {
       var id = widget.xid;
       id = int.parse(id);
 
-      uri = 'https://www.cloud.equalsoftlink.com/api/api_addcountry?dbname=' +
+      uri = '${globals.cdomain2}/api/api_addcountry?dbname=' +
           db +
           '&country=' +
           country +

@@ -1,9 +1,14 @@
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:cloud_mobile/common/alert.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../../common/global.dart' as globals;
+
+String getYMD(String inputDate) {
+  DateTime date = DateFormat("dd-MM-yyyy").parse(inputDate);
+  return DateFormat("yyyy-MM-dd").format(date);
+}
 
 DateTime retconvdate(String dDate, [format = 'dd-mm-yyyy']) {
   String startdate = dDate;
@@ -92,7 +97,7 @@ Future<List<dynamic>> getCityDetails(String City, int Id) async {
 
   Id = int.parse(getValue(Id.toString(), 'N'));
 
-  uri = 'https://www.cloud.equalsoftlink.com/api/getcitylist?dbname=' +
+  uri = '${globals.cdomain2}/api/getcitylist?dbname=' +
       db +
       '&city=' +
       City.toString() +

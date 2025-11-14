@@ -48,7 +48,7 @@ class _PurchaseBillListPageState extends State<PurchaseBillList> {
     print(globals.enddate);
 
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/getpurchaselist?dbname=' +
+        '${globals.cdomain2}/api/getpurchaselist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -58,7 +58,7 @@ class _PurchaseBillListPageState extends State<PurchaseBillList> {
             enddate));
 
     print(
-        'https://www.cloud.equalsoftlink.com/api/getpurchaselist?dbname=' +
+        '${globals.cdomain2}/api/getpurchaselist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -204,7 +204,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             var cno = globals.companyid;
 
             var response = await http.post(Uri.parse(
-                'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+                '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
                     db +
                     '&cno=' +
                     cno +
@@ -212,7 +212,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
                     id.toString()));
 
             print(
-                'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+                '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
                     db +
                     '&id=' +
                     id.toString());

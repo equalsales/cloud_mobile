@@ -46,10 +46,10 @@ class itemIdListState extends State<itemid_list> {
     var db = globals.dbname;
 
     print(
-        'https://www.looms.equalsoftlink.com/api/commonapi_getitemlist?dbname=' +
+        '${globals.cdomain}/api/commonapi_getitemlist?dbname=' +
             db);
     response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/commonapi_getitemlist?dbname=' +
+        '${globals.cdomain}/api/commonapi_getitemlist?dbname=' +
             db));
 
     var jsonData = jsonDecode(response.body);

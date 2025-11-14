@@ -33,7 +33,7 @@ class _SalesBillListPageState extends State<SalesBillList> {
     var enddate = retconvdate(globals.enddate).toString();
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_getsalebilllist?dbname=$clientid&cno=$companyid&startdate=${startdate.toString()}&enddate=${enddate.toString()}";
+        "${globals.cdomain2}/api/api_getsalebilllist?dbname=$clientid&cno=$companyid&startdate=${startdate.toString()}&enddate=${enddate.toString()}";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);

@@ -46,7 +46,7 @@ class _BankBookListPageState extends State<BankBookList> {
     var enddate = retconvdate(globals.enddate).toString();
 
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_getbankbooklist?dbname=' +
+        '${globals.cdomain2}/api/api_getbankbooklist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -195,7 +195,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             var cno = globals.companyid;
 
             var response = await http.post(Uri.parse(
-                'https://www.cloud.equalsoftlink.com/api/api_deletebankbook?dbname=' +
+                '${globals.cdomain2}/api/api_deletebankbook?dbname=' +
                     db +
                     '&cno=' +
                     cno +
@@ -203,7 +203,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
                     id.toString()));
 
             print(
-                'https://www.cloud.equalsoftlink.com/api/api_deletebankbook?dbname=' +
+                '${globals.cdomain2}/api/api_deletebankbook?dbname=' +
                     db +
                     '&id=' +
                     id.toString());
@@ -236,12 +236,12 @@ Future<bool> deleteBankBook(id) async {
   var db = globals.dbname;
 
   var response = await http.post(Uri.parse(
-      'https://www.cloud.equalsoftlink.com/api/api_deletebankbook?dbname=' +
+      '${globals.cdomain2}/api/api_deletebankbook?dbname=' +
           db +
           '&id=' +
           id.toString()));
 
-  print('https://www.cloud.equalsoftlink.com/api/api_deletebankbook?dbname=' +
+  print('${globals.cdomain2}/api/api_deletebankbook?dbname=' +
       db +
       '&id=' +
       id.toString());

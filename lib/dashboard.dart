@@ -1,23 +1,12 @@
-//ignore_for_file: prefer_const_constructors
 import 'dart:convert';
-
-import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:flutter/material.dart';
-
-import 'package:http/http.dart' as http;
-//import 'package:cloud_mobile/common/alert.dart';
-
-import 'package:cloud_mobile/dashboard/sidebar.dart';
-//import 'package:myfirstapp/screens/account/ledgerview_screen.dart';
-
 import 'common/global.dart' as globals;
-import 'package:cloud_mobile/common/bottombar.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:charts_flutter/flutter.dart' as charts;
-
-//// import 'package:google_fonts/google_fonts.dart';
-
 import 'package:cloud_mobile/function.dart';
+import 'package:cloud_mobile/common/eqappbar.dart';
+import 'package:cloud_mobile/dashboard/sidebar.dart';
+import 'package:cloud_mobile/common/bottombar.dart';
 
 class Dashboard extends StatefulWidget {
   var xcompanyid;
@@ -42,25 +31,61 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState() {
+    super.initState();
     companydetails();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // print('dhaval');
+    // print(data);
+
+    List<charts.Series<BarChartModel, String>> series = [
+      charts.Series(
+        id: 'Sales',
+        data: data,
+        domainFn: (BarChartModel series, _) => series.xValues,
+        measureFn: (BarChartModel series, _) => series.yValues,
+        colorFn: (BarChartModel series, _) => series.color,
+      )
+    ];
+
+    return Scaffold(
+      drawer: SideDrawer(
+          companyid: widget.xcompanyid,
+          companyname: widget.xcompanyname,
+          fbeg: widget.xfbeg,
+          fend: widget.xfend),
+      appBar: EqAppBar(
+        AppBarTitle: 'Dashboard [' + widget.xcompanyid + ']',
+      ),
+      body: Center(
+        child: Container(
+            width: 700,
+            padding: const EdgeInsets.all(10),
+            child: charts.BarChart(series, animate: true)),
+        //child: JobsListView()
+      ),
+      bottomNavigationBar: BottomBar(
+          companyname: widget.xcompanyname,
+          fbeg: widget.xfbeg,
+          fend: widget.xfend),
+    );
   }
 
   Future<bool> companydetails() async {
     var cfromdate = retconvdate(globals.startdate).toString();
     var ctodate = retconvdate(globals.enddate).toString();
+
     var cno = globals.companyid;
     var db = globals.dbname;
     //print('----');
     //print(cno);
-    var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_getchartsales?dbname=' +
-            db +
-            '&companyid=' +
-            cno +
-            '&type=ms&fromdate=' +
-            cfromdate +
-            '&todate=' +
-            ctodate));
+    var api =
+        "${globals.cdomain2}/api/api_getchartsales?dbname=$db&companyid=$cno&type=ms&fromdate=$cfromdate&todate=$ctodate";
+    print(api);
+
+    var response = await http.get(Uri.parse(api));
 
     var jsonData = jsonDecode(response.body);
 
@@ -77,10 +102,10 @@ class _DashboardState extends State<Dashboard> {
     //       color: charts.ColorUtil.fromDartColor(Colors.blue)));
     // }
 
-    this.setState(() {
+    // setState(() {
       //_companydetailsX = jsonX;
       //_companydetailsY = jsonY;
-    });
+    // });
 
     return true;
   }
@@ -107,48 +132,6 @@ class _DashboardState extends State<Dashboard> {
         yValues: 201510872.00,
         color: charts.ColorUtil.fromDartColor(Colors.blue)),
   ];
-
-  @override
-  Widget build(BuildContext context) {
-    print('dhaval');
-    print(data);
-
-    List<charts.Series<BarChartModel, String>> series = [
-      charts.Series(
-        id: 'Sales',
-        data: data,
-        domainFn: (BarChartModel series, _) => series.xValues,
-        measureFn: (BarChartModel series, _) => series.yValues,
-        colorFn: (BarChartModel series, _) => series.color,
-      )
-    ];
-
-    return Scaffold(
-      drawer: SideDrawer(
-          companyid: widget.xcompanyid,
-          companyname: widget.xcompanyname,
-          fbeg: widget.xfbeg,
-          fend: widget.xfend),
-      appBar: EqAppBar(
-        AppBarTitle: 'Dashboard [' + widget.xcompanyid + ']',
-      ),
-      body: Center(
-        child: Container(
-            width: 700,
-            padding: const EdgeInsets.all(10),
-            child: charts.BarChart(
-              series,
-              animate: true,
-            )),
-        //child: JobsListView()
-      ),
-      bottomNavigationBar: BottomBar(
-        companyname: widget.xcompanyname,
-        fbeg: widget.xfbeg,
-        fend: widget.xfend,
-      ),
-    );
-  }
 }
 
 class BarChartModel {

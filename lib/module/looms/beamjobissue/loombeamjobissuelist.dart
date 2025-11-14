@@ -50,7 +50,7 @@ class _LoomBeamJobIssueListPageState extends State<LoomBeamJobIssueList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=BEAMJOBISSUEMST";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=BEAMJOBISSUEMST";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -76,7 +76,7 @@ class _LoomBeamJobIssueListPageState extends State<LoomBeamJobIssueList> {
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=BEAMJOBISSUEMST&printformet=$printformet";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=BEAMJOBISSUEMST&printformet=$printformet";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -97,7 +97,7 @@ class _LoomBeamJobIssueListPageState extends State<LoomBeamJobIssueList> {
     print(globals.enddate);
 
     var response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/api_getbeamjobissuelist?dbname=' +
+        '${globals.cdomain}/api/api_getbeamjobissuelist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -107,7 +107,7 @@ class _LoomBeamJobIssueListPageState extends State<LoomBeamJobIssueList> {
             enddate));
 
     print(
-        'https://www.looms.equalsoftlink.com/api/api_getbeamjobissuelist?dbname=' +
+        '${globals.cdomain}/api/api_getbeamjobissuelist?dbname=' +
             db +
             '&cno=' +
             cno +

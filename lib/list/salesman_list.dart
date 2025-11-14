@@ -39,7 +39,7 @@ class SalesmanListIdState extends State<salesman_list> {
     var response;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_getsalesmanlist?dbname=" +
+        "${globals.cdomain2}/api/api_getsalesmanlist?dbname=" +
             clientid;
     response = await http.get(Uri.parse(uri));
     print(uri);

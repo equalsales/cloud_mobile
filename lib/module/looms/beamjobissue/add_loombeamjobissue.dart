@@ -98,7 +98,7 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
     var id = widget.xid;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getbeamjobissuedetlist?dbname=' +
+        '${globals.cdomain}/api/api_getbeamjobissuedetlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -151,7 +151,7 @@ class _beamJobIssueAddState extends State<beamJobIssueAdd> {
     var todate = retconvdate(widget.xfend).toString();
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getbeamjobissuelist?dbname=' +
+        '${globals.cdomain}/api/api_getbeamjobissuelist?dbname=' +
             db +
             '&cno=' +
             cno +

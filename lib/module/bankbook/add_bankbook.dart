@@ -87,7 +87,7 @@ class _BankBookAddState extends State<BankBookAdd> {
     var todate = retconvdate(widget.xfend).toString();
 
     uri =
-        'https://www.cloud.equalsoftlink.com/api/api_getbankbooklist?dbname=' +
+        '${globals.cdomain2}/api/api_getbankbooklist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -226,7 +226,7 @@ class _BankBookAddState extends State<BankBookAdd> {
       id = int.parse(id);
 
       uri =
-          'https://www.cloud.equalsoftlink.com/api/api_storebankbook?dbname=' +
+          '${globals.cdomain2}/api/api_storebankbook?dbname=' +
               db +
               '&date=' +
               date +

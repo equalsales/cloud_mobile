@@ -38,7 +38,7 @@ class _BankMasterListPageState extends State<BankMasterList> {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_banklist?dbname=$clientid&cno=$companyid";
+        "${globals.cdomain2}/api/api_banklist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -57,7 +57,7 @@ class _BankMasterListPageState extends State<BankMasterList> {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=partymst&id=$id";
+        "${globals.cdomain2}/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=partymst&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);

@@ -80,7 +80,7 @@ class _reportSettingState extends State<reportSettingView> {
         //     '&alias=' +
         //     ccalias +
         //     cRptCaption;
-        uri ='https://www.cloud.equalsoftlink.com/api/api_reportsettinglist?dbname=$clientid&cno=$companyid&alias=' +ccalias +cRptCaption;
+        uri ='${globals.cdomain2}/api/api_reportsettinglist?dbname=$clientid&cno=$companyid&alias=' +ccalias +cRptCaption;
     print(uri);
     var response = await http.get(Uri.parse(uri));
 
@@ -145,7 +145,7 @@ class _reportSettingState extends State<reportSettingView> {
       });
     }
     print(companyid);
-    uri ="https://www.cloud.equalsoftlink.com/api/api_storereportsetting?dbname=$clientid&cno=$companyid&alias="+ccalias.toString()+cRptCaption.toString() +"&GridData="+jsonEncode(addsetting);
+    uri ="${globals.cdomain2}/api/api_storereportsetting?dbname=$clientid&cno=$companyid&alias="+ccalias.toString()+cRptCaption.toString() +"&GridData="+jsonEncode(addsetting);
     print(uri);
     var response = await http.post(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);

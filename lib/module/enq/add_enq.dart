@@ -159,7 +159,7 @@ class _EnqAddState extends State<EnqAdd> {
       var id = widget.xid;
       id = int.parse(id);
 
-      uri = 'https://www.cloud.equalsoftlink.com/api/api_createenq?dbname=' +
+      uri = '${globals.cdomain2}/api/api_createenq?dbname=' +
           db +
           '&name=' +
           name +
@@ -210,7 +210,7 @@ class _EnqAddState extends State<EnqAdd> {
       var db = globals.dbname;
       var id = widget.xid;
 
-      uri = 'https://www.cloud.equalsoftlink.com/api/api_enqlist?dbname=' +
+      uri = '${globals.cdomain2}/api/api_enqlist?dbname=' +
           db +
           '&id=' +
           id;
@@ -265,7 +265,7 @@ class _EnqAddState extends State<EnqAdd> {
       //print(partylist); //6288
 
       uri =
-          'https://www.cloud.equalsoftlink.com/api/api_salelrpending?dbname=' +
+          '${globals.cdomain2}/api/api_salelrpending?dbname=' +
               db +
               '&conc=Y' +
               '&fromdate=' +

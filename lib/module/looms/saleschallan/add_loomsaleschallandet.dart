@@ -114,10 +114,12 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
   var UnitType = [
     'M',
     'P',
+    // 'W'
   ];
 
   @override
   void initState() {
+    super.initState();
     fromDate = retconvdate(widget.xfbeg);
     toDate = retconvdate(widget.xfend);
 
@@ -214,6 +216,7 @@ class _LoomSalesChallanDetAddState extends State<LoomSalesChallanDetAdd> {
         ordMeters = double.parse(result[0]['balmeters'].toString());
         _ordbalmtrs.text = result[0]['balmeters'].toString();
         _remarks.text = result[0]['remarks'].toString();
+        // print('result[0]: ${result[0]}');
         _duedays.text = result[0]['duedays'].toString();
       });
     });

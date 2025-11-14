@@ -46,7 +46,7 @@ class _CashBookListPageState extends State<CashBookList> {
     var enddate = retconvdate(globals.enddate).toString();
 
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/api_getcashbooklist?dbname=' +
+        '${globals.cdomain2}/api/api_getcashbooklist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -56,7 +56,7 @@ class _CashBookListPageState extends State<CashBookList> {
             enddate));
 
     print(
-        'https://www.cloud.equalsoftlink.com/api/api_getcashbooklist?dbname=' +
+        '${globals.cdomain2}/api/api_getcashbooklist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -202,7 +202,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             var cno = globals.companyid;
 
             var response = await http.post(Uri.parse(
-                'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+                '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
                     db +
                     '&cno=' +
                     cno +
@@ -210,7 +210,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
                     id.toString()));
 
             print(
-                'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+                '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
                     db +
                     '&id=' +
                     id.toString());
@@ -243,12 +243,12 @@ Future<bool> deleteCashBook(id) async {
   var db = globals.dbname;
 
   var response = await http.post(Uri.parse(
-      'https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+      '${globals.cdomain2}/api/api_deletecashbook?dbname=' +
           db +
           '&id=' +
           id.toString()));
 
-  print('https://www.cloud.equalsoftlink.com/api/api_deletecashbook?dbname=' +
+  print('${globals.cdomain2}/api/api_deletecashbook?dbname=' +
       db +
       '&id=' +
       id.toString());

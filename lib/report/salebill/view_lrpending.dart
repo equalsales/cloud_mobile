@@ -119,7 +119,7 @@ class _LRPendingViewState extends State<LRPendingView> {
       ctodate = ctodate.toString().split(' ')[0];
 
       uri =
-          'https://www.cloud.equalsoftlink.com/api/api_salelrpending?dbname=' +
+          '${globals.cdomain2}/api/api_salelrpending?dbname=' +
               db +
               '&fromdate=' +
               fromdate +

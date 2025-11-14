@@ -40,10 +40,10 @@ class machineListState extends State<machine_list> {
     var response;
     var db = globals.dbname;
     print(
-        'https://www.looms.equalsoftlink.com/api/api_getmachinelist?dbname=' +
+        '${globals.cdomain}/api/api_getmachinelist?dbname=' +
             db);
     response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/api_getmachinelist?dbname=' +
+        '${globals.cdomain}/api/api_getmachinelist?dbname=' +
             db));
     var jsonData = jsonDecode(response.body);
     jsonData = jsonData['Data'];

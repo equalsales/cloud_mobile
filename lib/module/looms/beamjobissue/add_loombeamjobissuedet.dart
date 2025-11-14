@@ -227,7 +227,7 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
     //     fromdate +
     //     '&enddate=' +
     //     todate;
-    uri = 'https://www.looms.equalsoftlink.com/api/api_beamstockiss?dbname=' +
+    uri = '${globals.cdomain}/api/api_beamstockiss?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -241,7 +241,7 @@ class _LoomBeamJobIssueDetAddState extends State<LoomBeamJobIssueDetAdd> {
             masterbeam;
             print(uri);
      var response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/api_beamstockiss?dbname=' +
+        '${globals.cdomain}/api/api_beamstockiss?dbname=' +
             db +
             '&cno=' +
             cno +

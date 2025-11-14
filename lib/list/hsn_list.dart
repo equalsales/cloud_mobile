@@ -40,14 +40,14 @@ class _HSN_listState extends State<HSN_list> {
     String uri = '';
     if (widget.xacctype != '') {
       uri =
-          "https://www.cloud.equalsoftlink.com/api/api_gethsncodelist?dbname=" +
+          "${globals.cdomain2}/api/api_gethsncodelist?dbname=" +
               clientid +
               '&acctype=' +
               widget.xacctype;
       response = await http.get(Uri.parse(uri));
     } else {
       uri =
-          "https://www.cloud.equalsoftlink.com/api/api_gethsncodelist?dbname=" +
+          "${globals.cdomain2}/api/api_gethsncodelist?dbname=" +
               clientid +
               "&acctype=";
       response = await http.get(Uri.parse(uri));
@@ -91,8 +91,8 @@ class _HSN_listState extends State<HSN_list> {
               child: ListView.builder(
             itemCount: this._hsnlist.length,
             itemBuilder: (context, index) {
-              String account = this._hsnlist[index]['hsncode'];
-              String id = this._hsnlist[index]['id'];
+              String account = this._hsnlist[index]['hsncode'].toString();
+              String id = this._hsnlist[index]['id'].toString();
               return Padding(
                 padding:
                     const EdgeInsets.only(bottom: 8.0, left: 8.0, right: 8.0),

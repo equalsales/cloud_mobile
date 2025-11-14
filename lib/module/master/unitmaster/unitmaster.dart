@@ -54,7 +54,7 @@ class _UnitMasterState extends State<UnitMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_unitlist?dbname=$clientid&cno=$companyid&id=$id";
+        "${globals.cdomain2}/api/api_unitlist?dbname=$clientid&cno=$companyid&id=$id";
     print(uri);
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
@@ -79,7 +79,7 @@ class _UnitMasterState extends State<UnitMaster> {
       var id = widget.xid;
       id = int.parse(id);
       uri =
-          "https://www.cloud.equalsoftlink.com/api/api_unitlist?dbname=$clientid&cno=$companyid&unit=$unitname";
+          "${globals.cdomain2}/api/api_unitlist?dbname=$clientid&cno=$companyid&unit=$unitname";
       var response = await http.get(Uri.parse(uri));
       print(uri);
       var jsonData = jsonDecode(response.body);
@@ -102,7 +102,7 @@ class _UnitMasterState extends State<UnitMaster> {
       id = int.parse(id);
       //print('In Save....');
       uri =
-          "https://www.cloud.equalsoftlink.com/api/api_unitmststort?dbname=$clientid" +
+          "${globals.cdomain2}/api/api_unitmststort?dbname=$clientid" +
               "&unit=" +
               unitname +
               "&id=" +

@@ -36,7 +36,7 @@ class _HSNMasterListPageState extends State<HSNMasterList> {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_hsncodelist?dbname=$clientid&cno=$companyid";
+        "${globals.cdomain2}/api/api_hsncodelist?dbname=$clientid&cno=$companyid";
     var response = await http.get(Uri.parse(uri));
     //print(uri);
     var jsonData = jsonDecode(response.body);
@@ -52,7 +52,7 @@ class _HSNMasterListPageState extends State<HSNMasterList> {
     var clientid = globals.dbname;
     String uri = '';
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=hsncodemst&id=$id";
+        "${globals.cdomain2}/api/api_masterdeletevld?dbname=$clientid&cno=$companyid&cfldkey=hsncodemst&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);

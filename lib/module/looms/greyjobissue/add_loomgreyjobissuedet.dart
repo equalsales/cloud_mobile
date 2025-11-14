@@ -249,20 +249,20 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
     List ItemDetails = widget.xItemDetails;
     int length = ItemDetails.length;
     print('Length :' + length.toString());
-    if (length > 0) {
-      for (int iCtr = 0; iCtr < length; iCtr++) {
-        cItem= ItemDetails[iCtr]['itemname'].toString();
-        if ((ItemDetails[iCtr]['takano'] == takano) &&
-            ((ItemDetails[iCtr]['takachr'] == takachr))) {
-          showAlertDialog(context, 'Taka No Already Exists...');
-          setState(() {
-            _takano.text = '0';
-            _takachr.text = '';
-          });
-          return true;
-        }
-      }
-    }
+    // if (length > 0) {
+    //   for (int iCtr = 0; iCtr < length; iCtr++) {
+    //     cItem= ItemDetails[iCtr]['itemname'].toString();
+    //     if ((ItemDetails[iCtr]['takano'] == takano) &&
+    //         ((ItemDetails[iCtr]['takachr'] == takachr))) {
+    //       showAlertDialog(context, 'Taka No Already Exists...');
+    //       setState(() {
+    //         _takano.text = '0';
+    //         _takachr.text = '';
+    //       });
+    //       return true;
+    //     }
+    //   }
+    // }
     uri = '${globals.cdomain}/api/commonapi_gettakastock2?dbname=' +
         db +
         '&partyfilter=N&takachr=' +
@@ -293,6 +293,20 @@ class _LoomGreyJobIssueDetAddState extends State<LoomGreyJobIssueDetAdd> {
 
     jsonData = jsonData[0];
     print(jsonData);
+
+     if (length > 0) {
+      for (int iCtr = 0; iCtr < length; iCtr++) {
+        cItem= ItemDetails[iCtr]['itemname'].toString();
+        if ((ItemDetails[iCtr]['inwdettkid'] == jsonData['inwdettkid'].toString())) {
+          showAlertDialog(context, 'Taka No Already Exists...');
+          setState(() {
+            _takano.text = '0';
+            _takachr.text = '';
+          });
+          return true;
+        }
+      }
+    }
 
     setState(() {
       visible = false;

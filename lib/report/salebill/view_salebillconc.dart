@@ -161,7 +161,7 @@ class _SaleBillConcViewState extends State<SaleBillConcView> {
       //print(partylist); //6288
 
       uri =
-          'https://www.cloud.equalsoftlink.com/api/api_salelrpending?dbname=' +
+          '${globals.cdomain2}/api/api_salelrpending?dbname=' +
               db +
               '&conc=Y' +
               '&fromdate=' +

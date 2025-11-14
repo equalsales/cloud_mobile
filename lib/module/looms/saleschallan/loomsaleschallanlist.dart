@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:convert';
 import 'package:cloud_mobile/common/PdfPreviewPagePrint.dart';
 import 'package:http/http.dart' as http;
@@ -52,7 +53,6 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     uri =
         "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
 
-
     // uri =
     //     "http://127.0.0.1:8000/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST";
 
@@ -82,7 +82,7 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     String uri = '';
     uri =
         "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
-    
+
     // uri =
     //     "http://127.0.0.1:8000/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=SALECHLNMST&printformet=$printformet";
 
@@ -112,20 +112,70 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
   }
 
   void execWhatsApp(id) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PdfViewerPagePrint(
-            companyid: widget.xcompanyid,
-            companyname: widget.xcompanyname,
-            fbeg: widget.xfbeg,
-            fend: widget.xfend,
-            id: id.toString(),
-            cPW: "WhatsApp",
-            formatid: 55,
-            printid: 49,
-          ),
-        ));
+    // if (globals.username == "SALE") {
+      sendSmsAndNotification(id);
+    // }
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => PdfViewerPagePrint(
+    //         companyid: widget.xcompanyid,
+    //         companyname: widget.xcompanyname,
+    //         fbeg: widget.xfbeg,
+    //         fend: widget.xfend,
+    //         id: id.toString(),
+    //         cPW: "WhatsApp",
+    //         formatid: 55,
+    //         printid: 49,
+    //       ),
+    //     ));
+  }
+
+  Future<void> sendSmsAndNotification(int jsonid) async {
+    var username = globals.username;
+    var cno = globals.companyid;
+    var db = globals.dbname;
+
+    String uri =
+        "${globals.cdomain}/sendmodulesms/$jsonid?WATxtApi=639b127a08175a3ef38f4367&call=4&email=&formatid=3&fromserial=0&mobile=&printid=49&srchr=&toserial=0&dbname=$db&cno=$cno&user=$username";
+    // &mobile=9377706023
+    print("55555555555555555555555555  sendSmsAndNotification : " + uri);
+    // https://www.looms.equalsoftlink.com/sendmodulesms/$jsonid?WATxtApi=639b127a08175a3ef38f4367&call=4&email=&formatid=3&fromserial=0&mobile=&printid=49&srchr=&toserial=0&dbname=admin_looms&cno=3&user=KRISHNA
+    var response = await http.get(Uri.parse(uri));
+    var jsonData = jsonDecode(response.body);
+    print("xyz");
+    print('jsonData: ${jsonData}');
+    await SendWhatAppnwork(jsonid);
+    if (jsonData['Code'] == "200") {
+      Fluttertoast.showToast(
+          msg: jsonData['Message'],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.white,
+          textColor: Colors.black,
+          fontSize: 16.0);
+    }
+  }
+
+  Future<void> SendWhatAppnwork(int id) async {
+    
+    var companyid = globals.companyid;
+    var formatid = 55;
+    var printid = 49;
+    // var url =
+    //     'https://vansh.equalsoftlink.com/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=10&printid=1&call=1&mobile=&email=&noofcopy=1&cWAApi=&cEmail=&sendwhatsapp=PARTY&nemailtemplate=0&cno=$companyid';
+    var url =
+        '${globals.cdomain}/printsaleorderdf/$id?fromserial=0&toserial=0&srchr=&formatid=$formatid&printid=$printid&call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&cEmail=&sendwhatsapp=BOTH&nemailtemplate=0&cno=$companyid';
+        //  ualsoftlink.com/printsaleorderdf/   ?fromserial=0&toserial=0&srchr=&formatid=49       &printid=49      &call=2&mobile=&email=&noofcopy=1&cWAApi=639b127a08175a3ef38f4367&cEmail=&sendwhatsapp=PARTY&nemailtemplate=0
+        print("SendWhatAppnwork : " + url);
+    // final response =
+     await http.get(Uri.parse(url));
+    // final bytes = response.bodyBytes;
+    // final filename = (url);
+    // final dir = await getApplicationDocumentsDirectory();
+    // var file = File('${dir.path}/$filename.pdf');
+    // await file.writeAsBytes(bytes, flush: true);
   }
 
   Future<bool> loaddetails() async {
@@ -143,13 +193,13 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
     String end = DateFormat("yyyy-MM-dd").format(date2);
 
     String uri = '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
-            db +
-            '&cno=' +
-            cno +
-            '&startdate=' +
-            start +
-            '&enddate=' +
-            end;
+        db +
+        '&cno=' +
+        cno +
+        '&startdate=' +
+        start +
+        '&enddate=' +
+        end;
 
     // String uri = 'http://127.0.0.1:8000/api/api_getsalechallanlist?dbname=' +
     //     db +
@@ -281,25 +331,25 @@ class _LoomSalesChallanListPageState extends State<LoomSalesChallanList> {
                                     ),
                                     child: Text('PDF'),
                                     onPressed: () {
-                                      if(PrintidDetails.isNotEmpty){
+                                      if (PrintidDetails.isNotEmpty) {
                                         Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PdfViewerPagePrint(
-                                            companyid: widget.xcompanyid,
-                                            companyname:
-                                                widget.xcompanyname,
-                                            fbeg: widget.xfbeg,
-                                            fend: widget.xfend,
-                                            id: id.toString(),
-                                            cPW: "PDF",
-                                            formatid: PrintidDetails[0]
-                                                ['formatid'],
-                                            printid: PrintidDetails[0]
-                                                ['printid'],
-                                          ),
-                                        ));
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PdfViewerPagePrint(
+                                                companyid: widget.xcompanyid,
+                                                companyname:
+                                                    widget.xcompanyname,
+                                                fbeg: widget.xfbeg,
+                                                fend: widget.xfend,
+                                                id: id.toString(),
+                                                cPW: "PDF",
+                                                formatid: PrintidDetails[0]
+                                                    ['formatid'],
+                                                printid: PrintidDetails[0]
+                                                    ['printid'],
+                                              ),
+                                            ));
                                       }
                                     }),
                                 TextButton(
@@ -422,15 +472,15 @@ void execDelete(BuildContext context, int index, int id, String name) {
             String uri = '';
 
             uri = '${globals.cdomain}/api/api_deletecashbook?dbname=' +
-                  db +
-                  '&id=' +
-                  id.toString();
-                
+                db +
+                '&id=' +
+                id.toString();
+
             // uri = 'http://127.0.0.1:8000/api/api_deletecashbook?dbname=' +
             //       db +
             //       '&id=' +
             //       id.toString();
-            
+
             print(uri);
 
             var response = await http.post(Uri.parse(uri));

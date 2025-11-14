@@ -39,7 +39,7 @@ class _Head_listState extends State<Head_list> {
     var response;
     String uri = '';
 
-    uri = "https://www.cloud.equalsoftlink.com/api/api_accheadlist?dbname=" +
+    uri = "${globals.cdomain2}/api/api_accheadlist?dbname=" +
         clientid;
     response = await http.get(Uri.parse(uri));
 

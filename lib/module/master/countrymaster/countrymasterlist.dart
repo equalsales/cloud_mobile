@@ -42,7 +42,7 @@ class _CountryMasterListPageState extends State<CountryMasterList> {
     var db = globals.dbname;
 
     var response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/getcountrylist?dbname=' + db));
+        '${globals.cdomain2}/api/getcountrylist?dbname=' + db));
 
     var jsonData = jsonDecode(response.body);
 
@@ -259,7 +259,7 @@ void execDelete(BuildContext context, int index, int id, String name) {
             var db = globals.dbname;
 
             var response = await http.post(Uri.parse(
-                'https://www.cloud.equalsoftlink.com/api/api_delcountry?dbname=' +
+                '${globals.cdomain2}/api/api_delcountry?dbname=' +
                     db +
                     '&id=' +
                     id.toString()));
@@ -321,12 +321,12 @@ Future<bool> deleteCountry(id) async {
   var db = globals.dbname;
 
   var response = await http.post(Uri.parse(
-      'https://www.cloud.equalsoftlink.com/api/api_delcountry?dbname=' +
+      '${globals.cdomain2}/api/api_delcountry?dbname=' +
           db +
           '&id=' +
           id.toString()));
 
-  print('https://www.cloud.equalsoftlink.com/api/api_delcountry?dbname=' +
+  print('${globals.cdomain2}/api/api_delcountry?dbname=' +
       db +
       '&id=' +
       id.toString());

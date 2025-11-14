@@ -25,20 +25,6 @@ import 'package:cloud_mobile/module/looms/yarnjobissue/loomyarnjobissuelist.dart
 import 'package:cloud_mobile/module/looms/beamjobissue/loombeamjobissuelist.dart';
 
 import 'package:cloud_mobile/report/salebill/salebillmenu.dart';
-//import 'package:cloud_mobile/report/task/pendingtask.dart';
-//import 'package:cloud_mobile/report/task/pendingcall.dart';
-//import 'package:cloud_mobile/report/task/checkingcall.dart';
-//>>>>>>> 074aa7a8b52fbfcc81e98c791470e254ad6414e8
-//import 'package:myfirstapp/screens/loginscreen/login_screen.dart';
-//import 'package:myfirstapp/screens/purchase/purchaseview_screen.dart';
-//import 'package:myfirstapp/screens/sales/saleview_screen.dart';
-//import 'package:myfirstapp/screens/greypurchase/greypurchaseview_screen.dart';
-//import 'package:myfirstapp/screens/millgp/millgpview_screen.dart';
-//import 'package:myfirstapp/screens/finishjob/finishjobview_screen.dart';
-//import 'package:myfirstapp/screens/genpurc/genpurcview_screen.dart';
-//import 'package:myfirstapp/screens/saleos/osview_screen.dart';
-//import 'package:myfirstapp/screens/transaction/saleorder/saleorderview_screen.dart';
-//import 'package:myfirstapp/screens/saleos/saleosview_screen.dart';
 
 class SideDrawer extends StatelessWidget {
   var xcompanyid;
@@ -53,6 +39,7 @@ class SideDrawer extends StatelessWidget {
     xfbeg = fbeg;
     xfend = fend;
   }
+
   @override
   Widget build(BuildContext context) {
     //print(xcompanyid);
@@ -62,7 +49,7 @@ class SideDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          DrawerHeader(
+          const DrawerHeader(
             child: Center(
               child: Text(
                 'Equal',
@@ -75,18 +62,17 @@ class SideDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.home),
-            title: Text('Master'),
+            leading: const Icon(Icons.home),
+            title: const Text('Master'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => MasterMenu(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           // ListTile(
@@ -105,63 +91,59 @@ class SideDrawer extends StatelessWidget {
           //   },
           // ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Sale Order'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Sale Order'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => SaleOrderList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Sale Bill'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Sale Bill'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => SalesBillList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Sale Challan Delivery'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Sale Challan Delivery'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => SaleChallanDelivery(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Sales Challan'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Sales Challan'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => LoomSalesChallanList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           // ListTile(
@@ -210,93 +192,87 @@ class SideDrawer extends StatelessWidget {
           //   },
           // ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Beam Card'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Beam Card'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => LoomBeamCardList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Machine Card'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Machine Card'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => MachinecardList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Grey Job Issue'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Grey Job Issue'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => LoomGreyJobIssueList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Yarn Job Issue'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Yarn Job Issue'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => LoomYarnJobIssueList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Beam Job Issue'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Beam Job Issue'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => LoomBeamJobIssueList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Physical Stock Entry'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Physical Stock Entry'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => LoomphysicalstockList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           // ListTile(
@@ -345,173 +321,162 @@ class SideDrawer extends StatelessWidget {
           //   },
           // ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Taka Adjustment Entry'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Taka Adjustment Entry'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => TakaAdjustmentList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Taka Production'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Taka Production'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => TakaProductionList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Yarn Physical Stock Entry'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Yarn Physical Stock Entry'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => Loomyarnphysicalstocklist(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Bank Book'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Bank Book'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => BankBookList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Cash Book'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Cash Book'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => CashBookList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.money),
-            title: Text('Party Statement (Ledger)'),
+            leading: const Icon(Icons.money),
+            title: const Text('Party Statement (Ledger)'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => Ledgerview(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Sale Bill Conc'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Sale Bill Conc'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => SaleBillMenu(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.shopping_cart),
-            title: Text('Enquiry'),
+            leading: const Icon(Icons.shopping_cart),
+            title: const Text('Enquiry'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => EnqList(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.report),
-            title: Text('Delivery Report'),
+            leading: const Icon(Icons.report),
+            title: const Text('Delivery Report'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => DeliveryReport(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.report),
-            title: Text('Stock Report'),
+            leading: const Icon(Icons.report),
+            title: const Text('Stock Report'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => StockReportMenu(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.report),
-            title: Text('Custom Report'),
+            leading: const Icon(Icons.report),
+            title: const Text('Custom Report'),
             onTap: () => {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (_) => CustomReportMenu(
-                            companyid: xcompanyid,
-                            companyname: xcompanyname,
-                            fbeg: xfbeg,
-                            fend: xfend,
-                          )))
+                          companyid: xcompanyid,
+                          companyname: xcompanyname,
+                          fbeg: xfbeg,
+                          fend: xfend)))
             },
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Logout'),
             onTap: () => {
               Navigator.push(
                   context, MaterialPageRoute(builder: (_) => MyApp()))

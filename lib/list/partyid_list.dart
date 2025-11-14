@@ -49,10 +49,10 @@ class partyid_listState extends State<partyid_list> {
     String uri = '';
     if (widget.xacctype != '') {
       response = await http.get(Uri.parse(
-          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=$db&acctype=${widget.xacctype}'));
+          '${globals.cdomain2}/api/api_getpartylist?dbname=$db&acctype=${widget.xacctype}'));
     } else {
       response = await http.get(Uri.parse(
-          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=$db&acctype='));
+          '${globals.cdomain2}/api/api_getpartylist?dbname=$db&acctype='));
     }
 
     if (response.statusCode == 200) {

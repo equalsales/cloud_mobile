@@ -216,7 +216,7 @@ class _PartyMasterState extends State<PartyMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_acctypeheadvld?dbname=$clientid&cno=$companyid&acctype=$dropdownAccType";
+        "${globals.cdomain2}/api/api_acctypeheadvld?dbname=$clientid&cno=$companyid&acctype=$dropdownAccType";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -232,7 +232,7 @@ class _PartyMasterState extends State<PartyMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_partylist?dbname=$clientid&cno=$companyid&id=$id";
+        "${globals.cdomain2}/api/api_partylist?dbname=$clientid&cno=$companyid&id=$id";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -328,7 +328,7 @@ class _PartyMasterState extends State<PartyMaster> {
     id = int.parse(id);
     //print('In Save....');
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_partystort?dbname=$clientid" +
+        "${globals.cdomain2}/api/api_partystort?dbname=$clientid" +
             "&party=" +
             partyname +
             "&acchead=" +

@@ -83,11 +83,12 @@ class _ShowdfReportPageState extends State<ShowdfReport> {
     }
 
     uri =
-        'https://www.cloud.equalsoftlink.com/api/api_reportsettinglist?dbname=$clientid&cno=$companyid&alias=' +
+        '${globals.cdomain2}/api/api_reportsettinglist?dbname=$clientid&cno=$companyid&alias=' +
             ccalias +
             cRptCaption +
             'Setting';
-    //print(uri);
+    print(uri);
+
     var response = await http.get(Uri.parse(uri));
      
     res = response;

@@ -1,22 +1,17 @@
-import 'dart:collection';
-
-import 'package:cloud_mobile/module/master/partymaster/partymaster.dart';
 import 'package:flutter/material.dart';
-
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-import 'package:cloud_mobile/common/alert.dart';
-import 'package:cloud_mobile/list/search_widget.dart';
-
 import '../common/global.dart' as globals;
+import 'package:cloud_mobile/list/search_widget.dart';
+import 'package:cloud_mobile/module/master/partymaster/partymaster.dart';
 
 class party_list extends StatefulWidget {
   var xcompanyid, xcompanyname, xfbeg, xfend, xacctype;
   var Title = 'Party List';
+
   party_list(
-      {Key? mykey, companyid, companyname, fbeg, fend, acctype, caption = ''})
-      : super(key: mykey) {
+      {Key? key, companyid, companyname, fbeg, fend, acctype, caption = ''})
+      : super(key: key) {
     xcompanyid = companyid;
     xcompanyname = companyname;
     xfbeg = fbeg;
@@ -24,6 +19,7 @@ class party_list extends StatefulWidget {
     xacctype = acctype;
     Title = caption;
   }
+
   @override
   PartyListState createState() => PartyListState();
 }
@@ -36,56 +32,116 @@ class PartyListState extends State<party_list> {
   List<bool> _selected = [];
   String query = '';
 
+  bool _isLoading = false;
+
   @override
   void initState() {
+    super.initState();
     getpartylist();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    if (widget.Title == '') {
+      widget.Title = 'Party List';
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.Title),
+      ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: <Widget>[
+                buildSearch(),
+                add(),
+                Text("${_partySelected}"),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, [_partySelected, _partySelected2]);
+                  },
+                  child: Text('Select'),
+                ),
+                Expanded(
+                    child: ListView.builder(
+                  itemCount: _partylist.length,
+                  itemBuilder: (context, index) {
+                    int id = _partylist[index]['id'];
+                    String account = _partylist[index]['party'];
+                    String city = _partylist[index]['city'];
+                    return ListTile(
+                      tileColor: _selected[index] ? Colors.blue : null,
+                      title: Text(account),
+                      subtitle: Text(city),
+                      onTap: () {
+                        //print(account);
+                        //setState(() => _selected[i] = !_selected[i])
+
+                        if (!_selected[index]) {
+                          // If selected, add to selected lists
+                          _partySelected.add(account);
+                          _partySelected2.add(this._partylist[index]);
+                          _partySelected2.add(id);
+                        } else {
+                          // If deselected, remove from selected lists
+                          _partySelected.remove(account);
+                          _partySelected2.remove(id);
+                        }
+                        // _partySelected2.add(this._partylist[index]);
+
+                        //setState(() => _selected[index] = !_selected[index]);
+                        setState(() => _selected[index] = !_selected[index]);
+                        //print(_selected);
+                        //showAlertDialog(context, companyid);
+                        // Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard(
+                        //   companyid: companyid,
+                        //   companyname: companyname,
+                        //   fbeg: fbeg,
+                        //   fend: fend
+                        //   )));
+                      },
+                    );
+                  },
+                ))
+              ],
+            ),
+    );
+  }
+
   Future<bool> getpartylist() async {
-    //String username = userController.text;
-    //String pwd = pwdController.text;
+    setState(() {
+      _isLoading = true;
+    });
 
-    //print('http://116.72.16.74:5000/api/usrcompanylist/admin&a');
-    //print('http://116.72.16.74:5000/api/usrcompanylist/'+_user+'&'+_pwd);
-
-    //var response  = await http.get(Uri.parse('http://116.72.16.74:5000/api/partylist/'+widget.xcompanyid));
     var response;
     var db = globals.dbname;
 
-    String uri = '';
+    var api =
+        "${globals.cdomain2}/api/api_getpartylist?dbname=$db&acctype=${widget.xacctype}";
+    print(api);
+
     if (widget.xacctype != '') {
       response = await http.get(Uri.parse(
-          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
-              db +
-              '&acctype=' +
-              widget.xacctype));
+          '${globals.cdomain2}/api/api_getpartylist?dbname=$db&acctype=${widget.xacctype}'));
     } else {
       response = await http.get(Uri.parse(
-          'https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
-              db +
-              '&acctype='));
+          '${globals.cdomain2}/api/api_getpartylist?dbname=$db&acctype='));
     }
-    print('https://www.cloud.equalsoftlink.com/api/api_getpartylist?dbname=' +
-        db +
-        '&acctype=' +
-        widget.xacctype);
 
     var jsonData = jsonDecode(response.body);
-
     jsonData = jsonData['Data'];
-    // print(jsonData);
 
-    this.setState(() {
+    setState(() {
       _partylist = jsonData;
       _orgpartylist = jsonData;
       _selected = List.generate(jsonData.length, (i) => false);
+      _isLoading = false;
     });
     return true;
   }
 
   Widget add() {
     if (query.length >= 1) {
-      print("Add");
       return Padding(
         padding: const EdgeInsets.only(left: 20),
         child: Row(
@@ -113,86 +169,13 @@ class PartyListState extends State<party_list> {
         ),
       );
     } else {
-      print("Not add");
       return Container();
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (widget.Title == '') {
-      widget.Title = 'Party List';
-    }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.Title),
-      ),
-      body: Column(
-        children: <Widget>[
-          buildSearch(),
-          add(),
-          Text("${_partySelected}"),
-          ElevatedButton(
-            onPressed: () {
-              // Navigate back to first route when tapped.
-              Navigator.pop(context, [_partySelected, _partySelected2]);
-            },
-            child: Text('Select'),
-          ),
-          Expanded(
-              child: ListView.builder(
-            itemCount: this._partylist.length,
-            itemBuilder: (context, index) {
-              int id = this._partylist[index]['id'];
-              String account = this._partylist[index]['party'];
-              String crlimit = this._partylist[index]['crlimit'];
-              String city = this._partylist[index]['city'];
-              return ListTile(
-                tileColor: _selected[index] ? Colors.blue : null,
-                title: Text(account),
-                subtitle: Text(city),
-                onTap: () {
-                  //print(account);
-                  //setState(() => _selected[i] = !_selected[i])
+  Widget buildSearch() =>
+      SearchWidget(text: query, hintText: 'Search', onChanged: searchParty);
 
-                  if (!_selected[index]) {
-                    // If selected, add to selected lists
-                    _partySelected.add(account);
-                    _partySelected2.add(this._partylist[index]);
-                    _partySelected2.add(id);
-                  } else {
-                    // If deselected, remove from selected lists
-                    _partySelected.remove(account);
-                    _partySelected2.remove(id);
-                  }
-                  // _partySelected2.add(this._partylist[index]);
-
-                  //setState(() => _selected[index] = !_selected[index]);
-                  setState(() => _selected[index] = !_selected[index]);
-                  //print(_selected);
-                  //showAlertDialog(context, companyid);
-                  // Navigator.push(context, MaterialPageRoute(builder: (_) => Dashboard(
-                  //   companyid: companyid,
-                  //   companyname: companyname,
-                  //   fbeg: fbeg,
-                  //   fend: fend
-                  //   )));
-                },
-              );
-            },
-          ))
-        ],
-
-        //child: JobsListView()
-      ),
-    );
-  }
-
-  Widget buildSearch() => SearchWidget(
-        text: query,
-        hintText: 'Search',
-        onChanged: searchParty,
-      );
   void searchParty(String query) {
     setState(() {
       this.query = query;
@@ -204,10 +187,12 @@ class PartyListState extends State<party_list> {
           final cityLower = party['city'].toString().toLowerCase();
           final searchLower = query.toLowerCase();
 
-          return titleLower.contains(searchLower) || cityLower.contains(searchLower);
+          return titleLower.contains(searchLower) ||
+              cityLower.contains(searchLower);
         }).toList();
 
         _partylist = partys;
+        _selected = List.generate(partys.length, (i) => false);
       }
     });
   }

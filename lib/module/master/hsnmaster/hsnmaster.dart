@@ -91,7 +91,7 @@ class _HSNMasterState extends State<HSNMaster> {
     var id = widget.xid;
 
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_hsncodedetlist?dbname=$clientid&cno=$companyid&controlid=$id";
+        "${globals.cdomain2}/api/api_hsncodedetlist?dbname=$clientid&cno=$companyid&controlid=$id";
     print(uri);
     var response = await http.get(Uri.parse(uri));
     var jsonData = jsonDecode(response.body);
@@ -121,7 +121,7 @@ class _HSNMasterState extends State<HSNMaster> {
     var clientid = globals.dbname;
     var id = widget.xid;
     uri =
-        "https://www.cloud.equalsoftlink.com/api/api_hsncodelist?dbname=$clientid&cno=$companyid&id=$id";
+        "${globals.cdomain2}/api/api_hsncodelist?dbname=$clientid&cno=$companyid&id=$id";
     print(uri);
     var response = await http.get(Uri.parse(uri));
 
@@ -179,7 +179,7 @@ class _HSNMasterState extends State<HSNMaster> {
         //print('In Save....');
 
         uri =
-            "https://www.cloud.equalsoftlink.com/api/api_hsncodestort?dbname=$clientid" +
+            "${globals.cdomain2}/api/api_hsncodestort?dbname=$clientid" +
                 "&hsncode=" +
                 hsn_sac +
                 "&type=" +

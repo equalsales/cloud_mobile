@@ -116,7 +116,7 @@ class _PurchaseBillAddState extends State<PurchaseBillAdd> {
 
 //api_getsalechallandetlist?dbname=admin_looms&cno=2&id=2997
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getsalechallandetlist?dbname=' +
+        '${globals.cdomain}/api/api_getsalechallandetlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -191,7 +191,7 @@ class _PurchaseBillAddState extends State<PurchaseBillAdd> {
     var todate = widget.xfend;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getsalechallanlist?dbname=' +
+        '${globals.cdomain}/api/api_getsalechallanlist?dbname=' +
             db +
             '&cno=' +
             cno +

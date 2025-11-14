@@ -53,9 +53,9 @@ class StateListState extends State<state_list> {
     var response;
     var db = globals.dbname;
 
-    print('https://www.cloud.equalsoftlink.com/api/getstatelist?dbname=' + db);
+    print('${globals.cdomain2}/api/getstatelist?dbname=' + db);
     response = await http.get(Uri.parse(
-        'https://www.cloud.equalsoftlink.com/api/getstatelist?dbname=' + db));
+        '${globals.cdomain2}/api/getstatelist?dbname=' + db));
 
     var jsonData = jsonDecode(response.body);
 

@@ -92,7 +92,7 @@ class _YarnphysicalstockAddState extends State<YarnphysicalstockAdd> {
     var id = widget.xid;
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getyarnphysicalstockdetlist?dbname=' +
+        '${globals.cdomain}/api/api_getyarnphysicalstockdetlist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -149,7 +149,7 @@ class _YarnphysicalstockAddState extends State<YarnphysicalstockAdd> {
     var todate = retconvdate(widget.xfend).toString();
 
     uri =
-        'https://www.looms.equalsoftlink.com/api/api_getyarnphysicalstocklist?dbname=' +
+        '${globals.cdomain}/api/api_getyarnphysicalstocklist?dbname=' +
             db +
             '&cno=' +
             cno +

@@ -39,7 +39,7 @@ class machineIdListIdState extends State<machineid_list> {
     var response;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_getmachinelist?dbname=" +
+        "${globals.cdomain}/api/api_getmachinelist?dbname=" +
             clientid;
     response = await http.get(Uri.parse(uri));
     print(uri);

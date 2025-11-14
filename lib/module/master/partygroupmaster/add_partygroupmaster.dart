@@ -80,7 +80,7 @@ class _PartyGroupMasterAddState extends State<PartyGroupMasterAdd> {
     var db = globals.dbname;
     var id = widget.xid;
 
-    uri = 'https://www.cloud.equalsoftlink.com/api/getpartygrplist?dbname=' +
+    uri = '${globals.cdomain2}/api/getpartygrplist?dbname=' +
         db +
         '&id=' +
         id;
@@ -208,7 +208,7 @@ class _PartyGroupMasterAddState extends State<PartyGroupMasterAdd> {
       var id = widget.xid;
       id = int.parse(id);
 
-      uri = 'https://www.cloud.equalsoftlink.com/api/apiaddpartygrp?dbname=' +
+      uri = '${globals.cdomain2}/api/apiaddpartygrp?dbname=' +
           db +
           '&acgroup=' +
           acgroup +

@@ -46,7 +46,7 @@ class _LoomyarnphysicalstockListPageState extends State<Loomyarnphysicalstocklis
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=YARNJOBISSUEMST";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=YARNJOBISSUEMST";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -72,7 +72,7 @@ class _LoomyarnphysicalstockListPageState extends State<Loomyarnphysicalstocklis
     var db = globals.dbname;
     String uri = '';
     uri =
-        "https://www.looms.equalsoftlink.com/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=YARNJOBISSUEMST&printformet=$printformet";
+        "${globals.cdomain}/api/api_comprintformat?dbname=$db&cno=$companyid&msttable=YARNJOBISSUEMST&printformet=$printformet";
     var response = await http.get(Uri.parse(uri));
     print(uri);
     var jsonData = jsonDecode(response.body);
@@ -93,7 +93,7 @@ class _LoomyarnphysicalstockListPageState extends State<Loomyarnphysicalstocklis
     print(globals.enddate);
 
     var response = await http.get(Uri.parse(
-        'https://www.looms.equalsoftlink.com/api/api_getyarnphysicalstocklist?dbname=' +
+        '${globals.cdomain}/api/api_getyarnphysicalstocklist?dbname=' +
             db +
             '&cno=' +
             cno +
@@ -103,7 +103,7 @@ class _LoomyarnphysicalstockListPageState extends State<Loomyarnphysicalstocklis
             enddate));
 
     print(
-        'https://www.looms.equalsoftlink.com/api/api_getyarnphysicalstocklist?dbname=' +
+        '${globals.cdomain}/api/api_getyarnphysicalstocklist?dbname=' +
             db +
             '&cno=' +
             cno +
