@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'common/global.dart' as globals;
 import 'package:http/http.dart' as http;
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_flutter_new/flutter.dart' as charts;
 import 'package:cloud_mobile/function.dart';
 import 'package:cloud_mobile/common/eqappbar.dart';
 import 'package:cloud_mobile/dashboard/sidebar.dart';
